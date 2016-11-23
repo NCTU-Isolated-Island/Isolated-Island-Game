@@ -17,7 +17,8 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 
         protected override void OnDisconnect(DisconnectReason reasonCode, string reasonDetail)
         {
-            throw new NotImplementedException();
+            Application.Log.InfoFormat("User Disconnect from: {0} because: {1}", RemoteIPAddress, reasonDetail);
+            UserFactory.Instance.UserDisconnect(User);
         }
 
         protected override void OnOperationRequest(OperationRequest operationRequest, SendParameters sendParameters)

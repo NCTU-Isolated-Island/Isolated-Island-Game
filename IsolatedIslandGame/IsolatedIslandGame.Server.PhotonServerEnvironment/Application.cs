@@ -3,6 +3,7 @@ using ExitGames.Logging.Log4Net;
 using log4net.Config;
 using Photon.SocketServer;
 using System.IO;
+using IsolatedIslandGame.Library;
 
 namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 {
@@ -12,11 +13,14 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         public static Application ServerInstance { get { return instance; } }
         public static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
-
         protected override void Setup()
         {
             instance = this;
+
             SetupLog();
+            SetupServices();
+            SetupFactories();
+            
             Log.Info("PhotonServer Setup Successiful.......");
         }
 
@@ -39,6 +43,16 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
                 LogManager.SetLoggerFactory(Log4NetLoggerFactory.Instance);
                 XmlConfigurator.ConfigureAndWatch(file);
             }
+        }
+        protected void SetupServices()
+        {
+            LogService.InitialService(Log.Info, Log.InfoFormat);
+            FacebookService.InitialService();
+        }
+        protected void SetupFactories()
+        {
+            UserFactory.InitialFactory();
+            PlayerFactory.InitialFactory();
         }
     }
 }
