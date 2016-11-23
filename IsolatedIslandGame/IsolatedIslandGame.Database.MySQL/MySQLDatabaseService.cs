@@ -9,6 +9,6 @@ namespace IsolatedIslandGame.Database.MySQL
         protected override ConnectionList InternalConnectionList { get { return internalConnectionList; } }
 
         private MySQLRepositoryList internalRepositoryList = new MySQLRepositoryList();
-        protected override RepositoryList InternalRepositoryList { get { return internalRepositoryList} }
+        protected override RepositoryList InternalRepositoryList { get { return internalRepositoryList; } }
     }
 }

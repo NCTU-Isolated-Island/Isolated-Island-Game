@@ -23,7 +23,7 @@ namespace IsolatedIslandGame.Server
         }
         public bool PlayerLogin(ServerUser user, ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
         {
-            if(FacebookService.Instance.LoginCheck(facebookID, accessToken))
+            if(FacebookService.LoginCheck(facebookID, accessToken))
             {
                 debugMessage = null;
                 errorCode = ErrorCode.NoError;
@@ -75,7 +75,7 @@ namespace IsolatedIslandGame.Server
             {
                 players.Add(player.PlayerID, player);
                 player.User.PlayerOnline(player);
-                LogService.Instance.InfoFormat("PlayerID: {0} Online", player.PlayerID);
+                LogService.InfoFormat("PlayerID: {0} Online", player.PlayerID);
                 return true;
             }
         }
@@ -85,7 +85,7 @@ namespace IsolatedIslandGame.Server
             {
                 players.Remove(player.PlayerID);
             }
-            LogService.Instance.InfoFormat("PlayerID: {0} Offline", player.PlayerID);
+            LogService.InfoFormat("PlayerID: {0} Offline", player.PlayerID);
             player.User.PlayerOffline();
         }
     }

@@ -21,6 +21,10 @@ namespace IsolatedIslandGame.Server
             connectedUsers = new Dictionary<Guid, ServerUser>();
         }
 
+        public bool ContainsUserGuid(Guid guid)
+        {
+            return connectedUsers.ContainsKey(guid);
+        }
         public bool UserConnect(ServerUser user)
         {
             if (connectedUsers.ContainsKey(user.Guid))
@@ -30,7 +34,7 @@ namespace IsolatedIslandGame.Server
             else
             {
                 connectedUsers.Add(user.Guid, user);
-                LogService.Instance.InfoFormat("User Guid: {0} Connect from {1}", user.Guid, user.LastConnectedIPAddress);
+                LogService.InfoFormat("User Guid: {0} Connect from {1}", user.Guid, user.LastConnectedIPAddress);
                 return true;
             }
         }
@@ -39,7 +43,7 @@ namespace IsolatedIslandGame.Server
             if (connectedUsers.ContainsKey(user.Guid))
             {
                 connectedUsers.Remove(user.Guid);
-                LogService.Instance.InfoFormat("User Guid: {0} Disconnect from {1}", user.Guid, user.LastConnectedIPAddress);
+                LogService.InfoFormat("User Guid: {0} Disconnect from {1}", user.Guid, user.LastConnectedIPAddress);
             }
             PlayerFactory.Instance.PlayerOffline(user.Player);
         }
