@@ -1,6 +1,6 @@
 ﻿namespace IsolatedIslandGame.Library
 {
-    public class Player
+    public class User
     {
     }
 }

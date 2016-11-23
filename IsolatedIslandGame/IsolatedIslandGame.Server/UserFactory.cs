@@ -1,6 +1,6 @@
 ﻿namespace IsolatedIslandGame.Server
 {
-    public class PlayerFactory
+    public class UserFactory
     {
 
     }

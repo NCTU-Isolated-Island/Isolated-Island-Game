@@ -7,7 +7,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
     public class Peer : ClientPeer
     {
         public Guid Guid { get; }
-        public ServerPlayer Player { get; protected set; }
+        public ServerUser User { get; protected set; }
 
 
         public Peer(InitRequest initRequest) : base(initRequest)

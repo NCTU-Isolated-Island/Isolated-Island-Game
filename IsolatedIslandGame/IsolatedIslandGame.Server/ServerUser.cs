@@ -2,7 +2,7 @@
 
 namespace IsolatedIslandGame.Server
 {
-    public class ServerPlayer : Player
+    public class ServerUser : User
     {
     }
 }
