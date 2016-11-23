@@ -6,23 +6,24 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 {
     public class Peer : ClientPeer
     {
-        public Guid Guid { get; }
-        public ServerPlayer Player { get; protected set; }
+        public Guid Guid { get { return User.Guid; } }
+        public ServerUser User { get; protected set; }
 
 
         public Peer(InitRequest initRequest) : base(initRequest)
         {
-            throw new NotImplementedException();
+            User = new ServerUser();
         }
 
         protected override void OnDisconnect(DisconnectReason reasonCode, string reasonDetail)
         {
-            throw new NotImplementedException();
+            Application.Log.InfoFormat("User Disconnect from: {0} because: {1}", RemoteIPAddress, reasonDetail);
+            UserFactory.Instance.UserDisconnect(User);
         }
 
         protected override void OnOperationRequest(OperationRequest operationRequest, SendParameters sendParameters)
         {
-            throw new NotImplementedException();
+            //operationResolver.Operate(operationRequest);
         }
     }
 }
