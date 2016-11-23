@@ -1,12 +1,12 @@
 ﻿using ExitGames.Logging;
 using ExitGames.Logging.Log4Net;
+using IsolatedIslandGame.Database;
+using IsolatedIslandGame.Database.MySQL;
+using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Server.Configuration;
 using log4net.Config;
 using Photon.SocketServer;
 using System.IO;
-using IsolatedIslandGame.Library;
-using IsolatedIslandGame.Database;
-using IsolatedIslandGame.Database.MySQL;
-using IsolatedIslandGame.Server.Configuration;
 
 namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 {
