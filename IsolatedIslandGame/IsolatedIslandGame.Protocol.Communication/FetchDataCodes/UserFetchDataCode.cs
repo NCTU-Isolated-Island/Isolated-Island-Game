@@ -1,7 +1,7 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.FetchDataCodes
 {
-    public enum PlayerFetchDataCode : byte
+    public enum UserFetchDataCode : byte
     {
-        
+        SystemVersion,
     }
 }

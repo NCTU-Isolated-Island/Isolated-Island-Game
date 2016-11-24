@@ -1,9 +1,8 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.EventParameters
 {
-    public enum EventParameterCode : byte
+    public enum InformDataEventParameterCode : byte
     {
-        ID,
-        EventCode,
+        InformCode,
         Parameters
     }
 }
