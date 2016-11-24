@@ -1,9 +1,13 @@
-﻿using System;
+﻿using IsolatedIslandGame.Library.CommunicationInfrastructure;
+using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
+using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers;
+using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
+using System;
 using System.Net;
 
 namespace IsolatedIslandGame.Library
 {
-    public class User
+    public class User : IIdentityProvidable
     {
         #region properties
         public Player Player { get; protected set; }
@@ -24,6 +28,13 @@ namespace IsolatedIslandGame.Library
             }
         }
         public bool IsOnline { get { return Player != null; } }
+
+        internal UserCommunicationInterface UserCommunicationInterface { get; private set; }
+        public UserEventManager EventManager { get; private set; }
+        public UserOperationManager OperationManager { get; private set; }
+        public UserResponseManager ResponseManager { get; private set; }
+
+        public string IdentityInformation { get { return string.Format("User IP: {0}", LastConnectedIPAddress); } }
         #endregion
 
         #region events
@@ -42,6 +53,14 @@ namespace IsolatedIslandGame.Library
         #endregion
 
         #region methods
+        public User(UserCommunicationInterface communicationInterface)
+        {
+            EventManager = new UserEventManager(this);
+            OperationManager = new UserOperationManager(this);
+            ResponseManager = new UserResponseManager(this);
+            UserCommunicationInterface = communicationInterface;
+            UserCommunicationInterface.BindUser(this);
+        }
         public void PlayerOnline(Player player)
         {
             Player = player;

@@ -1,4 +1,7 @@
 ﻿using ExitGames.Client.Photon;
+using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Protocol.Communication.EventCodes;
+using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +10,16 @@ namespace IsolatedIslandGame.Client.Communication
 {
     public class PhotonService : IPhotonPeerListener
     {
+        private static PhotonService instance;
+        public static PhotonService Instance { get { return instance; } }
+
+        static PhotonService()
+        {
+            instance = new PhotonService();
+        }
+
         private PhotonPeer peer;
         private bool serverConnected;
-        //protected EventResolver eventResolver;
-        //protected ResponseResolver responseResolver;
 
         #region Connect Change
         private event Action<bool> onConnectChange;
@@ -41,12 +50,6 @@ namespace IsolatedIslandGame.Client.Communication
         private string serverAddress;
         private int port;
 
-        public PhotonService()
-        {
-            //eventResolver = new EventResolver(this);
-            //responseResolver = new ResponseResolver(this);
-        }
-
         public void DebugReturn(DebugLevel level, string message)
         {
             Debug.Log(level.ToString() + " : " + message);
@@ -54,12 +57,20 @@ namespace IsolatedIslandGame.Client.Communication
 
         public void OnEvent(EventData eventData)
         {
-            //eventResolver.Operate(eventData);
+            UserManager.Instance.User.EventManager.Operate(
+                eventCode: (UserEventCode)eventData.Code, 
+                parameters: eventData.Parameters
+            );
         }
 
         public void OnOperationResponse(OperationResponse operationResponse)
         {
-            //responseResolver.Operate(operationResponse);
+            UserManager.Instance.User.ResponseManager.Operate(
+                operationCode: (UserOperationCode)operationResponse.OperationCode, 
+                returnCode: (ErrorCode)operationResponse.ReturnCode,
+                debugMessage: operationResponse.DebugMessage,
+                parameters: operationResponse.Parameters
+            );
         }
 
         public void OnStatusChanged(StatusCode statusCode)
@@ -122,6 +133,11 @@ namespace IsolatedIslandGame.Client.Communication
                 DebugReturn(DebugLevel.ERROR, ex.Message);
                 DebugReturn(DebugLevel.ERROR, ex.StackTrace);
             }
+        }
+
+        public void SendOperation(UserOperationCode operationCode, Dictionary<byte, object> parameters)
+        {
+            peer.OpCustom((byte)operationCode, parameters, true, 0, true);
         }
     }
 }
