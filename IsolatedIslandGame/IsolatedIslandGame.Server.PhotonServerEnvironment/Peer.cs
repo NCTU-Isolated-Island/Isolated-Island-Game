@@ -12,7 +12,8 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 
         public Peer(InitRequest initRequest) : base(initRequest)
         {
-            User = new ServerUser();
+            User = new ServerUser(RemoteIPAddress);
+            UserFactory.Instance.UserConnect(User);
         }
 
         protected override void OnDisconnect(DisconnectReason reasonCode, string reasonDetail)

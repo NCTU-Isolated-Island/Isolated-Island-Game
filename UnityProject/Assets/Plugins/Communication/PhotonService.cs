@@ -1,12 +1,19 @@
 ﻿using ExitGames.Client.Photon;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace IsolatedIslandGame.Client.Communication
 {
     public class PhotonService : IPhotonPeerListener
     {
+        private static PhotonService instance;
+        public static PhotonService Instance { get { return instance; } }
+
+        static PhotonService()
+        {
+            instance = new PhotonService();
+        }
+
         private PhotonPeer peer;
         private bool serverConnected;
         //protected EventResolver eventResolver;

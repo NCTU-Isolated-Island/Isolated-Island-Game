@@ -29,6 +29,7 @@ namespace IsolatedIslandGame.Server
         {
             if (connectedUsers.ContainsKey(user.Guid))
             {
+                LogService.InfoFormat("User Guid: {0} Duplicated Connect from {1}", user.Guid, user.LastConnectedIPAddress);
                 return false;
             }
             else
@@ -45,7 +46,10 @@ namespace IsolatedIslandGame.Server
                 connectedUsers.Remove(user.Guid);
                 LogService.InfoFormat("User Guid: {0} Disconnect from {1}", user.Guid, user.LastConnectedIPAddress);
             }
-            PlayerFactory.Instance.PlayerOffline(user.Player);
+            if(user.IsOnline)
+            {
+                PlayerFactory.Instance.PlayerOffline(user.Player);
+            }
         }
     }
 }
