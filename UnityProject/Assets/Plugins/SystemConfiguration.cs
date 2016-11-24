@@ -13,6 +13,10 @@ namespace IsolatedIslandGame.Client
         public string ServerAddress { get; set; }
         [XmlElement]
         public int ServerPort { get; set; }
+        [XmlElement]
+        public string ServerVersion { get; set; }
+        [XmlElement]
+        public string ClientVersion { get; set; }
 
         public SystemConfiguration() { }
         public static SystemConfiguration Load(string filePath)
@@ -40,6 +44,8 @@ namespace IsolatedIslandGame.Client
                     ServerName = "IsolatedIsland.TestServer",
                     ServerAddress = "140.113.123.134",
                     ServerPort = 4531,
+                    ServerVersion = "Development 0",
+                    ClientVersion = "Development 0"
                 };
                 using (XmlWriter writer = XmlWriter.Create(filePath))
                 {

@@ -16,8 +16,6 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         public static Application ServerInstance { get { return instance; } }
         public static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
-        public SystemConfiguration SystemConfiguration { get; private set; }
-
         protected override void Setup()
         {
             instance = this;
@@ -53,13 +51,17 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         }
         protected void SetupConfiguration()
         {
-            SystemConfiguration = SystemConfiguration.Load(Path.Combine(ApplicationPath, "config", "system.config"));
+            SystemConfiguration.InitialConfiguration(SystemConfiguration.Load(Path.Combine(ApplicationPath, "config", "system.config")));
         }
         protected void SetupServices()
         {
             FacebookService.InitialService();
             DatabaseService.Initial(new MySQLDatabaseService());
-            if (DatabaseService.Connect(SystemConfiguration.DatabaseHostname, SystemConfiguration.DatabaseUsername, SystemConfiguration.DatabasePassword, SystemConfiguration.Database))
+            if (DatabaseService.Connect(
+                    hostName: SystemConfiguration.Instance.DatabaseHostname, 
+                    userName: SystemConfiguration.Instance.DatabaseUsername, 
+                    password: SystemConfiguration.Instance.DatabasePassword, 
+                    database: SystemConfiguration.Instance.Database))
             {
                 Log.Info("Database Setup Successiful.......");
             }

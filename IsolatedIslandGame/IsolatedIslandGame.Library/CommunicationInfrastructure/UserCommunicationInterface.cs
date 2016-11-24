@@ -16,5 +16,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         public abstract void SendOperation(UserOperationCode operationCode, Dictionary<byte, object> parameters);
         public abstract void SendResponse(UserOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters);
         public abstract void ErrorInform(string title, string message);
+
+        public abstract void GetSystemVersion(out string serverVersion, out string clientVersion);
+        public abstract void CheckSystemVersion(string serverVersion, string clientVersion);
     }
 }

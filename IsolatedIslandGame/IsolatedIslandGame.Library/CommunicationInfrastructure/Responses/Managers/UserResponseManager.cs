@@ -1,7 +1,6 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.UserResponseHandlers;
 using IsolatedIslandGame.Protocol;
-using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
 
@@ -17,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             this.user = user;
             operationTable = new Dictionary<UserOperationCode, ResponseHandler<User, UserOperationCode>>
             {
-                { UserOperationCode.FetchData, new FetchDataResponseResolver<User, UserOperationCode, UserFetchDataCode>(user) },
+                { UserOperationCode.FetchData, new UserFetchDataResponseResolver(user) },
                 { UserOperationCode.PlayerOperation, new PlayerOperationResponseResolver(user) },
             };
         }

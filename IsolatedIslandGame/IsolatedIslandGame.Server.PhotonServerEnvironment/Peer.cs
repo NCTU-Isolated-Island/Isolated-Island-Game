@@ -1,6 +1,7 @@
 ﻿using Photon.SocketServer;
 using PhotonHostRuntimeInterfaces;
 using System;
+using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 
 namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 {
@@ -24,7 +25,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 
         protected override void OnOperationRequest(OperationRequest operationRequest, SendParameters sendParameters)
         {
-            //operationResolver.Operate(operationRequest);
+            User.OperationManager.Operate((UserOperationCode)operationRequest.OperationCode, operationRequest.Parameters);
         }
     }
 }
