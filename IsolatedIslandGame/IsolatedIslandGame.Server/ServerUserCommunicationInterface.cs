@@ -47,5 +47,10 @@ namespace IsolatedIslandGame.Server
         {
             LogService.FatalFormat("Server UpdateSystemVersion User Identity: {0}", user.IdentityInformation);
         }
+
+        public override bool Login(ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
+        {
+            return PlayerFactory.Instance.PlayerLogin(serverUser, facebookID, accessToken, out debugMessage, out errorCode);
+        }
     }
 }

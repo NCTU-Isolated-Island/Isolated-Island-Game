@@ -6,7 +6,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements
 {
     class MySQLRepositoryList : RepositoryList
     {
-        private MySQLPlayerRepository playerRepository;
+        private MySQLPlayerRepository playerRepository = new MySQLPlayerRepository();
         public override PlayerRepository PlayerRepository { get { return playerRepository; } }
     }
 }

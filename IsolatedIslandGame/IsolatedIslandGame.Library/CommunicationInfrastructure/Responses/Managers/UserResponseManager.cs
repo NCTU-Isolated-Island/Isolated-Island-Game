@@ -18,6 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             {
                 { UserOperationCode.FetchData, new UserFetchDataResponseResolver(user) },
                 { UserOperationCode.PlayerOperation, new PlayerOperationResponseResolver(user) },
+                { UserOperationCode.Login, new LoginResponseHandler(user) }
             };
         }
 

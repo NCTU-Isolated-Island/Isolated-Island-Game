@@ -18,7 +18,14 @@ namespace IsolatedIslandGame.Client
         private SystemManager()
         {
             LogService.InitialService(Debug.Log, Debug.LogFormat, Debug.LogWarning, Debug.LogWarningFormat, Debug.LogError, Debug.LogErrorFormat);
-            SystemConfiguration = SystemConfiguration.Load("system.config");
+            SystemConfiguration = new SystemConfiguration
+            {
+                ServerName = "IsolatedIsland.TestServer",
+                ServerAddress = "140.113.123.134",
+                ServerPort = 4531,
+                ServerVersion = "Development 0",
+                ClientVersion = "Development 0"
+            };
         }
     }
 }

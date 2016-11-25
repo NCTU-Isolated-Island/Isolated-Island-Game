@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
+using IsolatedIslandGame.Database.DatabaseFormatData;
 
 namespace IsolatedIslandGame.Server
 {
@@ -28,6 +29,7 @@ namespace IsolatedIslandGame.Server
                 debugMessage = null;
                 errorCode = ErrorCode.NoError;
                 int playerID;
+                PlayerData playerData;
                 if (!DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                 {
                     if(!DatabaseService.RepositoryList.PlayerRepository.Register(facebookID))
@@ -36,8 +38,21 @@ namespace IsolatedIslandGame.Server
                         errorCode = ErrorCode.Fail;
                         return false;
                     }
+                    if (DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
+                    {
+                        playerData = DatabaseService.RepositoryList.PlayerRepository.Find(playerID);
+                    }
+                    else
+                    {
+                        debugMessage = string.Format("facebookID: {0} Register Fail Identity: {1}", facebookID, user.IdentityInformation);
+                        errorCode = ErrorCode.Fail;
+                        return false;
+                    }
                 }
-                var playerData = DatabaseService.RepositoryList.PlayerRepository.Find(playerID);
+                else
+                {
+                    playerData = DatabaseService.RepositoryList.PlayerRepository.Find(playerID);
+                }
                 Player player = new Player(user, playerData.playerID, playerData.facebookID, playerData.nickname, playerData.lastConnectedIPAddress);
                 if (PlayerOnline(player))
                 {
@@ -75,7 +90,7 @@ namespace IsolatedIslandGame.Server
             {
                 players.Add(player.PlayerID, player);
                 player.User.PlayerOnline(player);
-                LogService.InfoFormat("PlayerID: {0} Online", player.PlayerID);
+                LogService.InfoFormat("PlayerID: {0} Online from: {1}", player.PlayerID, player.LastConnectedIPAddress);
                 return true;
             }
         }
@@ -83,6 +98,7 @@ namespace IsolatedIslandGame.Server
         {
             if (players.ContainsKey(player.PlayerID))
             {
+                DatabaseService.RepositoryList.PlayerRepository.Save(player);
                 players.Remove(player.PlayerID);
             }
             LogService.InfoFormat("PlayerID: {0} Offline", player.PlayerID);

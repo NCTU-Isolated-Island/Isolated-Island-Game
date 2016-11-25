@@ -19,5 +19,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
 
         public abstract void GetSystemVersion(out string serverVersion, out string clientVersion);
         public abstract void CheckSystemVersion(string serverVersion, string clientVersion);
+        public abstract bool Login(ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode);
     }
 }
