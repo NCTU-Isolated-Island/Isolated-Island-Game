@@ -8,5 +8,10 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements
     {
         private MySQLPlayerDataConnection playerDataConnection = new MySQLPlayerDataConnection();
         public override PlayerDataConnection PlayerDataConnection { get { return playerDataConnection; } }
+
+        public MySQLConnectionList()
+        {
+            childConnections.Add(playerDataConnection);
+        }
     }
 }

@@ -7,6 +7,14 @@ namespace IsolatedIslandGame.Server.Configuration
 {
     public class SystemConfiguration
     {
+        private static SystemConfiguration instance;
+        public static SystemConfiguration Instance { get { return instance; } }
+
+        public static void InitialConfiguration(SystemConfiguration configuration)
+        {
+            instance = configuration;
+        }
+
         [XmlElement]
         public string ServerVersion { get; set; }
         [XmlElement]

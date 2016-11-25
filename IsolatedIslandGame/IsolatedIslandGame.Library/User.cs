@@ -64,6 +64,10 @@ namespace IsolatedIslandGame.Library
         public void PlayerOnline(Player player)
         {
             Player = player;
+            if(player.LastConnectedIPAddress == null)
+            {
+                player.LastConnectedIPAddress = lastConnectedIPAddress;
+            }
             onPlayerOnline?.Invoke(Player);
         }
         public void PlayerOffline()

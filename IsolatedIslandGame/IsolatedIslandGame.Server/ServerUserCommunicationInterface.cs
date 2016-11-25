@@ -3,6 +3,7 @@ using IsolatedIslandGame.Library.CommunicationInfrastructure;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Server
@@ -35,6 +36,21 @@ namespace IsolatedIslandGame.Server
         public override void SendResponse(UserOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
             serverUser.SendResponse(operationCode, errorCode, debugMessage, parameters);
+        }
+
+        public override void GetSystemVersion(out string serverVersion, out string clientVersion)
+        {
+            serverVersion = SystemConfiguration.Instance.ServerVersion;
+            clientVersion = SystemConfiguration.Instance.ClientVersion;
+        }
+        public override void CheckSystemVersion(string serverVersion, string clientVersion)
+        {
+            LogService.FatalFormat("Server UpdateSystemVersion User Identity: {0}", user.IdentityInformation);
+        }
+
+        public override bool Login(ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
+        {
+            return PlayerFactory.Instance.PlayerLogin(serverUser, facebookID, accessToken, out debugMessage, out errorCode);
         }
     }
 }

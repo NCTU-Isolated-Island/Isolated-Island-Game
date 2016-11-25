@@ -20,6 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             {
                 { UserOperationCode.FetchData, FetchDataResolver },
                 { UserOperationCode.PlayerOperation, new PlayerOperationResolver(user) },
+                { UserOperationCode.Login, new LoginHandler(user) }
             };
         }
 
@@ -52,6 +53,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             };
             SendOperation(UserOperationCode.PlayerOperation, operationParameters);
         }
-
+        public void Login(ulong facebookID, string accessToken)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)LoginParameterCode.FacebookID, facebookID.ToString() },
+                { (byte)LoginParameterCode.AccessToken, accessToken }
+            };
+            SendOperation(UserOperationCode.Login, parameters);
+        }
     }
 }
