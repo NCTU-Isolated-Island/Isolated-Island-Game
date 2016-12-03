@@ -29,6 +29,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         { (byte)LoginResponseParameterCode.PlayerID, player.PlayerID },
                         { (byte)LoginResponseParameterCode.FacebookID, player.FacebookID.ToString() },
                         { (byte)LoginResponseParameterCode.Nickname, player.Nickname },
+                        { (byte)LoginResponseParameterCode.Signature, player.Signature },
+                        { (byte)LoginResponseParameterCode.GroupType, player.GroupType },
                         { (byte)LoginResponseParameterCode.LastConnectedIPAddress, player.LastConnectedIPAddress.ToString() },
                     };
                     SendResponse(operationCode, responseParameters);

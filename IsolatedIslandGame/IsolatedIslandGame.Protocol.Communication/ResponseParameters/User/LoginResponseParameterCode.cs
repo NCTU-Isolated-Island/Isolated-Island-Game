@@ -5,6 +5,8 @@
         PlayerID,
         FacebookID,
         Nickname,
+        Signature,
+        GroupType,
         LastConnectedIPAddress
     }
 }

@@ -1,8 +1,8 @@
 ﻿using IsolatedIslandGame.Database;
+using IsolatedIslandGame.Database.DatabaseFormatData;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
-using IsolatedIslandGame.Database.DatabaseFormatData;
 
 namespace IsolatedIslandGame.Server
 {
@@ -53,7 +53,7 @@ namespace IsolatedIslandGame.Server
                 {
                     playerData = DatabaseService.RepositoryList.PlayerRepository.Find(playerID);
                 }
-                Player player = new Player(user, playerData.playerID, playerData.facebookID, playerData.nickname, playerData.lastConnectedIPAddress);
+                Player player = new Player(user, playerData.playerID, playerData.facebookID, playerData.nickname, playerData.signature, playerData.groupType, playerData.lastConnectedIPAddress);
                 if (PlayerOnline(player))
                 {
                     return true;
@@ -89,6 +89,7 @@ namespace IsolatedIslandGame.Server
             else
             {
                 players.Add(player.PlayerID, player);
+                AssemblyPlayer(player);
                 player.User.PlayerOnline(player);
                 LogService.InfoFormat("PlayerID: {0} Online from: {1}", player.PlayerID, player.LastConnectedIPAddress);
                 return true;
@@ -98,11 +99,21 @@ namespace IsolatedIslandGame.Server
         {
             if (players.ContainsKey(player.PlayerID))
             {
+                DisassemblyPlayer(player);
                 DatabaseService.RepositoryList.PlayerRepository.Save(player);
                 players.Remove(player.PlayerID);
             }
             LogService.InfoFormat("PlayerID: {0} Offline", player.PlayerID);
             player.User.PlayerOffline();
+        }
+
+        private void AssemblyPlayer(Player player)
+        {
+            player.OnCreateCharacter += DatabaseService.RepositoryList.PlayerRepository.Save;
+        }
+        private void DisassemblyPlayer(Player player)
+        {
+            player.OnCreateCharacter -= DatabaseService.RepositoryList.PlayerRepository.Save;
         }
     }
 }

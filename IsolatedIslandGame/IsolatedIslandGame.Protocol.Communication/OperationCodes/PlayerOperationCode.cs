@@ -3,7 +3,6 @@
     public enum PlayerOperationCode : byte
     {
         FetchData,
-        Login,
-        Logout,
+        CreateCharacter
     }
 }

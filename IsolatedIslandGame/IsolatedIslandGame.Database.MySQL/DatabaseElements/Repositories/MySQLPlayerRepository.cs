@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Database.DatabaseElements.Repositories;
 using IsolatedIslandGame.Database.DatabaseFormatData;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
 using System;
 using System.Net;
@@ -61,7 +62,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
         public override PlayerData Find(int playerID)
         {
             string sqlString = @"SELECT  
-                FacebookID, Nickname, LastConnectedIPAddress
+                FacebookID, Nickname, Signature, GroupType, LastConnectedIPAddress
                 from PlayerCollection WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -72,7 +73,9 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     {
                         ulong facebookID = reader.GetUInt64(0);
                         string nickname = reader.IsDBNull(1) ? null : reader.GetString(1);
-                        IPAddress lastConnectedIPAddress = reader.IsDBNull(2) ? IPAddress.None : IPAddress.Parse(reader.GetString(2));
+                        string signature = reader.IsDBNull(2) ? null : reader.GetString(2);
+                        GroupType groupType = (GroupType)reader.GetByte(3);
+                        IPAddress lastConnectedIPAddress = reader.IsDBNull(4) ? IPAddress.None : IPAddress.Parse(reader.GetString(4));
                         return new PlayerData { playerID = playerID, facebookID = facebookID, nickname = nickname, lastConnectedIPAddress = lastConnectedIPAddress};
                     }
                     else
@@ -87,11 +90,15 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
         {
             string sqlString = @"UPDATE PlayerCollection SET 
                 Nickname = @nickname,
+                Signature = @signature,
+                GroupType = @groupType
                 LastConnectedIPAddress = @lastConnectedIPAddress
                 WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@nickname", player.Nickname ?? "");
+                command.Parameters.AddWithValue("@signature", player.Signature ?? "");
+                command.Parameters.AddWithValue("@groupType", (byte)player.GroupType);
                 command.Parameters.AddWithValue("@lastConnectedIPAddress", player.LastConnectedIPAddress.ToString());
                 command.Parameters.AddWithValue("@playerID", player.PlayerID);
                 if (command.ExecuteNonQuery() <= 0)

@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 4)
+                        if (parameters.Count != 6)
                         {
                             LogService.ErrorFormat(string.Format("LoginResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -59,14 +59,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     int playerID = (int)parameters[(byte)LoginResponseParameterCode.PlayerID];
                     ulong facebookID = ulong.Parse((string)parameters[(byte)LoginResponseParameterCode.FacebookID]);
                     string nickname = (string)parameters[(byte)LoginResponseParameterCode.Nickname];
+                    string signature = (string)parameters[(byte)LoginResponseParameterCode.Signature];
+                    GroupType groupType = (GroupType)parameters[(byte)LoginResponseParameterCode.GroupType];
                     string lastConnectedIPAddress = (string)parameters[(byte)LoginResponseParameterCode.LastConnectedIPAddress];
-                    subject.PlayerOnline(new Player(subject, playerID, facebookID, nickname, IPAddress.Parse(lastConnectedIPAddress)));
+                    subject.PlayerOnline(new Player(subject, playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress)));
                     return true;
                 }
                 catch (InvalidCastException ex)
                 {
                     subject.PlayerOffline();
-                    LogService.Error("PlayerLogin Parameter Cast Error");
+                    LogService.Error("PlayerLoginResponse Parameter Cast Error");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;
