@@ -82,6 +82,7 @@ namespace IsolatedIslandGame.Library
             {
                 info.Count += count;
             }
+            itemInfos[info.PositionIndex] = info;
             onItemChange?.Invoke(info);
             return true;
         }
