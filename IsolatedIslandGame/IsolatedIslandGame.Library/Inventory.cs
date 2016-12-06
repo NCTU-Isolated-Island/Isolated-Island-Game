@@ -69,13 +69,21 @@ namespace IsolatedIslandGame.Library
                 return 0;
             }
         }
+        public void LoadItemInfo(InventoryItemInfo info)
+        {
+            if(!ContainsInventoryItemInfo(info.InventoryItemInfoID))
+            {
+                itemInfoDictionary.Add(info.InventoryItemInfoID, info);
+                onItemChange?.Invoke(info);
+            }
+        }
         public bool AddItem(Item item, int count)
         {
             InventoryItemInfo info = FindInventoryItemInfoByItemID(item.ItemID);
             if (info == null)
             {
                 int positionIndex = itemInfos.FindIndex(x => x == null);
-                info = InventoryItemInfoFactory.Instance?.CreateItemInfo(item, count, positionIndex);
+                info = InventoryItemInfoFactory.Instance?.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex, false);
                 itemInfoDictionary.Add(info.InventoryItemInfoID, info);
             }
             else
@@ -99,7 +107,7 @@ namespace IsolatedIslandGame.Library
                         itemInfoDictionary.Remove(info.InventoryItemInfoID);
                     }
                     itemInfos[info.PositionIndex] = null;
-                    InventoryItemInfoFactory.Instance?.DeleteItemInfo(info);
+                    InventoryItemInfoFactory.Instance?.DeleteItemInfo(info.InventoryItemInfoID);
                 }
                 onItemChange?.Invoke(info);
                 return true;

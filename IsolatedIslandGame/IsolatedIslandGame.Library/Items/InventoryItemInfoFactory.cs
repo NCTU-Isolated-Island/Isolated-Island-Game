@@ -3,8 +3,12 @@
     public abstract class InventoryItemInfoFactory
     {
         public static InventoryItemInfoFactory Instance { get; protected set; }
+        public static void Initial(InventoryItemInfoFactory factory)
+        {
+            Instance = factory;
+        }
 
-        public abstract InventoryItemInfo CreateItemInfo(Item item, int count, int positionIndex);
-        public abstract void DeleteItemInfo(InventoryItemInfo itemInfo);
+        public abstract InventoryItemInfo CreateItemInfo(int inventoryID, int itemID, int count, int positionIndex, bool isUsing);
+        public abstract void DeleteItemInfo(int inventoryItemInfoID);
     }
 }

@@ -3,7 +3,9 @@ using ExitGames.Logging.Log4Net;
 using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Database.MySQL;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Server.Configuration;
+using IsolatedIslandGame.Server.Items;
 using log4net.Config;
 using Photon.SocketServer;
 using System.IO;
@@ -56,7 +58,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         protected void SetupServices()
         {
             FacebookService.InitialService();
-            DatabaseService.Initial(new MySQLDatabaseService());
+            DatabaseService.Initial(new MySQL_DatabaseService());
             if (DatabaseService.Connect(
                     hostName: SystemConfiguration.Instance.DatabaseHostname, 
                     userName: SystemConfiguration.Instance.DatabaseUsername, 
@@ -70,6 +72,8 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         {
             UserFactory.InitialFactory();
             PlayerFactory.InitialFactory();
+            ItemManager.Initial(new ItemFactory());
+            InventoryItemInfoFactory.Initial(new ServerInventoryItemInfoFactory());
         }
     }
 }
