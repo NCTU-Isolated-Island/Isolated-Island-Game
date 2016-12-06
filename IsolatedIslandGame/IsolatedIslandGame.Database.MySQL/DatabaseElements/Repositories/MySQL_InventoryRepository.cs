@@ -102,7 +102,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             }
             foreach(var itemInfo in inventory.ItemInfos)
             {
-                DatabaseService.RepositoryList.InventoryItemInfoRepository.Update(itemInfo);
+                DatabaseService.RepositoryList.InventoryItemInfoRepository.Update(itemInfo, inventory.InventoryID);
             }
         }
         public override void Delete(int inventoryID)
