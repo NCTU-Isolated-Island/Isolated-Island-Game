@@ -18,6 +18,7 @@ namespace IsolatedIslandGame.Library
         public GroupType GroupType { get; private set; }
         public IPAddress LastConnectedIPAddress { get; set; }
         public string IdentityInformation { get { return string.Format("Player ID: {0}", PlayerID); } }
+        public Inventory Inventory { get; private set; }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -43,7 +44,10 @@ namespace IsolatedIslandGame.Library
             OperationManager = new PlayerOperationManager(this);
             ResponseManager = new PlayerResponseManager(this);
         }
-
+        public void BindInventory(Inventory inventory)
+        {
+            Inventory = inventory;
+        }
         public void CreateCharacter(string nickname, string signature, GroupType groupType)
         {
             Nickname = nickname;

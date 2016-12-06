@@ -8,12 +8,11 @@ namespace IsolatedIslandGame.Server
 {
     public class PlayerFactory
     {
-        private static PlayerFactory instance;
-        public static PlayerFactory Instance { get { return instance; } }
+        public static PlayerFactory Instance { get; private set; }
 
         public static void InitialFactory()
         {
-            instance = new PlayerFactory();
+            Instance = new PlayerFactory();
         }
 
         private Dictionary<int, Player> players;
@@ -40,7 +39,7 @@ namespace IsolatedIslandGame.Server
                     }
                     if (DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                     {
-                        playerData = DatabaseService.RepositoryList.PlayerRepository.Find(playerID);
+                        playerData = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
                     }
                     else
                     {
@@ -51,9 +50,10 @@ namespace IsolatedIslandGame.Server
                 }
                 else
                 {
-                    playerData = DatabaseService.RepositoryList.PlayerRepository.Find(playerID);
+                    playerData = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
                 }
                 Player player = new Player(user, playerData.playerID, playerData.facebookID, playerData.nickname, playerData.signature, playerData.groupType, playerData.lastConnectedIPAddress);
+                player.BindInventory(DatabaseService.RepositoryList.InventoryRepository.ReadByPlayerID(player.PlayerID));
                 if (PlayerOnline(player))
                 {
                     return true;
@@ -100,7 +100,7 @@ namespace IsolatedIslandGame.Server
             if (players.ContainsKey(player.PlayerID))
             {
                 DisassemblyPlayer(player);
-                DatabaseService.RepositoryList.PlayerRepository.Save(player);
+                DatabaseService.RepositoryList.PlayerRepository.Update(player);
                 players.Remove(player.PlayerID);
             }
             LogService.InfoFormat("PlayerID: {0} Offline", player.PlayerID);
@@ -109,11 +109,11 @@ namespace IsolatedIslandGame.Server
 
         private void AssemblyPlayer(Player player)
         {
-            player.OnCreateCharacter += DatabaseService.RepositoryList.PlayerRepository.Save;
+            player.OnCreateCharacter += DatabaseService.RepositoryList.PlayerRepository.Update;
         }
         private void DisassemblyPlayer(Player player)
         {
-            player.OnCreateCharacter -= DatabaseService.RepositoryList.PlayerRepository.Save;
+            player.OnCreateCharacter -= DatabaseService.RepositoryList.PlayerRepository.Update;
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Net;
 
 namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
 {
-    class MySQLPlayerRepository : PlayerRepository
+    class MySQL_PlayerRepository : PlayerRepository
     {
         public override bool Register(ulong facebookID)
         {
@@ -20,19 +20,25 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             else
             {
                 string sqlString = @"INSERT INTO PlayerCollection 
-                        (FacebookID, RegisterDate) VALUES (@facebookID, @registerDate) ;";
+                    (FacebookID, RegisterDate) VALUES (@facebookID, @registerDate) 
+                    SELECT LAST_INSERT_ID();;";
                 using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
                 {
                     command.Parameters.AddWithValue("@facebookID", facebookID);
                     command.Parameters.AddWithValue("@registerDate", DateTime.Now);
-                    if (command.ExecuteNonQuery() <= 0)
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        LogService.ErrorFormat("MySQLPlayerRepository Register Player no affected row from FacebookID: {0}", facebookID);
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
+                        if (reader.Read())
+                        {
+                            playerID = reader.GetInt32(0);
+                            DatabaseService.RepositoryList.InventoryRepository.Create(playerID, Inventory.DefaultCapacity);
+                            return true;
+                        }
+                        else
+                        {
+                            LogService.ErrorFormat("MySQLPlayerRepository Register Player no affected row from FacebookID: {0}", facebookID);
+                            return false;
+                        }
                     }
                 }
             }
@@ -59,7 +65,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             }
         }
 
-        public override PlayerData Find(int playerID)
+        public override PlayerData Read(int playerID)
         {
             string sqlString = @"SELECT  
                 FacebookID, Nickname, Signature, GroupType, LastConnectedIPAddress
@@ -86,7 +92,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             }
         }
 
-        public override void Save(Player player)
+        public override void Update(Player player)
         {
             string sqlString = @"UPDATE PlayerCollection SET 
                 Nickname = @nickname,
@@ -106,6 +112,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     LogService.ErrorFormat("MySQLPlayerRepository Save Player no affected row from PlayerID:{0}, IPAddress:{1}", player.PlayerID, player.LastConnectedIPAddress);
                 }
             }
+            DatabaseService.RepositoryList.InventoryRepository.Update(player.Inventory);
         }
     }
 }

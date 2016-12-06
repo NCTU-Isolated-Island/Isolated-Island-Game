@@ -6,12 +6,11 @@ namespace IsolatedIslandGame.Server
 {
     public class UserFactory
     {
-        private static UserFactory instance;
-        public static UserFactory Instance { get { return instance; } }
+        public static UserFactory Instance { get; private set; }
         
         public static void InitialFactory()
         {
-            instance = new UserFactory();
+            Instance = new UserFactory();
         }
 
         private Dictionary<Guid, ServerUser> connectedUsers;

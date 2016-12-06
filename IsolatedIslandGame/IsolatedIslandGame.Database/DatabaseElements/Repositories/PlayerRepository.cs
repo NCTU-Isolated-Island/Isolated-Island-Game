@@ -7,7 +7,7 @@ namespace IsolatedIslandGame.Database.DatabaseElements.Repositories
     {
         public abstract bool Register(ulong facebookID);
         public abstract bool Contains(ulong facebookID, out int playerID);
-        public abstract PlayerData Find(int playerID);
-        public abstract void Save(Player player);
+        public abstract PlayerData Read(int playerID);
+        public abstract void Update(Player player);
     }
 }

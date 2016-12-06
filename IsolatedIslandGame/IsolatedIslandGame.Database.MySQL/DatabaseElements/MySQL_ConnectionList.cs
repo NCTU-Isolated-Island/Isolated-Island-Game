@@ -4,14 +4,18 @@ using IsolatedIslandGame.Database.MySQL.DatabaseElements.Connections;
 
 namespace IsolatedIslandGame.Database.MySQL.DatabaseElements
 {
-    class MySQLConnectionList : ConnectionList
+    class MySQL_ConnectionList : ConnectionList
     {
-        private MySQLPlayerDataConnection playerDataConnection = new MySQLPlayerDataConnection();
+        private MySQL_PlayerDataConnection playerDataConnection = new MySQL_PlayerDataConnection();
         public override PlayerDataConnection PlayerDataConnection { get { return playerDataConnection; } }
 
-        public MySQLConnectionList()
+        private MySQL_ItemDataConnection itemDataConnection = new MySQL_ItemDataConnection();
+        public override ItemDataConnection ItemDataConnection { get { return itemDataConnection; } }
+
+        public MySQL_ConnectionList()
         {
             childConnections.Add(playerDataConnection);
+            childConnections.Add(itemDataConnection);
         }
     }
 }

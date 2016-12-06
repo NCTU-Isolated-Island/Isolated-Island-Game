@@ -3,12 +3,12 @@ using IsolatedIslandGame.Database.MySQL.DatabaseElements;
 
 namespace IsolatedIslandGame.Database.MySQL
 {
-    public class MySQLDatabaseService : DatabaseService
+    public class MySQL_DatabaseService : DatabaseService
     {
-        private MySQLConnectionList internalConnectionList = new MySQLConnectionList();
+        private MySQL_ConnectionList internalConnectionList = new MySQL_ConnectionList();
         protected override ConnectionList InternalConnectionList { get { return internalConnectionList; } }
 
-        private MySQLRepositoryList internalRepositoryList = new MySQLRepositoryList();
+        private MySQL_RepositoryList internalRepositoryList = new MySQL_RepositoryList();
         protected override RepositoryList InternalRepositoryList { get { return internalRepositoryList; } }
     }
 }

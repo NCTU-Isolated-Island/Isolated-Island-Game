@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 
 namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Connections
 {
-    class MySQLPlayerDataConnection : PlayerDataConnection
+    class MySQL_PlayerDataConnection : PlayerDataConnection
     {
         protected override string DatabaseName { get { return "PlayerData"; } }
 
