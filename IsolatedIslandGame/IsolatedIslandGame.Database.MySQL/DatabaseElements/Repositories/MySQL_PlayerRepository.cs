@@ -20,8 +20,8 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             else
             {
                 string sqlString = @"INSERT INTO PlayerCollection 
-                    (FacebookID, RegisterDate) VALUES (@facebookID, @registerDate) 
-                    SELECT LAST_INSERT_ID();;";
+                    (FacebookID, RegisterDate) VALUES (@facebookID, @registerDate) ;
+                    SELECT LAST_INSERT_ID();";
                 using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
                 {
                     command.Parameters.AddWithValue("@facebookID", facebookID);
@@ -97,7 +97,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             string sqlString = @"UPDATE PlayerCollection SET 
                 Nickname = @nickname,
                 Signature = @signature,
-                GroupType = @groupType
+                GroupType = @groupType,
                 LastConnectedIPAddress = @lastConnectedIPAddress
                 WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
