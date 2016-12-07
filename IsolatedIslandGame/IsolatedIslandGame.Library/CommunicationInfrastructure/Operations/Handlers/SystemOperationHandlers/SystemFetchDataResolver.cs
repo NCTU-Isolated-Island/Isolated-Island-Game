@@ -1,6 +1,5 @@
 ﻿using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
-using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
 
@@ -24,12 +23,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         }
         internal void SendOperation(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
-            {
-                { (byte)FetchDataParameterCode.FetchDataCode, (byte)fetchCode },
-                { (byte)FetchDataParameterCode.Parameters, parameters }
-            };
-            subject.OperationManager.SendOperation(SystemOperationCode.FetchData, fetchDataParameters);
+            subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
         }
     }
 }

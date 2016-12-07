@@ -26,12 +26,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         }
         internal void SendOperation(UserFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
-            {
-                { (byte)FetchDataParameterCode.FetchDataCode, (byte)fetchCode },
-                { (byte)FetchDataParameterCode.Parameters, parameters }
-            };
-            subject.OperationManager.SendOperation(UserOperationCode.FetchData, fetchDataParameters);
+            subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
         }
 
         public void FetchSystemVersion()

@@ -1,7 +1,9 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.UserEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
+using IsolatedIslandGame.Protocol.Communication.EventParameters;
 using IsolatedIslandGame.Protocol.Communication.EventParameters.User;
+using IsolatedIslandGame.Protocol.Communication.InformDataCodes;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
@@ -66,6 +68,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
         public void ErrorInform(string title, string message)
         {
             user.UserCommunicationInterface.ErrorInform(title, message);
+        }
+
+        internal void SendInformDataEvent(UserInformDataCode informCode, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> informDataParameters = new Dictionary<byte, object>
+            {
+                { (byte)InformDataEventParameterCode.InformCode, (byte)informCode },
+                { (byte)InformDataEventParameterCode.Parameters, parameters }
+            };
+            SendEvent(UserEventCode.InformData, informDataParameters);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.PlayerOperationHandlers;
 using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
+using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.Player;
 using System.Collections.Generic;
@@ -45,6 +47,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             player.User.OperationManager.SendPlayerOperation(player, operationCode, parameters);
         }
 
+        internal void SendFetchDataOperation(PlayerFetchDataCode fetchCode, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
+            {
+                { (byte)FetchDataParameterCode.FetchDataCode, (byte)fetchCode },
+                { (byte)FetchDataParameterCode.Parameters, parameters }
+            };
+            SendOperation(PlayerOperationCode.FetchData, fetchDataParameters);
+        }
         public void CreateCharacter(string nickname, string signature, GroupType groupType)
         {
             var parameters = new Dictionary<byte, object>
