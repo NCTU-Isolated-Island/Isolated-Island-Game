@@ -1,9 +1,7 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.OperationCodes
 {
-    public enum PlayerOperationCode : byte
+    public enum SystemOperationCode : byte
     {
         FetchData,
-        CreateCharacter,
-        DrawMaterial
     }
 }

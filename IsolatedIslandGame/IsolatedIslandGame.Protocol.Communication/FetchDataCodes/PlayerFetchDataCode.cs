@@ -2,6 +2,7 @@
 {
     public enum PlayerFetchDataCode : byte
     {
-        
+        Inventory,
+        InventoryItemInfos,
     }
 }
