@@ -18,7 +18,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             operationTable = new Dictionary<PlayerOperationCode, ResponseHandler<Player, PlayerOperationCode>>
             {
                 { PlayerOperationCode.FetchData, new PlayerFetchDataResponseResolver(player) },
-                { PlayerOperationCode.CreateCharacter, new CreateCharacterResponseResolver(player) },
+                { PlayerOperationCode.CreateCharacter, new CreateCharacterResponseHandler(player) },
+                { PlayerOperationCode.DrawMaterial, new DrawMaterialResponseHandler(player) },
             };
         }
 

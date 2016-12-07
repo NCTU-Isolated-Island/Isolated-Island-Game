@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             {
                 { UserEventCode.InformData, InformDataResolver },
                 { UserEventCode.PlayerEvent, new PlayerEventResolver(user) },
+                { UserEventCode.SystemEvent, new SystemEventResolver(user) },
             };
         }
 

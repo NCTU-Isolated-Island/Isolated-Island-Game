@@ -12,6 +12,7 @@ namespace IsolatedIslandGame.Library
 
         protected Dictionary<int, Item> itemDictionary;
         public IEnumerable<Item> Items { get { return itemDictionary.Values; } }
+        public int ItemCount { get { return itemDictionary.Count; } }
 
         protected ItemManager()
         {

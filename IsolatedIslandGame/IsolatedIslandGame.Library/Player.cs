@@ -28,6 +28,9 @@ namespace IsolatedIslandGame.Library
         #region events
         private event Action<Player> onCreateCharacter;
         public event Action<Player> OnCreateCharacter { add { onCreateCharacter += value; } remove { onCreateCharacter -= value; } }
+
+        private event Action<Item, int> onDrawMaterial;
+        public event Action<Item, int> OnDrawMaterial { add { onDrawMaterial += value; } remove { onDrawMaterial -= value; } }
         #endregion
 
         public Player(User user, int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -54,6 +57,10 @@ namespace IsolatedIslandGame.Library
             Signature = signature;
             GroupType = groupType;
             onCreateCharacter?.Invoke(this);
+        }
+        public void DrawMaterial(int itemID, int itemCount)
+        {
+            onDrawMaterial?.Invoke(ItemManager.Instance.FindItem(itemID), itemCount);
         }
     }
 }

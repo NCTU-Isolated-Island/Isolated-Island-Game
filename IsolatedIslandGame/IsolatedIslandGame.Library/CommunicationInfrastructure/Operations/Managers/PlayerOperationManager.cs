@@ -22,6 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             {
                 { PlayerOperationCode.FetchData, FetchDataResolver },
                 { PlayerOperationCode.CreateCharacter, new CreateCharacterHandler(player) },
+                { PlayerOperationCode.DrawMaterial, new DrawMaterialHandler(player) },
             };
         }
 
@@ -60,6 +61,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)CreateCharacterParameterCode.GroupType, groupType }
             };
             SendOperation(PlayerOperationCode.CreateCharacter, parameters);
+        }
+        public void DrawMaterial()
+        {
+            SendOperation(PlayerOperationCode.DrawMaterial, new Dictionary<byte, object>());
         }
     }
 }
