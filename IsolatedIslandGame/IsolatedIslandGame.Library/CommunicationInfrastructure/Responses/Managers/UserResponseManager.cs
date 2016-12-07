@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             {
                 { UserOperationCode.FetchData, new UserFetchDataResponseResolver(user) },
                 { UserOperationCode.PlayerOperation, new PlayerOperationResponseResolver(user) },
+                { UserOperationCode.SystemOperation, new SystemOperationResponseResolver(user) },
                 { UserOperationCode.Login, new LoginResponseHandler(user) }
             };
         }
@@ -54,6 +55,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
                 { (byte)PlayerResponseParameterCode.Parameters, parameters }
             };
             player.User.ResponseManager.SendResponse(UserOperationCode.PlayerOperation, ErrorCode.NoError, null, responseData);
+        }
+        public void SendSystemResponse(SystemOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> responseData = new Dictionary<byte, object>
+            {
+                { (byte)SystemResponseParameterCode.OperationCode, (byte)operationCode },
+                { (byte)SystemResponseParameterCode.ReturnCode, (short)errorCode },
+                { (byte)SystemResponseParameterCode.DebugMessage, debugMessage },
+                { (byte)SystemResponseParameterCode.Parameters, parameters }
+            };
+            SystemManager.Instance.ResponseManager.SendResponse(UserOperationCode.SystemOperation, ErrorCode.NoError, null, responseData);
         }
     }
 }
