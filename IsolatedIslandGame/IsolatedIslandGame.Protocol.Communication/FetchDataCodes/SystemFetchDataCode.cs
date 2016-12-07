@@ -2,6 +2,6 @@
 {
     public enum SystemFetchDataCode : byte
     {
-        Item
+        Item,
     }
 }

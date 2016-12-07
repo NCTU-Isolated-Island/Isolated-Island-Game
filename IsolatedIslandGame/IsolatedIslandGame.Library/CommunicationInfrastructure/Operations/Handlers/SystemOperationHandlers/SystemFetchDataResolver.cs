@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
+using IsolatedIslandGame.Protocol.Communication.FetchDataParameters.System;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
 
@@ -9,6 +10,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
     {
         public SystemFetchDataResolver(SystemManager subject) : base(subject)
         {
+            fetchTable.Add(SystemFetchDataCode.Item, new FetchItemHandler(subject));
         }
 
         internal override void SendResponse(SystemOperationCode operationCode, Dictionary<byte, object> parameter)
@@ -24,6 +26,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         internal void SendOperation(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
             subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+        }
+
+        public void FetchItem(int itemID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)FetchItemParameterCode.ItemID, itemID }
+            };
+            SendOperation(SystemFetchDataCode.Item, parameters);
         }
     }
 }
