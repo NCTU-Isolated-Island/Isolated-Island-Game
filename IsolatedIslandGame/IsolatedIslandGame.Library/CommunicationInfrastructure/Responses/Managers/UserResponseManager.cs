@@ -54,7 +54,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
                 { (byte)PlayerResponseParameterCode.DebugMessage, debugMessage },
                 { (byte)PlayerResponseParameterCode.Parameters, parameters }
             };
-            player.User.ResponseManager.SendResponse(UserOperationCode.PlayerOperation, ErrorCode.NoError, null, responseData);
+            SendResponse(UserOperationCode.PlayerOperation, ErrorCode.NoError, null, responseData);
         }
         public void SendSystemResponse(SystemOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
@@ -65,7 +65,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
                 { (byte)SystemResponseParameterCode.DebugMessage, debugMessage },
                 { (byte)SystemResponseParameterCode.Parameters, parameters }
             };
-            SystemManager.Instance.ResponseManager.SendResponse(UserOperationCode.SystemOperation, ErrorCode.NoError, null, responseData);
+            SendResponse(UserOperationCode.SystemOperation, ErrorCode.NoError, null, responseData);
         }
     }
 }
