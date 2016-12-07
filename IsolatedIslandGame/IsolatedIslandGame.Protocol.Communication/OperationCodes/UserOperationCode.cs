@@ -4,6 +4,7 @@
     {
         FetchData,
         PlayerOperation,
+        SystemOperation,
         Login
     }
 }

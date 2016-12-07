@@ -63,6 +63,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     GroupType groupType = (GroupType)parameters[(byte)LoginResponseParameterCode.GroupType];
                     string lastConnectedIPAddress = (string)parameters[(byte)LoginResponseParameterCode.LastConnectedIPAddress];
                     subject.PlayerOnline(new Player(subject, playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress)));
+                    subject.Player.OperationManager.FetchDataResolver.FetchInventory();
                     return true;
                 }
                 catch (InvalidCastException ex)

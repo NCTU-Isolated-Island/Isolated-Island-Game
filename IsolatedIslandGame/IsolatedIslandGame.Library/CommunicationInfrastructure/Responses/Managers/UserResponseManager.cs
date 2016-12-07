@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.UserResponseHandlers;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using IsolatedIslandGame.Protocol.Communication.ResponseParameters.User;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers
@@ -18,6 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             {
                 { UserOperationCode.FetchData, new UserFetchDataResponseResolver(user) },
                 { UserOperationCode.PlayerOperation, new PlayerOperationResponseResolver(user) },
+                { UserOperationCode.SystemOperation, new SystemOperationResponseResolver(user) },
                 { UserOperationCode.Login, new LoginResponseHandler(user) }
             };
         }
@@ -40,6 +42,30 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
         public void SendResponse(UserOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
             user.UserCommunicationInterface.SendResponse(operationCode, errorCode, debugMessage, parameters);
+        }
+
+        public void SendPlayerResponse(Player player, PlayerOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> responseData = new Dictionary<byte, object>
+            {
+                { (byte)PlayerResponseParameterCode.PlayerID, player.PlayerID },
+                { (byte)PlayerResponseParameterCode.OperationCode, (byte)operationCode },
+                { (byte)PlayerResponseParameterCode.ReturnCode, (short)errorCode },
+                { (byte)PlayerResponseParameterCode.DebugMessage, debugMessage },
+                { (byte)PlayerResponseParameterCode.Parameters, parameters }
+            };
+            SendResponse(UserOperationCode.PlayerOperation, ErrorCode.NoError, null, responseData);
+        }
+        public void SendSystemResponse(SystemOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> responseData = new Dictionary<byte, object>
+            {
+                { (byte)SystemResponseParameterCode.OperationCode, (byte)operationCode },
+                { (byte)SystemResponseParameterCode.ReturnCode, (short)errorCode },
+                { (byte)SystemResponseParameterCode.DebugMessage, debugMessage },
+                { (byte)SystemResponseParameterCode.Parameters, parameters }
+            };
+            SendResponse(UserOperationCode.SystemOperation, ErrorCode.NoError, null, responseData);
         }
     }
 }

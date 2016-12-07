@@ -1,5 +1,7 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.UserOperationHandlers;
+using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
+using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.User;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             {
                 { UserOperationCode.FetchData, FetchDataResolver },
                 { UserOperationCode.PlayerOperation, new PlayerOperationResolver(user) },
+                { UserOperationCode.SystemOperation, new SystemOperationResolver(user) },
                 { UserOperationCode.Login, new LoginHandler(user) }
             };
         }
@@ -43,7 +46,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         {
             user.UserCommunicationInterface.SendOperation(operationCode, parameters);
         }
-        public void SendAnswerOperation(Player player, PlayerOperationCode operationCode, Dictionary<byte, object> parameters)
+
+        public void SendFetchDataOperation(UserFetchDataCode fetchCode, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
+            {
+                { (byte)FetchDataParameterCode.FetchDataCode, (byte)fetchCode },
+                { (byte)FetchDataParameterCode.Parameters, parameters }
+            };
+            SendOperation(UserOperationCode.FetchData, fetchDataParameters);
+        }
+        public void SendPlayerOperation(Player player, PlayerOperationCode operationCode, Dictionary<byte, object> parameters)
         {
             Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
             {
@@ -52,6 +65,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)PlayerOperationParameterCode.Parameters, parameters }
             };
             SendOperation(UserOperationCode.PlayerOperation, operationParameters);
+        }
+        public void SendSystemOperation(SystemOperationCode operationCode, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
+            {
+                { (byte)SystemOperationParameterCode.OperationCode, operationCode },
+                { (byte)SystemOperationParameterCode.Parameters, parameters }
+            };
+            SendOperation(UserOperationCode.SystemOperation, operationParameters);
         }
         public void Login(ulong facebookID, string accessToken)
         {
