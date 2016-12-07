@@ -3,7 +3,6 @@ using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.Player;
-using IsolatedIslandGame.Protocol.Communication.OperationParameters.User;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers
@@ -43,13 +42,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
 
         internal void SendOperation(PlayerOperationCode operationCode, Dictionary<byte, object> parameters)
         {
-            Dictionary<byte, object> operationData = new Dictionary<byte, object>
-            {
-                { (byte)PlayerOperationParameterCode.PlayerID, player.PlayerID },
-                { (byte)PlayerOperationParameterCode.OperationCode, (byte)operationCode },
-                { (byte)PlayerOperationParameterCode.Parameters, parameters }
-            };
-            player.User.OperationManager.SendOperation(UserOperationCode.PlayerOperation, operationData);
+            player.User.OperationManager.SendPlayerOperation(player, operationCode, parameters);
         }
 
         public void CreateCharacter(string nickname, string signature, GroupType groupType)

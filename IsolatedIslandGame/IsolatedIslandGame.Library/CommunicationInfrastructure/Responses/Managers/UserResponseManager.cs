@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.UserResponseHandlers;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using IsolatedIslandGame.Protocol.Communication.ResponseParameters.User;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers
@@ -40,6 +41,19 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
         public void SendResponse(UserOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
             user.UserCommunicationInterface.SendResponse(operationCode, errorCode, debugMessage, parameters);
+        }
+
+        public void SendPlayerResponse(Player player, PlayerOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> responseData = new Dictionary<byte, object>
+            {
+                { (byte)PlayerResponseParameterCode.PlayerID, player.PlayerID },
+                { (byte)PlayerResponseParameterCode.OperationCode, (byte)operationCode },
+                { (byte)PlayerResponseParameterCode.ReturnCode, (short)errorCode },
+                { (byte)PlayerResponseParameterCode.DebugMessage, debugMessage },
+                { (byte)PlayerResponseParameterCode.Parameters, parameters }
+            };
+            player.User.ResponseManager.SendResponse(UserOperationCode.PlayerOperation, ErrorCode.NoError, null, responseData);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.SystemEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
-using IsolatedIslandGame.Protocol.Communication.EventParameters.User;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
@@ -39,12 +38,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
 
         internal void SendEvent(SystemEventCode eventCode, Dictionary<byte, object> parameters)
         {
-            Dictionary<byte, object> eventData = new Dictionary<byte, object>
-            {
-                { (byte)SystemEventParameterCode.EventCode, (byte)eventCode },
-                { (byte)SystemEventParameterCode.Parameters, parameters }
-            };
-            systemManager.User.EventManager.SendEvent(UserEventCode.SystemEvent, eventData);
+            systemManager.User.EventManager.SendSystemEvent(eventCode, parameters);
         }
 
         public void ErrorInform(string title, string message)
