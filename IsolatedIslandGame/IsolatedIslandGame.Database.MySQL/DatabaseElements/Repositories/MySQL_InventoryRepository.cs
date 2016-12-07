@@ -91,7 +91,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             string sqlString = @"UPDATE InventoryCollection SET 
                 Capacity = @capacity
                 WHERE InventoryID = @inventoryID;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@capacity", inventory.Capacity);
                 command.Parameters.AddWithValue("@inventoryID", inventory.InventoryID);

@@ -40,9 +40,9 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
                 {
                     reconnectCountdownTimer = reconnectInterval;
                     PhotonService.Instance.Connect(
-                        serverName: SystemManager.Instance.SystemConfiguration.ServerName,
-                        serverAddress: SystemManager.Instance.SystemConfiguration.ServerAddress,
-                        port: SystemManager.Instance.SystemConfiguration.ServerPort
+                        serverName: GameManager.Instance.SystemConfiguration.ServerName,
+                        serverAddress: GameManager.Instance.SystemConfiguration.ServerAddress,
+                        port: GameManager.Instance.SystemConfiguration.ServerPort
                     );
                 }
             }

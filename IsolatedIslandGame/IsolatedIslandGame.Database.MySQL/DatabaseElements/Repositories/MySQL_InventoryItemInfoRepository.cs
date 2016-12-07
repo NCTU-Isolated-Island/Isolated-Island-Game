@@ -102,6 +102,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                 WHERE InventoryID = @inventoryID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
+                command.Parameters.AddWithValue("@inventoryID", inventoryID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
