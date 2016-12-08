@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.PlayerOperationHandlers.FetchDataHandlers
 {
-    class FetchInventoryHandler : PlayerFetchDataHandler
+    class FetchVesselHandler : PlayerFetchDataHandler
     {
-        public FetchInventoryHandler(Player subject) : base(subject, 0)
+        public FetchVesselHandler(Player subject) : base(subject, 0)
         {
         }
 
@@ -17,18 +17,24 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 try
                 {
-                    Inventory inventory = subject.Inventory;
+                    Vessel vessel = subject.Vessel;
                     var result = new Dictionary<byte, object>
                     {
-                        { (byte)FetchInventoryResponseParameterCode.InventoryID, inventory.InventoryID },
-                        { (byte)FetchInventoryResponseParameterCode.Capacity, inventory.Capacity },
+                        { (byte)FetchVesselResponseParameterCode.VesselID, vessel.VesselID },
+                        { (byte)FetchVesselResponseParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
+                        { (byte)FetchVesselResponseParameterCode.Name, vessel.Name },
+                        { (byte)FetchVesselResponseParameterCode.LocationX, vessel.LocationX },
+                        { (byte)FetchVesselResponseParameterCode.LocationZ, vessel.LocationZ },
+                        { (byte)FetchVesselResponseParameterCode.EulerAngleX, vessel.Rotation.eulerAngles.x },
+                        { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.Rotation.eulerAngles.y },
+                        { (byte)FetchVesselResponseParameterCode.EulerAngleZ, vessel.Rotation.eulerAngles.z },
                     };
                     SendResponse(fetchCode, result);
                     return true;
                 }
                 catch (InvalidCastException ex)
                 {
-                    LogService.ErrorFormat("FetchInventory Invalid Cast!");
+                    LogService.ErrorFormat("FetchVessel Invalid Cast!");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;

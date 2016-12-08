@@ -54,6 +54,7 @@ namespace IsolatedIslandGame.Server
                 }
                 Player player = new Player(user, playerData.playerID, playerData.facebookID, playerData.nickname, playerData.signature, playerData.groupType, playerData.lastConnectedIPAddress);
                 player.BindInventory(DatabaseService.RepositoryList.InventoryRepository.ReadByPlayerID(player.PlayerID));
+                player.BindVessel(DatabaseService.RepositoryList.VesselRepository.ReadByOwnerPlayerID(player.PlayerID));
                 if (PlayerOnline(player))
                 {
                     return true;
@@ -110,10 +111,16 @@ namespace IsolatedIslandGame.Server
         private void AssemblyPlayer(Player player)
         {
             player.OnCreateCharacter += DatabaseService.RepositoryList.PlayerRepository.Update;
+            player.OnCreateCharacter += CreateVessel;
         }
         private void DisassemblyPlayer(Player player)
         {
             player.OnCreateCharacter -= DatabaseService.RepositoryList.PlayerRepository.Update;
+            player.OnCreateCharacter -= CreateVessel;
+        }
+        private void CreateVessel(Player player)
+        {
+            player.BindVessel(DatabaseService.RepositoryList.VesselRepository.Create(player.PlayerID, player.Nickname));
         }
     }
 }

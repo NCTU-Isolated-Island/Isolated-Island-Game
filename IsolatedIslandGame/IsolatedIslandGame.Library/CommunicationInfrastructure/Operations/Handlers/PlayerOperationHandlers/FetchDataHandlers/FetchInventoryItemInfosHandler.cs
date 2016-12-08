@@ -43,7 +43,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 }
                 catch (InvalidCastException ex)
                 {
-                    LogService.ErrorFormat("Fetch System Version Invalid Cast!");
+                    LogService.ErrorFormat("FetchInventoryItemInfos Invalid Cast!");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;

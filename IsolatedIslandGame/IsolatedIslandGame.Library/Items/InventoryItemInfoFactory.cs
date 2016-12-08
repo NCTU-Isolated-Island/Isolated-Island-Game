@@ -8,7 +8,7 @@
             Instance = factory;
         }
 
-        public abstract InventoryItemInfo CreateItemInfo(int inventoryID, int itemID, int count, int positionIndex, bool isUsing);
+        public abstract InventoryItemInfo CreateItemInfo(int inventoryID, int itemID, int count, int positionIndex);
         public abstract void DeleteItemInfo(int inventoryItemInfoID);
     }
 }

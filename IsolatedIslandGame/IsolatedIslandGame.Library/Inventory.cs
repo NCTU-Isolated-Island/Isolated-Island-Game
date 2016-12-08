@@ -83,7 +83,7 @@ namespace IsolatedIslandGame.Library
             if (info == null)
             {
                 int positionIndex = itemInfos.FindIndex(x => x == null);
-                info = InventoryItemInfoFactory.Instance?.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex, false);
+                info = InventoryItemInfoFactory.Instance?.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex);
                 itemInfoDictionary.Add(info.InventoryItemInfoID, info);
             }
             else

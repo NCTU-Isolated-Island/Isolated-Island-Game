@@ -31,8 +31,6 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         if (reader.Read())
                         {
                             playerID = reader.GetInt32(0);
-                            DatabaseService.RepositoryList.InventoryRepository.Create(playerID, Inventory.DefaultCapacity);
-                            return true;
                         }
                         else
                         {
@@ -42,6 +40,8 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     }
                 }
             }
+            DatabaseService.RepositoryList.InventoryRepository.Create(playerID, Inventory.DefaultCapacity);
+            return true;
         }
 
         public override bool Contains(ulong facebookID, out int playerID)
@@ -113,6 +113,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                 }
             }
             DatabaseService.RepositoryList.InventoryRepository.Update(player.Inventory);
+            DatabaseService.RepositoryList.VesselRepository.Update(player.Vessel);
         }
     }
 }

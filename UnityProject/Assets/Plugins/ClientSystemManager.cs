@@ -3,20 +3,20 @@ using UnityEngine;
 
 namespace IsolatedIslandGame.Client
 {
-    public class GameManager : SystemManager
+    public class ClientSystemManager : SystemManager
     {
-        private static GameManager instance;
-        public static new GameManager Instance { get { return instance; } }
+        private static ClientSystemManager instance;
+        public static new ClientSystemManager Instance { get { return instance; } }
 
-        static GameManager()
+        static ClientSystemManager()
         {
-            instance = new GameManager(UserManager.Instance.User);
+            instance = new ClientSystemManager(UserManager.Instance.User);
             Initial(instance);
         }
 
         public SystemConfiguration SystemConfiguration { get; private set; }
 
-        private GameManager(User user) : base(user)
+        private ClientSystemManager(User user) : base(user)
         {
             LogService.InitialService(Debug.Log, Debug.LogFormat, Debug.LogWarning, Debug.LogWarningFormat, Debug.LogError, Debug.LogErrorFormat);
             SystemConfiguration = new SystemConfiguration

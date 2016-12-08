@@ -10,6 +10,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
         {
             fetchResponseTable.Add(PlayerFetchDataCode.Inventory, new FetchInventoryResponseHandler(subject));
             fetchResponseTable.Add(PlayerFetchDataCode.InventoryItemInfos, new FetchInventoryItemInfosResponseHandler(subject));
+            fetchResponseTable.Add(PlayerFetchDataCode.Vessel, new FetchVesselResponseHandler(subject));
+            fetchResponseTable.Add(PlayerFetchDataCode.VesselDecorations, new FetchVesselDecorationsResponseHandler(subject));
         }
     }
 }

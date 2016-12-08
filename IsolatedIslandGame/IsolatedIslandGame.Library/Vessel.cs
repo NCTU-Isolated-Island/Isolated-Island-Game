@@ -9,10 +9,10 @@ namespace IsolatedIslandGame.Library
     {
         public int VesselID { get; private set; }
         public int OwnerPlayerID { get; private set; }
-        public string OwnerName { get; private set; }
+        public string Name { get; private set; }
         public float LocationX { get; private set; }
         public float LocationZ { get; private set; }
-        public Quaternion Roration { get; private set; }
+        public Quaternion Rotation { get; private set; }
 
         private Dictionary<int, Decoration> decorationDictionary;
         public int DecorationCount { get { return decorationDictionary.Count; } }
@@ -22,14 +22,14 @@ namespace IsolatedIslandGame.Library
         private event DecorationChangeEventHandler onDecorationChange;
         public event DecorationChangeEventHandler OnDecorationChange { add { onDecorationChange += value; } remove { onDecorationChange -= value; } }
 
-        public Vessel(int vesselID, int ownerPlayerID, string ownerName, float locationX, float locationZ, Quaternion roration)
+        public Vessel(int vesselID, int ownerPlayerID, string name, float locationX, float locationZ, Quaternion roration)
         {
             VesselID = vesselID;
             OwnerPlayerID = ownerPlayerID;
-            OwnerName = ownerName;
+            Name = name;
             LocationX = locationX;
             LocationZ = locationZ;
-            Roration = roration;
+            Rotation = roration;
 
             decorationDictionary = new Dictionary<int, Decoration>();
         }
