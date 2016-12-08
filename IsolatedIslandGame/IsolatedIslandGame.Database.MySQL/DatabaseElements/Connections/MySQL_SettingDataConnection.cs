@@ -3,9 +3,9 @@ using MySql.Data.MySqlClient;
 
 namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Connections
 {
-    class MySQL_ItemDataConnection : ItemDataConnection
+    class MySQL_SettingDataConnection : SettingDataConnection
     {
-        protected override string DatabaseName { get { return "ItemData"; } }
+        protected override string DatabaseName { get { return "SettingData"; } }
 
         public override bool Connect(string hostName, string userName, string password, string database)
         {

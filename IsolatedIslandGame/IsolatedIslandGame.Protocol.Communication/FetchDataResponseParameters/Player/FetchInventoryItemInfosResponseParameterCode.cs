@@ -6,7 +6,6 @@
         InventoryItemInfoID,
         ItemID,
         ItemCount,
-        PositionIndex,
-        IsUsing
+        PositionIndex
     }
 }

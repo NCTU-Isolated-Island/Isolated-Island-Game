@@ -4,5 +4,7 @@
     {
         Inventory,
         InventoryItemInfos,
+        Vessel,
+        VesselDecorations
     }
 }

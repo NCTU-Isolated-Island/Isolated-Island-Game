@@ -52,6 +52,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     string signature = (string)parameters[(byte)CreateCharacterResponseParameterCode.Signature];
                     GroupType groupType = (GroupType)parameters[(byte)CreateCharacterResponseParameterCode.GroupType];
                     subject.CreateCharacter(nickname, signature, groupType);
+                    subject.OperationManager.FetchDataResolver.FetchVessel();
                     return true;
                 }
                 catch (InvalidCastException ex)

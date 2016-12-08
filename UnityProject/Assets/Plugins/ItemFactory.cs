@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Client
             {
                 Item item = new Item(itemID, "傳輸中", "傳輸中");
                 AddItem(item);
-                GameManager.Instance.OperationManager.FetchDataResolver.FetchItem(itemID);
+                ClientSystemManager.Instance.OperationManager.FetchDataResolver.FetchItem(itemID);
                 return item;
             }
         }

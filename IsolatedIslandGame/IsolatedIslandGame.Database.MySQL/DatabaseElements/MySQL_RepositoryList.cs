@@ -17,5 +17,11 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements
 
         private MySQL_InventoryItemInfoRepository inventoryItemInfoRepository = new MySQL_InventoryItemInfoRepository();
         public override InventoryItemInfoRepository InventoryItemInfoRepository { get { return inventoryItemInfoRepository; } }
+
+        private MySQL_VesselRepository vesselRepository = new MySQL_VesselRepository();
+        public override VesselRepository VesselRepository { get { return vesselRepository; } }
+
+        private MySQL_DecorationRepository decorationRepository = new MySQL_DecorationRepository();
+        public override DecorationRepository DecorationRepository { get { return decorationRepository; } }
     }
 }

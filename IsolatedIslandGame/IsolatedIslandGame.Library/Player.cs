@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Library
         public IPAddress LastConnectedIPAddress { get; set; }
         public string IdentityInformation { get { return string.Format("Player ID: {0}", PlayerID); } }
         public Inventory Inventory { get; private set; }
+        public Vessel Vessel { get; private set; }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -31,6 +32,12 @@ namespace IsolatedIslandGame.Library
 
         private event Action<Item, int> onDrawMaterial;
         public event Action<Item, int> OnDrawMaterial { add { onDrawMaterial += value; } remove { onDrawMaterial -= value; } }
+
+        private event Action<Inventory> onBindInventory;
+        public event Action<Inventory> OnBindInventory { add { onBindInventory += value; } remove { onBindInventory -= value; } }
+
+        private event Action<Vessel> onBindVessel;
+        public event Action<Vessel> OnBindVessel { add { onBindVessel += value; } remove { onBindVessel -= value; } }
         #endregion
 
         public Player(User user, int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -50,6 +57,15 @@ namespace IsolatedIslandGame.Library
         public void BindInventory(Inventory inventory)
         {
             Inventory = inventory;
+            onBindInventory?.Invoke(Inventory);
+        }
+        public void BindVessel(Vessel vessel)
+        {
+            if(vessel.OwnerPlayerID == PlayerID)
+            {
+                Vessel = vessel;
+                onBindVessel?.Invoke(Vessel);
+            }
         }
         public void CreateCharacter(string nickname, string signature, GroupType groupType)
         {

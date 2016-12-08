@@ -14,7 +14,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             string sqlString = @"INSERT INTO ItemCollection 
                 (ItemName,Description) VALUES (@itemName,@description) ;
                 SELECT LAST_INSERT_ID();";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("itemName", itemName);
                 command.Parameters.AddWithValue("description", description);
@@ -38,7 +38,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             string sqlString = @"INSERT INTO MaterialCollection 
                 (ItemID) VALUES (@itemID) ;
                 SELECT LAST_INSERT_ID();";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("itemID", item.ItemID);
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -61,7 +61,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             string sqlString = @"SELECT  
                 MaterialID
                 from MaterialCollection WHERE ItemID = @itemID;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@itemID", itemID);
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -75,7 +75,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             sqlString = @"SELECT  
                 ItemName, Description
                 from ItemCollection WHERE ItemID = @itemID;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@itemID", itemID);
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -105,7 +105,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             string sqlString = @"UPDATE ItemCollection SET 
                 ItemName = @itemName, Description = @description
                 WHERE ItemID = @itemID;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@itemName", item.ItemName);
                 command.Parameters.AddWithValue("@description", item.Description);
@@ -120,7 +120,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
         {
             string sqlString = @"DELETE FROM ItemCollection 
                 WHERE ItemID = @itemID;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@itemID", itemID);
                 if (command.ExecuteNonQuery() <= 0)
@@ -135,7 +135,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             string sqlString = @"SELECT  
                 ItemID,ItemName, Description
                 from ItemCollection;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
@@ -151,7 +151,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             sqlString = @"SELECT  
                 MaterialID, ItemID
                 from MaterialCollection;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ItemDataConnection.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {

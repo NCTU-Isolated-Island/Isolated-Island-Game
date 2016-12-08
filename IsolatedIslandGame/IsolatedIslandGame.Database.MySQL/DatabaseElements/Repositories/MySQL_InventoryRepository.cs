@@ -100,7 +100,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     LogService.ErrorFormat("MySQL_InventoryRepository Save Inventory Error InventoryID: {0}", inventory.InventoryID);
                 }
             }
-            foreach(var itemInfo in inventory.ItemInfos)
+            foreach (var itemInfo in inventory.ItemInfos)
             {
                 DatabaseService.RepositoryList.InventoryItemInfoRepository.Update(itemInfo, inventory.InventoryID);
             }
