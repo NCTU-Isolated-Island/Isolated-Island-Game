@@ -1,6 +1,6 @@
 ﻿namespace IsolatedIslandGame.Database.DatabaseElements.Connections
 {
-    public abstract class ItemDataConnection : DatabaseConnection
+    public abstract class SettingDataConnection : DatabaseConnection
     {
     }
 }

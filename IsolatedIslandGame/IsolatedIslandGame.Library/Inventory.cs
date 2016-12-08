@@ -11,7 +11,7 @@ namespace IsolatedIslandGame.Library
 
         public int InventoryID { get; private set; }
         public int Capacity { get; private set; }
-        protected Dictionary<int, InventoryItemInfo> itemInfoDictionary;
+        private Dictionary<int, InventoryItemInfo> itemInfoDictionary;
         private List<InventoryItemInfo> itemInfos;
         public int DifferentItemCount { get { return itemInfoDictionary.Count; } }
         

@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Library
         public IPAddress LastConnectedIPAddress { get; set; }
         public string IdentityInformation { get { return string.Format("Player ID: {0}", PlayerID); } }
         public Inventory Inventory { get; private set; }
+        public Vessel Vessel { get; private set; }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -50,6 +51,13 @@ namespace IsolatedIslandGame.Library
         public void BindInventory(Inventory inventory)
         {
             Inventory = inventory;
+        }
+        public void BindVessel(Vessel vessel)
+        {
+            if(vessel.OwnerPlayerID == PlayerID)
+            {
+                Vessel = vessel;
+            }
         }
         public void CreateCharacter(string nickname, string signature, GroupType groupType)
         {

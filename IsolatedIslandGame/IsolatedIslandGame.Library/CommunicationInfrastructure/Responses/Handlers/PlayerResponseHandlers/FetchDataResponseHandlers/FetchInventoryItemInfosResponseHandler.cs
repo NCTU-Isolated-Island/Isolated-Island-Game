@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 6)
+                        if (parameters.Count != 5)
                         {
                             LogService.ErrorFormat(string.Format("FetchInventoryItemInfosResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -48,15 +48,13 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     int itemID = (int)parameters[(byte)FetchInventoryItemInfosResponseParameterCode.ItemID];
                     int itemCount = (int)parameters[(byte)FetchInventoryItemInfosResponseParameterCode.ItemCount];
                     int positionIndex = (int)parameters[(byte)FetchInventoryItemInfosResponseParameterCode.PositionIndex];
-                    bool isUsing = (bool)parameters[(byte)FetchInventoryItemInfosResponseParameterCode.IsUsing];
                     if(subject.Inventory.InventoryID == inventoryID)
                     {
                         subject.Inventory.LoadItemInfo(new InventoryItemInfo(
                             inventoryItemInfoID: inventoryItemInfoID,
                             item: ItemManager.Instance.FindItem(itemID),
                             count: itemCount,
-                            positionIndex: positionIndex,
-                            isUsing: isUsing));
+                            positionIndex: positionIndex));
                         return true;
                     }
                     else
