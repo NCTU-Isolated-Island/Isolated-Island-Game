@@ -1,4 +1,4 @@
-﻿using IsolatedIslandGame.Protocol.Communication.EventParameters;
+﻿using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers

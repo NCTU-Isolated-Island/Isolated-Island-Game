@@ -1,8 +1,9 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.SystemEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
-using IsolatedIslandGame.Protocol.Communication.EventParameters;
+using IsolatedIslandGame.Protocol.Communication.EventParameters.User;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
+using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
@@ -40,12 +41,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
 
         internal void SendEvent(SystemEventCode eventCode, Dictionary<byte, object> parameters)
         {
-            systemManager.User.EventManager.SendSystemEvent(eventCode, parameters);
+            Dictionary<byte, object> eventData = new Dictionary<byte, object>
+            {
+                { (byte)SystemEventParameterCode.EventCode, (byte)eventCode },
+                { (byte)SystemEventParameterCode.Parameters, parameters }
+            };
+            systemManager.SendAllUserEvent(UserEventCode.SystemEvent, eventData);
         }
 
         public void ErrorInform(string title, string message)
         {
-            systemManager.User.EventManager.ErrorInform(title, message);
+            systemManager.EventManager.ErrorInform(title, message);
         }
 
         internal void SendSyncDataEvent(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)

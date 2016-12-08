@@ -13,10 +13,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             this.correctParameterCount = correctParameterCount;
         }
 
-        public virtual bool Handle(TSyncDataCode syncCode, Dictionary<byte, object> parameter)
+        internal virtual bool Handle(TSyncDataCode syncCode, Dictionary<byte, object> parameters)
         {
             string debugMessage;
-            if (CheckParameter(parameter, out debugMessage))
+            if (CheckParameter(parameters, out debugMessage))
             {
                 return true;
             }

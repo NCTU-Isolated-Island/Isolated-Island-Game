@@ -15,11 +15,11 @@ namespace IsolatedIslandGame.Server
             Instance = new PlayerFactory();
         }
 
-        private Dictionary<int, Player> players;
+        private Dictionary<int, Player> playerDictionary;
 
         private PlayerFactory()
         {
-            players = new Dictionary<int, Player>();
+            playerDictionary = new Dictionary<int, Player>();
         }
         public bool PlayerLogin(ServerUser user, ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
         {
@@ -75,7 +75,7 @@ namespace IsolatedIslandGame.Server
         }
         public void PlayerLogout(Player player)
         {
-            if (players.ContainsKey(player.PlayerID))
+            if (playerDictionary.ContainsKey(player.PlayerID))
             {
                 UserFactory.Instance.UserDisconnect(player.User as ServerUser);
             }
@@ -83,13 +83,13 @@ namespace IsolatedIslandGame.Server
 
         public bool PlayerOnline(Player player)
         {
-            if (players.ContainsKey(player.PlayerID))
+            if (playerDictionary.ContainsKey(player.PlayerID))
             {
                 return false;
             }
             else
             {
-                players.Add(player.PlayerID, player);
+                playerDictionary.Add(player.PlayerID, player);
                 AssemblyPlayer(player);
                 player.User.PlayerOnline(player);
                 LogService.InfoFormat("PlayerID: {0} Online from: {1}", player.PlayerID, player.LastConnectedIPAddress);
@@ -98,11 +98,11 @@ namespace IsolatedIslandGame.Server
         }
         public void PlayerOffline(Player player)
         {
-            if (players.ContainsKey(player.PlayerID))
+            if (playerDictionary.ContainsKey(player.PlayerID))
             {
                 DisassemblyPlayer(player);
                 DatabaseService.RepositoryList.PlayerRepository.Update(player);
-                players.Remove(player.PlayerID);
+                playerDictionary.Remove(player.PlayerID);
             }
             LogService.InfoFormat("PlayerID: {0} Offline", player.PlayerID);
             player.User.PlayerOffline();

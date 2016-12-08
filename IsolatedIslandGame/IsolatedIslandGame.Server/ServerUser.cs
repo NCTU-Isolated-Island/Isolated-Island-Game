@@ -14,7 +14,7 @@ namespace IsolatedIslandGame.Server
         public Guid Guid { get; protected set; }
         private ServerCommunicationInterface serverCommunicationInterface;
 
-        public ServerUser(ServerCommunicationInterface serverCommunicationInterface, UserCommunicationInterface communicationInterface, IPAddress lastConnectedIPAddress) : base(communicationInterface)
+        public ServerUser(ServerCommunicationInterface serverCommunicationInterface, CommunicationInterface communicationInterface, IPAddress lastConnectedIPAddress) : base(communicationInterface)
         {
             LastConnectedIPAddress = lastConnectedIPAddress;
             Guid = Guid.NewGuid();

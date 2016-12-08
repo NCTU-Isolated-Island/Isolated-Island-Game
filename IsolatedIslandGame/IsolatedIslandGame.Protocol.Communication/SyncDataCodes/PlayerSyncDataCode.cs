@@ -2,6 +2,6 @@
 {
     public enum PlayerSyncDataCode : byte
     {
-
+        InventoryItemInfoChange,
     }
 }

@@ -1,32 +1,52 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.SystemOperationHandlers.FetchDataHandlers;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
+using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.FetchDataParameters.System;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.SystemOperationHandlers
 {
-    public class SystemFetchDataResolver : FetchDataResolver<SystemManager, SystemOperationCode, SystemFetchDataCode>
+    public class SystemFetchDataResolver : SystemOperationHandler
     {
-        public SystemFetchDataResolver(SystemManager subject) : base(subject)
+        internal readonly Dictionary<SystemFetchDataCode, SystemFetchDataHandler> fetchTable;
+
+        public SystemFetchDataResolver(SystemManager subject) : base(subject, 2)
         {
-            fetchTable.Add(SystemFetchDataCode.Item, new FetchItemHandler(subject));
+            fetchTable = new Dictionary<SystemFetchDataCode, SystemFetchDataHandler>
+            {
+                {SystemFetchDataCode.Item, new FetchItemHandler(subject) }
+            };
         }
 
-        internal override void SendResponse(SystemOperationCode operationCode, Dictionary<byte, object> parameter)
+        internal override bool Handle(CommunicationInterface communicationInterface, SystemOperationCode operationCode, Dictionary<byte, object> parameters)
         {
-            subject.ResponseManager.SendResponse(operationCode, ErrorCode.NoError, null, parameter);
+            if (base.Handle(communicationInterface, operationCode, parameters))
+            {
+                string debugMessage;
+                SystemFetchDataCode fetchCode = (SystemFetchDataCode)parameters[(byte)FetchDataParameterCode.FetchDataCode];
+                Dictionary<byte, object> resolvedParameters = (Dictionary<byte, object>)parameters[(byte)FetchDataParameterCode.Parameters];
+                if (fetchTable.ContainsKey(fetchCode))
+                {
+                    return fetchTable[fetchCode].Handle(communicationInterface, fetchCode, resolvedParameters);
+                }
+                else
+                {
+                    debugMessage = string.Format("System Fetch Operation Not Exist Fetch Code: {0}", fetchCode);
+                    SendError(communicationInterface, operationCode, ErrorCode.InvalidOperation, debugMessage);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
-        internal override void SendError(SystemOperationCode operationCode, ErrorCode errorCode, string debugMessage)
-        {
-            base.SendError(operationCode, errorCode, debugMessage);
-            Dictionary<byte, object> parameters = new Dictionary<byte, object>();
-            subject.ResponseManager.SendResponse(operationCode, errorCode, debugMessage, parameters);
-        }
+
         internal void SendOperation(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+            systemManager.OperationManager.SendFetchDataOperation(fetchCode, parameters);
         }
 
         public void FetchItem(int itemID)

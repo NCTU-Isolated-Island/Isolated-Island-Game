@@ -1,7 +1,7 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
-using IsolatedIslandGame.Protocol.Communication.EventParameters;
+using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using System.Collections.Generic;
 

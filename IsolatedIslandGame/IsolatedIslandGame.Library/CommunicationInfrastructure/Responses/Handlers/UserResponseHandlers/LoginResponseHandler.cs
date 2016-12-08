@@ -64,6 +64,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     string lastConnectedIPAddress = (string)parameters[(byte)LoginResponseParameterCode.LastConnectedIPAddress];
                     subject.PlayerOnline(new Player(subject, playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress)));
                     subject.Player.OperationManager.FetchDataResolver.FetchInventory();
+                    subject.Player.BindVessel(VesselManager.Instance.FindVesselByOwnerPlayerID(playerID));
                     return true;
                 }
                 catch (InvalidCastException ex)
