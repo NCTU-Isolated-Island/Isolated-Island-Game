@@ -2,7 +2,7 @@
 {
     public enum UserEventCode : byte
     {
-        InformData,
+        SyncData,
         PlayerEvent,
         SystemEvent,
     }

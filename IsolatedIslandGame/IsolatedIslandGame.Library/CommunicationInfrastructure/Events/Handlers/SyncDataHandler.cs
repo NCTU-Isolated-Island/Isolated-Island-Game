@@ -2,18 +2,18 @@
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
-    internal abstract class InformDataHandler<TSubject, TInformDataCode> where TSubject : IIdentityProvidable
+    internal abstract class SyncDataHandler<TSubject, TSyncDataCode> where TSubject : IIdentityProvidable
     {
         protected TSubject subject;
         protected int correctParameterCount;
 
-        protected InformDataHandler(TSubject subject, int correctParameterCount)
+        protected SyncDataHandler(TSubject subject, int correctParameterCount)
         {
             this.subject = subject;
             this.correctParameterCount = correctParameterCount;
         }
 
-        public virtual bool Handle(TInformDataCode informCode, Dictionary<byte, object> parameter)
+        public virtual bool Handle(TSyncDataCode syncCode, Dictionary<byte, object> parameter)
         {
             string debugMessage;
             if (CheckParameter(parameter, out debugMessage))
@@ -22,7 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             }
             else
             {
-                LogService.ErrorFormat("{0} InformData Parameter Error On {1} Identity: {2}, Debug Message: {3}", subject.GetType(), informCode, subject.IdentityInformation, debugMessage);
+                LogService.ErrorFormat("{0} SyncData Parameter Error On {1} Identity: {2}, Debug Message: {3}", subject.GetType(), syncCode, subject.IdentityInformation, debugMessage);
                 return false;
             }
         }

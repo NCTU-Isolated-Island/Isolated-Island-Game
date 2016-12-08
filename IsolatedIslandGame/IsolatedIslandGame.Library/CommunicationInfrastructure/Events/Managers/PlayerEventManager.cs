@@ -2,7 +2,7 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.EventParameters;
-using IsolatedIslandGame.Protocol.Communication.InformDataCodes;
+using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
@@ -11,15 +11,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
     {
         private readonly Dictionary<PlayerEventCode, EventHandler<Player, PlayerEventCode>> eventTable;
         protected readonly Player player;
-        public PlayerInformDataResolver InformDataResolver { get; protected set; }
+        public PlayerSyncDataResolver SyncDataResolver { get; protected set; }
 
         internal PlayerEventManager(Player player)
         {
             this.player = player;
-            InformDataResolver = new PlayerInformDataResolver(player);
+            SyncDataResolver = new PlayerSyncDataResolver(player);
             eventTable = new Dictionary<PlayerEventCode, EventHandler<Player, PlayerEventCode>>
             {
-                { PlayerEventCode.InformData, InformDataResolver },
+                { PlayerEventCode.SyncData, SyncDataResolver },
             };
         }
 
@@ -48,14 +48,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             player.User.EventManager.ErrorInform(title, message);
         }
 
-        internal void SendInformDataEvent(PlayerInformDataCode informCode, Dictionary<byte, object> parameters)
+        internal void SendSyncDataEvent(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
         {
-            Dictionary<byte, object> informDataParameters = new Dictionary<byte, object>
+            Dictionary<byte, object> syncDataParameters = new Dictionary<byte, object>
             {
-                { (byte)InformDataEventParameterCode.InformCode, (byte)informCode },
-                { (byte)InformDataEventParameterCode.Parameters, parameters }
+                { (byte)SyncDataEventParameterCode.SyncCode, (byte)syncCode },
+                { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
-            SendEvent(PlayerEventCode.InformData, informDataParameters);
+            SendEvent(PlayerEventCode.SyncData, syncDataParameters);
         }
     }
 }

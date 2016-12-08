@@ -3,7 +3,7 @@ using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.Use
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.EventParameters;
 using IsolatedIslandGame.Protocol.Communication.EventParameters.User;
-using IsolatedIslandGame.Protocol.Communication.InformDataCodes;
+using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
@@ -12,15 +12,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
     {
         private readonly Dictionary<UserEventCode, EventHandler<User, UserEventCode>> eventTable;
         protected readonly User user;
-        public UserInformDataResolver InformDataResolver { get; protected set; }
+        public UserSyncDataResolver SyncDataResolver { get; protected set; }
 
         internal UserEventManager(User user)
         {
             this.user = user;
-            InformDataResolver = new UserInformDataResolver(user);
+            SyncDataResolver = new UserSyncDataResolver(user);
             eventTable = new Dictionary<UserEventCode, EventHandler<User, UserEventCode>>
             {
-                { UserEventCode.InformData, InformDataResolver },
+                { UserEventCode.SyncData, SyncDataResolver },
                 { UserEventCode.PlayerEvent, new PlayerEventResolver(user) },
                 { UserEventCode.SystemEvent, new SystemEventResolver(user) },
             };
@@ -70,14 +70,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             user.UserCommunicationInterface.ErrorInform(title, message);
         }
 
-        internal void SendInformDataEvent(UserInformDataCode informCode, Dictionary<byte, object> parameters)
+        internal void SendSyncDataEvent(UserSyncDataCode syncCode, Dictionary<byte, object> parameters)
         {
-            Dictionary<byte, object> informDataParameters = new Dictionary<byte, object>
+            Dictionary<byte, object> syncDataParameters = new Dictionary<byte, object>
             {
-                { (byte)InformDataEventParameterCode.InformCode, (byte)informCode },
-                { (byte)InformDataEventParameterCode.Parameters, parameters }
+                { (byte)SyncDataEventParameterCode.SyncCode, (byte)syncCode },
+                { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
-            SendEvent(UserEventCode.InformData, informDataParameters);
+            SendEvent(UserEventCode.SyncData, syncDataParameters);
         }
     }
 }

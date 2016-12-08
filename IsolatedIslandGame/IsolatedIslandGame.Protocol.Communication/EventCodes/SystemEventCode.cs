@@ -2,6 +2,6 @@
 {
     public enum SystemEventCode : byte
     {
-        InformData
+        SyncData
     }
 }
