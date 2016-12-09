@@ -112,8 +112,14 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     LogService.ErrorFormat("MySQLPlayerRepository Save Player no affected row from PlayerID:{0}, IPAddress:{1}", player.PlayerID, player.LastConnectedIPAddress);
                 }
             }
-            DatabaseService.RepositoryList.InventoryRepository.Update(player.Inventory);
-            DatabaseService.RepositoryList.VesselRepository.Update(player.Vessel);
+            if(player.Inventory != null)
+            {
+                DatabaseService.RepositoryList.InventoryRepository.Update(player.Inventory);
+            }
+            if (player.Vessel != null)
+            {
+                DatabaseService.RepositoryList.VesselRepository.Update(player.Vessel);
+            }
         }
     }
 }

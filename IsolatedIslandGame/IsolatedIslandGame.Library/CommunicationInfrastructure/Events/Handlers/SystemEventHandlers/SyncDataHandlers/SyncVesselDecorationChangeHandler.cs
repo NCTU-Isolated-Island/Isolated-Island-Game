@@ -39,13 +39,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     switch (changeType)
                     {
                         case DataChangeType.Add:
+                        case DataChangeType.Update:
                             vessel.AddDecoration(decoration);
                             break;
                         case DataChangeType.Remove:
                             vessel.RemoveDecoration(decoration.DecorationID);
-                            break;
-                        case DataChangeType.Update:
-                            vessel.AddDecoration(decoration);
                             break;
                         default:
                             LogService.Error("SyncVesselDecorationChange Error Undefined DataChangeType");

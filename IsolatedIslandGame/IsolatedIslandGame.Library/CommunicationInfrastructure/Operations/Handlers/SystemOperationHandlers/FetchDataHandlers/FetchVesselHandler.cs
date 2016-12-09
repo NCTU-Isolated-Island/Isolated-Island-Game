@@ -1,24 +1,26 @@
 ﻿using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
-using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.Player;
+using IsolatedIslandGame.Protocol.Communication.FetchDataParameters.System;
+using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System;
 using System;
 using System.Collections.Generic;
 
-namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.PlayerOperationHandlers.FetchDataHandlers
+namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.SystemOperationHandlers.FetchDataHandlers
 {
-    class FetchVesselHandler : PlayerFetchDataHandler
+    class FetchVesselHandler : SystemFetchDataHandler
     {
-        public FetchVesselHandler(Player subject) : base(subject, 0)
+        public FetchVesselHandler(SystemManager subject) : base(subject, 1)
         {
         }
 
-        public override bool Handle(PlayerFetchDataCode fetchCode, Dictionary<byte, object> parameter)
+        public override bool Handle(CommunicationInterface communicationInterface, SystemFetchDataCode fetchCode, Dictionary<byte, object> parameter)
         {
-            if (base.Handle(fetchCode, parameter))
+            if (base.Handle(communicationInterface, fetchCode, parameter))
             {
                 try
                 {
-                    Vessel vessel = subject.Vessel;
-                    if(vessel != null)
+                    int vesselID = (int)parameter[(byte)FetchVesselParameterCode.VesselID];
+                    Vessel vessel = VesselManager.Instance.FindVessel(vesselID);
+                    if (vessel != null)
                     {
                         var result = new Dictionary<byte, object>
                         {
@@ -29,14 +31,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             { (byte)FetchVesselResponseParameterCode.LocationZ, vessel.LocationZ },
                             { (byte)FetchVesselResponseParameterCode.EulerAngleX, vessel.Rotation.eulerAngles.x },
                             { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.Rotation.eulerAngles.y },
-                            { (byte)FetchVesselResponseParameterCode.EulerAngleZ, vessel.Rotation.eulerAngles.z },
+                            { (byte)FetchVesselResponseParameterCode.EulerAngleZ, vessel.Rotation.eulerAngles.z }
                         };
-                        SendResponse(fetchCode, result);
+                        SendResponse(communicationInterface, fetchCode, result);
                         return true;
                     }
                     else
                     {
-                        LogService.ErrorFormat("FetchVessel No Vessel Player: {0}", subject.IdentityInformation);
+                        LogService.ErrorFormat("FetchVessel No Vessel VesselID: {0}", vesselID);
                         return false;
                     }
                 }

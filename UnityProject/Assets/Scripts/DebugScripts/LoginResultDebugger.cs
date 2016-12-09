@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using IsolatedIslandGame.Library;
+using UnityEngine;
 
 namespace IsolatedIslandGame.Client.Scripts.DebugScripts
 {
     public class LoginResultDebugger : MonoBehaviour
     {
+        private void Start()
+        {
+            SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
+        }
         private void OnGUI()
         {
             if(UserManager.Instance.User.IsOnline)

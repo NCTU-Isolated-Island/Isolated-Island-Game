@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,16 +27,30 @@ namespace IsolatedIslandGame.Library
         private event VesselTransformUpdatedEventHandler onVesselTransformUpdated;
         public event VesselTransformUpdatedEventHandler OnVesselTransformUpdated { add { onVesselTransformUpdated += value; } remove { onVesselTransformUpdated -= value; } }
 
-        public Vessel(int vesselID, int ownerPlayerID, string name, float locationX, float locationZ, Quaternion roration)
+        private event Action<Vessel> onVesselFullDataUpdated;
+        public event Action<Vessel> OnVesselFullDataUpdated { add { onVesselFullDataUpdated += value; } remove { onVesselFullDataUpdated -= value; } }
+
+        public Vessel(int vesselID, int ownerPlayerID, string name, float locationX, float locationZ, Quaternion rotation)
         {
             VesselID = vesselID;
             OwnerPlayerID = ownerPlayerID;
             Name = name;
             LocationX = locationX;
             LocationZ = locationZ;
-            Rotation = roration;
+            Rotation = rotation;
 
             decorationDictionary = new Dictionary<int, Decoration>();
+        }
+        public void UpdateFullData(Vessel vessel)
+        {
+            VesselID = vessel.VesselID;
+            OwnerPlayerID = vessel.OwnerPlayerID;
+            Name = vessel.Name;
+            LocationX = vessel.LocationX;
+            LocationZ = vessel.LocationZ;
+            Rotation = vessel.Rotation;
+
+            onVesselFullDataUpdated?.Invoke(this);
         }
         public void UpdateTransform(float locationX, float locationZ, Quaternion rotation)
         {

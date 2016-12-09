@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Library.Items;
 
 namespace IsolatedIslandGame.Library
 {
@@ -7,7 +8,7 @@ namespace IsolatedIslandGame.Library
     {
         public static VesselManager Instance { get; private set; }
 
-        public static void InitialFactory(VesselManager vesselManager)
+        public static void Initial(VesselManager vesselManager)
         {
             Instance = vesselManager;
         }
@@ -18,7 +19,10 @@ namespace IsolatedIslandGame.Library
         public int VesselCount { get { return vesselDictionary.Count; } }
 
         public delegate void VesselChangeEventHandler(Vessel vessel, DataChangeType changeType);
-        public abstract event VesselChangeEventHandler OnItemInfoChange;
+        public abstract event VesselChangeEventHandler OnVesselChange;
+
+        public abstract event Vessel.VesselTransformUpdatedEventHandler OnVesselTransformUpdated;
+        public abstract event Vessel.DecorationChangeEventHandler OnVesselDecorationChange;
 
         protected VesselManager()
         {

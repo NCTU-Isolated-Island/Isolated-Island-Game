@@ -10,7 +10,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
         private float reconnectInterval = 10;
         private float reconnectCountdownTimer = 0;
 
-        void Awake()
+        void Start()
         {
             RegisterEvents();
         }
@@ -40,9 +40,9 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
                 {
                     reconnectCountdownTimer = reconnectInterval;
                     PhotonService.Instance.Connect(
-                        serverName: ClientSystemManager.Instance.SystemConfiguration.ServerName,
-                        serverAddress: ClientSystemManager.Instance.SystemConfiguration.ServerAddress,
-                        port: ClientSystemManager.Instance.SystemConfiguration.ServerPort
+                        serverName: SystemConfiguration.Instance.ServerName,
+                        serverAddress: SystemConfiguration.Instance.ServerAddress,
+                        port: SystemConfiguration.Instance.ServerPort
                     );
                 }
             }

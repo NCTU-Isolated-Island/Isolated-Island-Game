@@ -1,6 +1,6 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System
 {
-    public enum FetchVesselParameterCode : byte
+    public enum FetchVesselDecorationsResponseParameterCode : byte
     {
         VesselID,
         DecorationID,

@@ -34,13 +34,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                         switch (changeType)
                         {
                             case DataChangeType.Add:
+                            case DataChangeType.Update:
                                 subject.Inventory.LoadItemInfo(info);
                                 break;
                             case DataChangeType.Remove:
                                 subject.Inventory.RemoveItemInfo(info.InventoryItemInfoID);
-                                break;
-                            case DataChangeType.Update:
-                                subject.Inventory.LoadItemInfo(info);
                                 break;
                             default:
                                 LogService.Error("SyncInventoryItemInfoChange Error Undefined DataChangeType");

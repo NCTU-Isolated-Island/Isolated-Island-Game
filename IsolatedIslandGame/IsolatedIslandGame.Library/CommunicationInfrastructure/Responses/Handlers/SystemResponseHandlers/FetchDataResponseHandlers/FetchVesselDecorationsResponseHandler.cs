@@ -1,0 +1,82 @@
+﻿using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
+using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.Player;
+using System;
+using System.Collections.Generic;
+
+namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.SystemResponseHandlers.FetchDataResponseHandlers
+{
+    class FetchVesselDecorationsResponseHandler : FetchDataResponseHandler<SystemManager, SystemFetchDataCode>
+    {
+        public FetchVesselDecorationsResponseHandler(SystemManager subject) : base(subject)
+        {
+        }
+
+        public override bool CheckError(Dictionary<byte, object> parameters, ErrorCode returnCode, string debugMessage)
+        {
+            switch (returnCode)
+            {
+                case ErrorCode.NoError:
+                    {
+                        if (parameters.Count != 9)
+                        {
+                            LogService.ErrorFormat(string.Format("FetchVesselDecorationsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                default:
+                    {
+                        LogService.ErrorFormat("FetchVesselDecorationsResponse Error DebugMessage: {0}", debugMessage);
+                        return false;
+                    }
+            }
+        }
+
+        public override bool Handle(SystemFetchDataCode fetchCode, ErrorCode returnCode, string fetchDebugMessage, Dictionary<byte, object> parameters)
+        {
+            if (base.Handle(fetchCode, returnCode, fetchDebugMessage, parameters))
+            {
+                try
+                {
+                    int vesselID = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.VesselID];
+                    int decorationID = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.DecorationID];
+                    int materialItemID = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.MaterialItemID];
+                    float positionX = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionX];
+                    float positionY = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionY];
+                    float positionZ = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionZ];
+                    float eulerAngleX = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleX];
+                    float eulerAngleY = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleY];
+                    float eulerAngleZ = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleZ];
+                    VesselManager.Instance.FindVessel(vesselID).AddDecoration(new Decoration(
+                        decorationID: decorationID,
+                        material: ItemManager.Instance.FindItem(materialItemID) as Material,
+                        position: new UnityEngine.Vector3(positionX, positionY, positionZ),
+                        rotation: UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ)));
+                    return true;
+                }
+                catch (InvalidCastException ex)
+                {
+                    LogService.Error("FetchVesselDecorationsResponse Parameter Cast Error");
+                    LogService.Error(ex.Message);
+                    LogService.Error(ex.StackTrace);
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error(ex.Message);
+                    LogService.Error(ex.StackTrace);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}

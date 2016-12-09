@@ -2,7 +2,7 @@
 {
     public enum SystemSyncDataCode : byte
     {
-        Vessel,
+        VesselChange,
         VesselTransform,
         VesselDecorationChange
     }

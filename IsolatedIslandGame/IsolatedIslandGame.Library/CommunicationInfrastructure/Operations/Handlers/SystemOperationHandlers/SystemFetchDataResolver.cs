@@ -16,7 +16,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             fetchTable = new Dictionary<SystemFetchDataCode, SystemFetchDataHandler>
             {
-                {SystemFetchDataCode.Item, new FetchItemHandler(subject) }
+                { SystemFetchDataCode.Item, new FetchItemHandler(subject) },
+                { SystemFetchDataCode.AllVessels, new FetchAllVesselsHandler(subject) },
+                { SystemFetchDataCode.Vessel, new FetchVesselHandler(subject) },
+                { SystemFetchDataCode.VesselWithOwnerPlayerID, new FetchVesselWithOwnerPlayerIDHandler(subject) },
+                { SystemFetchDataCode.VesselDecorations, new FetchVesselDecorationsHandler(subject) }
             };
         }
 
@@ -56,6 +60,34 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { (byte)FetchItemParameterCode.ItemID, itemID }
             };
             SendOperation(SystemFetchDataCode.Item, parameters);
+        }
+        public void FetchAllVessels()
+        {
+            SendOperation(SystemFetchDataCode.AllVessels, new Dictionary<byte, object>());
+        }
+        public void FetchVessel(int vesselID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)FetchVesselParameterCode.VesselID, vesselID }
+            };
+            SendOperation(SystemFetchDataCode.Vessel, parameters);
+        }
+        public void FetchVesselWithOwnerPlayerID(int ownerPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)FetchVesselWithOwnerPlayerIDParameterCode.OwnerPlayerID, ownerPlayerID }
+            };
+            SendOperation(SystemFetchDataCode.VesselWithOwnerPlayerID, parameters);
+        }
+        public void FetchVesselDecorations(int vesselID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)FetchVesselDecorationsParameterCode.VesselID, vesselID }
+            };
+            SendOperation(SystemFetchDataCode.VesselDecorations, parameters);
         }
     }
 }

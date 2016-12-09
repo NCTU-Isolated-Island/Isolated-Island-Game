@@ -4,6 +4,8 @@
     {
         Item,
         AllVessels,
-        Vessel
+        Vessel,
+        VesselWithOwnerPlayerID,
+        VesselDecorations
     }
 }

@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Library;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IsolatedIslandGame.Server
 {
@@ -14,6 +15,7 @@ namespace IsolatedIslandGame.Server
         }
 
         private Dictionary<Guid, ServerUser> connectedUsers;
+        public IEnumerable<ServerUser> Users { get { return connectedUsers.Values.ToArray(); } }
 
         private UserFactory()
         {

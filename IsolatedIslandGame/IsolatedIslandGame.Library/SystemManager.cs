@@ -26,6 +26,12 @@ namespace IsolatedIslandGame.Library
             }
         }
 
+        protected SystemManager()
+        {
+            EventManager = new SystemEventManager(this);
+            OperationManager = new SystemOperationManager(this);
+            ResponseManager = new SystemResponseManager(this);
+        }
         public abstract void SendAllUserEvent(UserEventCode eventCode, Dictionary<byte, object> parameters);
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace IsolatedIslandGame.Protocol.Communication.SyncDataParameters.System
+﻿namespace IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System
 {
-    public enum SyncVesselParameterCode : byte
+    public enum FetchVesselWithOwnerPlayerIDResponseParameterCode : byte
     {
         VesselID,
         OwnerPlayerID,
