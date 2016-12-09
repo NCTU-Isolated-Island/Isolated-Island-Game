@@ -3,5 +3,9 @@
     public enum SystemFetchDataCode : byte
     {
         Item,
+        AllVessels,
+        Vessel,
+        VesselWithOwnerPlayerID,
+        VesselDecorations
     }
 }

@@ -44,7 +44,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 {
                     string currentServerVersion = (string)parameters[(byte)FetchSystemVersionResponseParameterCode.CurrentServerVersion];
                     string currentClientVersion = (string)parameters[(byte)FetchSystemVersionResponseParameterCode.CurrentClientVersion];
-                    subject.UserCommunicationInterface.CheckSystemVersion(currentServerVersion, currentClientVersion);
+                    subject.CommunicationInterface.CheckSystemVersion(currentServerVersion, currentClientVersion);
                     return true;
                 }
                 catch (InvalidCastException ex)

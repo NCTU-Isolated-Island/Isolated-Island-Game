@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure
 {
-    public abstract class UserCommunicationInterface
+    public abstract class CommunicationInterface
     {
         protected User user;
         public virtual void BindUser(User user)

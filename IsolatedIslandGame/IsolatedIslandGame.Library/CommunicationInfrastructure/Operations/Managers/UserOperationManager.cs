@@ -44,7 +44,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
 
         public void SendOperation(UserOperationCode operationCode, Dictionary<byte, object> parameters)
         {
-            user.UserCommunicationInterface.SendOperation(operationCode, parameters);
+            user.CommunicationInterface.SendOperation(operationCode, parameters);
         }
 
         public void SendFetchDataOperation(UserFetchDataCode fetchCode, Dictionary<byte, object> parameters)

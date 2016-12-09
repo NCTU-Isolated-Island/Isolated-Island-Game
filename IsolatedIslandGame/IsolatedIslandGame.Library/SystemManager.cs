@@ -1,7 +1,8 @@
-﻿using System;
-using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
+﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
+using IsolatedIslandGame.Protocol.Communication.EventCodes;
+using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library
 {
@@ -12,8 +13,6 @@ namespace IsolatedIslandGame.Library
         {
             Instance = manager;
         }
-
-        public User User { get; private set; }
 
         public SystemEventManager EventManager { get; private set; }
         public SystemOperationManager OperationManager { get; private set; }
@@ -27,9 +26,12 @@ namespace IsolatedIslandGame.Library
             }
         }
 
-        protected SystemManager(User user)
+        protected SystemManager()
         {
-            User = user;
+            EventManager = new SystemEventManager(this);
+            OperationManager = new SystemOperationManager(this);
+            ResponseManager = new SystemResponseManager(this);
         }
+        public abstract void SendAllUserEvent(UserEventCode eventCode, Dictionary<byte, object> parameters);
     }
 }

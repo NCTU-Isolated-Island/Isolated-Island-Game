@@ -18,19 +18,27 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 try
                 {
                     Vessel vessel = subject.Vessel;
-                    var result = new Dictionary<byte, object>
+                    if(vessel != null)
                     {
-                        { (byte)FetchVesselResponseParameterCode.VesselID, vessel.VesselID },
-                        { (byte)FetchVesselResponseParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
-                        { (byte)FetchVesselResponseParameterCode.Name, vessel.Name },
-                        { (byte)FetchVesselResponseParameterCode.LocationX, vessel.LocationX },
-                        { (byte)FetchVesselResponseParameterCode.LocationZ, vessel.LocationZ },
-                        { (byte)FetchVesselResponseParameterCode.EulerAngleX, vessel.Rotation.eulerAngles.x },
-                        { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.Rotation.eulerAngles.y },
-                        { (byte)FetchVesselResponseParameterCode.EulerAngleZ, vessel.Rotation.eulerAngles.z },
-                    };
-                    SendResponse(fetchCode, result);
-                    return true;
+                        var result = new Dictionary<byte, object>
+                        {
+                            { (byte)FetchVesselResponseParameterCode.VesselID, vessel.VesselID },
+                            { (byte)FetchVesselResponseParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
+                            { (byte)FetchVesselResponseParameterCode.Name, vessel.Name },
+                            { (byte)FetchVesselResponseParameterCode.LocationX, vessel.LocationX },
+                            { (byte)FetchVesselResponseParameterCode.LocationZ, vessel.LocationZ },
+                            { (byte)FetchVesselResponseParameterCode.EulerAngleX, vessel.Rotation.eulerAngles.x },
+                            { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.Rotation.eulerAngles.y },
+                            { (byte)FetchVesselResponseParameterCode.EulerAngleZ, vessel.Rotation.eulerAngles.z },
+                        };
+                        SendResponse(fetchCode, result);
+                        return true;
+                    }
+                    else
+                    {
+                        LogService.ErrorFormat("FetchVessel No Vessel Player: {0}", subject.IdentityInformation);
+                        return false;
+                    }
                 }
                 catch (InvalidCastException ex)
                 {

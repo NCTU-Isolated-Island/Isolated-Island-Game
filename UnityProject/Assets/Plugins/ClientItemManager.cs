@@ -2,9 +2,9 @@
 
 namespace IsolatedIslandGame.Client
 {
-    public class ItemFactory : ItemManager
+    public class ClientItemManager : ItemManager
     {
-        public ItemFactory()
+        public ClientItemManager()
         {
             
         }
@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Client
             {
                 Item item = new Item(itemID, "傳輸中", "傳輸中");
                 AddItem(item);
-                ClientSystemManager.Instance.OperationManager.FetchDataResolver.FetchItem(itemID);
+                SystemManager.Instance.OperationManager.FetchDataResolver.FetchItem(itemID);
                 return item;
             }
         }

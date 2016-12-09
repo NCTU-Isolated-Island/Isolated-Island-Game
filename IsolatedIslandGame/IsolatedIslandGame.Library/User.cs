@@ -29,7 +29,7 @@ namespace IsolatedIslandGame.Library
         }
         public bool IsOnline { get { return Player != null; } }
 
-        internal UserCommunicationInterface UserCommunicationInterface { get; private set; }
+        internal CommunicationInterface CommunicationInterface { get; private set; }
         public UserEventManager EventManager { get; private set; }
         public UserOperationManager OperationManager { get; private set; }
         public UserResponseManager ResponseManager { get; private set; }
@@ -53,13 +53,13 @@ namespace IsolatedIslandGame.Library
         #endregion
 
         #region methods
-        public User(UserCommunicationInterface communicationInterface)
+        public User(CommunicationInterface communicationInterface)
         {
             EventManager = new UserEventManager(this);
             OperationManager = new UserOperationManager(this);
             ResponseManager = new UserResponseManager(this);
-            UserCommunicationInterface = communicationInterface;
-            UserCommunicationInterface.BindUser(this);
+            CommunicationInterface = communicationInterface;
+            CommunicationInterface.BindUser(this);
         }
         public void PlayerOnline(Player player)
         {

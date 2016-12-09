@@ -1,0 +1,74 @@
+﻿using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
+using IsolatedIslandGame.Protocol.Communication.SyncDataParameters.Player;
+using System;
+using System.Collections.Generic;
+
+namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers.SyncDataHandlers
+{
+    class SyncInventoryItemInfoChangeHandler : SyncDataHandler<Player, PlayerSyncDataCode>
+    {
+        public SyncInventoryItemInfoChangeHandler(Player subject) : base(subject, 6)
+        {
+        }
+        internal override bool Handle(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
+        {
+            if (base.Handle(syncCode, parameters))
+            {
+                try
+                {
+                    int inventoryID = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.InventoryID];
+                    int inventoryItemInfoID = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.InventoryItemInfoID];
+                    int itemID = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.ItemID];
+                    int itemCount = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.ItemCount];
+                    int positionIndex = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex];
+                    DataChangeType changeType = (DataChangeType)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType];
+                    if (subject.Inventory.InventoryID == inventoryID)
+                    {
+                        InventoryItemInfo info = new InventoryItemInfo(
+                            inventoryItemInfoID: inventoryItemInfoID,
+                            item: ItemManager.Instance.FindItem(itemID),
+                            count: itemCount,
+                            positionIndex: positionIndex);
+                        switch (changeType)
+                        {
+                            case DataChangeType.Add:
+                            case DataChangeType.Update:
+                                subject.Inventory.LoadItemInfo(info);
+                                break;
+                            case DataChangeType.Remove:
+                                subject.Inventory.RemoveItemInfo(info.InventoryItemInfoID);
+                                break;
+                            default:
+                                LogService.Error("SyncInventoryItemInfoChange Error Undefined DataChangeType");
+                                return false;
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (InvalidCastException ex)
+                {
+                    LogService.Error("SyncInventoryItemInfoChange Parameter Cast Error");
+                    LogService.Error(ex.Message);
+                    LogService.Error(ex.StackTrace);
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error(ex.Message);
+                    LogService.Error(ex.StackTrace);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}

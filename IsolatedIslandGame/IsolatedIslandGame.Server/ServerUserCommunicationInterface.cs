@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Server
 {
-    public class ServerUserCommunicationInterface : UserCommunicationInterface
+    public class ServerUserCommunicationInterface : CommunicationInterface
     {
         protected ServerUser serverUser;
 

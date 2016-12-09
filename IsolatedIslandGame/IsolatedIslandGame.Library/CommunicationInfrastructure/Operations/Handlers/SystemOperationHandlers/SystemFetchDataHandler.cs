@@ -6,13 +6,45 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.SystemOperationHandlers
 {
-    internal abstract class SystemFetchDataHandler : FetchDataHandler<SystemManager, SystemFetchDataCode>
+    internal abstract class SystemFetchDataHandler 
     {
-        public SystemFetchDataHandler(SystemManager subject, int correctParameterCount) : base(subject, correctParameterCount)
+        protected SystemManager systemManager;
+        protected int correctParameterCount;
+
+        public SystemFetchDataHandler(SystemManager systemManager, int correctParameterCount)
         {
+            this.systemManager = systemManager;
+            this.correctParameterCount = correctParameterCount;
         }
 
-        public override void SendError(SystemFetchDataCode fetchCode, ErrorCode errorCode, string debugMessage)
+        public virtual bool Handle(CommunicationInterface communicationInterface, SystemFetchDataCode fetchCode, Dictionary<byte, object> parameter)
+        {
+            string debugMessage;
+            if (CheckParameter(parameter, out debugMessage))
+            {
+                return true;
+            }
+            else
+            {
+                SendError(communicationInterface, fetchCode, ErrorCode.ParameterError, debugMessage);
+                return false;
+            }
+        }
+        internal virtual bool CheckParameter(Dictionary<byte, object> parameters, out string debugMessage)
+        {
+            if (parameters.Count != correctParameterCount)
+            {
+                debugMessage = string.Format("Parameter Count: {0} Should be {1}", parameters.Count, correctParameterCount);
+                return false;
+            }
+            else
+            {
+                debugMessage = "";
+                return true;
+            }
+        }
+
+        public void SendError(CommunicationInterface communicationInterface, SystemFetchDataCode fetchCode, ErrorCode errorCode, string debugMessage)
         {
             Dictionary<byte, object> eventData = new Dictionary<byte, object>
             {
@@ -21,11 +53,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { (byte)FetchDataResponseParameterCode.DebugMessage, debugMessage },
                 { (byte)FetchDataResponseParameterCode.Parameters, new Dictionary<byte, object>() }
             };
-            LogService.ErrorFormat("Error On {0} Fetch Operation: {1}, ErrorCode:{2}, Debug Message: {3}", subject.GetType(), fetchCode, errorCode, debugMessage);
-            subject.ResponseManager.SendResponse(SystemOperationCode.FetchData, ErrorCode.NoError, null, eventData);
+            LogService.ErrorFormat("Error On System Fetch Operation: {0}, ErrorCode:{1}, Debug Message: {2}", fetchCode, errorCode, debugMessage);
+            systemManager.ResponseManager.SendResponse(communicationInterface, SystemOperationCode.FetchData, ErrorCode.NoError, null, eventData);
         }
 
-        public override void SendResponse(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)
+        public void SendResponse(CommunicationInterface communicationInterface, SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
             Dictionary<byte, object> eventData = new Dictionary<byte, object>
             {
@@ -34,7 +66,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { (byte)FetchDataResponseParameterCode.DebugMessage, null },
                 { (byte)FetchDataResponseParameterCode.Parameters, parameters }
             };
-            subject.ResponseManager.SendResponse(SystemOperationCode.FetchData, ErrorCode.NoError, null, eventData);
+            systemManager.ResponseManager.SendResponse(communicationInterface, SystemOperationCode.FetchData, ErrorCode.NoError, null, eventData);
         }
     }
 }

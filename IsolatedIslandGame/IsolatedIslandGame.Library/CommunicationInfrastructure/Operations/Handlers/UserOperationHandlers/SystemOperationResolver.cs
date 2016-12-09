@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     SystemOperationCode resolvedOperationCode = (SystemOperationCode)parameters[(byte)SystemOperationParameterCode.OperationCode];
                     Dictionary<byte, object> resolvedParameters = (Dictionary<byte, object>)parameters[(byte)SystemOperationParameterCode.Parameters];
-                    SystemManager.Instance.OperationManager.Operate(resolvedOperationCode, resolvedParameters);
+                    SystemManager.Instance.OperationManager.Operate(subject.CommunicationInterface, resolvedOperationCode, resolvedParameters);
                     return true;
                 }
                 catch (InvalidCastException ex)

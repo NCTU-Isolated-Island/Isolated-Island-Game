@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Client.Communication
 {
-    class ClientUserCommunicationInterface : UserCommunicationInterface
+    class ClientUserCommunicationInterface : CommunicationInterface
     {
         public override void ErrorInform(string title, string message)
         {
@@ -38,17 +38,17 @@ namespace IsolatedIslandGame.Client.Communication
         }
         public override void CheckSystemVersion(string serverVersion, string clientVersion)
         {
-            if(ClientSystemManager.Instance.SystemConfiguration.ServerVersion != serverVersion)
+            if(SystemConfiguration.Instance.ServerVersion != serverVersion)
             {
-                LogService.FatalFormat("ServerVersion Inconsistent {0}/{1}", ClientSystemManager.Instance.SystemConfiguration.ServerVersion, serverVersion);
+                LogService.FatalFormat("ServerVersion Inconsistent {0}/{1}", SystemConfiguration.Instance.ServerVersion, serverVersion);
             }
             else
             {
                 LogService.InfoFormat("ServerVersion: {0}", serverVersion);
             }
-            if (ClientSystemManager.Instance.SystemConfiguration.ClientVersion != clientVersion)
+            if (SystemConfiguration.Instance.ClientVersion != clientVersion)
             {
-                LogService.FatalFormat("ClientVersion Inconsistent {0}/{1}", ClientSystemManager.Instance.SystemConfiguration.ClientVersion, clientVersion);
+                LogService.FatalFormat("ClientVersion Inconsistent {0}/{1}", SystemConfiguration.Instance.ClientVersion, clientVersion);
             }
             else
             {

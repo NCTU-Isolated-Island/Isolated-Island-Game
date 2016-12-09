@@ -15,11 +15,11 @@ namespace IsolatedIslandGame.Server
             Instance = new PlayerFactory();
         }
 
-        private Dictionary<int, Player> players;
+        private Dictionary<int, Player> playerDictionary;
 
         private PlayerFactory()
         {
-            players = new Dictionary<int, Player>();
+            playerDictionary = new Dictionary<int, Player>();
         }
         public bool PlayerLogin(ServerUser user, ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
         {
@@ -53,8 +53,6 @@ namespace IsolatedIslandGame.Server
                     playerData = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
                 }
                 Player player = new Player(user, playerData.playerID, playerData.facebookID, playerData.nickname, playerData.signature, playerData.groupType, playerData.lastConnectedIPAddress);
-                player.BindInventory(DatabaseService.RepositoryList.InventoryRepository.ReadByPlayerID(player.PlayerID));
-                player.BindVessel(DatabaseService.RepositoryList.VesselRepository.ReadByOwnerPlayerID(player.PlayerID));
                 if (PlayerOnline(player))
                 {
                     return true;
@@ -75,7 +73,7 @@ namespace IsolatedIslandGame.Server
         }
         public void PlayerLogout(Player player)
         {
-            if (players.ContainsKey(player.PlayerID))
+            if (playerDictionary.ContainsKey(player.PlayerID))
             {
                 UserFactory.Instance.UserDisconnect(player.User as ServerUser);
             }
@@ -83,13 +81,13 @@ namespace IsolatedIslandGame.Server
 
         public bool PlayerOnline(Player player)
         {
-            if (players.ContainsKey(player.PlayerID))
+            if (playerDictionary.ContainsKey(player.PlayerID))
             {
                 return false;
             }
             else
             {
-                players.Add(player.PlayerID, player);
+                playerDictionary.Add(player.PlayerID, player);
                 AssemblyPlayer(player);
                 player.User.PlayerOnline(player);
                 LogService.InfoFormat("PlayerID: {0} Online from: {1}", player.PlayerID, player.LastConnectedIPAddress);
@@ -98,11 +96,10 @@ namespace IsolatedIslandGame.Server
         }
         public void PlayerOffline(Player player)
         {
-            if (players.ContainsKey(player.PlayerID))
+            if (playerDictionary.ContainsKey(player.PlayerID))
             {
                 DisassemblyPlayer(player);
-                DatabaseService.RepositoryList.PlayerRepository.Update(player);
-                players.Remove(player.PlayerID);
+                playerDictionary.Remove(player.PlayerID);
             }
             LogService.InfoFormat("PlayerID: {0} Offline", player.PlayerID);
             player.User.PlayerOffline();
@@ -112,15 +109,41 @@ namespace IsolatedIslandGame.Server
         {
             player.OnCreateCharacter += DatabaseService.RepositoryList.PlayerRepository.Update;
             player.OnCreateCharacter += CreateVessel;
+
+            player.BindInventory(DatabaseService.RepositoryList.InventoryRepository.ReadByPlayerID(player.PlayerID));
+            if(player.Inventory != null)
+            {
+                player.Inventory.OnItemInfoChange += player.EventManager.SyncDataResolver.SyncInventoryItemInfoChange;
+            }
+
+            Vessel vessel = DatabaseService.RepositoryList.VesselRepository.ReadByOwnerPlayerID(player.PlayerID);
+            if(vessel != null)
+            {
+                VesselManager.Instance.AddVessel(vessel);
+                player.BindVessel(vessel);
+            }
         }
         private void DisassemblyPlayer(Player player)
         {
             player.OnCreateCharacter -= DatabaseService.RepositoryList.PlayerRepository.Update;
             player.OnCreateCharacter -= CreateVessel;
+
+            if (player.Inventory != null)
+            {
+                player.Inventory.OnItemInfoChange -= player.EventManager.SyncDataResolver.SyncInventoryItemInfoChange;
+            }
+
+            DatabaseService.RepositoryList.PlayerRepository.Update(player);
+            if (player.Vessel != null)
+            {
+                VesselManager.Instance.RemoveVessel(player.Vessel.VesselID);
+            }
         }
         private void CreateVessel(Player player)
         {
-            player.BindVessel(DatabaseService.RepositoryList.VesselRepository.Create(player.PlayerID, player.Nickname));
+            Vessel vessel = DatabaseService.RepositoryList.VesselRepository.Create(player.PlayerID, player.Nickname);
+            VesselManager.Instance.AddVessel(vessel);
+            player.BindVessel(vessel);
         }
     }
 }

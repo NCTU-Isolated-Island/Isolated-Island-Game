@@ -24,9 +24,9 @@ namespace IsolatedIslandGame.Library
         }
         public abstract Item FindItem(int itemID);
         public abstract void AddItem(Item item);
-        public bool RemoveItem(int item)
+        public bool RemoveItem(int itemID)
         {
-            return itemDictionary.Remove(item);
+            return itemDictionary.Remove(itemID);
         }
     }
 }

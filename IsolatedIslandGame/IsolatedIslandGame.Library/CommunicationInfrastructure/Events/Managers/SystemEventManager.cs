@@ -1,8 +1,9 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.SystemEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
-using IsolatedIslandGame.Protocol.Communication.EventParameters;
-using IsolatedIslandGame.Protocol.Communication.InformDataCodes;
+using IsolatedIslandGame.Protocol.Communication.EventParameters.User;
+using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
+using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
@@ -11,15 +12,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
     {
         private readonly Dictionary<SystemEventCode, EventHandler<SystemManager, SystemEventCode>> eventTable;
         protected readonly SystemManager systemManager;
-        public SystemInformDataResolver InformDataResolver { get; protected set; }
+        public SystemSyncDataResolver SyncDataResolver { get; protected set; }
 
         internal SystemEventManager(SystemManager systemManager)
         {
             this.systemManager = systemManager;
-            InformDataResolver = new SystemInformDataResolver(systemManager);
+            SyncDataResolver = new SystemSyncDataResolver(systemManager);
             eventTable = new Dictionary<SystemEventCode, EventHandler<SystemManager, SystemEventCode>>
             {
-                { SystemEventCode.InformData, InformDataResolver },
+                { SystemEventCode.SyncData, SyncDataResolver },
             };
         }
 
@@ -40,22 +41,27 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
 
         internal void SendEvent(SystemEventCode eventCode, Dictionary<byte, object> parameters)
         {
-            systemManager.User.EventManager.SendSystemEvent(eventCode, parameters);
+            Dictionary<byte, object> eventData = new Dictionary<byte, object>
+            {
+                { (byte)SystemEventParameterCode.EventCode, (byte)eventCode },
+                { (byte)SystemEventParameterCode.Parameters, parameters }
+            };
+            systemManager.SendAllUserEvent(UserEventCode.SystemEvent, eventData);
         }
 
         public void ErrorInform(string title, string message)
         {
-            systemManager.User.EventManager.ErrorInform(title, message);
+            systemManager.EventManager.ErrorInform(title, message);
         }
 
-        internal void SendInformDataEvent(SystemInformDataCode informCode, Dictionary<byte, object> parameters)
+        internal void SendSyncDataEvent(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
         {
-            Dictionary<byte, object> informDataParameters = new Dictionary<byte, object>
+            Dictionary<byte, object> syncDataParameters = new Dictionary<byte, object>
             {
-                { (byte)InformDataEventParameterCode.InformCode, (byte)informCode },
-                { (byte)InformDataEventParameterCode.Parameters, parameters }
+                { (byte)SyncDataEventParameterCode.SyncCode, (byte)syncCode },
+                { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
-            SendEvent(SystemEventCode.InformData, informDataParameters);
+            SendEvent(SystemEventCode.SyncData, syncDataParameters);
         }
     }
 }

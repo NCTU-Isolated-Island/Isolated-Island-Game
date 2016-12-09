@@ -26,6 +26,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             SetupConfiguration();
             SetupServices();
             SetupFactories();
+            SetupManagers();
             
             Log.Info("PhotonServer Setup Successiful.......");
         }
@@ -74,6 +75,11 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             PlayerFactory.InitialFactory();
             ItemManager.Initial(new ItemFactory());
             InventoryItemInfoFactory.Initial(new ServerInventoryItemInfoFactory());
+        }
+        protected void SetupManagers()
+        {
+            SystemManager.Initial(new ServerSystemManager());
+            VesselManager.Initial(new ServerVesselManager());
         }
     }
 }

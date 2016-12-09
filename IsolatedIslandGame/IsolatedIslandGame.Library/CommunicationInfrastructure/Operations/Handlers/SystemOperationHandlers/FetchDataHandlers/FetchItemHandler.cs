@@ -13,9 +13,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
         }
 
-        public override bool Handle(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameter)
+        public override bool Handle(CommunicationInterface communicationInterface, SystemFetchDataCode fetchCode, Dictionary<byte, object> parameter)
         {
-            if (base.Handle(fetchCode, parameter))
+            if (base.Handle(communicationInterface, fetchCode, parameter))
             {
                 try
                 {
@@ -33,7 +33,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)FetchMaterialResponseParameterCode.Description, material.Description },
                                 { (byte)FetchMaterialResponseParameterCode.MaterialID, material.MaterialID }
                             };
-                            SendResponse(fetchCode, result);
+                            SendResponse(communicationInterface, fetchCode, result);
                         }
                         else
                         {
@@ -43,7 +43,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)FetchItemResponseParameterCode.ItemName, item.ItemName },
                                 { (byte)FetchItemResponseParameterCode.Description, item.Description },
                             };
-                            SendResponse(fetchCode, result);
+                            SendResponse(communicationInterface, fetchCode, result);
                         }
                         return true;
                     }

@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
 {
     public class SystemOperationManager
     {
-        private readonly Dictionary<SystemOperationCode, OperationHandler<SystemManager, SystemOperationCode>> operationTable;
+        private readonly Dictionary<SystemOperationCode, SystemOperationHandler> operationTable;
         protected readonly SystemManager systemManager;
         public SystemFetchDataResolver FetchDataResolver { get; protected set; }
 
@@ -17,17 +17,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         {
             this.systemManager = systemManager;
             FetchDataResolver = new SystemFetchDataResolver(systemManager);
-            operationTable = new Dictionary<SystemOperationCode, OperationHandler<SystemManager, SystemOperationCode>>
+            operationTable = new Dictionary<SystemOperationCode, SystemOperationHandler>
             {
                 { SystemOperationCode.FetchData, FetchDataResolver },
             };
         }
 
-        internal void Operate(SystemOperationCode operationCode, Dictionary<byte, object> parameters)
+        internal void Operate(CommunicationInterface communicationInterface, SystemOperationCode operationCode, Dictionary<byte, object> parameters)
         {
             if (operationTable.ContainsKey(operationCode))
             {
-                if (!operationTable[operationCode].Handle(operationCode, parameters))
+                if (!operationTable[operationCode].Handle(communicationInterface, operationCode, parameters))
                 {
                     LogService.ErrorFormat("System Operation Error: {0} from Identity: {1}", operationCode, systemManager.IdentityInformation);
                 }
@@ -40,7 +40,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
 
         internal void SendOperation(SystemOperationCode operationCode, Dictionary<byte, object> parameters)
         {
-            systemManager.User.OperationManager.SendSystemOperation(operationCode, parameters);
+            UserManager.Instance.User.OperationManager.SendSystemOperation(operationCode, parameters);
         }
 
         internal void SendFetchDataOperation(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)

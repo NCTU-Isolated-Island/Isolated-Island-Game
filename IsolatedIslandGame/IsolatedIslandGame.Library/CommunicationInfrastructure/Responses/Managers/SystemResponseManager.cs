@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.SystemResponseHandlers;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using IsolatedIslandGame.Protocol.Communication.ResponseParameters.User;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers
@@ -35,9 +36,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             }
         }
 
-        internal void SendResponse(SystemOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
+        internal void SendResponse(CommunicationInterface communicationInterface, SystemOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
-            systemManager.User.ResponseManager.SendSystemResponse(operationCode, errorCode, debugMessage, parameters);
+            Dictionary<byte, object> responseData = new Dictionary<byte, object>
+            {
+                { (byte)SystemResponseParameterCode.OperationCode, (byte)operationCode },
+                { (byte)SystemResponseParameterCode.ReturnCode, (short)errorCode },
+                { (byte)SystemResponseParameterCode.DebugMessage, debugMessage },
+                { (byte)SystemResponseParameterCode.Parameters, parameters }
+            };
+            communicationInterface.SendResponse(UserOperationCode.SystemOperation, ErrorCode.NoError, null, responseData);
         }
     }
 }

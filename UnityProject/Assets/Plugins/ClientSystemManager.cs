@@ -1,32 +1,25 @@
 ﻿using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Protocol.Communication.EventCodes;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace IsolatedIslandGame.Client
 {
     public class ClientSystemManager : SystemManager
     {
-        private static ClientSystemManager instance;
-        public static new ClientSystemManager Instance { get { return instance; } }
-
-        static ClientSystemManager()
+        public static void Initial(User user)
         {
-            instance = new ClientSystemManager(UserManager.Instance.User);
-            Initial(instance);
+            Initial(new ClientSystemManager(user));
         }
 
-        public SystemConfiguration SystemConfiguration { get; private set; }
-
-        private ClientSystemManager(User user) : base(user)
+        private ClientSystemManager(User user) : base()
         {
             LogService.InitialService(Debug.Log, Debug.LogFormat, Debug.LogWarning, Debug.LogWarningFormat, Debug.LogError, Debug.LogErrorFormat);
-            SystemConfiguration = new SystemConfiguration
-            {
-                ServerName = "IsolatedIsland.TestServer",
-                ServerAddress = "140.113.123.134",
-                ServerPort = 4531,
-                ServerVersion = "Development 0",
-                ClientVersion = "Development 0"
-            };
+        }
+
+        public override void SendAllUserEvent(UserEventCode eventCode, Dictionary<byte, object> parameters)
+        {
+            LogService.FatalFormat("Client SendAllUserEvent UserEventCode: {0}", eventCode);
         }
     }
 }
