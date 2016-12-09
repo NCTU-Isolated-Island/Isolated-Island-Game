@@ -24,6 +24,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.FetchData, FetchDataResolver },
                 { PlayerOperationCode.CreateCharacter, new CreateCharacterHandler(player) },
                 { PlayerOperationCode.DrawMaterial, new DrawMaterialHandler(player) },
+                { PlayerOperationCode.UpdateVesselTransform, new UpdateVesselTransformHandler(player) },
             };
         }
 
@@ -69,6 +70,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         public void DrawMaterial()
         {
             SendOperation(PlayerOperationCode.DrawMaterial, new Dictionary<byte, object>());
+        }
+        public void CreateCharacter(float locationX, float locationZ, UnityEngine.Quaternion rotation)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)UpdateVesselTransformParameterCode.LocationX, locationX },
+                { (byte)UpdateVesselTransformParameterCode.LocatiomZ, locationZ },
+                { (byte)UpdateVesselTransformParameterCode.EulerAngleX, rotation.eulerAngles.x },
+                { (byte)UpdateVesselTransformParameterCode.EulerAngleY, rotation.eulerAngles.y },
+                { (byte)UpdateVesselTransformParameterCode.EulerAngleZ, rotation.eulerAngles.z }
+            };
+            SendOperation(PlayerOperationCode.UpdateVesselTransform, parameters);
         }
     }
 }
