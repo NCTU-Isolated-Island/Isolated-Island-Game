@@ -40,9 +40,9 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
                 {
                     reconnectCountdownTimer = reconnectInterval;
                     PhotonService.Instance.Connect(
-                        serverName: GameManager.Instance.SystemConfiguration.ServerName,
-                        serverAddress: GameManager.Instance.SystemConfiguration.ServerAddress,
-                        port: GameManager.Instance.SystemConfiguration.ServerPort
+                        serverName: ClientSystemManager.Instance.SystemConfiguration.ServerName,
+                        serverAddress: ClientSystemManager.Instance.SystemConfiguration.ServerAddress,
+                        port: ClientSystemManager.Instance.SystemConfiguration.ServerPort
                     );
                 }
             }
@@ -56,15 +56,15 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
         public void EraseEvents()
         {
             PhotonService.Instance.OnConnectChange -= OnConnectChange;
-            UserManager.Instance.User.OnPlayerOnline -= ToMainScene;
-            UserManager.Instance.User.OnPlayerOffline -= ToLoginScene;
+            //UserManager.Instance.User.OnPlayerOnline -= ToMainScene;
+            //UserManager.Instance.User.OnPlayerOffline -= ToLoginScene;
         }
 
         public void RegisterEvents()
         {
             PhotonService.Instance.OnConnectChange += OnConnectChange;
-            UserManager.Instance.User.OnPlayerOnline += ToMainScene;
-            UserManager.Instance.User.OnPlayerOffline += ToLoginScene;
+            //UserManager.Instance.User.OnPlayerOnline += ToMainScene;
+            //UserManager.Instance.User.OnPlayerOffline += ToLoginScene;
         }
 
         private void OnConnectChange(bool connected)
@@ -79,16 +79,16 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             {
                 LogService.Info("Disconnected");
                 reconnectCountdownTimer = reconnectInterval;
-                SceneManager.LoadScene("Login");
+                SceneManager.LoadScene("LoginScene");
             }
         }
         private void ToLoginScene(Player player)
         {
-            SceneManager.LoadScene("Login");
+            SceneManager.LoadScene("LoginScene");
         }
         private void ToMainScene(Player player)
         {
-            SceneManager.LoadScene("Main");
+            SceneManager.LoadScene("MainScene");
             Debug.Log("IP:" + player.LastConnectedIPAddress);
         }
     }
