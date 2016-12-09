@@ -71,7 +71,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         {
             SendOperation(PlayerOperationCode.DrawMaterial, new Dictionary<byte, object>());
         }
-        public void CreateCharacter(float locationX, float locationZ, UnityEngine.Quaternion rotation)
+        public void UpdateVesselTransform(float locationX, float locationZ, UnityEngine.Quaternion rotation)
         {
             var parameters = new Dictionary<byte, object>
             {
