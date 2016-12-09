@@ -55,8 +55,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     VesselManager.Instance.FindVessel(vesselID).AddDecoration(new Decoration(
                         decorationID: decorationID,
                         material: ItemManager.Instance.FindItem(materialItemID) as Material,
-                        position: new UnityEngine.Vector3(positionX, positionY, positionZ),
-                        rotation: UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ)));
+                        positionX: positionX,
+                        positionY: positionY,
+                        positionZ: positionZ,
+                        rotationEulerAngleX: eulerAngleX,
+                        rotationEulerAngleY: eulerAngleY,
+                        rotationEulerAngleZ: eulerAngleZ));
                     return true;
                 }
                 catch (InvalidCastException ex)

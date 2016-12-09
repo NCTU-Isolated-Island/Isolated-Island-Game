@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 
 namespace IsolatedIslandGame.Library.Items
 {
@@ -8,24 +7,36 @@ namespace IsolatedIslandGame.Library.Items
         public int DecorationID { get; private set; }
         public Material Material { get; private set; }
 
-        public  Vector3 Position { get; private set; }
-        public Quaternion Rotation { get; private set; }
+        public  float PositionX { get; private set; }
+        public float PositionY { get; private set; }
+        public float PositionZ { get; private set; }
+        public float RotationEulerAngleX { get; private set; }
+        public float RotationEulerAngleY { get; private set; }
+        public float RotationEulerAngleZ { get; private set; }
 
         private event Action<Decoration> onDecorationUpdate;
         public event Action<Decoration> OnDecorationUpdate { add { onDecorationUpdate += value; } remove { onDecorationUpdate -= value; } }
 
-        public Decoration(int decorationID, Material material, Vector3 position, Quaternion rotation)
+        public Decoration(int decorationID, Material material, float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
         {
             DecorationID = decorationID;
             Material = material;
-            Position = position;
-            Rotation = rotation;
+            PositionX = positionX;
+            PositionY = positionY;
+            PositionZ = positionZ;
+            RotationEulerAngleX = rotationEulerAngleX;
+            RotationEulerAngleY = rotationEulerAngleY;
+            RotationEulerAngleZ = rotationEulerAngleZ;
         }
 
-        public void UpdateDecoration(Vector3 position, Quaternion rotation)
+        public void UpdateDecoration(float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
         {
-            Position = position;
-            Rotation = rotation;
+            PositionX = positionX;
+            PositionY = positionY;
+            PositionZ = positionZ;
+            RotationEulerAngleX = rotationEulerAngleX;
+            RotationEulerAngleY = rotationEulerAngleY;
+            RotationEulerAngleZ = rotationEulerAngleZ;
             onDecorationUpdate?.Invoke(this);
         }
     }

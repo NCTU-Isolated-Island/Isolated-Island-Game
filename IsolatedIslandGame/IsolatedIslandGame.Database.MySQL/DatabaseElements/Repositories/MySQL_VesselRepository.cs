@@ -1,7 +1,6 @@
 ﻿using IsolatedIslandGame.Database.DatabaseElements.Repositories;
 using IsolatedIslandGame.Library;
 using MySql.Data.MySqlClient;
-using UnityEngine;
 
 namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
 {
@@ -21,7 +20,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     if (reader.Read())
                     {
                         int vesselID = reader.GetInt32(0);
-                        return new Vessel(vesselID, ownerPlayerID, name, 0, 0, Quaternion.Euler(0, 0, 0));
+                        return new Vessel(vesselID, ownerPlayerID, name, 0, 0, 0, 0, 0);
                     }
                     else
                     {
@@ -50,7 +49,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         float eulerAngleX = reader.GetFloat(4);
                         float eulerAngleY = reader.GetFloat(5);
                         float eulerAngleZ = reader.GetFloat(6);
-                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ));
+                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
                     }
                 }
             }
@@ -84,7 +83,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         float eulerAngleX = reader.GetFloat(4);
                         float eulerAngleY = reader.GetFloat(5);
                         float eulerAngleZ = reader.GetFloat(6);
-                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ));
+                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
                     }
                 }
             }
@@ -108,9 +107,9 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                 command.Parameters.AddWithValue("@name", vessel.Name);
                 command.Parameters.AddWithValue("@locationX", vessel.LocationX);
                 command.Parameters.AddWithValue("@locationZ", vessel.LocationZ);
-                command.Parameters.AddWithValue("@eulerAngleX", vessel.Rotation.eulerAngles.x);
-                command.Parameters.AddWithValue("@eulerAngleY", vessel.Rotation.eulerAngles.y);
-                command.Parameters.AddWithValue("@eulerAngleZ", vessel.Rotation.eulerAngles.z);
+                command.Parameters.AddWithValue("@eulerAngleX", vessel.RotationEulerAngleX);
+                command.Parameters.AddWithValue("@eulerAngleY", vessel.RotationEulerAngleY);
+                command.Parameters.AddWithValue("@eulerAngleZ", vessel.RotationEulerAngleZ);
                 command.Parameters.AddWithValue("@vesselID", vessel.VesselID);
                 if (command.ExecuteNonQuery() <= 0)
                 {

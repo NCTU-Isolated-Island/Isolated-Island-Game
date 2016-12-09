@@ -5,7 +5,6 @@ using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataParameters.System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.SystemEventHandlers
 {
@@ -32,23 +31,23 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncVesselChangeParameterCode.Name, vessel.Name },
                 { (byte)SyncVesselChangeParameterCode.LocationX, vessel.LocationX },
                 { (byte)SyncVesselChangeParameterCode.LocationZ, vessel.LocationZ },
-                { (byte)SyncVesselChangeParameterCode.EulerAngleX, vessel.Rotation.eulerAngles.x },
-                { (byte)SyncVesselChangeParameterCode.EulerAngleY, vessel.Rotation.eulerAngles.y },
-                { (byte)SyncVesselChangeParameterCode.EulerAngleZ, vessel.Rotation.eulerAngles.z },
+                { (byte)SyncVesselChangeParameterCode.EulerAngleX, vessel.RotationEulerAngleX },
+                { (byte)SyncVesselChangeParameterCode.EulerAngleY, vessel.RotationEulerAngleY },
+                { (byte)SyncVesselChangeParameterCode.EulerAngleZ, vessel.RotationEulerAngleZ },
                 { (byte)SyncVesselChangeParameterCode.DataChangeType, (byte)changeType }
             };
             SendSyncData(SystemSyncDataCode.VesselChange, parameters);
         }
-        public void SyncVesselTransform(int vesselID, float locationX, float locationY, Quaternion rotation)
+        public void SyncVesselTransform(int vesselID, float locationX, float locationY, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
         {
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)SyncVesselTransformParameterCode.VesselID, vesselID },
                 { (byte)SyncVesselTransformParameterCode.LocationX, locationX },
                 { (byte)SyncVesselTransformParameterCode.LocationZ, locationY },
-                { (byte)SyncVesselTransformParameterCode.EulerAngleX, rotation.eulerAngles.x },
-                { (byte)SyncVesselTransformParameterCode.EulerAngleY, rotation.eulerAngles.y },
-                { (byte)SyncVesselTransformParameterCode.EulerAngleZ, rotation.eulerAngles.z },
+                { (byte)SyncVesselTransformParameterCode.EulerAngleX, rotationEulerAngleX },
+                { (byte)SyncVesselTransformParameterCode.EulerAngleY, rotationEulerAngleY },
+                { (byte)SyncVesselTransformParameterCode.EulerAngleZ, rotationEulerAngleZ },
             };
             SendSyncData(SystemSyncDataCode.VesselTransform, parameters);
         }
@@ -59,12 +58,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncVesselDecorationChangeParameterCode.VesselID, vesselID },
                 { (byte)SyncVesselDecorationChangeParameterCode.DecorationID, decoration.DecorationID },
                 { (byte)SyncVesselDecorationChangeParameterCode.MaterialItemID, decoration.Material.ItemID },
-                { (byte)SyncVesselDecorationChangeParameterCode.PositionX, decoration.Position.x },
-                { (byte)SyncVesselDecorationChangeParameterCode.PositionY, decoration.Position.y },
-                { (byte)SyncVesselDecorationChangeParameterCode.PositionZ, decoration.Position.z },
-                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleX, decoration.Rotation.eulerAngles.x },
-                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleY, decoration.Rotation.eulerAngles.y },
-                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleZ, decoration.Rotation.eulerAngles.z },
+                { (byte)SyncVesselDecorationChangeParameterCode.PositionX, decoration.PositionX },
+                { (byte)SyncVesselDecorationChangeParameterCode.PositionY, decoration.PositionY },
+                { (byte)SyncVesselDecorationChangeParameterCode.PositionZ, decoration.PositionZ },
+                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleX, decoration.RotationEulerAngleX },
+                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleY, decoration.RotationEulerAngleY },
+                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleZ, decoration.RotationEulerAngleZ },
                 { (byte)SyncVesselDecorationChangeParameterCode.DataChangeType, (byte)changeType }
             };
             SendSyncData(SystemSyncDataCode.VesselDecorationChange, parameters);

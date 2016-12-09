@@ -22,7 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 if(subject.Vessel != null)
                 {
-                    subject.Vessel.UpdateTransform(locationX, locationZ, UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ));
+                    subject.Vessel.UpdateTransform(locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
                     return true;
                 }
                 else

@@ -3,7 +3,6 @@ using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
 using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.Player;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.PlayerResponseHandlers.FetchDataResponseHandlers
 {
@@ -53,7 +52,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     float eulerAngleZ = (float)parameters[(byte)FetchVesselResponseParameterCode.EulerAngleZ];
                     if(subject.PlayerID == ownerPlayerID)
                     {
-                        subject.BindVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ)));
+                        subject.BindVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ));
                         subject.OperationManager.FetchDataResolver.FetchVesselDecorations(subject.Vessel.VesselID);
                         return true;
                     }

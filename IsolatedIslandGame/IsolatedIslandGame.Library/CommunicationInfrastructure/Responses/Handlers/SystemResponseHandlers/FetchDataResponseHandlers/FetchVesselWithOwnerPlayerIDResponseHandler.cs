@@ -50,7 +50,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     float eulerAngleX = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.EulerAngleX];
                     float eulerAngleY = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.EulerAngleY];
                     float eulerAngleZ = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.EulerAngleZ];
-                    VesselManager.Instance.AddVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ)));
+                    VesselManager.Instance.AddVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ));
                     return true;
                 }
                 catch (InvalidCastException ex)
