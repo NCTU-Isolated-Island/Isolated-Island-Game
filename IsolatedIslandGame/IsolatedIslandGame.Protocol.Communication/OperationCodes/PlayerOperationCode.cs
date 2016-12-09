@@ -4,6 +4,7 @@
     {
         FetchData,
         CreateCharacter,
-        DrawMaterial
+        DrawMaterial,
+        UpdateVesselTransform
     }
 }
