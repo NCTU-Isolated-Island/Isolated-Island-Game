@@ -28,7 +28,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     if (reader.Read())
                     {
                         int decorationID = reader.GetInt32(0);
-                        return new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, new UnityEngine.Vector3(positionX, positionY, positionZ), UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ));
+                        return new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
                     }
                     else
                     {
@@ -56,7 +56,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         float eulerAngleX = reader.GetFloat(4);
                         float eulerAngleY = reader.GetFloat(5);
                         float eulerAngleZ = reader.GetFloat(6);
-                        return new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, new UnityEngine.Vector3(positionX, positionY, positionZ), UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ));
+                        return new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
                     }
                     else
                     {
@@ -74,12 +74,12 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
             {
                 command.Parameters.AddWithValue("vesselID", vesselID);
                 command.Parameters.AddWithValue("@materialItemID", decoration.Material.ItemID);
-                command.Parameters.AddWithValue("@positionX", decoration.Position.x);
-                command.Parameters.AddWithValue("@positionY", decoration.Position.y);
-                command.Parameters.AddWithValue("@positionZ", decoration.Position.z);
-                command.Parameters.AddWithValue("@eulerAngleX", decoration.Rotation.eulerAngles.x);
-                command.Parameters.AddWithValue("@eulerAngleY", decoration.Rotation.eulerAngles.y);
-                command.Parameters.AddWithValue("@eulerAngleZ", decoration.Rotation.eulerAngles.z);
+                command.Parameters.AddWithValue("@positionX", decoration.PositionX);
+                command.Parameters.AddWithValue("@positionY", decoration.PositionY);
+                command.Parameters.AddWithValue("@positionZ", decoration.PositionZ);
+                command.Parameters.AddWithValue("@eulerAngleX", decoration.RotationEulerAngleX);
+                command.Parameters.AddWithValue("@eulerAngleY", decoration.RotationEulerAngleY);
+                command.Parameters.AddWithValue("@eulerAngleZ", decoration.RotationEulerAngleZ);
                 command.Parameters.AddWithValue("@decorationID", decoration.DecorationID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
@@ -122,7 +122,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         float eulerAngleX = reader.GetFloat(5);
                         float eulerAngleY = reader.GetFloat(6);
                         float eulerAngleZ = reader.GetFloat(7);
-                        decorations.Add(new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, new UnityEngine.Vector3(positionX, positionY, positionZ), UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ)));
+                        decorations.Add(new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ));
                     }
                 }
             }

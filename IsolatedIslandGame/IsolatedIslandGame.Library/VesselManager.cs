@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using IsolatedIslandGame.Protocol;
-using IsolatedIslandGame.Library.Items;
+﻿using IsolatedIslandGame.Protocol;
+using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library
 {

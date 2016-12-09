@@ -24,7 +24,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     float eulerAngleZ = (int)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleZ];
 
                     Vessel vessel = VesselManager.Instance.FindVessel(vesselID);
-                    vessel.UpdateTransform(locationX, locationZ, UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ));
+                    vessel.UpdateTransform(locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
 
                     return true;
                 }

@@ -29,12 +29,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)FetchVesselDecorationsResponseParameterCode.VesselID, vessel.VesselID },
                                 { (byte)FetchVesselDecorationsResponseParameterCode.DecorationID, decoration.DecorationID },
                                 { (byte)FetchVesselDecorationsResponseParameterCode.MaterialItemID, decoration.Material.ItemID },
-                                { (byte)FetchVesselDecorationsResponseParameterCode.PositionX, decoration.Position.x },
-                                { (byte)FetchVesselDecorationsResponseParameterCode.PositionY, decoration.Position.y },
-                                { (byte)FetchVesselDecorationsResponseParameterCode.PositionZ, decoration.Position.z },
-                                { (byte)FetchVesselDecorationsResponseParameterCode.EulerAngleX, decoration.Rotation.eulerAngles.x },
-                                { (byte)FetchVesselDecorationsResponseParameterCode.EulerAngleY, decoration.Rotation.eulerAngles.y },
-                                { (byte)FetchVesselDecorationsResponseParameterCode.EulerAngleZ, decoration.Rotation.eulerAngles.z }
+                                { (byte)FetchVesselDecorationsResponseParameterCode.PositionX, decoration.PositionX },
+                                { (byte)FetchVesselDecorationsResponseParameterCode.PositionY, decoration.PositionY },
+                                { (byte)FetchVesselDecorationsResponseParameterCode.PositionZ, decoration.PositionZ },
+                                { (byte)FetchVesselDecorationsResponseParameterCode.EulerAngleX, decoration.RotationEulerAngleX },
+                                { (byte)FetchVesselDecorationsResponseParameterCode.EulerAngleY, decoration.RotationEulerAngleY },
+                                { (byte)FetchVesselDecorationsResponseParameterCode.EulerAngleZ, decoration.RotationEulerAngleZ }
                             };
                             SendResponse(communicationInterface, fetchCode, result);
                         }

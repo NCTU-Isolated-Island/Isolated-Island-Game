@@ -27,7 +27,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     float eulerAngleZ = (int)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleZ];
                     DataChangeType changeType = (DataChangeType)parameters[(byte)SyncVesselChangeParameterCode.DataChangeType];
 
-                    Vessel vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, UnityEngine.Quaternion.Euler(eulerAngleX, eulerAngleY, eulerAngleZ));
+                    Vessel vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
                     switch(changeType)
                     {
                         case DataChangeType.Add:
