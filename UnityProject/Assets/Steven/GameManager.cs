@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
 	void OnEnable(){
 		SceneManager.sceneLoaded += OnSceneLoaded;
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
-		UserManager.Instance.User.Player.OnCreateCharacter += OnCreateCharacter;
+		//UserManager.Instance.User.Player.OnCreateCharacter += OnCreateCharacter;
 	}
 
 	void OnDisable(){
@@ -41,41 +41,6 @@ public class GameManager : MonoBehaviour {
 	{
 		StartCoroutine(SlowUpdate());
 	}
-		
-	void OnPlayerOnline(Player player)
-	{print("this?");
-		if(UserManager.Instance.User.Player.GroupType == IsolatedIslandGame.Protocol.GroupType.No)
-		{
-			UserManager.Instance.User.Player.OperationManager.CreateCharacter("nickname","signature",IsolatedIslandGame.Protocol.GroupType.A);
-		}
-		else
-		{
-			SceneManager.LoadScene("MainScene");
-		}
-
-	}
-
-	//TODO make sure回傳值是nickname
-	void OnCreateCharacter(Player player)
-	{
-		SceneManager.LoadScene("MainScene");
-	}
-
-
-
-	void OnSceneLoaded(Scene a,LoadSceneMode b){
-		
-
-		//InstantiateUserGameObject
-
-
-		//設定完之後再把顯示出遊戲畫面（在這之前可能顯示loading bar
-	}
-
-	public void OnPlayerLocationChange()
-	{
-		//Send LocationInfo to server
-	}
 
 	IEnumerator SlowUpdate()
 	{
@@ -84,6 +49,43 @@ public class GameManager : MonoBehaviour {
 			yield return new WaitForSeconds(5f);
 		}
 	}
+
+	void OnPlayerOnline(Player player)
+	{
+		print(player.Nickname + " GroupeType: " + player.GroupType.ToString());
+		if(UserManager.Instance.User.Player.GroupType == IsolatedIslandGame.Protocol.GroupType.No)
+		{print("if");
+			UserManager.Instance.User.Player.OperationManager.CreateCharacter("Steven","signature",IsolatedIslandGame.Protocol.GroupType.A);
+		}
+		else
+		{print("else");
+			SceneManager.LoadScene("MainScene");
+		}
+
+	}
+		
+	void OnCreateCharacter(Player player)
+	{
+		SceneManager.LoadScene("MainScene");
+	}
+
+	void OnSceneLoaded(Scene a,LoadSceneMode b){
+		
+		if(a == SceneManager.GetSceneByName("MainScene"))
+		{
+			//InstantiateUserGameObject
+		}
+			
+		//設定完之後再把顯示出遊戲畫面（在這之前可能顯示loading bar
+	}
+
+	public void OnPlayerLocationChange()
+	{
+		//Move Player Ship to location
+		//Send LocationInfo to server
+	}
+
+
 
 	/*
 	void InstantiateUserGameObject(){
