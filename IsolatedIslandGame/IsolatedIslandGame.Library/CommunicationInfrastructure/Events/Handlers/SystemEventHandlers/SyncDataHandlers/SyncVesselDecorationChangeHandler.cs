@@ -21,12 +21,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     int vesselID = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.VesselID];
                     int decorationID = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.DecorationID];
                     int materialItemID = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.MaterialItemID];
-                    float positionX = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.PositionX];
-                    float positionY = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.PositionY];
-                    float positionZ = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.PositionZ];
-                    float eulerAngleX = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.EulerAngleX];
-                    float eulerAngleY = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.EulerAngleY];
-                    float eulerAngleZ = (int)parameters[(byte)SyncVesselDecorationChangeParameterCode.EulerAngleZ];
+                    float positionX = (float)parameters[(byte)SyncVesselDecorationChangeParameterCode.PositionX];
+                    float positionY = (float)parameters[(byte)SyncVesselDecorationChangeParameterCode.PositionY];
+                    float positionZ = (float)parameters[(byte)SyncVesselDecorationChangeParameterCode.PositionZ];
+                    float eulerAngleX = (float)parameters[(byte)SyncVesselDecorationChangeParameterCode.EulerAngleX];
+                    float eulerAngleY = (float)parameters[(byte)SyncVesselDecorationChangeParameterCode.EulerAngleY];
+                    float eulerAngleZ = (float)parameters[(byte)SyncVesselDecorationChangeParameterCode.EulerAngleZ];
                     DataChangeType changeType = (DataChangeType)parameters[(byte)SyncVesselDecorationChangeParameterCode.DataChangeType];
 
                     Vessel vessel = VesselManager.Instance.FindVessel(vesselID);

@@ -46,12 +46,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     int vesselID = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.VesselID];
                     int decorationID = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.DecorationID];
                     int materialItemID = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.MaterialItemID];
-                    float positionX = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionX];
-                    float positionY = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionY];
-                    float positionZ = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionZ];
-                    float eulerAngleX = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleX];
-                    float eulerAngleY = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleY];
-                    float eulerAngleZ = (int)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleZ];
+                    float positionX = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionX];
+                    float positionY = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionY];
+                    float positionZ = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.PositionZ];
+                    float eulerAngleX = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleX];
+                    float eulerAngleY = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleY];
+                    float eulerAngleZ = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleZ];
                     VesselManager.Instance.FindVessel(vesselID).AddDecoration(new Decoration(
                         decorationID: decorationID,
                         material: ItemManager.Instance.FindItem(materialItemID) as Material,
