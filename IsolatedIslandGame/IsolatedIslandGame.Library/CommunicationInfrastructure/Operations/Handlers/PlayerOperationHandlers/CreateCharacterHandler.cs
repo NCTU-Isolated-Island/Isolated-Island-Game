@@ -22,10 +22,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 string nickname = (string)parameters[(byte)CreateCharacterParameterCode.Nickname];
                 string signature = (string)parameters[(byte)CreateCharacterParameterCode.Signature];
                 GroupType groupType = (GroupType)parameters[(byte)CreateCharacterParameterCode.GroupType];
-                if (!Enum.IsDefined(typeof(GroupType), groupType))
+                if(subject.GroupType != GroupType.No)
+                {
+                    errorCode = ErrorCode.AlreadyExisted;
+                    debugMessage = "already created character";
+                    SendError(operationCode, errorCode, debugMessage);
+                    return false;
+                }
+                if (groupType == GroupType.No || !Enum.IsDefined(typeof(GroupType), groupType))
                 {
                     errorCode = ErrorCode.ParameterError;
-                    debugMessage = "group type is not defined";
+                    debugMessage = "invalid group type";
                     SendError(operationCode, errorCode, debugMessage);
                     return false;
                 }

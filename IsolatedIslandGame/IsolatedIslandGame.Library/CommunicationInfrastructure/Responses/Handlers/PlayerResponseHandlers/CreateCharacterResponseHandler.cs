@@ -28,6 +28,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
+                case ErrorCode.AlreadyExisted:
+                    {
+                        LogService.ErrorFormat("CreateCharacter Error DebugMessage: {0}", debugMessage);
+                        subject.EventManager.ErrorInform("錯誤", "已完成角色創建");
+                        return false;
+                    }
                 case ErrorCode.ParameterError:
                     {
                         LogService.ErrorFormat("CreateCharacter Error DebugMessage: {0}", debugMessage);

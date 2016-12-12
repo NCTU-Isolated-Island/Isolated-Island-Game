@@ -20,11 +20,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     int vesselID = (int)parameters[(byte)SyncVesselChangeParameterCode.VesselID];
                     int ownerPlayerID = (int)parameters[(byte)SyncVesselChangeParameterCode.OwnerPlayerID];
                     string name = (string)parameters[(byte)SyncVesselChangeParameterCode.Name];
-                    float locationX = (int)parameters[(byte)SyncVesselChangeParameterCode.LocationX];
-                    float locationZ = (int)parameters[(byte)SyncVesselChangeParameterCode.LocationZ];
-                    float eulerAngleX = (int)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleX];
-                    float eulerAngleY = (int)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleY];
-                    float eulerAngleZ = (int)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleZ];
+                    float locationX = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationX];
+                    float locationZ = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationZ];
+                    float eulerAngleX = (float)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleX];
+                    float eulerAngleY = (float)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleY];
+                    float eulerAngleZ = (float)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleZ];
                     DataChangeType changeType = (DataChangeType)parameters[(byte)SyncVesselChangeParameterCode.DataChangeType];
 
                     Vessel vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);

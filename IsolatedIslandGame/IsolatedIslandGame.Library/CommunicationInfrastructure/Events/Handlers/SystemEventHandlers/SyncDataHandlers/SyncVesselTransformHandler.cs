@@ -17,11 +17,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 try
                 {
                     int vesselID = (int)parameters[(byte)SyncVesselTransformParameterCode.VesselID];
-                    float locationX = (int)parameters[(byte)SyncVesselTransformParameterCode.LocationX];
-                    float locationZ = (int)parameters[(byte)SyncVesselTransformParameterCode.LocationZ];
-                    float eulerAngleX = (int)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleX];
-                    float eulerAngleY = (int)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleY];
-                    float eulerAngleZ = (int)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleZ];
+                    float locationX = (float)parameters[(byte)SyncVesselTransformParameterCode.LocationX];
+                    float locationZ = (float)parameters[(byte)SyncVesselTransformParameterCode.LocationZ];
+                    float eulerAngleX = (float)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleX];
+                    float eulerAngleY = (float)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleY];
+                    float eulerAngleZ = (float)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleZ];
 
                     Vessel vessel = VesselManager.Instance.FindVessel(vesselID);
                     vessel.UpdateTransform(locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
