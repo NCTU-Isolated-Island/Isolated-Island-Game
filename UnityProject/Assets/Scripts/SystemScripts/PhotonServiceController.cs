@@ -56,15 +56,13 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
         public void EraseEvents()
         {
             PhotonService.Instance.OnConnectChange -= OnConnectChange;
-            //UserManager.Instance.User.OnPlayerOnline -= ToMainScene;
-            //UserManager.Instance.User.OnPlayerOffline -= ToLoginScene;
+
         }
 
         public void RegisterEvents()
         {
             PhotonService.Instance.OnConnectChange += OnConnectChange;
-            //UserManager.Instance.User.OnPlayerOnline += ToMainScene;
-            //UserManager.Instance.User.OnPlayerOffline += ToLoginScene;
+
         }
 
         private void OnConnectChange(bool connected)
@@ -82,14 +80,6 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
                 SceneManager.LoadScene("LoginScene");
             }
         }
-        private void ToLoginScene(Player player)
-        {
-            SceneManager.LoadScene("LoginScene");
-        }
-        private void ToMainScene(Player player)
-        {
-            SceneManager.LoadScene("MainScene");
-            Debug.Log("IP:" + player.LastConnectedIPAddress);
-        }
+
     }
 }

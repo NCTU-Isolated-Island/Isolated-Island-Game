@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour {
 		}
 		DontDestroyOnLoad(gameObject);
 
-
 		//FacebookService.InitialFacebook();
 	}
 
@@ -52,21 +51,20 @@ public class GameManager : MonoBehaviour {
 
 	void OnPlayerOnline(Player player)
 	{
-		print(player.Nickname + " GroupeType: " + player.GroupType.ToString());
 		if(UserManager.Instance.User.Player.GroupType == IsolatedIslandGame.Protocol.GroupType.No)
-		{print("if");
-			UserManager.Instance.User.Player.OperationManager.CreateCharacter("Steven","signature",IsolatedIslandGame.Protocol.GroupType.A);
+		{
+			UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature",IsolatedIslandGame.Protocol.GroupType.B);
 		}
 		else
-		{print("else");
+		{
 			SceneManager.LoadScene("MainScene");
 		}
-
 	}
 		
 	void OnCreateCharacter(Player player)
 	{
-		SceneManager.LoadScene("MainScene");
+		print(player.Nickname + " GroupeType: " + player.GroupType.ToString());
+		//SceneManager.LoadScene("MainScene");
 	}
 
 	void OnSceneLoaded(Scene a,LoadSceneMode b){

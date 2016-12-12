@@ -5,16 +5,32 @@ using System.Collections;
 
 public class LocationSystem : MonoBehaviour {
 
+	public static LocationSystem Instance;
+
 	//ForDEBUG
 	public Text locationInfo;
+	public GameObject testCube;
 
 	private System.DateTime updateTime;
+
+	void Awake()
+	{
+		if(Instance == null){
+			Instance = this;
+		}
+	}
 
 	void Update()
 	{	
 		if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
 		{
-			GameManager.Instance.OnPlayerLocationChange();
+//			GameManager.Instance.OnPlayerLocationChange();
+
+			//FOR DEVELOP
+			if(Input.location.status == LocationServiceStatus.Running)
+				testCube.transform.position = GetInGameCoordinate();
+
+
 			updateTime = ConvertFromUnixTimestamp(Input.location.lastData.timestamp);
 		}
 
