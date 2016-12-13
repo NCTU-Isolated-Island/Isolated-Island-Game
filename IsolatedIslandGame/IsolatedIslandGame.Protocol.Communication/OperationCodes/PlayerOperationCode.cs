@@ -5,6 +5,9 @@
         FetchData,
         CreateCharacter,
         DrawMaterial,
-        UpdateVesselTransform
+        UpdateVesselTransform,
+        AddDecorationToVessel,
+        RemoveDecorationFromVessel,
+        UpdateDecorationOnVessel,
     }
 }
