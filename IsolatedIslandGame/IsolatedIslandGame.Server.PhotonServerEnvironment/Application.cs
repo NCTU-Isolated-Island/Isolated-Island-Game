@@ -75,6 +75,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             PlayerFactory.InitialFactory();
             ItemManager.Initial(new ItemFactory());
             InventoryItemInfoFactory.Initial(new ServerInventoryItemInfoFactory());
+            DecorationFactory.Initial(new ServerDecorationFactory());
         }
         protected void SetupManagers()
         {

@@ -29,7 +29,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     if (item is Material)
                     {
                         subject.Inventory.RemoveItem(materialItemID, 1);
-                        Decoration decoration = DecorationFactory.Instance.CreateDecoration(item as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                        Decoration decoration = DecorationFactory.Instance.CreateDecoration(subject.Vessel.VesselID, item as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
                         subject.Vessel.AddDecoration(decoration);
                         return true;
                     }
