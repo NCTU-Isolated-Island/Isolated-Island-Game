@@ -2,7 +2,7 @@
 {
     public abstract class InventoryItemInfoFactory
     {
-        public static InventoryItemInfoFactory Instance { get; protected set; }
+        public static InventoryItemInfoFactory Instance { get; private set; }
         public static void Initial(InventoryItemInfoFactory factory)
         {
             Instance = factory;

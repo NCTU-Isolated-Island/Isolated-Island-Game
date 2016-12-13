@@ -82,7 +82,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         string signature = reader.IsDBNull(2) ? null : reader.GetString(2);
                         GroupType groupType = (GroupType)reader.GetByte(3);
                         IPAddress lastConnectedIPAddress = reader.IsDBNull(4) ? IPAddress.None : IPAddress.Parse(reader.GetString(4));
-                        return new PlayerData { playerID = playerID, facebookID = facebookID, nickname = nickname, lastConnectedIPAddress = lastConnectedIPAddress};
+                        return new PlayerData { playerID = playerID, facebookID = facebookID, nickname = nickname, lastConnectedIPAddress = lastConnectedIPAddress, groupType = groupType};
                     }
                     else
                     {

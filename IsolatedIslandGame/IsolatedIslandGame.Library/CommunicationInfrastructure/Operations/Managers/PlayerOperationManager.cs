@@ -25,6 +25,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.CreateCharacter, new CreateCharacterHandler(player) },
                 { PlayerOperationCode.DrawMaterial, new DrawMaterialHandler(player) },
                 { PlayerOperationCode.UpdateVesselTransform, new UpdateVesselTransformHandler(player) },
+                { PlayerOperationCode.AddDecorationToVessel, new AddDecorationToVesselHandler(player) },
+                { PlayerOperationCode.RemoveDecorationFromVessel, new RemoveDecorationFromVesselHandler(player) },
             };
         }
 
@@ -82,6 +84,28 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)UpdateVesselTransformParameterCode.EulerAngleZ, rotationEulerAngleZ }
             };
             SendOperation(PlayerOperationCode.UpdateVesselTransform, parameters);
+        }
+        public void AddDecorationToVessel(int materialItemID, float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)AddDecorationToVesselParameterCode.MaterialItemID, materialItemID },
+                { (byte)AddDecorationToVesselParameterCode.PositionX, positionX },
+                { (byte)AddDecorationToVesselParameterCode.PositionY, positionY },
+                { (byte)AddDecorationToVesselParameterCode.PositionZ, positionZ },
+                { (byte)AddDecorationToVesselParameterCode.RotationEulerAngleX, rotationEulerAngleX },
+                { (byte)AddDecorationToVesselParameterCode.RotationEulerAngleY, rotationEulerAngleY },
+                { (byte)AddDecorationToVesselParameterCode.RotationEulerAngleZ, rotationEulerAngleZ }
+            };
+            SendOperation(PlayerOperationCode.AddDecorationToVessel, parameters);
+        }
+        public void RemoveDecorationFromVessel(int decorationID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)RemoveDecorationFromVesselParameterCode.DecorationID, decorationID }
+            };
+            SendOperation(PlayerOperationCode.RemoveDecorationFromVessel, parameters);
         }
     }
 }
