@@ -27,6 +27,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.UpdateVesselTransform, new UpdateVesselTransformHandler(player) },
                 { PlayerOperationCode.AddDecorationToVessel, new AddDecorationToVesselHandler(player) },
                 { PlayerOperationCode.RemoveDecorationFromVessel, new RemoveDecorationFromVesselHandler(player) },
+                { PlayerOperationCode.UpdateDecorationOnVessel, new UpdateDecorationOnVesselHandler(player) },
             };
         }
 
@@ -106,6 +107,20 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)RemoveDecorationFromVesselParameterCode.DecorationID, decorationID }
             };
             SendOperation(PlayerOperationCode.RemoveDecorationFromVessel, parameters);
+        }
+        public void UpdateDecorationOnVessel(int decorationID, float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)UpdateDecorationOnVesselParameterCode.DecorationID, decorationID },
+                { (byte)UpdateDecorationOnVesselParameterCode.PositionX, positionX },
+                { (byte)UpdateDecorationOnVesselParameterCode.PositionY, positionY },
+                { (byte)UpdateDecorationOnVesselParameterCode.PositionZ, positionZ },
+                { (byte)UpdateDecorationOnVesselParameterCode.RotationEulerAngleX, rotationEulerAngleX },
+                { (byte)UpdateDecorationOnVesselParameterCode.RotationEulerAngleY, rotationEulerAngleY },
+                { (byte)UpdateDecorationOnVesselParameterCode.RotationEulerAngleZ, rotationEulerAngleZ }
+            };
+            SendOperation(PlayerOperationCode.UpdateDecorationOnVessel, parameters);
         }
     }
 }

@@ -7,6 +7,7 @@
         DrawMaterial,
         UpdateVesselTransform,
         AddDecorationToVessel,
-        RemoveDecorationFromVessel
+        RemoveDecorationFromVessel,
+        UpdateDecorationOnVessel,
     }
 }
