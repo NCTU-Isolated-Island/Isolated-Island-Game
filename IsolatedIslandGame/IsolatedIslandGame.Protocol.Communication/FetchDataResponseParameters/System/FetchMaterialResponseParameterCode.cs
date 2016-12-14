@@ -5,6 +5,7 @@
         ItemID,
         ItemName,
         Description,
-        MaterialID
+        MaterialID,
+        Score
     }
 }

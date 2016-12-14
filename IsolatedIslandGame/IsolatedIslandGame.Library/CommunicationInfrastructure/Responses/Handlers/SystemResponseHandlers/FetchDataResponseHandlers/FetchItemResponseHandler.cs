@@ -53,13 +53,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                                 ItemManager.Instance.AddItem(new Item(itemID, itemName, description));
                             }
                             return true;
-                        case 4:
+                        case 5:
                             {
                                 int itemID = (int)parameters[(byte)FetchMaterialResponseParameterCode.ItemID];
                                 string itemName = (string)parameters[(byte)FetchMaterialResponseParameterCode.ItemName];
                                 string description = (string)parameters[(byte)FetchMaterialResponseParameterCode.Description];
                                 int materialID = (int)parameters[(byte)FetchMaterialResponseParameterCode.MaterialID];
-                                ItemManager.Instance.AddItem(new Material(itemID, itemName, description, materialID));
+                                int score = (int)parameters[(byte)FetchMaterialResponseParameterCode.Score];
+                                ItemManager.Instance.AddItem(new Material(itemID, itemName, description, materialID, score));
                             }
                             return true;
                         default:

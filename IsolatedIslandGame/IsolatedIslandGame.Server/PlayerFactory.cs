@@ -1,7 +1,7 @@
 ﻿using IsolatedIslandGame.Database;
-using IsolatedIslandGame.Database.DatabaseFormatData;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol;
+using System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Server
@@ -16,10 +16,12 @@ namespace IsolatedIslandGame.Server
         }
 
         private Dictionary<int, Player> playerDictionary;
+        private Dictionary<int, Action<Blueprint>> playerGetBlueprintFunctionDictionary;
 
         private PlayerFactory()
         {
             playerDictionary = new Dictionary<int, Player>();
+            playerGetBlueprintFunctionDictionary = new Dictionary<int, Action<Blueprint>>();
         }
         public bool PlayerLogin(ServerUser user, ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
         {
@@ -28,7 +30,7 @@ namespace IsolatedIslandGame.Server
                 debugMessage = null;
                 errorCode = ErrorCode.NoError;
                 int playerID;
-                PlayerData playerData;
+                Player player;
                 if (!DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                 {
                     if(!DatabaseService.RepositoryList.PlayerRepository.Register(facebookID))
@@ -39,7 +41,7 @@ namespace IsolatedIslandGame.Server
                     }
                     if (DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                     {
-                        playerData = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
+                        player = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
                     }
                     else
                     {
@@ -50,9 +52,9 @@ namespace IsolatedIslandGame.Server
                 }
                 else
                 {
-                    playerData = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
+                    player = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
                 }
-                Player player = new Player(user, playerData.playerID, playerData.facebookID, playerData.nickname, playerData.signature, playerData.groupType, playerData.lastConnectedIPAddress);
+                player.BindUser(user);
                 if (PlayerOnline(player))
                 {
                     return true;
@@ -122,6 +124,13 @@ namespace IsolatedIslandGame.Server
                 VesselManager.Instance.AddVessel(vessel);
                 player.BindVessel(vessel);
             }
+
+            Action<Blueprint> playerGetBlueprintFunction = (blueprint) =>
+            {
+                DatabaseService.RepositoryList.PlayerKnownBlueprintRepository.AddRelation(player.PlayerID, blueprint.BlueprintID);
+            };
+            playerGetBlueprintFunctionDictionary.Add(player.PlayerID, playerGetBlueprintFunction); ;
+            player.OnGetBlueprint += playerGetBlueprintFunction;
         }
         private void DisassemblyPlayer(Player player)
         {
@@ -138,6 +147,9 @@ namespace IsolatedIslandGame.Server
             {
                 VesselManager.Instance.RemoveVessel(player.Vessel.VesselID);
             }
+
+            Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
+            player.OnGetBlueprint -= playerGetBlueprintFunction;
         }
         private void CreateVessel(Player player)
         {

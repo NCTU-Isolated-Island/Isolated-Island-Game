@@ -46,9 +46,8 @@ namespace IsolatedIslandGame.Library
         public event Action<Blueprint> OnGetBlueprint { add { onGetBlueprint += value; } remove { onGetBlueprint -= value; } }
         #endregion
 
-        public Player(User user, int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
+        public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
         {
-            User = user;
             PlayerID = playerID;
             FacebookID = facebookID;
             Nickname = nickname;
@@ -61,6 +60,10 @@ namespace IsolatedIslandGame.Library
             ResponseManager = new PlayerResponseManager(this);
 
             knownBlueprintDictionary = new Dictionary<int, Blueprint>();
+        }
+        public void BindUser(User user)
+        {
+            User = user;
         }
         public void BindInventory(Inventory inventory)
         {
@@ -91,7 +94,7 @@ namespace IsolatedIslandGame.Library
         {
             return knownBlueprintDictionary.ContainsKey(blueprintID);
         }
-        public void AddBlueprint(Blueprint blueprint)
+        public void GetBlueprint(Blueprint blueprint)
         {
             if (!IsKnownBlueprint(blueprint.BlueprintID))
             {

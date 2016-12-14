@@ -62,7 +62,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     string signature = (string)parameters[(byte)LoginResponseParameterCode.Signature];
                     GroupType groupType = (GroupType)parameters[(byte)LoginResponseParameterCode.GroupType];
                     string lastConnectedIPAddress = (string)parameters[(byte)LoginResponseParameterCode.LastConnectedIPAddress];
-                    subject.PlayerOnline(new Player(subject, playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress)));
+                    Player player = new Player(playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress));
+                    player.BindUser(subject);
+                    subject.PlayerOnline(player);
                     subject.Player.OperationManager.FetchDataResolver.FetchInventory();
                     subject.Player.BindVessel(VesselManager.Instance.FindVesselByOwnerPlayerID(playerID));
                     return true;

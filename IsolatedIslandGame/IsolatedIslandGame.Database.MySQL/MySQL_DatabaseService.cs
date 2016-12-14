@@ -1,5 +1,5 @@
-﻿using IsolatedIslandGame.Database.DatabaseElements;
-using IsolatedIslandGame.Database.MySQL.DatabaseElements;
+﻿using IsolatedIslandGame.Database;
+using IsolatedIslandGame.Database.MySQL;
 
 namespace IsolatedIslandGame.Database.MySQL
 {

@@ -1,4 +1,4 @@
-﻿using IsolatedIslandGame.Database.DatabaseElements;
+﻿using IsolatedIslandGame.Database;
 
 namespace IsolatedIslandGame.Database
 {
