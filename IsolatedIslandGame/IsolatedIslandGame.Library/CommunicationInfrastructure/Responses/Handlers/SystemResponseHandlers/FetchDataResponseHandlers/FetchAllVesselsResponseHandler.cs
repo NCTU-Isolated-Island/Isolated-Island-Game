@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 8)
+                        if (parameters.Count != 6)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllVesselsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -47,10 +47,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     string ownerName = (string)parameters[(byte)FetchAllVesselsResponseParameterCode.Name];
                     float locationX = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.LocationZ];
-                    float eulerAngleX = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.EulerAngleX];
                     float eulerAngleY = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.EulerAngleY];
-                    float eulerAngleZ = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.EulerAngleZ];
-                    VesselManager.Instance.AddVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ));
+                    VesselManager.Instance.AddVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, eulerAngleY));
                     return true;
                 }
                 catch (InvalidCastException ex)

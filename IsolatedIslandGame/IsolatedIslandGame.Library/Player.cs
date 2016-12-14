@@ -3,6 +3,7 @@ using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
 using IsolatedIslandGame.Protocol;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace IsolatedIslandGame.Library
@@ -20,6 +21,8 @@ namespace IsolatedIslandGame.Library
         public string IdentityInformation { get { return string.Format("Player ID: {0}", PlayerID); } }
         public Inventory Inventory { get; private set; }
         public Vessel Vessel { get; private set; }
+        private Dictionary<int, Blueprint> knownBlueprintDictionary;
+        public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values; } }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -38,6 +41,9 @@ namespace IsolatedIslandGame.Library
 
         private event Action<Vessel> onBindVessel;
         public event Action<Vessel> OnBindVessel { add { onBindVessel += value; } remove { onBindVessel -= value; } }
+
+        private event Action<Blueprint> onGetBlueprint;
+        public event Action<Blueprint> OnGetBlueprint { add { onGetBlueprint += value; } remove { onGetBlueprint -= value; } }
         #endregion
 
         public Player(User user, int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -53,6 +59,8 @@ namespace IsolatedIslandGame.Library
             EventManager = new PlayerEventManager(this);
             OperationManager = new PlayerOperationManager(this);
             ResponseManager = new PlayerResponseManager(this);
+
+            knownBlueprintDictionary = new Dictionary<int, Blueprint>();
         }
         public void BindInventory(Inventory inventory)
         {
@@ -77,6 +85,19 @@ namespace IsolatedIslandGame.Library
         public void DrawMaterial(int itemID, int itemCount)
         {
             onDrawMaterial?.Invoke(ItemManager.Instance.FindItem(itemID), itemCount);
+        }
+
+        public bool IsKnownBlueprint(int blueprintID)
+        {
+            return knownBlueprintDictionary.ContainsKey(blueprintID);
+        }
+        public void AddBlueprint(Blueprint blueprint)
+        {
+            if (!IsKnownBlueprint(blueprint.BlueprintID))
+            {
+                knownBlueprintDictionary.Add(blueprint.BlueprintID, blueprint);
+                onGetBlueprint?.Invoke(blueprint);
+            }
         }
     }
 }
