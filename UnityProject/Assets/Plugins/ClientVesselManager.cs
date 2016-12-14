@@ -19,7 +19,7 @@ public class ClientVesselManager : VesselManager
         if(ContainsVessel(vessel.VesselID) && ContainsVesselWithOwnerPlayerID(vessel.OwnerPlayerID))
         {
             Vessel existedVessel = vesselDictionary[vessel.VesselID];
-            existedVessel.UpdateTransform(vessel.LocationX, vessel.LocationZ, vessel.RotationEulerAngleX, vessel.RotationEulerAngleY, vessel.RotationEulerAngleZ);
+            existedVessel.UpdateTransform(vessel.LocationX, vessel.LocationZ, vessel.RotationEulerAngleY);
         }
         else if(ContainsVessel(vessel.VesselID))
         {
@@ -66,7 +66,7 @@ public class ClientVesselManager : VesselManager
         }
         else
         {
-            Vessel vessel = new Vessel(vesselID, 0, "", 0, 0, 0, 0, 0);
+            Vessel vessel = new Vessel(vesselID, 0, "", 0, 0, 0);
             vesselDictionary.Add(vessel.VesselID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
@@ -86,7 +86,7 @@ public class ClientVesselManager : VesselManager
         }
         else
         {
-            Vessel vessel = new Vessel(0, ownerPlayerID, "", 0, 0, 0, 0, 0);
+            Vessel vessel = new Vessel(0, ownerPlayerID, "", 0, 0, 0);
             vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
@@ -137,11 +137,11 @@ public class ClientVesselManager : VesselManager
             onVesselChange(vessel, DataChangeType.Update);
         }
     }
-    private void InformVesselTransformUpdated(int vesselID, float locationX, float locationY, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
+    private void InformVesselTransformUpdated(int vesselID, float locationX, float locationY, float rotationEulerAngleY)
     {
         if (onVesselTransformUpdated != null)
         {
-            onVesselTransformUpdated(vesselID, locationX, locationY, rotationEulerAngleX, rotationEulerAngleY, rotationEulerAngleZ);
+            onVesselTransformUpdated(vesselID, locationX, locationY, rotationEulerAngleY);
         }
     }
     private void InformVesselDecorationChange(int vesselID, Decoration decoration, DataChangeType changeType)

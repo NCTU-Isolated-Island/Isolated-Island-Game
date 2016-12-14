@@ -56,15 +56,11 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
         public void EraseEvents()
         {
             PhotonService.Instance.OnConnectChange -= OnConnectChange;
-            UserManager.Instance.User.OnPlayerOnline -= ToMainScene;
-            UserManager.Instance.User.OnPlayerOffline -= ToLoginScene;
         }
 
         public void RegisterEvents()
         {
             PhotonService.Instance.OnConnectChange += OnConnectChange;
-            UserManager.Instance.User.OnPlayerOnline += ToMainScene;
-            UserManager.Instance.User.OnPlayerOffline += ToLoginScene;
         }
 
         private void OnConnectChange(bool connected)
@@ -73,7 +69,6 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             {
                 LogService.Info("Connected");
                 UserManager.Instance.User.OperationManager.FetchDataResolver.FetchSystemVersion();
-                FacebookService.InitialFacebook();
             }
             else
             {
@@ -81,15 +76,6 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
                 reconnectCountdownTimer = reconnectInterval;
                 SceneManager.LoadScene("Login");
             }
-        }
-        private void ToLoginScene(Player player)
-        {
-            SceneManager.LoadScene("Login");
-        }
-        private void ToMainScene(Player player)
-        {
-            SceneManager.LoadScene("Main");
-            Debug.Log("IP:" + player.LastConnectedIPAddress);
         }
     }
 }
