@@ -7,9 +7,7 @@
         Name,
         LocationX,
         LocationZ,
-        EulerAngleX,
         EulerAngleY,
-        EulerAngleZ,
         DataChangeType
     }
 }

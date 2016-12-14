@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                     if (reader.Read())
                     {
                         int vesselID = reader.GetInt32(0);
-                        return new Vessel(vesselID, ownerPlayerID, name, 0, 0, 0, 0, 0);
+                        return new Vessel(vesselID, ownerPlayerID, name, 0, 0, 0);
                     }
                     else
                     {
@@ -33,7 +33,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
         {
             Vessel vessel = null;
             string sqlString = @"SELECT  
-                OwnerPlayerID, Name, LocationX, LocationZ, EulerAngleX, EulerAngleY, EulerAngleZ
+                OwnerPlayerID, Name, LocationX, LocationZ, EulerAngleY
                 from VesselCollection WHERE VesselID = @vesselID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -46,10 +46,8 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         string name = reader.GetString(1);
                         float locationX = reader.GetFloat(2);
                         float locationZ = reader.GetFloat(3);
-                        float eulerAngleX = reader.GetFloat(4);
-                        float eulerAngleY = reader.GetFloat(5);
-                        float eulerAngleZ = reader.GetFloat(6);
-                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                        float eulerAngleY = reader.GetFloat(4);
+                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleY);
                     }
                 }
             }
@@ -67,7 +65,7 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
         {
             Vessel vessel = null;
             string sqlString = @"SELECT  
-                VesselID, Name, LocationX, LocationZ, EulerAngleX, EulerAngleY, EulerAngleZ
+                VesselID, Name, LocationX, LocationZ, EulerAngleY
                 from VesselCollection WHERE OwnerPlayerID = @ownerPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -80,10 +78,8 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
                         string name = reader.GetString(1);
                         float locationX = reader.GetFloat(2);
                         float locationZ = reader.GetFloat(3);
-                        float eulerAngleX = reader.GetFloat(4);
-                        float eulerAngleY = reader.GetFloat(5);
-                        float eulerAngleZ = reader.GetFloat(6);
-                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                        float eulerAngleY = reader.GetFloat(4);
+                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleY);
                     }
                 }
             }
@@ -100,16 +96,14 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements.Repositories
         public override void Update(Vessel vessel)
         {
             string sqlString = @"UPDATE VesselCollection SET 
-                Name = @name, LocationX = @locationX, LocationZ = @locationZ, EulerAngleX = @eulerAngleX, EulerAngleY = @eulerAngleY, EulerAngleZ = @eulerAngleZ
+                Name = @name, LocationX = @locationX, LocationZ = @locationZ, EulerAngleY = @eulerAngleY
                 WHERE VesselID = @vesselID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@name", vessel.Name);
                 command.Parameters.AddWithValue("@locationX", vessel.LocationX);
                 command.Parameters.AddWithValue("@locationZ", vessel.LocationZ);
-                command.Parameters.AddWithValue("@eulerAngleX", vessel.RotationEulerAngleX);
                 command.Parameters.AddWithValue("@eulerAngleY", vessel.RotationEulerAngleY);
-                command.Parameters.AddWithValue("@eulerAngleZ", vessel.RotationEulerAngleZ);
                 command.Parameters.AddWithValue("@vesselID", vessel.VesselID);
                 if (command.ExecuteNonQuery() <= 0)
                 {

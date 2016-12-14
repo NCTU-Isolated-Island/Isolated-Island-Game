@@ -5,8 +5,6 @@
         VesselID,
         LocationX,
         LocationZ,
-        EulerAngleX,
-        EulerAngleY,
-        EulerAngleZ,
+        EulerAngleY
     }
 }

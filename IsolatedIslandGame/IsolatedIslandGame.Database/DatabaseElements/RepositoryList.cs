@@ -10,5 +10,8 @@ namespace IsolatedIslandGame.Database.DatabaseElements
         public abstract InventoryItemInfoRepository InventoryItemInfoRepository { get; }
         public abstract VesselRepository VesselRepository { get; }
         public abstract DecorationRepository DecorationRepository { get; }
+        public abstract BlueprintRepository BlueprintRepository { get; }
+        public abstract BlueprintRequirementRepository BlueprintRequirementRepository { get; }
+        public abstract BlueprintProductRepository BlueprintProductRepository { get; }
     }
 }

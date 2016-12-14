@@ -29,9 +29,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             { (byte)FetchVesselResponseParameterCode.Name, vessel.Name },
                             { (byte)FetchVesselResponseParameterCode.LocationX, vessel.LocationX },
                             { (byte)FetchVesselResponseParameterCode.LocationZ, vessel.LocationZ },
-                            { (byte)FetchVesselResponseParameterCode.EulerAngleX, vessel.RotationEulerAngleX },
                             { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.RotationEulerAngleY },
-                            { (byte)FetchVesselResponseParameterCode.EulerAngleZ, vessel.RotationEulerAngleZ }
                         };
                         SendResponse(communicationInterface, fetchCode, result);
                         return true;

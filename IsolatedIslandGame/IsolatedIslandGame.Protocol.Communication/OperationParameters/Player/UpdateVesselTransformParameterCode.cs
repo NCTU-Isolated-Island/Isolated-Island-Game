@@ -4,8 +4,6 @@
     {
         LocationX,
         LocatiomZ,
-        EulerAngleX,
-        EulerAngleY,
-        EulerAngleZ,
+        EulerAngleY
     }
 }

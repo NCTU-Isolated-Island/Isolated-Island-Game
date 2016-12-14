@@ -23,5 +23,14 @@ namespace IsolatedIslandGame.Database.MySQL.DatabaseElements
 
         private MySQL_DecorationRepository decorationRepository = new MySQL_DecorationRepository();
         public override DecorationRepository DecorationRepository { get { return decorationRepository; } }
+
+        private MySQL_BlueprintRepository blueprintRepository = new MySQL_BlueprintRepository();
+        public override BlueprintRepository BlueprintRepository { get { return blueprintRepository; } }
+
+        private MySQL_BlueprintRequirementRepository blueprintRequirementRepository = new MySQL_BlueprintRequirementRepository();
+        public override BlueprintRequirementRepository BlueprintRequirementRepository { get { return blueprintRequirementRepository; } }
+
+        private MySQL_BlueprintProductRepository blueprintProductRepository = new MySQL_BlueprintProductRepository();
+        public override BlueprintProductRepository BlueprintProductRepository { get { return blueprintProductRepository; } }
     }
 }

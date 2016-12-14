@@ -6,7 +6,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 {
     class UpdateVesselTransformHandler : PlayerOperationHandler
     {
-        public UpdateVesselTransformHandler(Player subject) : base(subject, 5)
+        public UpdateVesselTransformHandler(Player subject) : base(subject, 3)
         {
         }
 
@@ -16,13 +16,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 float locationX = (float)parameters[(byte)UpdateVesselTransformParameterCode.LocationX];
                 float locationZ = (float)parameters[(byte)UpdateVesselTransformParameterCode.LocatiomZ];
-                float eulerAngleX = (float)parameters[(byte)UpdateVesselTransformParameterCode.EulerAngleX];
                 float eulerAngleY = (float)parameters[(byte)UpdateVesselTransformParameterCode.EulerAngleY];
-                float eulerAngleZ = (float)parameters[(byte)UpdateVesselTransformParameterCode.EulerAngleZ];
 
                 if(subject.Vessel != null)
                 {
-                    subject.Vessel.UpdateTransform(locationX, locationZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                    subject.Vessel.UpdateTransform(locationX, locationZ, eulerAngleY);
                     return true;
                 }
                 else
