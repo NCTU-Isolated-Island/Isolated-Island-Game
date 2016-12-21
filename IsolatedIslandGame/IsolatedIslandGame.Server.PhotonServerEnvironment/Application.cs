@@ -3,7 +3,9 @@ using ExitGames.Logging.Log4Net;
 using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Database.MySQL;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Library.CommunicationInfrastructure;
 using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Protocol.Communication;
 using IsolatedIslandGame.Server.Configuration;
 using IsolatedIslandGame.Server.Items;
 using log4net.Config;
@@ -55,6 +57,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         protected void SetupConfiguration()
         {
             SystemConfiguration.InitialConfiguration(SystemConfiguration.Load(Path.Combine(ApplicationPath, "config", "system.config")));
+            Photon.SocketServer.Protocol.TryRegisterCustomType(typeof(Blueprint.ElementInfo), (byte)SerializationTypeCode.BlueprintElementInfo, SerializationHelper.Serialize<Blueprint.ElementInfo>, SerializationHelper.Deserialize<Blueprint.ElementInfo>);
         }
         protected void SetupServices()
         {

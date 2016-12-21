@@ -19,14 +19,19 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 Random randomGenerator = new Random(DateTime.Now.GetHashCode());
                 Item randomItem = ItemManager.Instance.Items.ElementAt(randomGenerator.Next(0, ItemManager.Instance.ItemCount));
                 int randomNumber = randomGenerator.Next(1, 10);
-                subject.Inventory.AddItem(randomItem, randomNumber);
-                Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
+
+                lock(subject.Inventory)
                 {
-                    { (byte)DrawMaterialResponseParameterCode.ItemID, randomItem.ItemID },
-                    { (byte)DrawMaterialResponseParameterCode.ItemCount, randomNumber }
-                };
-                SendResponse(operationCode, responseParameters);
-                return true;
+                    subject.Inventory.AddItem(randomItem, randomNumber);
+                    Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
+                    {
+                        { (byte)DrawMaterialResponseParameterCode.ItemID, randomItem.ItemID },
+                        { (byte)DrawMaterialResponseParameterCode.ItemCount, randomNumber }
+                    };
+                    SendResponse(operationCode, responseParameters);
+                    LogService.InfoFormat("Player: {0}, DrawMaterial, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, randomNumber);
+                    return true;
+                }
             }
             else
             {

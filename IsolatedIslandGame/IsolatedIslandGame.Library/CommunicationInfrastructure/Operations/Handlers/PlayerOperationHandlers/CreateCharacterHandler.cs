@@ -27,6 +27,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     errorCode = ErrorCode.AlreadyExisted;
                     debugMessage = "already created character";
                     SendError(operationCode, errorCode, debugMessage);
+                    LogService.ErrorFormat("Player: {0}, CreateCharacter Fail because GroupType is not No, which is {1}", subject.IdentityInformation, subject.GroupType);
                     return false;
                 }
                 if (groupType == GroupType.No || !Enum.IsDefined(typeof(GroupType), groupType))
@@ -34,6 +35,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     errorCode = ErrorCode.ParameterError;
                     debugMessage = "invalid group type";
                     SendError(operationCode, errorCode, debugMessage);
+                    LogService.ErrorFormat("Player: {0}, CreateCharacter Fail because GroupType is invalid, GroupType is {1}", subject.IdentityInformation, groupType);
                     return false;
                 }
                 else
@@ -46,6 +48,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         { (byte)CreateCharacterResponseParameterCode.GroupType, subject.GroupType }
                     };
                     SendResponse(operationCode, responseParameters);
+                    LogService.InfoFormat("Player: {0}, CreateCharacter, Nickname: {1}, Signature: {2}, GroupType: {3}", subject.IdentityInformation, subject.Nickname, subject.Signature, subject.GroupType);
                     return true;
                 }
             }
