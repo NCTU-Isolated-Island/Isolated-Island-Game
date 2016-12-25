@@ -38,26 +38,30 @@ namespace IsolatedIslandGame.Library
         {
             return itemInfoDictionary.Values.Any(x => x.Item.ItemID == itemID);
         }
-        public InventoryItemInfo FindInventoryItemInfo(int inventoryItemInfoID)
+        public bool FindInventoryItemInfo(int inventoryItemInfoID, out InventoryItemInfo info)
         {
             if (ContainsInventoryItemInfo(inventoryItemInfoID))
             {
-                return itemInfoDictionary[inventoryItemInfoID];
+                info = itemInfoDictionary[inventoryItemInfoID];
+                return true;
             }
             else
             {
-                return null;
+                info = null;
+                return false;
             }
         }
-        public InventoryItemInfo FindInventoryItemInfoByItemID(int itemID)
+        public bool FindInventoryItemInfoByItemID(int itemID, out InventoryItemInfo info)
         {
             if (ContainsItem(itemID))
             {
-                return ItemInfos.First(x => x.Item.ItemID == itemID);
+                info = ItemInfos.First(x => x.Item.ItemID == itemID);
+                return true;
             }
             else
             {
-                return null;
+                info = null;
+                return false;
             }
         }
         public int ItemCount(int itemID)
@@ -99,50 +103,64 @@ namespace IsolatedIslandGame.Library
         }
         public bool AddItem(Item item, int count)
         {
-            InventoryItemInfo info = FindInventoryItemInfoByItemID(item.ItemID);
-            if (info == null)
+            InventoryItemInfo info;
+            if (FindInventoryItemInfoByItemID(item.ItemID, out info))
+            {
+                info.Count += count;
+                onItemInfoChange?.Invoke(info, DataChangeType.Update);
+                return true;
+            }
+            else
             {
                 int positionIndex = Array.FindIndex(itemInfos, x => x == null);
                 if (positionIndex >= 0)
                 {
-                    info = InventoryItemInfoFactory.Instance?.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex);
-                    itemInfoDictionary.Add(info.InventoryItemInfoID, info);
-                    itemInfos[info.PositionIndex] = info;
-                    onItemInfoChange?.Invoke(info, DataChangeType.Add);
+                    if (InventoryItemInfoFactory.Instance != null && InventoryItemInfoFactory.Instance.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex, out info))
+                    {
+                        itemInfoDictionary.Add(info.InventoryItemInfoID, info);
+                        itemInfos[info.PositionIndex] = info;
+                        onItemInfoChange?.Invoke(info, DataChangeType.Add);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
                     return false;
                 }
             }
-            else
-            {
-                info.Count += count;
-                onItemInfoChange?.Invoke(info, DataChangeType.Update);
-            }
-            return true;
         }
         public bool RemoveItem(int itemID, int count)
         {
             if (ContainsItem(itemID) && ItemCount(itemID) >= count)
             {
-                InventoryItemInfo info = FindInventoryItemInfoByItemID(itemID);
-                info.Count -= count;
-                if (info.Count == 0)
+                InventoryItemInfo info;
+                if(FindInventoryItemInfoByItemID(itemID, out info))
                 {
-                    if (itemInfoDictionary.ContainsKey(info.InventoryItemInfoID))
+                    info.Count -= count;
+                    if (info.Count == 0)
                     {
-                        itemInfoDictionary.Remove(info.InventoryItemInfoID);
+                        if (itemInfoDictionary.ContainsKey(info.InventoryItemInfoID))
+                        {
+                            itemInfoDictionary.Remove(info.InventoryItemInfoID);
+                        }
+                        itemInfos[info.PositionIndex] = null;
+                        InventoryItemInfoFactory.Instance?.DeleteItemInfo(info.InventoryItemInfoID);
+                        onItemInfoChange?.Invoke(info, DataChangeType.Remove);
                     }
-                    itemInfos[info.PositionIndex] = null;
-                    InventoryItemInfoFactory.Instance?.DeleteItemInfo(info.InventoryItemInfoID);
-                    onItemInfoChange?.Invoke(info, DataChangeType.Remove);
+                    else
+                    {
+                        onItemInfoChange?.Invoke(info, DataChangeType.Update);
+                    }
+                    return true;
                 }
                 else
                 {
-                    onItemInfoChange?.Invoke(info, DataChangeType.Update);
+                    return false;
                 }
-                return true;
             }
             else
             {

@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_DecorationRepository : DecorationRepository
     {
-        public override Decoration Create(int vesselID, int materialItemID, float positionX, float positionY, float positionZ, float eulerAngleX, float eulerAngleY, float eulerAngleZ)
+        public override bool Create(int vesselID, int materialItemID, float positionX, float positionY, float positionZ, float eulerAngleX, float eulerAngleY, float eulerAngleZ, out Decoration decoration)
         {
             string sqlString = @"INSERT INTO DecorationCollection 
                 (VesselID,MaterialItemID,PositionX,PositionY,PositionZ,EulerAngleX,EulerAngleY,EulerAngleZ) VALUES (@vesselID,@materialItemID,@positionX,@positionY,@positionZ,@eulerAngleX,@eulerAngleY,eulerAngleZ) ;
@@ -28,16 +28,27 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int decorationID = reader.GetInt32(0);
-                        return new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                        Item material;
+                        if (ItemManager.Instance.FindItem(materialItemID, out material))
+                        {
+                            decoration = new Decoration(decorationID, material as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                            return true;
+                        }
+                        else
+                        {
+                            decoration = null;
+                            return false;
+                        }
                     }
                     else
                     {
-                        return null;
+                        decoration = null;
+                        return false;
                     }
                 }
             }
         }
-        public override Decoration Read(int decorationID)
+        public override bool Read(int decorationID, out Decoration decoration)
         {
             string sqlString = @"SELECT  
                 MaterialItemID, PositionX, PositionY, PositionZ, EulerAngleX, EulerAngleY, EulerAngleZ 
@@ -56,11 +67,22 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         float eulerAngleX = reader.GetFloat(4);
                         float eulerAngleY = reader.GetFloat(5);
                         float eulerAngleZ = reader.GetFloat(6);
-                        return new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                        Item material;
+                        if (ItemManager.Instance.FindItem(materialItemID, out material))
+                        {
+                            decoration = new Decoration(decorationID, material as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                            return true;
+                        }
+                        else
+                        {
+                            decoration = null;
+                            return false;
+                        }
                     }
                     else
                     {
-                        return null;
+                        decoration = null;
+                        return false;
                     }
                 }
             }
@@ -122,7 +144,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         float eulerAngleX = reader.GetFloat(5);
                         float eulerAngleY = reader.GetFloat(6);
                         float eulerAngleZ = reader.GetFloat(7);
-                        decorations.Add(new Decoration(decorationID, ItemManager.Instance.FindItem(materialItemID) as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ));
+                        Item material;
+                        if (ItemManager.Instance.FindItem(materialItemID, out material))
+                        {
+                            decorations.Add(new Decoration(decorationID, material as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ));
+                        }
                     }
                 }
             }

@@ -54,19 +54,29 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     float eulerAngleZ = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleZ];
                     if (subject.Vessel.VesselID == vesselID)
                     {
-                        subject.Vessel.AddDecoration(new Decoration(
+                        Item material;
+                        if(ItemManager.Instance.FindItem(materialItemID, out material))
+                        {
+                            subject.Vessel.AddDecoration(new Decoration(
                             decorationID: decorationID,
-                            material: ItemManager.Instance.FindItem(materialItemID) as Material,
+                            material: material as Material,
                             positionX: positionX,
                             positionY: positionY,
                             positionZ: positionZ,
                             rotationEulerAngleX: eulerAngleX,
                             rotationEulerAngleY: eulerAngleY,
                             rotationEulerAngleZ: eulerAngleZ));
-                        return true;
+                            return true;
+                        }
+                        else
+                        {
+                            LogService.Error($"FetchVesselDecorationsResponse Error, Item not existed ItemID: {materialItemID}");
+                            return false;
+                        }
                     }
                     else
                     {
+                        LogService.Error($"FetchVesselDecorationsResponse Error, VesselID incorrect, self: {subject.Vessel.VesselID}, received: {vesselID}");
                         return false;
                     }
                 }

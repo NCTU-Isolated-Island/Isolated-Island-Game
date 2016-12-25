@@ -26,7 +26,7 @@ namespace IsolatedIslandGame.Library
         {
             return blueprintDictionary.ContainsKey(blueprintID);
         }
-        public abstract Blueprint FindBlueprint(int blueprintID);
+        public abstract bool FindBlueprint(int blueprintID, out Blueprint blueprint);
         public abstract void AddBlueprint(Blueprint blueprint);
         public abstract bool RemoveBlueprint(int blueprintID);
     }

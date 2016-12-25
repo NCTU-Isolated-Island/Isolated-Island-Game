@@ -62,15 +62,17 @@ namespace IsolatedIslandGame.Library
         {
             return decorationDictionary.ContainsKey(decorationID);
         }
-        public Decoration FindDecoration(int decorationID)
+        public bool FindDecoration(int decorationID, out Decoration decoration)
         {
             if (ContainsDecoration(decorationID))
             {
-                return decorationDictionary[decorationID];
+                decoration = decorationDictionary[decorationID];
+                return true;
             }
             else
             {
-                return null;
+                decoration = null;
+                return false;
             }
         }
         public void AddDecoration(Decoration decoration)

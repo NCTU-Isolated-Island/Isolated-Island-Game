@@ -29,31 +29,47 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     float eulerAngleZ = (float)parameters[(byte)SyncVesselDecorationChangeParameterCode.EulerAngleZ];
                     DataChangeType changeType = (DataChangeType)parameters[(byte)SyncVesselDecorationChangeParameterCode.DataChangeType];
 
-                    Vessel vessel = VesselManager.Instance.FindVessel(vesselID);
-
-                    Decoration decoration = new Decoration(
+                    Vessel vessel;
+                    if(VesselManager.Instance.FindVessel(vesselID, out vessel))
+                    {
+                        Item material;
+                        if(ItemManager.Instance.FindItem(materialItemID, out material))
+                        {
+                            Decoration decoration = new Decoration(
                             decorationID: decorationID,
-                            material: ItemManager.Instance.FindItem(materialItemID) as Material,
+                            material: material as Material,
                             positionX: positionX,
                             positionY: positionY,
                             positionZ: positionZ,
                             rotationEulerAngleX: eulerAngleX,
                             rotationEulerAngleY: eulerAngleY,
                             rotationEulerAngleZ: eulerAngleZ);
-                    switch (changeType)
-                    {
-                        case DataChangeType.Add:
-                        case DataChangeType.Update:
-                            vessel.AddDecoration(decoration);
-                            break;
-                        case DataChangeType.Remove:
-                            vessel.RemoveDecoration(decoration.DecorationID);
-                            break;
-                        default:
-                            LogService.Error("SyncVesselDecorationChange Error Undefined DataChangeType");
+                            switch (changeType)
+                            {
+                                case DataChangeType.Add:
+                                case DataChangeType.Update:
+                                    vessel.AddDecoration(decoration);
+                                    break;
+                                case DataChangeType.Remove:
+                                    vessel.RemoveDecoration(decoration.DecorationID);
+                                    break;
+                                default:
+                                    LogService.Error("SyncVesselDecorationChange Error Undefined DataChangeType");
+                                    return false;
+                            }
+                            return true;
+                        }
+                        else
+                        {
+                            LogService.Error($"SyncVesselDecorationChange Error, Item not existed ItemID: {materialItemID}");
                             return false;
+                        }
                     }
-                    return true;
+                    else
+                    {
+                        LogService.Error($"SyncVesselDecorationChange Error, Vessel not existed, VesselID: {vesselID}");
+                        return false;
+                    }
                 }
                 catch (InvalidCastException ex)
                 {

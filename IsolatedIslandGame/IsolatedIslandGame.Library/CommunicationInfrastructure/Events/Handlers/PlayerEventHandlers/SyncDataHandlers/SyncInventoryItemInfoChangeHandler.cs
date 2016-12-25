@@ -26,28 +26,38 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     DataChangeType changeType = (DataChangeType)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType];
                     if (subject.Inventory.InventoryID == inventoryID)
                     {
-                        InventoryItemInfo info = new InventoryItemInfo(
+                        Item item;
+                        if(ItemManager.Instance.FindItem(itemID, out item))
+                        {
+                            InventoryItemInfo info = new InventoryItemInfo(
                             inventoryItemInfoID: inventoryItemInfoID,
-                            item: ItemManager.Instance.FindItem(itemID),
+                            item: item,
                             count: itemCount,
                             positionIndex: positionIndex);
-                        switch (changeType)
-                        {
-                            case DataChangeType.Add:
-                            case DataChangeType.Update:
-                                subject.Inventory.LoadItemInfo(info);
-                                break;
-                            case DataChangeType.Remove:
-                                subject.Inventory.RemoveItemInfo(info.InventoryItemInfoID);
-                                break;
-                            default:
-                                LogService.Error("SyncInventoryItemInfoChange Error Undefined DataChangeType");
-                                return false;
+                            switch (changeType)
+                            {
+                                case DataChangeType.Add:
+                                case DataChangeType.Update:
+                                    subject.Inventory.LoadItemInfo(info);
+                                    break;
+                                case DataChangeType.Remove:
+                                    subject.Inventory.RemoveItemInfo(info.InventoryItemInfoID);
+                                    break;
+                                default:
+                                    LogService.Error("SyncInventoryItemInfoChange Error Undefined DataChangeType");
+                                    return false;
+                            }
+                            return true;
                         }
-                        return true;
+                        else
+                        {
+                            LogService.Error($"SyncInventoryItemInfoChange Error Item not existed ItemID: {itemID}");
+                            return false;
+                        }
                     }
                     else
                     {
+                        LogService.Error($"SyncInventoryItemInfoChange Error InventoryID incorrect, self: {subject.Inventory.InventoryID}, received: {inventoryID}");
                         return false;
                     }
                 }

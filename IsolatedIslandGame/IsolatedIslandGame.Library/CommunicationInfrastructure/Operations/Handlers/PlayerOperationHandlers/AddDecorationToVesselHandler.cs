@@ -27,18 +27,33 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     if (subject.Inventory.ItemCount(materialItemID) > 0)
                     {
-                        Item item = subject.Inventory.FindInventoryItemInfoByItemID(materialItemID).Item;
-                        if (item is Material)
+                        InventoryItemInfo info;
+                        if(subject.Inventory.FindInventoryItemInfoByItemID(materialItemID, out info))
                         {
-                            subject.Inventory.RemoveItem(materialItemID, 1);
-                            Decoration decoration = DecorationFactory.Instance.CreateDecoration(subject.Vessel.VesselID, item as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
-                            subject.Vessel.AddDecoration(decoration);
-                            LogService.InfoFormat("Player: {0}, AddDecorationToVessel, MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
-                            return true;
+                            if (info.Item is Material)
+                            {
+                                subject.Inventory.RemoveItem(materialItemID, 1);
+                                Decoration decoration;
+                                if(DecorationFactory.Instance.CreateDecoration(subject.Vessel.VesselID, info.Item as Material, positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ, out decoration))
+                                {
+                                    subject.Vessel.AddDecoration(decoration);
+                                    LogService.InfoFormat("Player: {0}, AddDecorationToVessel, MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
+                                    return true;
+                                }
+                                else
+                                {
+                                    LogService.ErrorFormat("AddDecorationToVessel Error Player: {0}, item not existed MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                LogService.ErrorFormat("AddDecorationToVessel Error Player: {0}, the item is not a material MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
+                                return false;
+                            }
                         }
                         else
                         {
-                            LogService.ErrorFormat("AddDecorationToVessel error Player: {0}, the item is not a material MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
                             return false;
                         }
                     }

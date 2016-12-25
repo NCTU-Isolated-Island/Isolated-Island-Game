@@ -19,6 +19,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
                 { PlayerOperationCode.FetchData, new PlayerFetchDataResponseResolver(player) },
                 { PlayerOperationCode.CreateCharacter, new CreateCharacterResponseHandler(player) },
                 { PlayerOperationCode.DrawMaterial, new DrawMaterialResponseHandler(player) },
+                { PlayerOperationCode.SynthesizeMaterial, new SynthesizeMaterialResponseHandler(player) },
+                { PlayerOperationCode.UseBlueprint, new UseBlueprintResponseHandler(player) },
             };
         }
 

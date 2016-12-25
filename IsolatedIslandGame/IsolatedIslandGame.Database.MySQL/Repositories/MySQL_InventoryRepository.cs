@@ -6,7 +6,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_InventoryRepository : InventoryRepository
     {
-        public override Inventory Create(int playerID, int capacity)
+        public override bool Create(int playerID, int capacity, out Inventory inventory)
         {
             string sqlString = @"INSERT INTO InventoryCollection 
                 (PlayerID,Capacity) VALUES (@playerID,@capacity) ;
@@ -20,18 +20,20 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int inventoryID = reader.GetInt32(0);
-                        return new Inventory(inventoryID, capacity);
+                        inventory = new Inventory(inventoryID, capacity);
+                        return true;
                     }
                     else
                     {
-                        return null;
+                        inventory = null;
+                        return false;
                     }
                 }
             }
         }
-        public override Inventory Read(int inventoryID)
+        public override bool Read(int inventoryID, out Inventory inventory)
         {
-            Inventory inventory = null;
+            inventory = null;
             string sqlString = @"SELECT  
                 Capacity
                 from InventoryCollection WHERE InventoryID = @inventoryID;";
@@ -54,12 +56,16 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     inventory.LoadItemInfo(itemInfo);
                 }
+                return true;
             }
-            return inventory;
+            else
+            {
+                return false;
+            }
         }
-        public override Inventory ReadByPlayerID(int playerID)
+        public override bool ReadByPlayerID(int playerID, out Inventory inventory)
         {
-            Inventory inventory = null;
+            inventory = null;
             string sqlString = @"SELECT  
                 InventoryID, Capacity
                 from InventoryCollection WHERE PlayerID = @playerID;";
@@ -83,8 +89,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     inventory.LoadItemInfo(itemInfo);
                 }
+                return true;
             }
-            return inventory;
+            else
+            {
+                return false;
+            }
         }
         public override void Update(Inventory inventory)
         {

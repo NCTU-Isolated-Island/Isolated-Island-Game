@@ -52,16 +52,34 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     float eulerAngleX = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleX];
                     float eulerAngleY = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleY];
                     float eulerAngleZ = (float)parameters[(byte)FetchVesselDecorationsResponseParameterCode.EulerAngleZ];
-                    VesselManager.Instance.FindVessel(vesselID).AddDecoration(new Decoration(
-                        decorationID: decorationID,
-                        material: ItemManager.Instance.FindItem(materialItemID) as Material,
-                        positionX: positionX,
-                        positionY: positionY,
-                        positionZ: positionZ,
-                        rotationEulerAngleX: eulerAngleX,
-                        rotationEulerAngleY: eulerAngleY,
-                        rotationEulerAngleZ: eulerAngleZ));
-                    return true;
+                    Vessel vessel;
+                    if (VesselManager.Instance.FindVessel(vesselID, out vessel))
+                    {
+                        Item material;
+                        if (ItemManager.Instance.FindItem(materialItemID, out material) && material is Material)
+                        {
+                            vessel.AddDecoration(new Decoration(
+                            decorationID: decorationID,
+                            material: material as Material,
+                            positionX: positionX,
+                            positionY: positionY,
+                            positionZ: positionZ,
+                            rotationEulerAngleX: eulerAngleX,
+                            rotationEulerAngleY: eulerAngleY,
+                            rotationEulerAngleZ: eulerAngleZ));
+                            return true;
+                        }
+                        else
+                        {
+                            LogService.Error($"FetchVesselDecorationsResponse Error, Material not existed, VesselID: {vesselID}, MaterialItemID: {materialItemID}");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        LogService.Error($"FetchVesselDecorationsResponse Error, Vessel not existed, VesselID: {vesselID}, DecorationID: {decorationID}");
+                        return false;
+                    }
                 }
                 catch (InvalidCastException ex)
                 {

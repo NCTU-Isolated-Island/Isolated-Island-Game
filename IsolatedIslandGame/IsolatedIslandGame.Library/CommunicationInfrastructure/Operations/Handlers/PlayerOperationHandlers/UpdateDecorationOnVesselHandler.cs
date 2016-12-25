@@ -27,10 +27,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     if (subject.Vessel.ContainsDecoration(decorationID))
                     {
-                        Decoration decoration = subject.Vessel.FindDecoration(decorationID);
-                        decoration.UpdateDecoration(positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
-                        LogService.InfoFormat("Player: {0}, UpdateDecorationOnVessel, DecorationID: {1}", subject.IdentityInformation, decorationID);
-                        return true;
+                        Decoration decoration;
+                        if(subject.Vessel.FindDecoration(decorationID, out decoration))
+                        {
+                            decoration.UpdateDecoration(positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                            LogService.InfoFormat("Player: {0}, UpdateDecorationOnVessel, DecorationID: {1}", subject.IdentityInformation, decorationID);
+                            return true;
+                        }
+                        else
+                        {
+                            LogService.ErrorFormat("UpdateDecorationOnVessel error Player: {0}, decoration not on the vessel, Decoration: {1}", subject.IdentityInformation, decorationID);
+                            return false;
+                        }
                     }
                     else
                     {

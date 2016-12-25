@@ -19,8 +19,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 try
                 {
                     int ownerPlayerID = (int)parameter[(byte)FetchVesselWithOwnerPlayerIDParameterCode.OwnerPlayerID];
-                    Vessel vessel = VesselManager.Instance.FindVesselByOwnerPlayerID(ownerPlayerID);
-                    if (vessel != null)
+                    Vessel vessel;
+                    if(VesselManager.Instance.FindVesselByOwnerPlayerID(ownerPlayerID, out vessel))
                     {
                         var result = new Dictionary<byte, object>
                         {

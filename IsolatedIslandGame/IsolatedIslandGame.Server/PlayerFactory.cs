@@ -31,9 +31,18 @@ namespace IsolatedIslandGame.Server
                 errorCode = ErrorCode.NoError;
                 int playerID;
                 Player player;
-                if (!DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
+                if (DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                 {
-                    if(!DatabaseService.RepositoryList.PlayerRepository.Register(facebookID))
+                    if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player))
+                    {
+                        debugMessage = $"Player not in PlayerRepository, PlayerID: {playerID}";
+                        errorCode = ErrorCode.Fail;
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (!DatabaseService.RepositoryList.PlayerRepository.Register(facebookID))
                     {
                         debugMessage = "register fail";
                         errorCode = ErrorCode.Fail;
@@ -41,7 +50,12 @@ namespace IsolatedIslandGame.Server
                     }
                     if (DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                     {
-                        player = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
+                        if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player))
+                        {
+                            debugMessage = $"Player not in PlayerRepository, PlayerID: {playerID}";
+                            errorCode = ErrorCode.Fail;
+                            return false;
+                        }
                     }
                     else
                     {
@@ -49,10 +63,6 @@ namespace IsolatedIslandGame.Server
                         errorCode = ErrorCode.Fail;
                         return false;
                     }
-                }
-                else
-                {
-                    player = DatabaseService.RepositoryList.PlayerRepository.Read(playerID);
                 }
                 player.BindUser(user);
                 if (PlayerOnline(player))
@@ -112,14 +122,15 @@ namespace IsolatedIslandGame.Server
             player.OnCreateCharacter += DatabaseService.RepositoryList.PlayerRepository.Update;
             player.OnCreateCharacter += CreateVessel;
 
-            player.BindInventory(DatabaseService.RepositoryList.InventoryRepository.ReadByPlayerID(player.PlayerID));
-            if(player.Inventory != null)
+            Inventory inventory;
+            if(DatabaseService.RepositoryList.InventoryRepository.ReadByPlayerID(player.PlayerID, out inventory))
             {
+                player.BindInventory(inventory);
                 player.Inventory.OnItemInfoChange += player.EventManager.SyncDataResolver.SyncInventoryItemInfoChange;
             }
 
-            Vessel vessel = DatabaseService.RepositoryList.VesselRepository.ReadByOwnerPlayerID(player.PlayerID);
-            if(vessel != null)
+            Vessel vessel;
+            if(DatabaseService.RepositoryList.VesselRepository.ReadByOwnerPlayerID(player.PlayerID, out vessel))
             {
                 VesselManager.Instance.AddVessel(vessel);
                 player.BindVessel(vessel);
@@ -156,9 +167,12 @@ namespace IsolatedIslandGame.Server
         {
             if(player.Vessel == null)
             {
-                Vessel vessel = DatabaseService.RepositoryList.VesselRepository.Create(player.PlayerID, player.Nickname);
-                VesselManager.Instance.AddVessel(vessel);
-                player.BindVessel(vessel);
+                Vessel vessel;
+                if(DatabaseService.RepositoryList.VesselRepository.Create(player.PlayerID, player.Nickname, out vessel))
+                {
+                    VesselManager.Instance.AddVessel(vessel);
+                    player.BindVessel(vessel);
+                }
             }
         }
     }

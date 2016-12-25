@@ -56,7 +56,15 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         }
         protected void SetupConfiguration()
         {
-            SystemConfiguration.InitialConfiguration(SystemConfiguration.Load(Path.Combine(ApplicationPath, "config", "system.config")));
+            SystemConfiguration config;
+            if(SystemConfiguration.Load(Path.Combine(ApplicationPath, "config", "system.config"), out config))
+            {
+                SystemConfiguration.InitialConfiguration(config);
+            }
+            else
+            {
+                LogService.Fatal("Load SystemConfiguration Fail");
+            }
             Photon.SocketServer.Protocol.TryRegisterCustomType(typeof(Blueprint.ElementInfo), (byte)SerializationTypeCode.BlueprintElementInfo, SerializationHelper.Serialize<Blueprint.ElementInfo>, SerializationHelper.Deserialize<Blueprint.ElementInfo>);
         }
         protected void SetupServices()

@@ -33,9 +33,6 @@ namespace IsolatedIslandGame.Library
         private event Action<Player> onCreateCharacter;
         public event Action<Player> OnCreateCharacter { add { onCreateCharacter += value; } remove { onCreateCharacter -= value; } }
 
-        private event Action<Item, int> onDrawMaterial;
-        public event Action<Item, int> OnDrawMaterial { add { onDrawMaterial += value; } remove { onDrawMaterial -= value; } }
-
         private event Action<Inventory> onBindInventory;
         public event Action<Inventory> OnBindInventory { add { onBindInventory += value; } remove { onBindInventory -= value; } }
 
@@ -44,6 +41,19 @@ namespace IsolatedIslandGame.Library
 
         private event Action<Blueprint> onGetBlueprint;
         public event Action<Blueprint> OnGetBlueprint { add { onGetBlueprint += value; } remove { onGetBlueprint -= value; } }
+
+        #region response events
+        public delegate void DrawMaterialEventHandler(Item material, int count);
+        private event DrawMaterialEventHandler onDrawMaterial;
+        public event DrawMaterialEventHandler OnDrawMaterial { add { onDrawMaterial += value; } remove { onDrawMaterial -= value; } }
+
+        public delegate void SynthesizeMaterialEventHandler(Blueprint.ElementInfo[] requirements, Blueprint.ElementInfo[] products);
+        private event SynthesizeMaterialEventHandler onSynthesizeMaterial;
+        public event SynthesizeMaterialEventHandler OnSynthesizeMaterial { add { onSynthesizeMaterial += value; } remove { onSynthesizeMaterial -= value; } }
+
+        private event Action<Blueprint> onUseBlueprint;
+        public event Action<Blueprint> OnUseBlueprint { add { onUseBlueprint += value; } remove { onUseBlueprint -= value; } }
+        #endregion
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -85,10 +95,6 @@ namespace IsolatedIslandGame.Library
             GroupType = groupType;
             onCreateCharacter?.Invoke(this);
         }
-        internal void DrawMaterial(int itemID, int itemCount)
-        {
-            onDrawMaterial?.Invoke(ItemManager.Instance.FindItem(itemID), itemCount);
-        }
 
         public bool IsKnownBlueprint(int blueprintID)
         {
@@ -101,6 +107,23 @@ namespace IsolatedIslandGame.Library
                 knownBlueprintDictionary.Add(blueprint.BlueprintID, blueprint);
                 onGetBlueprint?.Invoke(blueprint);
             }
+        }
+
+        internal void TriggerDrawMaterialEvents(int itemID, int itemCount)
+        {
+            Item item;
+            if(ItemManager.Instance.FindItem(itemID, out item))
+            {
+                onDrawMaterial?.Invoke(item, itemCount);
+            }
+        }
+        internal void TriggerSynthesizeMaterialEvents(Blueprint.ElementInfo[] requirements, Blueprint.ElementInfo[] products)
+        {
+            onSynthesizeMaterial?.Invoke(requirements, products);
+        }
+        internal void TriggerUseBlueprintEvents(Blueprint blueprint)
+        {
+            onUseBlueprint?.Invoke(blueprint);
         }
     }
 }

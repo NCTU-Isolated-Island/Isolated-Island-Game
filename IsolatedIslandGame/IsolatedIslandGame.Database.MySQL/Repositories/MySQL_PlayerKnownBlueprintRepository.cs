@@ -39,7 +39,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         int blueprintID = reader.GetInt32(0);
                         if(BlueprintManager.Instance.ContainsBlueprint(blueprintID))
                         {
-                            blueprints.Add(BlueprintManager.Instance.FindBlueprint(blueprintID));
+                            Blueprint blueprint;
+                            if(BlueprintManager.Instance.FindBlueprint(blueprintID, out blueprint))
+                            {
+                                blueprints.Add(blueprint);
+                            }
                         }
                     }
                 }

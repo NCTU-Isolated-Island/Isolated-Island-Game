@@ -45,7 +45,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             }
                             foreach (var product in blueprint.Products)
                             {
-                                subject.Inventory.AddItem(ItemManager.Instance.FindItem(product.itemID), product.itemCount);
+                                Item item;
+                                if(ItemManager.Instance.FindItem(product.itemID, out item))
+                                {
+                                    subject.Inventory.AddItem(item, product.itemCount);
+                                }
                             }
                             Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
                             {

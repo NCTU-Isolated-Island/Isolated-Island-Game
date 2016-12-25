@@ -32,41 +32,52 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 }
                 else
                 {
-                    Blueprint blueprint = BlueprintManager.Instance.FindBlueprint(blueprintID);
-                    bool isSufficientRequirements = true;
-                    lock(subject.Inventory)
+                    Blueprint blueprint;
+                    if (BlueprintManager.Instance.FindBlueprint(blueprintID, out blueprint))
                     {
-                        foreach (var requirement in blueprint.Requirements)
-                        {
-                            if (subject.Inventory.ItemCount(requirement.itemID) < requirement.itemCount)
-                            {
-                                isSufficientRequirements = false;
-                                break;
-                            }
-                        }
-                        if (isSufficientRequirements)
+                        bool isSufficientRequirements = true;
+                        lock (subject.Inventory)
                         {
                             foreach (var requirement in blueprint.Requirements)
                             {
-                                subject.Inventory.RemoveItem(requirement.itemID, requirement.itemCount);
+                                if (subject.Inventory.ItemCount(requirement.itemID) < requirement.itemCount)
+                                {
+                                    isSufficientRequirements = false;
+                                    break;
+                                }
                             }
-                            foreach (var product in blueprint.Products)
+                            if (isSufficientRequirements)
                             {
-                                subject.Inventory.AddItem(ItemManager.Instance.FindItem(product.itemID), product.itemCount);
-                            }
-                            Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
+                                foreach (var requirement in blueprint.Requirements)
+                                {
+                                    subject.Inventory.RemoveItem(requirement.itemID, requirement.itemCount);
+                                }
+                                foreach (var product in blueprint.Products)
+                                {
+                                    Item item;
+                                    if(ItemManager.Instance.FindItem(product.itemID, out item))
+                                    {
+                                        subject.Inventory.AddItem(item, product.itemCount);
+                                    }
+                                }
+                                Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
                             {
                                 { (byte)UseBlueprintResponseParameterCode.BlueprintID, blueprintID }
                             };
-                            SendResponse(operationCode, responseParameters);
-                            return true;
+                                SendResponse(operationCode, responseParameters);
+                                return true;
+                            }
+                            else
+                            {
+                                SendError(operationCode, ErrorCode.Fail, "You don't have sufficient materials");
+                                LogService.ErrorFormat("UseBlueprint error Player: {0}, Player doesn't have enough materials, BlueprintID: {1}", subject.IdentityInformation, blueprintID);
+                                return false;
+                            }
                         }
-                        else
-                        {
-                            SendError(operationCode, ErrorCode.Fail, "You don't have sufficient materials");
-                            LogService.ErrorFormat("UseBlueprint error Player: {0}, Player doesn't have enough materials, BlueprintID: {1}", subject.IdentityInformation, blueprintID);
-                            return false;
-                        }
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
             }
