@@ -85,7 +85,7 @@ namespace IsolatedIslandGame.Library
             GroupType = groupType;
             onCreateCharacter?.Invoke(this);
         }
-        public void DrawMaterial(int itemID, int itemCount)
+        internal void DrawMaterial(int itemID, int itemCount)
         {
             onDrawMaterial?.Invoke(ItemManager.Instance.FindItem(itemID), itemCount);
         }

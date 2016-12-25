@@ -150,6 +150,7 @@ namespace IsolatedIslandGame.Server
 
             Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
             player.OnGetBlueprint -= playerGetBlueprintFunction;
+            playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
         }
         private void CreateVessel(Player player)
         {

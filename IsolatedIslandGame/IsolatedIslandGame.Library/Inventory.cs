@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace IsolatedIslandGame.Library
 {
@@ -12,7 +13,7 @@ namespace IsolatedIslandGame.Library
         public int InventoryID { get; private set; }
         public int Capacity { get; private set; }
         private Dictionary<int, InventoryItemInfo> itemInfoDictionary;
-        private List<InventoryItemInfo> itemInfos;
+        private InventoryItemInfo[] itemInfos;
         public int DifferentItemCount { get { return itemInfoDictionary.Count; } }
         
 
@@ -27,7 +28,7 @@ namespace IsolatedIslandGame.Library
             InventoryID = inventoryID;
             Capacity = capacity;
             itemInfoDictionary = new Dictionary<int, InventoryItemInfo>();
-            itemInfos = new List<InventoryItemInfo>(Capacity);
+            itemInfos = new InventoryItemInfo[Capacity];
         }
         public bool ContainsInventoryItemInfo(int inventoryItemInfoID)
         {
@@ -75,6 +76,7 @@ namespace IsolatedIslandGame.Library
             if(!ContainsInventoryItemInfo(info.InventoryItemInfoID))
             {
                 itemInfoDictionary.Add(info.InventoryItemInfoID, info);
+                itemInfos[info.PositionIndex] = info;
                 onItemInfoChange?.Invoke(info, DataChangeType.Add);
             }
             else
@@ -91,6 +93,7 @@ namespace IsolatedIslandGame.Library
             {
                 InventoryItemInfo info = itemInfoDictionary[itemInfoID];
                 itemInfoDictionary.Remove(itemInfoID);
+                itemInfos[info.PositionIndex] = null;
                 onItemInfoChange?.Invoke(info, DataChangeType.Remove);
             }
         }
@@ -99,11 +102,18 @@ namespace IsolatedIslandGame.Library
             InventoryItemInfo info = FindInventoryItemInfoByItemID(item.ItemID);
             if (info == null)
             {
-                int positionIndex = itemInfos.FindIndex(x => x == null);
-                info = InventoryItemInfoFactory.Instance?.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex);
-                itemInfoDictionary.Add(info.InventoryItemInfoID, info);
-                itemInfos[info.PositionIndex] = info;
-                onItemInfoChange?.Invoke(info, DataChangeType.Add);
+                int positionIndex = Array.FindIndex(itemInfos, x => x == null);
+                if (positionIndex >= 0)
+                {
+                    info = InventoryItemInfoFactory.Instance?.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex);
+                    itemInfoDictionary.Add(info.InventoryItemInfoID, info);
+                    itemInfos[info.PositionIndex] = info;
+                    onItemInfoChange?.Invoke(info, DataChangeType.Add);
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
