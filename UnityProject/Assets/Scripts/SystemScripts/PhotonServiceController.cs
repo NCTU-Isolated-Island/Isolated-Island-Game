@@ -60,7 +60,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
 
         public void RegisterEvents()
         {
-            PhotonService.Instance.OnConnectChange += OnConnectChange;
+			PhotonService.Instance.OnConnectChange += OnConnectChange;
         }
 
         private void OnConnectChange(bool connected)
@@ -74,7 +74,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             {
                 LogService.Info("Disconnected");
                 reconnectCountdownTimer = reconnectInterval;
-                SceneManager.LoadScene("Login");
+                SceneManager.LoadScene("LoginScene");
             }
         }
     }
