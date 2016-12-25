@@ -20,8 +20,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 try
                 {
                     int itemID = (int)parameter[(byte)FetchItemParameterCode.ItemID];
-                    Item item = ItemManager.Instance.FindItem(itemID);
-                    if(item != null)
+                    Item item;
+                    if(ItemManager.Instance.FindItem(itemID, out item))
                     {
                         if (item is Material)
                         {

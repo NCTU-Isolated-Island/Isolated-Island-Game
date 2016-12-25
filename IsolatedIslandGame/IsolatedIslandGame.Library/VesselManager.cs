@@ -37,8 +37,8 @@ namespace IsolatedIslandGame.Library
         {
             return vesselDictionaryByOwnerPlayerID.ContainsKey(ownerPlayerID);
         }
-        public abstract Vessel FindVessel(int vesselID);
-        public abstract Vessel FindVesselByOwnerPlayerID(int ownerPlayerID);
+        public abstract bool FindVessel(int vesselID, out Vessel vessel);
+        public abstract bool FindVesselByOwnerPlayerID(int ownerPlayerID, out Vessel vessel);
         public abstract void AddVessel(Vessel vessel);
         public abstract bool RemoveVessel(int vesselID);
     }

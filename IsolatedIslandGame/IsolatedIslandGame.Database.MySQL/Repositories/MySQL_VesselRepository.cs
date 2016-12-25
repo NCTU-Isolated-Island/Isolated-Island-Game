@@ -6,7 +6,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_VesselRepository : VesselRepository
     {
-        public override Vessel Create(int ownerPlayerID, string name)
+        public override bool Create(int ownerPlayerID, string name, out Vessel vessel)
         {
             string sqlString = @"INSERT INTO VesselCollection 
                 (OwnerPlayerID,Name) VALUES (@ownerPlayerID,@name) ;
@@ -20,18 +20,20 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int vesselID = reader.GetInt32(0);
-                        return new Vessel(vesselID, ownerPlayerID, name, 0, 0, 0);
+                        vessel = new Vessel(vesselID, ownerPlayerID, name, 0, 0, 0);
+                        return true;
                     }
                     else
                     {
-                        return null;
+                        vessel = null;
+                        return false;
                     }
                 }
             }
         }
-        public override Vessel Read(int vesselID)
+        public override bool Read(int vesselID, out Vessel vessel)
         {
-            Vessel vessel = null;
+            vessel = null;
             string sqlString = @"SELECT  
                 OwnerPlayerID, Name, LocationX, LocationZ, EulerAngleY
                 from VesselCollection WHERE VesselID = @vesselID;";
@@ -58,12 +60,16 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     vessel.AddDecoration(decoration);
                 }
+                return true;
             }
-            return vessel;
+            else
+            {
+                return false;
+            }
         }
-        public override Vessel ReadByOwnerPlayerID(int ownerPlayerID)
+        public override bool ReadByOwnerPlayerID(int ownerPlayerID, out Vessel vessel)
         {
-            Vessel vessel = null;
+            vessel = null;
             string sqlString = @"SELECT  
                 VesselID, Name, LocationX, LocationZ, EulerAngleY
                 from VesselCollection WHERE OwnerPlayerID = @ownerPlayerID;";
@@ -90,8 +96,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     vessel.AddDecoration(decoration);
                 }
+                return true;
             }
-            return vessel;
+            else
+            {
+                return false;
+            }
         }
         public override void Update(Vessel vessel)
         {

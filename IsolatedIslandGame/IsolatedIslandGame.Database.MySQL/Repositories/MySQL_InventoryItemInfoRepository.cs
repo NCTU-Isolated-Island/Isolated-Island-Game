@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_InventoryItemInfoRepository : InventoryItemInfoRepository
     {
-        public override InventoryItemInfo Create(int inventoryID, int itemID, int itemCount, int positionIndex)
+        public override bool Create(int inventoryID, int itemID, int itemCount, int positionIndex, out InventoryItemInfo info)
         {
             string sqlString = @"INSERT INTO InventoryItemInfoCollection 
                 (InventoryID,ItemID,ItemCount,PositionIndex) VALUES (@inventoryID,@itemID,@itemCount,@positionIndex) ;
@@ -24,16 +24,27 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int inventoryItemInfoID = reader.GetInt32(0);
-                        return new InventoryItemInfo(inventoryItemInfoID, ItemManager.Instance.FindItem(itemID), itemCount, positionIndex);
+                        Item item;
+                        if(ItemManager.Instance.FindItem(itemID, out item))
+                        {
+                            info = new InventoryItemInfo(inventoryItemInfoID, item, itemCount, positionIndex);
+                            return true;
+                        }
+                        else
+                        {
+                            info = null;
+                            return false;
+                        }
                     }
                     else
                     {
-                        return null;
+                        info = null;
+                        return false;
                     }
                 }
             }
         }
-        public override InventoryItemInfo Read(int inventoryItemInfoID)
+        public override bool Read(int inventoryItemInfoID, out InventoryItemInfo info)
         {
             string sqlString = @"SELECT  
                 InventoryID, ItemID, ItemCount, PositionIndex
@@ -49,11 +60,22 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         int itemID = reader.GetInt32(1);
                         int itemCount = reader.GetInt32(2);
                         int positionIndex = reader.GetInt32(3);
-                        return new InventoryItemInfo(inventoryItemInfoID, ItemManager.Instance.FindItem(itemID), itemCount, positionIndex);
+                        Item item;
+                        if (ItemManager.Instance.FindItem(itemID, out item))
+                        {
+                            info = new InventoryItemInfo(inventoryItemInfoID, item, itemCount, positionIndex);
+                            return true;
+                        }
+                        else
+                        {
+                            info = null;
+                            return false;
+                        }
                     }
                     else
                     {
-                        return null;
+                        info = null;
+                        return false;
                     }
                 }
             }
@@ -108,7 +130,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         int itemID = reader.GetInt32(1);
                         int itemCount = reader.GetInt32(2);
                         int positionIndex = reader.GetInt32(3);
-                        items.Add(new InventoryItemInfo(inventoryItemInfoID, ItemManager.Instance.FindItem(itemID), itemCount, positionIndex));
+                        Item item;
+                        if (ItemManager.Instance.FindItem(itemID, out item))
+                        {
+                            items.Add(new InventoryItemInfo(inventoryItemInfoID, item, itemCount, positionIndex));
+                        }
                     }
                 }
             }

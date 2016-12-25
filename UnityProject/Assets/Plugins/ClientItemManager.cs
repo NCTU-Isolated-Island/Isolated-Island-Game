@@ -1,13 +1,12 @@
 ﻿using IsolatedIslandGame.Library;
+using System;
 
 namespace IsolatedIslandGame.Client
 {
     public class ClientItemManager : ItemManager
     {
-        public ClientItemManager()
-        {
-            
-        }
+        private event Action<Item> onItemUpdate;
+        public override event Action<Item> OnItemUpdate { add { onItemUpdate += value; } remove { onItemUpdate -= value; } }
 
         public override void AddItem(Item item)
         {
@@ -17,22 +16,27 @@ namespace IsolatedIslandGame.Client
             }
             else
             {
-                itemDictionary[item.ItemID].UpdateItem(item.ItemName, item.Description);
+                itemDictionary[item.ItemID] = item;
+                if(onItemUpdate != null)
+                {
+                    onItemUpdate.Invoke(item);
+                }
             }
         }
 
-        public override Item FindItem(int itemID)
+        public override bool FindItem(int itemID, out Item item)
         {
             if (ContainsItem(itemID))
             {
-                return itemDictionary[itemID];
+                item = itemDictionary[itemID];
+                return true;
             }
             else
             {
-                Item item = new Item(itemID, "傳輸中", "傳輸中");
+                item = new Item(itemID, "傳輸中", "傳輸中");
                 AddItem(item);
                 SystemManager.Instance.OperationManager.FetchDataResolver.FetchItem(itemID);
-                return item;
+                return true;
             }
         }
     }

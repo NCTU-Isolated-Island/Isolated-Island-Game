@@ -5,13 +5,14 @@ namespace IsolatedIslandGame.Server.Items
 {
     public class ServerInventoryItemInfoFactory : InventoryItemInfoFactory
     {
-        public override InventoryItemInfo CreateItemInfo(int inventoryID, int itemID, int count, int positionIndex)
+        public override bool CreateItemInfo(int inventoryID, int itemID, int count, int positionIndex, out InventoryItemInfo info)
         {
             return DatabaseService.RepositoryList.InventoryItemInfoRepository.Create(
                 inventoryID: inventoryID,
                 itemID: itemID,
                 itemCount: count,
-                positionIndex: positionIndex);
+                positionIndex: positionIndex,
+                info: out info );
         }
 
         public override void DeleteItemInfo(int inventoryItemInfoID)

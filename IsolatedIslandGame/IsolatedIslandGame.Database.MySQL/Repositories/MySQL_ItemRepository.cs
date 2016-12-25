@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_ItemRepository : ItemRepository
     {
-        public override Item Create(string itemName, string description)
+        public override bool Create(string itemName, string description, out Item item)
         {
             string sqlString = @"INSERT INTO ItemCollection 
                 (ItemName,Description) VALUES (@itemName,@description) ;
@@ -23,40 +23,52 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int itemID = reader.GetInt32(0);
-                        return new Item(itemID, itemName, description);
+                        item = new Item(itemID, itemName, description);
+                        return true;
                     }
                     else
                     {
-                        return null;
+                        item = null;
+                        return false;
                     }
                 }
             }
         }
-        public override Material CreateMaterial(string itemName, string description, int score)
+        public override bool CreateMaterial(string itemName, string description, int score, out Material material)
         {
-            Item item = Create(itemName, description);
-            string sqlString = @"INSERT INTO MaterialCollection 
+            Item item;
+            if(Create(itemName, description, out item))
+            {
+                string sqlString = @"INSERT INTO MaterialCollection 
                 (ItemID,Score) VALUES (@itemID,@score) ;
                 SELECT LAST_INSERT_ID();";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
-            {
-                command.Parameters.AddWithValue("itemID", item.ItemID);
-                command.Parameters.AddWithValue("score", score);
-                using (MySqlDataReader reader = command.ExecuteReader())
+                using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
                 {
-                    if (reader.Read())
+                    command.Parameters.AddWithValue("itemID", item.ItemID);
+                    command.Parameters.AddWithValue("score", score);
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        int materialID = reader.GetInt32(0);
-                        return new Material(item.ItemID, item.ItemName, item.Description, materialID, score);
-                    }
-                    else
-                    {
-                        return null;
+                        if (reader.Read())
+                        {
+                            int materialID = reader.GetInt32(0);
+                            material = new Material(item.ItemID, item.ItemName, item.Description, materialID, score);
+                            return true;
+                        }
+                        else
+                        {
+                            material = null;
+                            return false;
+                        }
                     }
                 }
             }
+            else
+            {
+                material = null;
+                return false;
+            }
         }
-        public override Item Read(int itemID)
+        public override bool Read(int itemID, out Item item)
         {
             int materialID = 0;
             int score = 0;
@@ -89,16 +101,18 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         string description = reader.GetString(1);
                         if(materialID == 0)
                         {
-                            return new Item(itemID, itemName, description);
+                            item = new Item(itemID, itemName, description);
                         }
                         else
                         {
-                            return new Material(itemID, itemName, description, materialID, score);
+                            item = new Material(itemID, itemName, description, materialID, score);
                         }
+                        return true;
                     }
                     else
                     {
-                        return null;
+                        item = null;
+                        return false;
                     }
                 }
             }

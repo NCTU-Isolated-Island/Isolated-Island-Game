@@ -6,7 +6,7 @@ namespace IsolatedIslandGame.Server.Items
 {
     public class ServerDecorationFactory : DecorationFactory
     {
-        public override Decoration CreateDecoration(int vesselID, Material material, float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
+        public override bool CreateDecoration(int vesselID, Material material, float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ, out Decoration decoration)
         {
             return DatabaseService.RepositoryList.DecorationRepository.Create(
                 vesselID: vesselID,
@@ -16,7 +16,8 @@ namespace IsolatedIslandGame.Server.Items
                 positionZ: positionZ,
                 eulerAngleX: rotationEulerAngleX,
                 eulerAngleY: rotationEulerAngleX,
-                eulerAngleZ: rotationEulerAngleX);
+                eulerAngleZ: rotationEulerAngleX,
+                decoration: out decoration);
         }
 
         public override void DeleteDecoration(int decorationID)

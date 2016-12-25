@@ -29,7 +29,7 @@ namespace IsolatedIslandGame.Server.Configuration
         public string Database { get; set; }
 
         public SystemConfiguration() { }
-        public static SystemConfiguration Load(string filePath)
+        public static bool Load(string filePath, out SystemConfiguration configuration)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(SystemConfiguration));
             if (File.Exists(filePath))
@@ -38,12 +38,14 @@ namespace IsolatedIslandGame.Server.Configuration
                 {
                     if (serializer.CanDeserialize(reader))
                     {
-                        return (SystemConfiguration)serializer.Deserialize(reader);
+                        configuration = (SystemConfiguration)serializer.Deserialize(reader);
+                        return true;
                     }
                     else
                     {
+                        configuration = null;
                         LogService.Fatal("version configuration can't be serialized!");
-                        return null;
+                        return false;
                     }
                 }
             }
@@ -62,7 +64,8 @@ namespace IsolatedIslandGame.Server.Configuration
                 {
                     serializer.Serialize(writer, versionConfiguration);
                 }
-                return versionConfiguration;
+                configuration = versionConfiguration;
+                return true;
             }
         }
     }

@@ -5,6 +5,7 @@
         Inventory,
         InventoryItemInfos,
         Vessel,
-        VesselDecorations
+        VesselDecorations,
+        AllKnownBlueprints,
     }
 }

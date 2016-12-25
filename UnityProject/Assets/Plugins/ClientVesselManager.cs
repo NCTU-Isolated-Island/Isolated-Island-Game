@@ -58,15 +58,16 @@ public class ClientVesselManager : VesselManager
         }
     }
 
-    public override Vessel FindVessel(int vesselID)
+    public override bool FindVessel(int vesselID, out Vessel vessel)
     {
         if(ContainsVessel(vesselID))
         {
-            return vesselDictionary[vesselID];
+            vessel = vesselDictionary[vesselID];
+            return true;
         }
         else
         {
-            Vessel vessel = new Vessel(vesselID, 0, "", 0, 0, 0);
+            vessel = new Vessel(vesselID, 0, "", 0, 0, 0);
             vesselDictionary.Add(vessel.VesselID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
@@ -74,19 +75,20 @@ public class ClientVesselManager : VesselManager
                 onVesselChange(vessel, DataChangeType.Add);
             }
             SystemManager.Instance.OperationManager.FetchDataResolver.FetchVessel(vesselID);
-            return vessel;
+            return true;
         }
     }
 
-    public override Vessel FindVesselByOwnerPlayerID(int ownerPlayerID)
+    public override bool FindVesselByOwnerPlayerID(int ownerPlayerID, out Vessel vessel)
     {
         if (ContainsVesselWithOwnerPlayerID(ownerPlayerID))
         {
-            return vesselDictionaryByOwnerPlayerID[ownerPlayerID];
+            vessel = vesselDictionaryByOwnerPlayerID[ownerPlayerID];
+            return true;
         }
         else
         {
-            Vessel vessel = new Vessel(0, ownerPlayerID, "", 0, 0, 0);
+            vessel = new Vessel(0, ownerPlayerID, "", 0, 0, 0);
             vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
@@ -94,7 +96,7 @@ public class ClientVesselManager : VesselManager
                 onVesselChange(vessel, DataChangeType.Add);
             }
             SystemManager.Instance.OperationManager.FetchDataResolver.FetchVesselWithOwnerPlayerID(ownerPlayerID);
-            return vessel;
+            return true;
         }
     }
 

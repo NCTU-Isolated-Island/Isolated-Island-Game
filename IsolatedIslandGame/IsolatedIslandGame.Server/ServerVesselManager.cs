@@ -25,27 +25,31 @@ namespace IsolatedIslandGame.Server
             }
         }
 
-        public override Vessel FindVessel(int vesselID)
+        public override bool FindVessel(int vesselID, out Vessel vessel)
         {
             if (ContainsVessel(vesselID))
             {
-                return vesselDictionary[vesselID];
+                vessel = vesselDictionary[vesselID];
+                return true;
             }
             else
             {
-                return null;
+                vessel = null;
+                return false;
             }
         }
 
-        public override Vessel FindVesselByOwnerPlayerID(int ownerPlayerID)
+        public override bool FindVesselByOwnerPlayerID(int ownerPlayerID, out Vessel vessel)
         {
             if(ContainsVesselWithOwnerPlayerID(ownerPlayerID))
             {
-                return vesselDictionaryByOwnerPlayerID[ownerPlayerID];
+                vessel = vesselDictionaryByOwnerPlayerID[ownerPlayerID];
+                return true;
             }
             else
             {
-                return null;
+                vessel = null;
+                return false;
             }
         }
 

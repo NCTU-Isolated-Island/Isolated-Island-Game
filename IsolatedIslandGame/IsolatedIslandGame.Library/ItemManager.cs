@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace IsolatedIslandGame.Library
 {
@@ -14,6 +15,8 @@ namespace IsolatedIslandGame.Library
         public IEnumerable<Item> Items { get { return itemDictionary.Values; } }
         public int ItemCount { get { return itemDictionary.Count; } }
 
+        public abstract event Action<Item> OnItemUpdate;
+
         protected ItemManager()
         {
             itemDictionary = new Dictionary<int, Item>();
@@ -22,7 +25,7 @@ namespace IsolatedIslandGame.Library
         {
             return itemDictionary.ContainsKey(itemID);
         }
-        public abstract Item FindItem(int itemID);
+        public abstract bool FindItem(int itemID, out Item item);
         public abstract void AddItem(Item item);
         public bool RemoveItem(int itemID)
         {

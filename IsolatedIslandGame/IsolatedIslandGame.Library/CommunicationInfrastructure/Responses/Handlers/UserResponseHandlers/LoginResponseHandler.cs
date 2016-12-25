@@ -66,8 +66,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     player.BindUser(subject);
                     subject.PlayerOnline(player);
                     subject.Player.OperationManager.FetchDataResolver.FetchInventory();
-                    subject.Player.BindVessel(VesselManager.Instance.FindVesselByOwnerPlayerID(playerID));
-                    return true;
+                    subject.Player.OperationManager.FetchDataResolver.FetchAllKnownBlueprints();
+                    Vessel vessel;
+                    if(VesselManager.Instance.FindVesselByOwnerPlayerID(playerID, out vessel))
+                    {
+                        subject.Player.BindVessel(vessel);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 catch (InvalidCastException ex)
                 {

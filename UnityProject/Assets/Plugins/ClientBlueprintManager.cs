@@ -1,32 +1,29 @@
-﻿using IsolatedIslandGame.Database;
+﻿using System;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Protocol;
 
-namespace IsolatedIslandGame.Server
+namespace IsolatedIslandGame.Client
 {
-    public class BlueprintFactory : BlueprintManager
+    public class ClientBlueprintManager : BlueprintManager
     {
-        public BlueprintFactory()
-        {
-            var blueprints = DatabaseService.RepositoryList.BlueprintRepository.ListAll();
-            foreach (var blueprint in blueprints)
-            {
-                AddBlueprint(blueprint);
-            }
-        }
-
-        public override event BlueprintChangeEventHandler OnBlueprintChange;
+        private event BlueprintChangeEventHandler onBlueprintChange;
+        public override event BlueprintChangeEventHandler OnBlueprintChange { add { onBlueprintChange += value; } remove { onBlueprintChange -= value; } }
 
         public override void AddBlueprint(Blueprint blueprint)
         {
             if (!ContainsBlueprint(blueprint.BlueprintID))
             {
                 blueprintDictionary.Add(blueprint.BlueprintID, blueprint);
+                if(onBlueprintChange != null)
+                {
+                    onBlueprintChange.Invoke(blueprint, DataChangeType.Add);
+                }
             }
         }
 
         public override bool FindBlueprint(int blueprintID, out Blueprint blueprint)
         {
-            if (ContainsBlueprint(blueprintID))
+            if(ContainsBlueprint(blueprintID))
             {
                 blueprint = blueprintDictionary[blueprintID];
                 return true;
@@ -40,9 +37,14 @@ namespace IsolatedIslandGame.Server
 
         public override bool RemoveBlueprint(int blueprintID)
         {
-            if (ContainsBlueprint(blueprintID))
+            if(ContainsBlueprint(blueprintID))
             {
+                Blueprint blueprint = blueprintDictionary[blueprintID];
                 blueprintDictionary.Remove(blueprintID);
+                if (onBlueprintChange != null)
+                {
+                    onBlueprintChange.Invoke(blueprint, DataChangeType.Remove);
+                }
                 return true;
             }
             else

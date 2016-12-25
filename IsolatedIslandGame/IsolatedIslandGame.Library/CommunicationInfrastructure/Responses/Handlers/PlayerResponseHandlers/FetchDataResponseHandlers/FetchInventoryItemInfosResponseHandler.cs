@@ -50,15 +50,25 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     int positionIndex = (int)parameters[(byte)FetchInventoryItemInfosResponseParameterCode.PositionIndex];
                     if(subject.Inventory.InventoryID == inventoryID)
                     {
-                        subject.Inventory.LoadItemInfo(new InventoryItemInfo(
+                        Item item;
+                        if(ItemManager.Instance.FindItem(itemID, out item))
+                        {
+                            subject.Inventory.LoadItemInfo(new InventoryItemInfo(
                             inventoryItemInfoID: inventoryItemInfoID,
-                            item: ItemManager.Instance.FindItem(itemID),
+                            item: item,
                             count: itemCount,
                             positionIndex: positionIndex));
-                        return true;
+                            return true;
+                        }
+                        else
+                        {
+                            LogService.Error($"FetchInventoryItemInfosResponse Error, Item not existed ItemID: {itemID}");
+                            return false;
+                        }
                     }
                     else
                     {
+                        LogService.Error($"FetchInventoryItemInfosResponse Error, InventoryID incorrect, self: {subject.Inventory.InventoryID}, received: {inventoryID}");
                         return false;
                     }
                 }

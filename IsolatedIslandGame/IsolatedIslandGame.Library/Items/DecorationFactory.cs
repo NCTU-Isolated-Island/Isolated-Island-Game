@@ -8,7 +8,7 @@
             Instance = factory;
         }
 
-        public abstract Decoration CreateDecoration(int vesselID, Material material, float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ);
+        public abstract bool CreateDecoration(int vesselID, Material material, float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ, out Decoration decoration);
         public abstract void DeleteDecoration(int decorationID);
     }
 }

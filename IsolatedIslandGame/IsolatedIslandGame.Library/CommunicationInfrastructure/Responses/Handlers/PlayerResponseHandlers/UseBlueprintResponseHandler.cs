@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.PlayerResponseHandlers
 {
-    class DrawMaterialResponseHandler : ResponseHandler<Player, PlayerOperationCode>
+    class UseBlueprintResponseHandler : ResponseHandler<Player, PlayerOperationCode>
     {
-        public DrawMaterialResponseHandler(Player subject) : base(subject)
+        public UseBlueprintResponseHandler(Player subject) : base(subject)
         {
         }
 
@@ -18,9 +18,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 2)
+                        if (parameters.Count != 1)
                         {
-                            LogService.ErrorFormat(string.Format("DrawMaterialResponse Parameter Error, Parameter Count: {0}", parameters.Count));
+                            LogService.ErrorFormat(string.Format("UseBlueprintResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
                         }
                         else
@@ -28,9 +28,21 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
+                case ErrorCode.ParameterError:
+                    {
+                        LogService.ErrorFormat("UseBlueprint Error DebugMessage: {0}", debugMessage);
+                        subject.EventManager.ErrorInform("錯誤", "藍圖不存在");
+                        return false;
+                    }
+                case ErrorCode.Fail:
+                    {
+                        LogService.ErrorFormat("UseBlueprint Error DebugMessage: {0}", debugMessage);
+                        subject.EventManager.ErrorInform("錯誤", "素材不足");
+                        return false;
+                    }
                 default:
                     {
-                        LogService.ErrorFormat("DrawMaterialResponse Error DebugMessage: {0}", debugMessage);
+                        LogService.ErrorFormat("UseBlueprint Error DebugMessage: {0}", debugMessage);
                         subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
                         return false;
                     }
@@ -42,14 +54,22 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 try
                 {
-                    int itemID = (int)parameters[(byte)DrawMaterialResponseParameterCode.ItemID];
-                    int itemCount = (int)parameters[(byte)DrawMaterialResponseParameterCode.ItemCount];
-                    subject.TriggerDrawMaterialEvents(itemID, itemCount);
-                    return true;
+                    int blueprintID = (int)parameters[(byte)UseBlueprintResponseParameterCode.BlueprintID];
+                    Blueprint blueprint;
+                    if(BlueprintManager.Instance.FindBlueprint(blueprintID, out blueprint))
+                    {
+                        subject.TriggerUseBlueprintEvents(blueprint);
+                        return true;
+                    }
+                    else
+                    {
+                        LogService.Error("UseBlueprintResponse Error Blueprint Not Existed");
+                        return false;
+                    }
                 }
                 catch (InvalidCastException ex)
                 {
-                    LogService.Error("DrawMaterialResponse Parameter Cast Error");
+                    LogService.Error("UseBlueprintResponse Parameter Cast Error");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;

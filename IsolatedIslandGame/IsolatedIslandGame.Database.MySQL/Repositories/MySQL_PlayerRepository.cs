@@ -39,8 +39,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     }
                 }
             }
-            DatabaseService.RepositoryList.InventoryRepository.Create(playerID, Inventory.DefaultCapacity);
-            return true;
+            Inventory inventory;
+            return DatabaseService.RepositoryList.InventoryRepository.Create(playerID, Inventory.DefaultCapacity, out inventory);
         }
 
         public override bool Contains(ulong facebookID, out int playerID)
@@ -64,7 +64,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             }
         }
 
-        public override Player Read(int playerID)
+        public override bool Read(int playerID, out Player player)
         {
             string sqlString = @"SELECT  
                 FacebookID, Nickname, Signature, GroupType, LastConnectedIPAddress
@@ -81,11 +81,13 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         string signature = reader.IsDBNull(2) ? null : reader.GetString(2);
                         GroupType groupType = (GroupType)reader.GetByte(3);
                         IPAddress lastConnectedIPAddress = reader.IsDBNull(4) ? IPAddress.None : IPAddress.Parse(reader.GetString(4));
-                        return new Player(playerID, facebookID, nickname, signature, groupType, lastConnectedIPAddress);
+                        player = new Player(playerID, facebookID, nickname, signature, groupType, lastConnectedIPAddress);
+                        return true;
                     }
                     else
                     {
-                        return null;
+                        player = null;
+                        return false;
                     }
                 }
             }

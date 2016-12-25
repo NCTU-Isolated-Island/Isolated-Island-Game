@@ -21,10 +21,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     float locationZ = (float)parameters[(byte)SyncVesselTransformParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleY];
 
-                    Vessel vessel = VesselManager.Instance.FindVessel(vesselID);
-                    vessel.UpdateTransform(locationX, locationZ, eulerAngleY);
-
-                    return true;
+                    Vessel vessel;
+                    if(VesselManager.Instance.FindVessel(vesselID, out vessel))
+                    {
+                        vessel.UpdateTransform(locationX, locationZ, eulerAngleY);
+                        return true;
+                    }
+                    else
+                    {
+                        LogService.Error($"SyncVesselTransform Error, Can't Find Vessel ID: {vesselID}");
+                        return false;
+                    }
                 }
                 catch (InvalidCastException ex)
                 {

@@ -3,12 +3,11 @@ using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.ResponseParameters.Player;
 using System;
 using System.Collections.Generic;
-
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.PlayerResponseHandlers
 {
-    class DrawMaterialResponseHandler : ResponseHandler<Player, PlayerOperationCode>
+    class SynthesizeMaterialResponseHandler : ResponseHandler<Player, PlayerOperationCode>
     {
-        public DrawMaterialResponseHandler(Player subject) : base(subject)
+        public SynthesizeMaterialResponseHandler(Player subject) : base(subject)
         {
         }
 
@@ -20,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     {
                         if (parameters.Count != 2)
                         {
-                            LogService.ErrorFormat(string.Format("DrawMaterialResponse Parameter Error, Parameter Count: {0}", parameters.Count));
+                            LogService.ErrorFormat(string.Format("SynthesizeMaterial Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
                         }
                         else
@@ -28,9 +27,21 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
+                case ErrorCode.InvalidOperation:
+                    {
+                        LogService.ErrorFormat("SynthesizeMaterial Error DebugMessage: {0}", debugMessage);
+                        subject.EventManager.ErrorInform("錯誤", "沒有這種藍圖");
+                        return false;
+                    }
+                case ErrorCode.PermissionDeny:
+                    {
+                        LogService.ErrorFormat("SynthesizeMaterial Error DebugMessage: {0}", debugMessage);
+                        subject.EventManager.ErrorInform("錯誤", "素材不足");
+                        return false;
+                    }
                 default:
                     {
-                        LogService.ErrorFormat("DrawMaterialResponse Error DebugMessage: {0}", debugMessage);
+                        LogService.ErrorFormat("SynthesizeMaterial Error DebugMessage: {0}", debugMessage);
                         subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
                         return false;
                     }
@@ -42,14 +53,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 try
                 {
-                    int itemID = (int)parameters[(byte)DrawMaterialResponseParameterCode.ItemID];
-                    int itemCount = (int)parameters[(byte)DrawMaterialResponseParameterCode.ItemCount];
-                    subject.TriggerDrawMaterialEvents(itemID, itemCount);
+                    Blueprint.ElementInfo[] requirements = (Blueprint.ElementInfo[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Requirements];
+                    Blueprint.ElementInfo[] products = (Blueprint.ElementInfo[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Products];
+                    subject.TriggerSynthesizeMaterialEvents(requirements, products);
                     return true;
                 }
                 catch (InvalidCastException ex)
                 {
-                    LogService.Error("DrawMaterialResponse Parameter Cast Error");
+                    LogService.Error("SynthesizeMaterial Parameter Cast Error");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;

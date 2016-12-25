@@ -21,12 +21,20 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     if (subject.Vessel.ContainsDecoration(decorationID))
                     {
-                        Item material = subject.Vessel.FindDecoration(decorationID).Material;
-                        subject.Inventory.AddItem(material, 1);
-                        subject.Vessel.RemoveDecoration(decorationID);
-                        DecorationFactory.Instance.DeleteDecoration(decorationID);
-                        LogService.InfoFormat("Player: {0}, RemoveDecorationFromVessel, MaterialItemID: {1}", subject.IdentityInformation, material.ItemID);
-                        return true;
+                        Decoration decoration;
+                        if(subject.Vessel.FindDecoration(decorationID, out decoration))
+                        {
+                            Item material = decoration.Material;
+                            subject.Inventory.AddItem(material, 1);
+                            subject.Vessel.RemoveDecoration(decorationID);
+                            DecorationFactory.Instance.DeleteDecoration(decorationID);
+                            LogService.InfoFormat("Player: {0}, RemoveDecorationFromVessel, MaterialItemID: {1}", subject.IdentityInformation, material.ItemID);
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                     else
                     {

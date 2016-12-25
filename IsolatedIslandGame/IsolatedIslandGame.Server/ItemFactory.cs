@@ -1,10 +1,14 @@
-﻿using IsolatedIslandGame.Database;
+﻿using System;
+using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
 
 namespace IsolatedIslandGame.Server
 {
     public class ItemFactory : ItemManager
     {
+        private event Action<Item> onItemUpdate;
+        public override event Action<Item> OnItemUpdate { add { onItemUpdate += value; } remove { onItemUpdate -= value; } }
+
         public ItemFactory()
         {
             var items = DatabaseService.RepositoryList.ItemRepository.ListAll();
@@ -19,18 +23,21 @@ namespace IsolatedIslandGame.Server
             if(!ContainsItem(item.ItemID))
             {
                 itemDictionary.Add(item.ItemID, item);
+                onItemUpdate?.Invoke(item);
             }
         }
 
-        public override Item FindItem(int itemID)
+        public override bool FindItem(int itemID, out Item item)
         {
             if(ContainsItem(itemID))
             {
-                return itemDictionary[itemID];
+                item = itemDictionary[itemID];
+                return true;
             }
             else
             {
-                return null;
+                item = null;
+                return false;
             }
         }
     }
