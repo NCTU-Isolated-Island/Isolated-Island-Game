@@ -17,18 +17,22 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 int decorationID = (int)parameters[(byte)RemoveDecorationFromVesselParameterCode.DecorationID];
 
-                if (subject.Vessel.ContainsDecoration(decorationID))
+                lock(subject.Vessel)
                 {
-                    Item material = subject.Vessel.FindDecoration(decorationID).Material;
-                    subject.Inventory.AddItem(material, 1);
-                    subject.Vessel.RemoveDecoration(decorationID);
-                    DecorationFactory.Instance.DeleteDecoration(decorationID);
-                    return true;
-                }
-                else
-                {
-                    LogService.ErrorFormat("RemoveDecorationFromVessel error Player: {0}, the decoration is not existed DecorationID: {1}", subject.IdentityInformation, decorationID);
-                    return false;
+                    if (subject.Vessel.ContainsDecoration(decorationID))
+                    {
+                        Item material = subject.Vessel.FindDecoration(decorationID).Material;
+                        subject.Inventory.AddItem(material, 1);
+                        subject.Vessel.RemoveDecoration(decorationID);
+                        DecorationFactory.Instance.DeleteDecoration(decorationID);
+                        LogService.InfoFormat("Player: {0}, RemoveDecorationFromVessel, MaterialItemID: {1}", subject.IdentityInformation, material.ItemID);
+                        return true;
+                    }
+                    else
+                    {
+                        LogService.ErrorFormat("RemoveDecorationFromVessel error Player: {0}, the decoration is not existed DecorationID: {1}", subject.IdentityInformation, decorationID);
+                        return false;
+                    }
                 }
             }
             else

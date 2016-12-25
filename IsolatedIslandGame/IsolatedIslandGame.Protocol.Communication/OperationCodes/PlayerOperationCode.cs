@@ -9,5 +9,7 @@
         AddDecorationToVessel,
         RemoveDecorationFromVessel,
         UpdateDecorationOnVessel,
+        SynthesizeMaterial,
+        UseBlueprint
     }
 }

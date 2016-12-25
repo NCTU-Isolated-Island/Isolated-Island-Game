@@ -9,7 +9,7 @@ public class ClientVesselManager : VesselManager
     public override event VesselChangeEventHandler OnVesselChange { add { onVesselChange += value; } remove { onVesselChange -= value; } }
 
     private event Vessel.VesselTransformUpdatedEventHandler onVesselTransformUpdated;
-    public override event Vessel.VesselTransformUpdatedEventHandler OnVesselTransformUpdated;
+    public override event Vessel.VesselTransformUpdatedEventHandler OnVesselTransformUpdated { add { onVesselTransformUpdated += value; } remove { onVesselTransformUpdated -= value; } }
 
     private event Vessel.DecorationChangeEventHandler onVesselDecorationChange;
     public override event Vessel.DecorationChangeEventHandler OnVesselDecorationChange { add { onVesselDecorationChange += value; } remove { onVesselDecorationChange -= value; } }

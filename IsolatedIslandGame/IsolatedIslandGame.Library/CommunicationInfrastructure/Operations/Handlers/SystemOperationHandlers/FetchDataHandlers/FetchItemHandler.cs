@@ -31,7 +31,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)FetchMaterialResponseParameterCode.ItemID, material.ItemID },
                                 { (byte)FetchMaterialResponseParameterCode.ItemName, material.ItemName },
                                 { (byte)FetchMaterialResponseParameterCode.Description, material.Description },
-                                { (byte)FetchMaterialResponseParameterCode.MaterialID, material.MaterialID }
+                                { (byte)FetchMaterialResponseParameterCode.MaterialID, material.MaterialID },
+                                { (byte)FetchMaterialResponseParameterCode.Score, material.Score }
                             };
                             SendResponse(communicationInterface, fetchCode, result);
                         }

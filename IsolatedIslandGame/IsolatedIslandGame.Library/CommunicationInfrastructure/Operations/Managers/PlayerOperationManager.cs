@@ -28,6 +28,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.AddDecorationToVessel, new AddDecorationToVesselHandler(player) },
                 { PlayerOperationCode.RemoveDecorationFromVessel, new RemoveDecorationFromVesselHandler(player) },
                 { PlayerOperationCode.UpdateDecorationOnVessel, new UpdateDecorationOnVesselHandler(player) },
+                { PlayerOperationCode.SynthesizeMaterial, new SynthesizeMaterialHandler(player) },
+                { PlayerOperationCode.UseBlueprint, new UseBlueprintHandler(player) },
             };
         }
 
@@ -119,6 +121,22 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)UpdateDecorationOnVesselParameterCode.RotationEulerAngleZ, rotationEulerAngleZ }
             };
             SendOperation(PlayerOperationCode.UpdateDecorationOnVessel, parameters);
+        }
+        public void SynthesizeMaterial(Blueprint.ElementInfo[] elementInfos)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SynthesizeMaterialParameterCode.BlueprintElementInfos, elementInfos }
+            };
+            SendOperation(PlayerOperationCode.SynthesizeMaterial, parameters);
+        }
+        public void UseBlueprint(int blueprintID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)UseBlueprintParameterCode.BlueprintID, blueprintID }
+            };
+            SendOperation(PlayerOperationCode.UseBlueprint, parameters);
         }
     }
 }
