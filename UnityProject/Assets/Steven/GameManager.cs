@@ -308,4 +308,12 @@ public class GameManager : MonoBehaviour {
 
 	#endregion
 
+
+	void OnGUI(){
+		foreach(InventoryItemInfo info in UserManager.Instance.User.Player.Inventory.ItemInfos)
+		{
+			GUILayout.Label(info.Item.ItemName + " : " + info.Count + " ID: " + info.Item.ItemID);
+		}
+	}
+
 }
