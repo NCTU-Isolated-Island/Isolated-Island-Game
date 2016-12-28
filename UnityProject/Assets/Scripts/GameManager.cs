@@ -11,12 +11,12 @@ using IsolatedIslandGame.Protocol;
 public class GameManager : MonoBehaviour {
 
 	public static GameManager Instance; // ASK need to implement standard singleton?
-	public GameObject DefaultShipModel;
+	[HideInInspector]public GameObject DefaultShipModel;
 	public List<GameObject> ElementModel;
 	public Dictionary<int,GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
 	public Dictionary<int,GameObject> VesselIDGameObject = new Dictionary<int, GameObject>(); //VesselID to GO
 	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
-	public GameObject PlayerGameObject;
+	[HideInInspector]public GameObject PlayerGameObject;
 
 	void Awake () {
 		
