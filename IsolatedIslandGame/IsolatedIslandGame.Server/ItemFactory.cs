@@ -1,6 +1,7 @@
 ﻿using System;
 using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Library.Items;
 
 namespace IsolatedIslandGame.Server
 {
@@ -37,6 +38,30 @@ namespace IsolatedIslandGame.Server
             else
             {
                 item = null;
+                return false;
+            }
+        }
+
+        public override bool SpecializeItemToMaterial(int itemID, out Material material)
+        {
+            if (ContainsItem(itemID))
+            {
+                Item item = itemDictionary[itemID];
+                if(item is Material)
+                {
+                    material = item as Material;
+                }
+                else
+                {
+                    material = new Material(item.ItemID, item.ItemName, item.Description, 0, 0);
+                    itemDictionary[itemID] = material;
+                    onItemUpdate?.Invoke(material);
+                }
+                return true;
+            }
+            else
+            {
+                material = null;
                 return false;
             }
         }

@@ -43,19 +43,7 @@ public class ClientVesselManager : VesselManager
                 onVesselChange(vessel, DataChangeType.Add);
             }
         }
-        if (UserManager.Instance.User.IsOnline)
-        {
-            Player player = UserManager.Instance.User.Player;
-            if (player.PlayerID == vessel.OwnerPlayerID)
-            {
-                player.BindVessel(vessel);
-                player.OperationManager.FetchDataResolver.FetchVesselDecorations(vessel.VesselID);
-            }
-            else
-            {
-                SystemManager.Instance.OperationManager.FetchDataResolver.FetchVesselDecorations(vessel.VesselID);
-            }
-        }
+        SystemManager.Instance.OperationManager.FetchDataResolver.FetchVesselDecorations(vessel.VesselID);
     }
 
     public override bool FindVessel(int vesselID, out Vessel vessel)

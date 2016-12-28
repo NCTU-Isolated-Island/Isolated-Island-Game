@@ -13,6 +13,21 @@
             Item = item;
             Count = count;
             PositionIndex = positionIndex;
+
+            ItemManager.Instance.OnItemUpdate += UpdateItem;
+        }
+
+        ~InventoryItemInfo()
+        {
+            ItemManager.Instance.OnItemUpdate -= UpdateItem;
+        }
+
+        private void UpdateItem(Item item)
+        {
+            if(item.ItemID == Item.ItemID)
+            {
+                Item = item;
+            }
         }
     }
 }
