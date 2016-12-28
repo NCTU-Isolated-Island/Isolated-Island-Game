@@ -27,6 +27,21 @@ namespace IsolatedIslandGame.Library.Items
             RotationEulerAngleX = rotationEulerAngleX;
             RotationEulerAngleY = rotationEulerAngleY;
             RotationEulerAngleZ = rotationEulerAngleZ;
+
+            ItemManager.Instance.OnItemUpdate += UpdateMaterial;
+        }
+
+        ~Decoration()
+        {
+            ItemManager.Instance.OnItemUpdate -= UpdateMaterial;
+        }
+
+        private void UpdateMaterial(Item material)
+        {
+            if (material.ItemID == Material.ItemID)
+            {
+                Material = material as Material;
+            }
         }
 
         public void UpdateDecoration(float positionX, float positionY, float positionZ, float rotationEulerAngleX, float rotationEulerAngleY, float rotationEulerAngleZ)
