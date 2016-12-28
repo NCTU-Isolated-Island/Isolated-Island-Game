@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using IsolatedIslandGame.Library.Items;
 
 namespace IsolatedIslandGame.Library
 {
@@ -27,6 +28,7 @@ namespace IsolatedIslandGame.Library
         }
         public abstract bool FindItem(int itemID, out Item item);
         public abstract void AddItem(Item item);
+        public abstract bool SpecializeItemToMaterial(int itemID, out Material material);
         public bool RemoveItem(int itemID)
         {
             return itemDictionary.Remove(itemID);
