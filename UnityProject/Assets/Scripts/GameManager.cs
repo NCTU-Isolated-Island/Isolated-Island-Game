@@ -15,8 +15,12 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> ElementModel;
 	public Dictionary<int,GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
 	public Dictionary<int,GameObject> VesselIDGameObject = new Dictionary<int, GameObject>(); //VesselID to GO
+<<<<<<< HEAD:UnityProject/Assets/Scripts/GameManager.cs
 <<<<<<< HEAD:UnityProject/Assets/Steven/GameManager.cs
 	public Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
+=======
+	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
+>>>>>>> refs/remotes/origin/master:UnityProject/Assets/Steven/GameManager.cs
 	public GameObject PlayerGameObject;
 =======
 	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
@@ -32,25 +36,27 @@ public class GameManager : MonoBehaviour {
 		}
 		DontDestroyOnLoad(gameObject);
 
-		DefaultShipModel = Resources.Load<GameObject>("ShipModel");
+		DefaultShipModel = Resources.Load<GameObject>("ShipGameObject");
 
 
 
 	}
 
-	void OnEnable(){
-		SceneManager.sceneLoaded += OnSceneLoaded;
+	void OnEnable()
+	{
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
-
+		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
-	void OnDisable(){
-		SceneManager.sceneLoaded -= OnSceneLoaded;
+	void OnDisable()
+	{
 		UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
 		UserManager.Instance.User.Player.OnCreateCharacter -= OnCreateCharacter;
+		SceneManager.sceneLoaded -= OnSceneLoaded;
 		VesselManager.Instance.OnVesselTransformUpdated -= OnVesselTransformUpdated;
+		VesselManager.Instance.OnVesselDecorationChange -= OnVesselDecorationChange;
+		VesselManager.Instance.OnVesselChange -= OnVesselChange;
 	}
-
 
 	void Start()
 	{
@@ -72,11 +78,12 @@ public class GameManager : MonoBehaviour {
 		
 		UserManager.Instance.User.Player.OnCreateCharacter += OnCreateCharacter;
 		VesselManager.Instance.OnVesselTransformUpdated += OnVesselTransformUpdated;
+		VesselManager.Instance.OnVesselDecorationChange += OnVesselDecorationChange;
+		VesselManager.Instance.OnVesselChange += OnVesselChange;
 
-		print(player.GroupType.ToString());
 		if(UserManager.Instance.User.Player.GroupType == IsolatedIslandGame.Protocol.GroupType.No)
 		{
-			SceneManager.LoadScene("RegisterScnee");
+			SceneManager.LoadScene("RegisterScene");
 
 			UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature",IsolatedIslandGame.Protocol.GroupType.B);
 		}
@@ -115,7 +122,7 @@ public class GameManager : MonoBehaviour {
 			eulerAngleY
 		);
 	}
-		
+
 
 	void InstantiateUserGameObject(){
 
@@ -128,32 +135,33 @@ public class GameManager : MonoBehaviour {
 				new Vector3(vessel.LocationX,0f,vessel.LocationZ),
 				Quaternion.Euler(0f,vessel.RotationEulerAngleY,0f)
 			) as GameObject;
-
+				
 			foreach(Decoration decoration in vessel.Decorations)
-			{
+			{print("DEC: " + decoration.DecorationID);
 				GameObject dec = Instantiate(
 					ElementModel[decoration.Material.MaterialID],
-					new Vector3
+					user.transform
+				) as GameObject;
+
+				dec.transform.localPosition = new Vector3
 					(
 						decoration.PositionX,
 						decoration.PositionY,
 						decoration.PositionZ
-					) + user.transform.position, 
-					Quaternion.Euler
+					);
+				dec.transform.localEulerAngles = new Vector3
 					(
 						decoration.RotationEulerAngleX,
 						decoration.RotationEulerAngleY,
 						decoration.RotationEulerAngleZ
-					),
-					user.transform
-				) as GameObject;
+					);
 
 				decorationDic.Add(decoration.DecorationID,dec);
 			}
 
 			UserGameObject.Add(vessel.OwnerPlayerID,user);
 			VesselIDGameObject.Add(vessel.VesselID,user);
-			UserDecoration.Add(vessel.VesselID,decorationDic);
+			VesselDecoration.Add(vessel.VesselID,decorationDic);
 			user.name = "OwnerID: " + vessel.OwnerPlayerID;
 		}
 	}
@@ -182,15 +190,14 @@ public class GameManager : MonoBehaviour {
 		user.transform.rotation = Quaternion.Euler(0f,rotationEulerAngleY,0f);
 	}
 
-
-	void OnDecorationChange(int vesselID, Decoration decoration, DataChangeType changeType)
-	{ 
+	void OnVesselDecorationChange(int vesselID, Decoration decoration, DataChangeType changeType)
+	{ print("decoration");
 		GameObject user;
 		VesselIDGameObject.TryGetValue(vesselID,out user);
 
 		if(changeType == DataChangeType.Add)
 		{
-			Instantiate(
+			GameObject dec = Instantiate(
 				ElementModel[decoration.Material.MaterialID],
 				new Vector3
 				(
@@ -205,7 +212,21 @@ public class GameManager : MonoBehaviour {
 					decoration.RotationEulerAngleZ
 				),
 				user.transform
-			);
+			) as GameObject;
+
+			Dictionary<int, GameObject> decorationDic;
+
+			if(VesselDecoration.TryGetValue(vesselID,out decorationDic))
+			{
+			
+			}
+			else
+			{
+				
+			}
+
+
+
 		}
 		else if(changeType == DataChangeType.Remove)
 		{
@@ -214,7 +235,7 @@ public class GameManager : MonoBehaviour {
 		else if(changeType == DataChangeType.Update)
 		{
 			Dictionary<int, GameObject> decorationDic;
-			if(UserDecoration.TryGetValue(vesselID,out decorationDic))
+			if(VesselDecoration.TryGetValue(vesselID,out decorationDic))
 			{
 				GameObject dec;
 				if(decorationDic.TryGetValue(decoration.DecorationID,out dec))
@@ -237,52 +258,89 @@ public class GameManager : MonoBehaviour {
 		}
 	}//當船上的裝飾物更新時的回調事件
 
+	void OnVesselChange (Vessel vessel, DataChangeType changeType)
+	{
+		if(changeType == DataChangeType.Add)
+		{
+			GameObject user = Instantiate(
+				DefaultShipModel,
+				new Vector3(vessel.LocationX,0f,vessel.LocationZ),
+				Quaternion.Euler(0f,vessel.RotationEulerAngleY,0f)
+			) as GameObject;
+
+			foreach(Decoration decoration in vessel.Decorations)
+			{
+				Instantiate(
+					ElementModel[decoration.Material.MaterialID],
+					new Vector3
+					(
+						decoration.PositionX,
+						decoration.PositionY,
+						decoration.PositionZ
+					) + user.transform.position, 
+					Quaternion.Euler
+					(
+						decoration.RotationEulerAngleX,
+						decoration.RotationEulerAngleY,
+						decoration.RotationEulerAngleZ
+					),
+					user.transform
+				);
+
+				UserGameObject.Add(vessel.OwnerPlayerID,user);
+				VesselIDGameObject.Add(vessel.VesselID,user);
+				user.name = "OwnerID: " + vessel.OwnerPlayerID;
+			}
+		
+
+
+		}
+		else if(changeType == DataChangeType.Remove)
+		{
+			GameObject user;
+			if(VesselIDGameObject.TryGetValue(vessel.VesselID, out user))
+			{
+				VesselIDGameObject.Remove(vessel.VesselID);
+				UserGameObject.Remove(vessel.OwnerPlayerID);
+				Destroy(user);
+			}
+		}
+		else
+		{
+			Debug.LogError("OnVesselChange ChangeType = Update");
+		}
+
+
+
+
+	} //當船物件有變化時的回調事件
+
 	#endregion
 
-//	void OnUserOnline(Player player)
-//	{
-//		GameObject user = Instantiate(
-//			DefaultShipModel,
-//			new Vector3(player.Vessel.LocationX,0f,player.Vessel.LocationZ),
-//			Quaternion.Euler(0f,player.Vessel.RotationEulerAngleY,0f)
-//		) as GameObject;
-//
-//		foreach(Decoration decoration in player.Vessel.Decorations)
-//		{
-//			Instantiate(
-//				ElementModel[decoration.Material.MaterialID],
-//				new Vector3
-//				(
-//					decoration.PositionX,
-//					decoration.PositionY,
-//					decoration.PositionZ
-//				) + user.transform.position, 
-//				Quaternion.Euler
-//				(
-//					decoration.RotationEulerAngleX,
-//					decoration.RotationEulerAngleY,
-//					decoration.RotationEulerAngleZ
-//				),
-//				user.transform
-//			);
-//		}
-//
-//		UserGameObject.Add(player.PlayerID,user);
-//		VesselIDGameObject.Add(player.Vessel.VesselID,user);
-//		user.name = "OwnerID: " + player.PlayerID;
-//	}
 
-//	void OnUserOffline(Player player)
-//	{
-//		GameObject temp;
-//		UserGameObject.TryGetValue(player.PlayerID, out temp);
-//		Destroy(temp);
-//
-//		UserGameObject.Remove(player.PlayerID);
-//		VesselIDGameObject.Remove(player.Vessel.VesselID);
-//	}
+	void OnGUI()
+    {
+        if(UserManager.Instance.User.Player != null && UserManager.Instance.User.Player.Inventory != null)
+        {
+            foreach (InventoryItemInfo info in UserManager.Instance.User.Player.Inventory.ItemInfos)
+            {
+                GUILayout.Label(info.Item.ItemName + " : " + info.Count + " ID: " + info.Item.ItemID);
+            }
+            foreach(Vessel vessel in VesselManager.Instance.Vessels)
+            {
+                GUILayout.Label(string.Format("VesselName: {0}", vessel.Name));
+                foreach (Decoration decoration in vessel.Decorations)
+                {
+                    GUILayout.Label(string.Format("DecorationID: {0}, MaterialName: {1}", decoration.DecorationID, decoration.Material.ItemName));
+                }
+            }
+        }
 
-
+        if(GUI.Button(new Rect(400, 200, 200, 50), "Draw"))
+        {
+            UserManager.Instance.User.Player.OperationManager.DrawMaterial();
+        }
+	}
 
 
 	void OnGUI(){

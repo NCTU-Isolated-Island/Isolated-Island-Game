@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library;
 using System;
+using IsolatedIslandGame.Library.Items;
 
 namespace IsolatedIslandGame.Client
 {
@@ -37,6 +38,33 @@ namespace IsolatedIslandGame.Client
                 AddItem(item);
                 SystemManager.Instance.OperationManager.FetchDataResolver.FetchItem(itemID);
                 return true;
+            }
+        }
+
+        public override bool SpecializeItemToMaterial(int itemID, out Material material)
+        {
+            if (ContainsItem(itemID))
+            {
+                Item item = itemDictionary[itemID];
+                if (item is Material)
+                {
+                    material = item as Material;
+                }
+                else
+                {
+                    material = new Material(item.ItemID, item.ItemName, item.Description, 0, 0);
+                    itemDictionary[itemID] = material;
+                    if (onItemUpdate != null)
+                    {
+                        onItemUpdate.Invoke(material);
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                material = null;
+                return false;
             }
         }
     }

@@ -56,17 +56,41 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     if (VesselManager.Instance.FindVessel(vesselID, out vessel))
                     {
                         Item material;
-                        if (ItemManager.Instance.FindItem(materialItemID, out material) && material is Material)
+                        if (ItemManager.Instance.FindItem(materialItemID, out material))
                         {
-                            vessel.AddDecoration(new Decoration(
-                            decorationID: decorationID,
-                            material: material as Material,
-                            positionX: positionX,
-                            positionY: positionY,
-                            positionZ: positionZ,
-                            rotationEulerAngleX: eulerAngleX,
-                            rotationEulerAngleY: eulerAngleY,
-                            rotationEulerAngleZ: eulerAngleZ));
+                            if(material is Material)
+                            {
+                                vessel.AddDecoration(new Decoration(
+                                decorationID: decorationID,
+                                material: material as Material,
+                                positionX: positionX,
+                                positionY: positionY,
+                                positionZ: positionZ,
+                                rotationEulerAngleX: eulerAngleX,
+                                rotationEulerAngleY: eulerAngleY,
+                                rotationEulerAngleZ: eulerAngleZ));
+                            }
+                            else
+                            {
+                                Material specializedMaterial;
+                                if(ItemManager.Instance.SpecializeItemToMaterial(materialItemID, out specializedMaterial))
+                                {
+                                    vessel.AddDecoration(new Decoration(
+                                    decorationID: decorationID,
+                                    material: specializedMaterial,
+                                    positionX: positionX,
+                                    positionY: positionY,
+                                    positionZ: positionZ,
+                                    rotationEulerAngleX: eulerAngleX,
+                                    rotationEulerAngleY: eulerAngleY,
+                                    rotationEulerAngleZ: eulerAngleZ));
+                                }
+                                else
+                                {
+                                    LogService.Error($"FetchVesselDecorationsResponse Error, SpecializeItemToMaterial Fail, VesselID: {vesselID}, MaterialItemID: {materialItemID}");
+                                    return false;
+                                }
+                            }
                             return true;
                         }
                         else
