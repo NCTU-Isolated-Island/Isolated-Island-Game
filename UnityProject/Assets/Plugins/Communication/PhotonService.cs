@@ -105,7 +105,7 @@ namespace IsolatedIslandGame.Client.Communication
             try
             {
                 peer = new PhotonPeer(this, ConnectionProtocol.Tcp);
-                if (!peer.Connect(serverAddress + ":" + port.ToString(), serverName))
+                if (!peer.Connect(this.serverAddress + ":" + this.port.ToString(), this.serverName))
                 {
                     DebugReturn(DebugLevel.ERROR, "Connect Fail");
                     ServerConnected = false;

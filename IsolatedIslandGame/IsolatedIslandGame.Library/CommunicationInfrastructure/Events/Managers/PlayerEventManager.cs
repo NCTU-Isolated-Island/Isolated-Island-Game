@@ -1,9 +1,11 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
-using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
+using IsolatedIslandGame.Protocol.Communication.EventParameters.Player;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
+using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
 {
@@ -20,6 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             eventTable = new Dictionary<PlayerEventCode, EventHandler<Player, PlayerEventCode>>
             {
                 { PlayerEventCode.SyncData, SyncDataResolver },
+                { PlayerEventCode.GetBlueprint, new GetBlueprintHandler(player) },
             };
         }
 
@@ -56,6 +59,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
             SendEvent(PlayerEventCode.SyncData, syncDataParameters);
+        }
+
+        public void GetBlueprint(Blueprint blueprint)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.BlueprintID },
+                { (byte)GetBlueprintParameterCode.Requirements, blueprint.Requirements.ToArray() },
+                { (byte)GetBlueprintParameterCode.Products, blueprint.Products.ToArray() }
+            };
+            SendEvent(PlayerEventCode.GetBlueprint, parameters);
         }
     }
 }
