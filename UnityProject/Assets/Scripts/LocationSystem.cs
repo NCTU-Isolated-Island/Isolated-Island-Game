@@ -10,6 +10,8 @@ public class LocationSystem : MonoBehaviour {
 	private System.DateTime updateTime;
 	private Vector3 previousLocation;
 
+	public GameObject TestLocation;
+
 	void Awake()
 	{
 		if(Instance == null){
@@ -21,7 +23,8 @@ public class LocationSystem : MonoBehaviour {
 
 	void Update()
 	{	
-		if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
+		//if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
+		if(Input.anyKeyDown)
 		{
 			
 			transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
@@ -68,14 +71,15 @@ public class LocationSystem : MonoBehaviour {
 		//FOR DEVELOP
 		if(Input.location.status != LocationServiceStatus.Running)
 		{
-			return Vector3.one;
+			return new Vector3(TestLocation.transform.position.x,0f,TestLocation.transform.position.z);
+//			return Vector3.one;
 		}
 
 		Vector3 result;
 		result.x = (Input.location.lastData.longitude - 120.997325f) * 110000;
 		result.y = 0f;
 		result.z = (Input.location.lastData.latitude - 24.787493f) * 100000;
-		print(result);
+
 		return result;
 	}
 

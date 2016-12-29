@@ -44,8 +44,7 @@ public class PlayerController : MonoBehaviour {
 	{
 		print(item.ItemName + " : " + count);
 	}
-
-
+		
 	public void StartPlaceDecoration()
 	{
 		finishPlacing = false;
@@ -64,6 +63,7 @@ public class PlayerController : MonoBehaviour {
 		Quaternion rotation;
 
 		GameObject temp = Instantiate(instantiatedMaterial,Vector3.zero,Quaternion.identity) as GameObject;
+		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
 		RaycastHit hitInfo = new RaycastHit();
 		while(!finishPlacing)
 		{
@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour {
 			position.x, position.y, position.z,
 			rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
 		);
-		print("done");
+
 	}
 
 	void CheckIfSelectVessel()
@@ -104,9 +104,19 @@ public class PlayerController : MonoBehaviour {
 		//Select Vessel
 		if(hit)
 		{
-			
+			print("Select " + hitInfo.collider.transform.root.name + " Vessel");
+
+			//move camera to 
+			//hitInfo.collider.transform.root.Find("NearAnchor").position;
+			//hitInfo.collider.transform.root.Find("NearAnchor").rotation;
 		}
 
+	}
+
+	void BackToPlayerFarAnchor()
+	{
+		//move camera to 
+//		GameManager.Instance.PlayerGameObject.transform.Find("FarAnchor")
 	}
 
 	void AdjustViewAngle()
