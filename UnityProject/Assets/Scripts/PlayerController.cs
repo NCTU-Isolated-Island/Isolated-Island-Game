@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour {
 			CheckIfSelectVessel();
 		}
 
+		AdjustViewAngle();
+
 	}
 
 	void Awake()
@@ -62,7 +64,7 @@ public class PlayerController : MonoBehaviour {
 		Vector3 position;
 		Quaternion rotation;
 
-		GameObject temp = Instantiate(instantiatedMaterial,Vector3.zero,Quaternion.identity) as GameObject;
+		GameObject temp = Instantiate(GameManager.Instance.ElementModel[materialID],Vector3.zero,Quaternion.identity) as GameObject;
 		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
 		RaycastHit hitInfo = new RaycastHit();
 		while(!finishPlacing)
@@ -106,6 +108,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			print("Select " + hitInfo.collider.transform.root.name + " Vessel");
 
+			CameraManager.Instance.Focus(hitInfo.collider.transform.root.Find("NearAnchor"));
 			//move camera to 
 			//hitInfo.collider.transform.root.Find("NearAnchor").position;
 			//hitInfo.collider.transform.root.Find("NearAnchor").rotation;
@@ -119,24 +122,28 @@ public class PlayerController : MonoBehaviour {
 //		GameManager.Instance.PlayerGameObject.transform.Find("FarAnchor")
 	}
 
+	//在FarAnchor的時候不能執行旋轉
 	void AdjustViewAngle()
 	{
-//		if(Input.touchCount == 1)
-//		{
-//			Touch touch = Input.GetTouch(0);
-//			Vector2 touchVector = touch.deltaPosition * 0.05f;
+		
+		if(Input.touchCount == 1)
+		{
+			Touch touch = Input.GetTouch(0);
+			float amount = touch.deltaPosition.x * 0.5f;
+			print(amount);
+
+			//CameraManager Rotate
+		}
 //
-//			islandGameObject.transform.Rotate(touchVector.y,touchVector.x * (-1f),0f,Space.World);
-//		}
-		Vector3 deltaPosition = Input.mousePosition - originalMousePosition;
-		deltaPosition *= 2.2f;
-		//Quaternion rotation = Quaternion.Euler(deltaPosition.y * (-1f),deltaPosition.x * (-1f),0);
-
-
-
-
-		//islandGameObject.transform.rotation = rotation;
-		originalMousePosition = Input.mousePosition;
+//		Vector3 deltaPosition = Input.mousePosition - originalMousePosition;
+//		deltaPosition *= 2.2f;
+//		//Quaternion rotation = Quaternion.Euler(deltaPosition.y * (-1f),deltaPosition.x * (-1f),0);
+//
+//
+//
+//
+//		//islandGameObject.transform.rotation = rotation;
+//		originalMousePosition = Input.mousePosition;
 	}
 //
 //	void PinchToZoom()

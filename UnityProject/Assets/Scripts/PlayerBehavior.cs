@@ -16,7 +16,7 @@ public class PlayerBehavior : MonoBehaviour {
 
 	void Update () {
 		transform.position = Vector3.SmoothDamp(transform.position, TargetPosition, ref velocity, 1f);
-		transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotaion ,0.1f);
+		transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotaion ,Time.deltaTime);
 	}
 
 	public void UpdateLocation(Vector3 position,float eulurAngle)

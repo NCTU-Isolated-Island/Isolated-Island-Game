@@ -19,6 +19,12 @@ public class GameManager : MonoBehaviour {
 	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
 	public GameObject PlayerGameObject;
 
+	public CameraStat cameraStat;
+	public enum CameraStat{
+		Near,
+		Far
+	}
+
 	void Awake () {
 		
 		if(Instance == null){
@@ -115,6 +121,10 @@ public class GameManager : MonoBehaviour {
 		);
 	}
 
+	void Register(string nickname, string signature, GroupType groupType)
+	{
+		UserManager.Instance.User.Player.OperationManager.CreateCharacter(nickname,signature,groupType);
+	}
 
 	void InstantiateUserGameObject(){
 
@@ -169,7 +179,8 @@ public class GameManager : MonoBehaviour {
 			UserManager.Instance.User.Player.PlayerID,
 			out PlayerGameObject
 		);
-		
+
+
 		if(!success)
 		{
 			Debug.LogError("GetPlayerVesselGameObject Error!");	
