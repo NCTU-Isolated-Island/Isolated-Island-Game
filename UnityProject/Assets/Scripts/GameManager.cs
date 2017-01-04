@@ -104,6 +104,9 @@ public class GameManager : MonoBehaviour {
 			SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
 			InstantiateUserGameObject();
 			GetPlayerVesselGameObject();
+
+			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
+
 		}
 
 		//TODO 設定完之後再把顯示出遊戲畫面（在這之前可能顯示loading bar

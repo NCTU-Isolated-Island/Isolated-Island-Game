@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			print("Select " + hitInfo.collider.transform.root.name + " Vessel");
 
-			CameraManager.Instance.Focus(hitInfo.collider.transform.root.Find("NearAnchor"));
+			//CameraManager.Instance.Focus(hitInfo.collider.transform.root.Find("NearAnchor"));
 			//move camera to 
 			//hitInfo.collider.transform.root.Find("NearAnchor").position;
 			//hitInfo.collider.transform.root.Find("NearAnchor").rotation;
