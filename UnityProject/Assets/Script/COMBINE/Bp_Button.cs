@@ -11,8 +11,8 @@ public class Bp_Button : MonoBehaviour {
     {
         
         // this.GetComponent<RectTransform>().localPosition = new Vector3(0, 90, 0);
-        yourButton = this.gameObject.GetComponent<Button>();
-        Bp_list.GetComponent<RectTransform>().localPosition = new Vector3(canvas.GetComponent<RectTransform>().rect.width / 2 + Bp_list.GetComponent<RectTransform>().rect.width / 2, 0, 0);
+        yourButton = this.gameObject.transform.GetChild(0).GetComponent<Button>();
+        Bp_list.GetComponent<RectTransform>().localPosition = new Vector3(canvas.GetComponent<RectTransform>().rect.width / 2 + Bp_list.GetComponent<RectTransform>().rect.width / 2, 20, 0);
         yourButton.onClick.AddListener(move);
     }
 
@@ -21,8 +21,8 @@ public class Bp_Button : MonoBehaviour {
         float A_pos = canvas.GetComponent<RectTransform>().rect.width / 2 - Bp_list.GetComponent<RectTransform>().rect.width / 2;
         float B_pos = canvas.GetComponent<RectTransform>().rect.width / 2 + Bp_list.GetComponent<RectTransform>().rect.width / 2;
         if (Mathf.Abs(Bp_list.GetComponent<RectTransform>().localPosition.x - A_pos) <1)
-        { Bp_list.transform.localPosition = new Vector3(B_pos, 0, 0);  }
+        { Bp_list.transform.localPosition = new Vector3(B_pos, 20, 0);  }
         else if(Mathf.Abs(Bp_list.GetComponent<RectTransform>().localPosition.x - B_pos) < 1)
-        { Bp_list.transform.localPosition = new Vector3(A_pos, 0, 0); }
+        { Bp_list.transform.localPosition = new Vector3(A_pos, 20, 0); }
     }
 }

@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour {
 	private Vector3 originalMousePosition;
 
 	private bool finishPlacing = false; // 完成放置素材
+	private bool placingMaterial = false; //正在放置素材
 
 	void Update()
 	{
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour {
 	public void StartPlaceDecoration()
 	{
 		finishPlacing = false;
-		StartCoroutine(PlaceMaterial(1));
+		StartCoroutine(PlaceMaterial(0));
 
 	}
 
@@ -61,16 +62,19 @@ public class PlayerController : MonoBehaviour {
 		
 	IEnumerator PlaceMaterial(int materialID)
 	{
+		placingMaterial = true;
+
 		Vector3 position;
 		Quaternion rotation;
 
 		GameObject temp = Instantiate(GameManager.Instance.ElementModel[materialID],Vector3.zero,Quaternion.identity) as GameObject;
 		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
 		RaycastHit hitInfo = new RaycastHit();
+
 		while(!finishPlacing)
 		{
 			//TODO 必須把Player模型設定成 "PlayerModel" Layer
-			bool hit = Physics.Raycast(
+			Physics.Raycast(
 				Camera.main.ScreenPointToRay(Input.mousePosition),
 				out hitInfo,
 				99999f,
@@ -90,6 +94,8 @@ public class PlayerController : MonoBehaviour {
 			position.x, position.y, position.z,
 			rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
 		);
+
+		placingMaterial = false;
 
 	}
 
@@ -126,14 +132,16 @@ public class PlayerController : MonoBehaviour {
 	void AdjustViewAngle()
 	{
 		
-		if(Input.touchCount == 1)
+		if(Input.touchCount == 1 && !placingMaterial)
 		{
 			Touch touch = Input.GetTouch(0);
-			float amount = touch.deltaPosition.x * 0.5f;
+			float amount = touch.deltaPosition.x * 0.15f;
 			print(amount);
 
-			//CameraManager Rotate
+			CameraManager.Instance.CameraRotate(amount);
+
 		}
+
 //
 //		Vector3 deltaPosition = Input.mousePosition - originalMousePosition;
 //		deltaPosition *= 2.2f;
@@ -145,6 +153,18 @@ public class PlayerController : MonoBehaviour {
 //		//islandGameObject.transform.rotation = rotation;
 //		originalMousePosition = Input.mousePosition;
 	}
+
+	public void ToFarAnchor()
+	{
+		CameraManager.Instance.ToFarAnchor(GameManager.Instance.PlayerGameObject);
+	}
+
+	public void ToNearAnchor()
+	{
+		CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+	}
+
+
 //
 //	void PinchToZoom()
 //	{

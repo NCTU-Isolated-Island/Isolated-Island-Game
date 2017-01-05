@@ -87,7 +87,8 @@ public class GameManager : MonoBehaviour {
 		}
 		else
 		{
-			SceneManager.LoadScene("MainScene");
+			UImanager.Instance.LoadResult(0);
+			//SceneManager.LoadScene("MainScene");
 		}
 	}
 		
