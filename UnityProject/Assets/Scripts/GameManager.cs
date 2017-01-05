@@ -340,10 +340,5 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
-
-        if(GUI.Button(new Rect(400, 200, 200, 50), "Draw"))
-        {
-            UserManager.Instance.User.Player.OperationManager.DrawMaterial();
-        }
 	}
 }
