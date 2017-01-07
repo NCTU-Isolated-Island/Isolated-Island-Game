@@ -32,7 +32,8 @@ public class PlayerController : MonoBehaviour {
 
 		if(Input.GetKeyDown(KeyCode.P))
 		{
-			PlaceMaterial(1);
+			StartPlaceDecoration();
+
 		}
 
 		if(Input.GetKeyDown(KeyCode.D))
