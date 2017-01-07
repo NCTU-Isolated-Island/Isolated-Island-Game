@@ -41,6 +41,12 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	void Update()
+	{
+
+
+	}
+
 	void OnEnable()
 	{
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
@@ -178,7 +184,6 @@ public class GameManager : MonoBehaviour {
 
 			UserDecoration.Add(vessel.OwnerPlayerID,decorationDic);
 			VesselDecoration.Add(vessel.VesselID,decorationDic);
-
 		}
 	}
 
@@ -215,7 +220,8 @@ public class GameManager : MonoBehaviour {
 
 		if(changeType == DataChangeType.Add)
 		{
-			
+			if(!user)
+				print("ABC");
 			GameObject dec = Instantiate(
 				ElementModel[decoration.Material.MaterialID],
 				user.transform
@@ -332,6 +338,10 @@ public class GameManager : MonoBehaviour {
 
 	#endregion
 
+	internal void InsVesselGO()
+	{
+		
+	}
 
 	void OnGUI()
     {

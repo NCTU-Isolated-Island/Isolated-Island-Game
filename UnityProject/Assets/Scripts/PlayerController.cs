@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
 
 	private bool finishPlacing = false; // 完成放置素材
 	private bool placingMaterial = false; //正在放置素材
+	private float lastTimeClick = -99f ;
 
 	public static PlayerController Instance;
 
@@ -30,10 +31,7 @@ public class PlayerController : MonoBehaviour {
 	{
 
 
-		if(Input.GetMouseButtonDown(0))
-		{
-			CheckIfSelectVessel();
-		}
+		CheckDoubleClick();
 
 		AdjustViewAngle();
 		PinchToZoom();
@@ -91,6 +89,21 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
+	void CheckDoubleClick()
+	{
+		if(Input.GetMouseButtonDown(0))
+		{
+			if((Time.time - lastTimeClick) < 0.25f) 
+			{
+				//Player has double clicked
+				CheckIfSelectVessel();
+
+			}	
+
+			lastTimeClick = Time.time;
+		}
+	}
+
 	void CheckIfSelectVessel()
 	{
 		RaycastHit hitInfo = new RaycastHit();
@@ -102,11 +115,11 @@ public class PlayerController : MonoBehaviour {
 		);
 
 		//Select Vessel
-		if(hit && !GameObject.Equals(hitInfo.transform.gameObject,GameManager.Instance.PlayerGameObject))
+		if(hit && !GameObject.Equals(hitInfo.transform.root.gameObject,GameManager.Instance.PlayerGameObject))
 		{
 			print("Select " + hitInfo.collider.transform.root.name + " Vessel");
 
-			//CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
+			CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
 			UImanager.Instance.GameUI = UImanager.UI.Other_Boat;
 		}
 
@@ -132,11 +145,13 @@ public class PlayerController : MonoBehaviour {
 	public void ToPlayerFarAnchor()
 	{
 		CameraManager.Instance.ToFarAnchor(GameManager.Instance.PlayerGameObject);
+		UImanager.Instance.GameUI = UImanager.UI.Map;
 	}
 
 	public void ToPlayerNearAnchor()
 	{
 		CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+		UImanager.Instance.GameUI = UImanager.UI.Main_Boat;
 	}
 
 
