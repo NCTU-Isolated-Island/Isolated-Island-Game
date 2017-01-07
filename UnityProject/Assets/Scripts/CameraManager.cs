@@ -19,12 +19,13 @@ public class CameraManager : MonoBehaviour {
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-            ToNearAnchor(GameManager.Instance.PlayerGameObject);
-        if (Input.GetKeyDown(KeyCode.S))
-            ToFarAnchor(GameManager.Instance.PlayerGameObject);
-        if (Input.GetKeyDown(KeyCode.W))
-            Zoom(2);
+//        if (Input.GetKeyDown(KeyCode.A))
+//            ToNearAnchor(GameManager.Instance.PlayerGameObject);
+//        if (Input.GetKeyDown(KeyCode.S))
+//            ToFarAnchor(GameManager.Instance.PlayerGameObject);
+//        if (Input.GetKeyDown(KeyCode.W))
+//            Zoom(2);
+
     }
     
     IEnumerator MoveObject(Transform source, Transform target, float overTime)
@@ -62,18 +63,26 @@ public class CameraManager : MonoBehaviour {
 
     public void Zoom (float amount)
     {
-        Vector3 delta = Camera.transform.position - Camera.transform.parent.position;// CameraAnchor position
 
-        if (amount > 0)
-            delta /= amount;
-        else
-            delta *= amount;
+		if(Vector3.Distance(Camera.transform.position,Camera.transform.parent.position) < 5f && amount < 1)
+			return;
+		if(Vector3.Distance(Camera.transform.position,Camera.transform.parent.position) > 50f && amount > 1)
+			return;
 
-        Camera.transform.position = Camera.transform.parent.position + delta;
+		this.transform.position = Vector3.LerpUnclamped(Camera.transform.parent.position,this.transform.position,amount);
+
+//        Vector3 delta = Camera.transform.position - Camera.transform.parent.position;// CameraAnchor position
+//
+//        if (amount > 0)
+//            delta /= amount;
+//        else
+//			delta *= amount;
+//
+//        Camera.transform.position = Camera.transform.parent.position + delta;
     }
 
-    public void CameraRotate (float angle)
+	public void CameraRotate (float amount)
     {
-        Camera.transform.parent.Rotate( new Vector3(0, angle ,0));
+		Camera.transform.parent.Rotate( new Vector3(0, amount , 0));
     }
 }
