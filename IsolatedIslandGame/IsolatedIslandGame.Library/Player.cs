@@ -4,6 +4,7 @@ using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
 using IsolatedIslandGame.Protocol;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace IsolatedIslandGame.Library
@@ -23,6 +24,8 @@ namespace IsolatedIslandGame.Library
         public Vessel Vessel { get; private set; }
         private Dictionary<int, Blueprint> knownBlueprintDictionary;
         public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values; } }
+        private HashSet<int> friendPlayerIDSet;
+        public IEnumerable<int> FriendPlayerIDs { get { return friendPlayerIDSet.ToArray(); } }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -70,6 +73,7 @@ namespace IsolatedIslandGame.Library
             ResponseManager = new PlayerResponseManager(this);
 
             knownBlueprintDictionary = new Dictionary<int, Blueprint>();
+            friendPlayerIDSet = new HashSet<int>();
         }
         public void BindUser(User user)
         {

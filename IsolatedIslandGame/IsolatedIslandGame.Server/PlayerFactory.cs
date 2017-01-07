@@ -23,6 +23,23 @@ namespace IsolatedIslandGame.Server
             playerDictionary = new Dictionary<int, Player>();
             playerGetBlueprintFunctionDictionary = new Dictionary<int, Action<Blueprint>>();
         }
+        public bool ContainsPlayer(int playerID)
+        {
+            return playerDictionary.ContainsKey(playerID);
+        }
+        public bool FindPlayer(int playerID, out Player player)
+        {
+            if(ContainsPlayer(playerID))
+            {
+                player = playerDictionary[playerID];
+                return true;
+            }
+            else
+            {
+                player = null;
+                return false;
+            }
+        }
         public bool PlayerLogin(ServerUser user, ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
         {
             if(FacebookService.LoginCheck(facebookID, accessToken))
@@ -85,7 +102,7 @@ namespace IsolatedIslandGame.Server
         }
         public void PlayerLogout(Player player)
         {
-            if (playerDictionary.ContainsKey(player.PlayerID))
+            if (ContainsPlayer(player.PlayerID))
             {
                 UserFactory.Instance.UserDisconnect(player.User as ServerUser);
             }
@@ -93,7 +110,12 @@ namespace IsolatedIslandGame.Server
 
         public bool PlayerOnline(Player player)
         {
-            if (playerDictionary.ContainsKey(player.PlayerID))
+            Player existedPlayer;
+            if (FindPlayer(player.PlayerID, out existedPlayer))
+            {
+                PlayerOffline(existedPlayer);
+            }
+            if (ContainsPlayer(player.PlayerID))
             {
                 return false;
             }
@@ -108,7 +130,7 @@ namespace IsolatedIslandGame.Server
         }
         public void PlayerOffline(Player player)
         {
-            if (playerDictionary.ContainsKey(player.PlayerID))
+            if (ContainsPlayer(player.PlayerID))
             {
                 DisassemblyPlayer(player);
                 playerDictionary.Remove(player.PlayerID);
