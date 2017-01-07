@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour {
 		Vector3 position;
 		Quaternion rotation;
 
-		GameObject temp = Instantiate(GameManager.Instance.ElementModel[materialID],Vector3.zero,Quaternion.identity) as GameObject;
+		GameObject temp = Instantiate(GameManager.Instance.elementModels[materialID],Vector3.zero,Quaternion.identity) as GameObject;
 		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
 		RaycastHit hitInfo = new RaycastHit();
 
