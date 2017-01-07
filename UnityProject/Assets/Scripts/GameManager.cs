@@ -13,9 +13,10 @@ public class GameManager : MonoBehaviour {
 	public static GameManager Instance; // ASK need to implement standard singleton?
 	public GameObject DefaultShipModel;
 	public List<GameObject> ElementModel;
+	public List<GameObject> ShipModel;
 	public Dictionary<int,GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
 	public Dictionary<int,GameObject> VesselIDGameObject = new Dictionary<int, GameObject>(); //VesselID to GO
-	public Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
+	public Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // PlayerID to decorationID-decorationGO
 	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
 	public GameObject PlayerGameObject;
 
@@ -81,8 +82,10 @@ public class GameManager : MonoBehaviour {
 
 		if(UserManager.Instance.User.Player.GroupType == IsolatedIslandGame.Protocol.GroupType.No)
 		{
-			SceneManager.LoadScene("RegisterScene");
+			//SceneManager.LoadScene("RegisterScene");
+			UImanager.Instance.LoadResult(1);
 
+			//Create Charater by Uimanager ? (probably
 			UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature",IsolatedIslandGame.Protocol.GroupType.B);
 		}
 		else
@@ -106,6 +109,7 @@ public class GameManager : MonoBehaviour {
 			InstantiateUserGameObject();
 			GetPlayerVesselGameObject();
 
+			PlayerController.Instance.gameObject.SetActive(true);
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
 
 		}
@@ -144,10 +148,12 @@ public class GameManager : MonoBehaviour {
 				
 			UserGameObject.Add(vessel.OwnerPlayerID,user);
 			VesselIDGameObject.Add(vessel.VesselID,user);
+			user.name = "OwnerID: " + vessel.OwnerPlayerID;
+
 
 			foreach(Decoration decoration in vessel.Decorations)
 			{	
-				print("DEC: " + decoration.DecorationID);
+				
 				GameObject dec = Instantiate(
 					ElementModel[decoration.Material.MaterialID],
 					user.transform
@@ -170,9 +176,9 @@ public class GameManager : MonoBehaviour {
 				dec.name = "ID: " + decoration.DecorationID;
 			}
 
-
+			UserDecoration.Add(vessel.OwnerPlayerID,decorationDic);
 			VesselDecoration.Add(vessel.VesselID,decorationDic);
-			user.name = "OwnerID: " + vessel.OwnerPlayerID;
+
 		}
 	}
 
@@ -195,6 +201,7 @@ public class GameManager : MonoBehaviour {
 
 	void OnVesselTransformUpdated(int vesselID, float locationX, float locationZ, float rotationEulerAngleY)
 	{
+		print(vesselID + "UPDATED");
 		GameObject user;
 		VesselIDGameObject.TryGetValue(vesselID,out user);
 		user.transform.position = new Vector3(locationX,0f,locationZ);
@@ -205,7 +212,6 @@ public class GameManager : MonoBehaviour {
 	{ 
 		GameObject user;
 		VesselIDGameObject.TryGetValue(vesselID,out user);
-
 
 		if(changeType == DataChangeType.Add)
 		{
@@ -272,10 +278,10 @@ public class GameManager : MonoBehaviour {
 
 			UserGameObject.Add(vessel.OwnerPlayerID,user);
 			VesselIDGameObject.Add(vessel.VesselID,user);
+			user.name = "OwnerID: " + vessel.OwnerPlayerID;
 
 			foreach(Decoration decoration in vessel.Decorations)
 			{	
-				print("DEC: " + decoration.DecorationID);
 				GameObject dec = Instantiate(
 					ElementModel[decoration.Material.MaterialID],
 					user.transform
@@ -299,8 +305,8 @@ public class GameManager : MonoBehaviour {
 			}
 
 
+			UserDecoration.Add(vessel.OwnerPlayerID,decorationDic);
 			VesselDecoration.Add(vessel.VesselID,decorationDic);
-			user.name = "OwnerID: " + vessel.OwnerPlayerID;
 
 		}
 		else if(changeType == DataChangeType.Remove)
@@ -308,8 +314,12 @@ public class GameManager : MonoBehaviour {
 			GameObject user;
 			if(VesselIDGameObject.TryGetValue(vessel.VesselID, out user))
 			{
-				VesselIDGameObject.Remove(vessel.VesselID);
+
 				UserGameObject.Remove(vessel.OwnerPlayerID);
+				VesselIDGameObject.Remove(vessel.VesselID);
+				UserDecoration.Remove(vessel.OwnerPlayerID);
+				VesselDecoration.Remove(vessel.VesselID);
+
 				Destroy(user);
 			}
 		}
@@ -340,5 +350,23 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+	}
+
+	int GroupTypeToInt(GroupType type)
+	{
+		if(type == GroupType.A)
+		{
+			return 1;
+		}
+		if(type == GroupType.B)
+		{
+			return 2;
+		}
+		if(type == GroupType.C)
+		{
+			return 3;
+		}
+
+		return 0;
 	}
 }
