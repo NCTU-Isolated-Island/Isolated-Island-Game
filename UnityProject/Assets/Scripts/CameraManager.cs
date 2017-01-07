@@ -19,12 +19,12 @@ public class CameraManager : MonoBehaviour {
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-            ToNearAnchor(GameManager.Instance.PlayerGameObject);
-        if (Input.GetKeyDown(KeyCode.S))
-            ToFarAnchor(GameManager.Instance.PlayerGameObject);
-        if (Input.GetKeyDown(KeyCode.W))
-            Zoom(2);
+//        if (Input.GetKeyDown(KeyCode.A))
+//            ToNearAnchor(GameManager.Instance.PlayerGameObject);
+//        if (Input.GetKeyDown(KeyCode.S))
+//            ToFarAnchor(GameManager.Instance.PlayerGameObject);
+//        if (Input.GetKeyDown(KeyCode.W))
+//            Zoom(2);
 
     }
     

@@ -30,6 +30,15 @@ public class PlayerController : MonoBehaviour {
 	void Update()
 	{
 
+		if(Input.GetKeyDown(KeyCode.P))
+		{
+			PlaceMaterial(1);
+		}
+
+		if(Input.GetKeyDown(KeyCode.D))
+		{
+			FinishPlaceDecoration();
+		}
 
 		CheckDoubleClick();
 
