@@ -55,7 +55,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 {
                     Blueprint.ElementInfo[] requirements = (Blueprint.ElementInfo[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Requirements];
                     Blueprint.ElementInfo[] products = (Blueprint.ElementInfo[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Products];
-                    subject.ResponseManager.SynthesizeMaterialResponse(returnCode, requirements, products);
+                    subject.TriggerSynthesizeMaterialEvents(requirements, products);
                     return true;
                 }
                 catch (InvalidCastException ex)

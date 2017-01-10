@@ -3,6 +3,5 @@
     public enum PlayerSyncDataCode : byte
     {
         InventoryItemInfoChange,
-        FriendInformationChange
     }
 }

@@ -44,7 +44,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 {
                     int itemID = (int)parameters[(byte)DrawMaterialResponseParameterCode.ItemID];
                     int itemCount = (int)parameters[(byte)DrawMaterialResponseParameterCode.ItemCount];
-                    subject.ResponseManager.DrawMaterialResponse(returnCode, itemID, itemCount);
+                    subject.TriggerDrawMaterialEvents(itemID, itemCount);
                     return true;
                 }
                 catch (InvalidCastException ex)

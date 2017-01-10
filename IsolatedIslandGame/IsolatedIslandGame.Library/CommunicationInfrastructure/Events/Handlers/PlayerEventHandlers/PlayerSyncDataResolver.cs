@@ -34,20 +34,5 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             };
             SendSyncData(PlayerSyncDataCode.InventoryItemInfoChange, parameters);
         }
-        public void SyncFriendInformationChange(DataChangeType changeType, FriendInformation information)
-        {
-            var parameters = new Dictionary<byte, object>
-            {
-                { (byte)SyncFriendInformationChangeParameterCode.DataChangeType, (byte)changeType },
-                { (byte)SyncFriendInformationChangeParameterCode.PlayerID, information.playerInformation.playerID },
-                { (byte)SyncFriendInformationChangeParameterCode.Nickname, information.playerInformation.nickname },
-                { (byte)SyncFriendInformationChangeParameterCode.Signature, information.playerInformation.signature },
-                { (byte)SyncFriendInformationChangeParameterCode.GroupType, (byte)information.playerInformation.groupType },
-                { (byte)SyncFriendInformationChangeParameterCode.VesselID, information.playerInformation.vesselID },
-                { (byte)SyncFriendInformationChangeParameterCode.IsSender, information.isSender },
-                { (byte)SyncFriendInformationChangeParameterCode.IsConfirmed, information.isConfirmed }
-            };
-            SendSyncData(PlayerSyncDataCode.FriendInformationChange, parameters);
-        }
     }
 }

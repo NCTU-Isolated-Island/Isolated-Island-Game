@@ -7,6 +7,5 @@
         Vessel,
         VesselDecorations,
         AllKnownBlueprints,
-        FriendInformations
     }
 }

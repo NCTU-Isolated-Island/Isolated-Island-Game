@@ -2,7 +2,6 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.PlayerResponseHandlers;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
-using System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers
@@ -11,18 +10,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
     {
         protected readonly Dictionary<PlayerOperationCode, ResponseHandler<Player, PlayerOperationCode>> operationTable;
         protected readonly Player player;
-
-        public delegate void DrawMaterialResponseEventHandler(ErrorCode returnCode, Item material, int count);
-        private event DrawMaterialResponseEventHandler onDrawMaterialResponse;
-        public event DrawMaterialResponseEventHandler OnDrawMaterialResponse { add { onDrawMaterialResponse += value; } remove { onDrawMaterialResponse -= value; } }
-
-        public delegate void SynthesizeMaterialResponseEventHandler(ErrorCode returnCode, Blueprint.ElementInfo[] requirements, Blueprint.ElementInfo[] products);
-        private event SynthesizeMaterialResponseEventHandler onSynthesizeMaterialResponse;
-        public event SynthesizeMaterialResponseEventHandler OnSynthesizeMaterialResponse { add { onSynthesizeMaterialResponse += value; } remove { onSynthesizeMaterialResponse -= value; } }
-
-        public delegate void UseBlueprintResponseEventHandler(ErrorCode returnCode, Blueprint blueprint);
-        private event UseBlueprintResponseEventHandler onUseBlueprintResponse;
-        public event UseBlueprintResponseEventHandler OnUseBlueprintResponse { add { onUseBlueprintResponse += value; } remove { onUseBlueprintResponse -= value; } }
 
         public PlayerResponseManager(Player player)
         {
@@ -55,23 +42,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
         internal void SendResponse(PlayerOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
             player.User.ResponseManager.SendPlayerResponse(player, operationCode, errorCode, debugMessage, parameters);
-        }
-
-        internal void DrawMaterialResponse(ErrorCode returnCode, int itemID, int itemCount)
-        {
-            Item item;
-            if (ItemManager.Instance.FindItem(itemID, out item))
-            {
-                onDrawMaterialResponse?.Invoke(returnCode, item, itemCount);
-            }
-        }
-        internal void SynthesizeMaterialResponse(ErrorCode returnCode, Blueprint.ElementInfo[] requirements, Blueprint.ElementInfo[] products)
-        {
-            onSynthesizeMaterialResponse?.Invoke(returnCode, requirements, products);
-        }
-        internal void UseBlueprintResponse(ErrorCode returnCode, Blueprint blueprint)
-        {
-            onUseBlueprintResponse?.Invoke(returnCode, blueprint);
         }
     }
 }
