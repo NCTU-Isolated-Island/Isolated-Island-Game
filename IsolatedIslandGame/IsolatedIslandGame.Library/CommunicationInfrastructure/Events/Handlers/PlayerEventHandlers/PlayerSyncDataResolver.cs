@@ -21,18 +21,33 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             subject.EventManager.SendSyncDataEvent(syncCode, parameters);
         }
 
-        public void SyncInventoryItemInfoChange(InventoryItemInfo info, DataChangeType changeType)
+        public void SyncInventoryItemInfoChange(DataChangeType changeType, InventoryItemInfo info)
         {
             var parameters = new Dictionary<byte, object>
             {
+                { (byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType, (byte)changeType },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.InventoryID, subject.Inventory.InventoryID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.InventoryItemInfoID, info.InventoryItemInfoID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.ItemID, info.Item.ItemID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.ItemCount, info.Count },
-                { (byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex, info.PositionIndex },
-                { (byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType, (byte)changeType }
+                { (byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex, info.PositionIndex }
             };
             SendSyncData(PlayerSyncDataCode.InventoryItemInfoChange, parameters);
+        }
+        public void SyncFriendInformationChange(DataChangeType changeType, FriendInformation information)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncFriendInformationChangeParameterCode.DataChangeType, (byte)changeType },
+                { (byte)SyncFriendInformationChangeParameterCode.PlayerID, information.playerInformation.playerID },
+                { (byte)SyncFriendInformationChangeParameterCode.Nickname, information.playerInformation.nickname },
+                { (byte)SyncFriendInformationChangeParameterCode.Signature, information.playerInformation.signature },
+                { (byte)SyncFriendInformationChangeParameterCode.GroupType, (byte)information.playerInformation.groupType },
+                { (byte)SyncFriendInformationChangeParameterCode.VesselID, information.playerInformation.vesselID },
+                { (byte)SyncFriendInformationChangeParameterCode.IsSender, information.isSender },
+                { (byte)SyncFriendInformationChangeParameterCode.IsConfirmed, information.isConfirmed }
+            };
+            SendSyncData(PlayerSyncDataCode.FriendInformationChange, parameters);
         }
     }
 }

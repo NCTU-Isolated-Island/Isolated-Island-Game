@@ -2,6 +2,7 @@
 {
     public enum SyncVesselDecorationChangeParameterCode : byte
     {
+        DataChangeType,
         VesselID,
         DecorationID,
         MaterialItemID,
@@ -11,6 +12,5 @@
         EulerAngleX,
         EulerAngleY,
         EulerAngleZ,
-        DataChangeType
     }
 }

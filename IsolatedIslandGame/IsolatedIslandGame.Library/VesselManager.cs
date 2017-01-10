@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library
         public IEnumerable<Vessel> Vessels { get { return vesselDictionary.Values; } }
         public int VesselCount { get { return vesselDictionary.Count; } }
 
-        public delegate void VesselChangeEventHandler(Vessel vessel, DataChangeType changeType);
+        public delegate void VesselChangeEventHandler(DataChangeType changeType, Vessel vessel);
         public abstract event VesselChangeEventHandler OnVesselChange;
 
         public abstract event Vessel.VesselTransformUpdatedEventHandler OnVesselTransformUpdated;

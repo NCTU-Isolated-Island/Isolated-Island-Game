@@ -8,8 +8,7 @@ namespace IsolatedIslandGame.Library
     public class Vessel
     {
         public int VesselID { get; private set; }
-        public int OwnerPlayerID { get; private set; }
-        public string Name { get; private set; }
+        public PlayerInformation PlayerInformation { get; private set; }
         public float LocationX { get; private set; }
         public float LocationZ { get; private set; }
         public float RotationEulerAngleY { get; private set; }
@@ -18,7 +17,7 @@ namespace IsolatedIslandGame.Library
         public int DecorationCount { get { return decorationDictionary.Count; } }
         public IEnumerable<Decoration> Decorations { get { return decorationDictionary.Values; } }
 
-        public delegate void DecorationChangeEventHandler(int vesselID, Decoration decoration, DataChangeType changeType);
+        public delegate void DecorationChangeEventHandler(DataChangeType changeType, int vesselID, Decoration decoration);
         private event DecorationChangeEventHandler onDecorationChange;
         public event DecorationChangeEventHandler OnDecorationChange { add { onDecorationChange += value; } remove { onDecorationChange -= value; } }
 
@@ -29,11 +28,10 @@ namespace IsolatedIslandGame.Library
         private event Action<Vessel> onVesselFullDataUpdated;
         public event Action<Vessel> OnVesselFullDataUpdated { add { onVesselFullDataUpdated += value; } remove { onVesselFullDataUpdated -= value; } }
 
-        public Vessel(int vesselID, int ownerPlayerID, string name, float locationX, float locationZ, float rotationEulerAngleY)
+        public Vessel(int vesselID, PlayerInformation playerInformation, float locationX, float locationZ, float rotationEulerAngleY)
         {
             VesselID = vesselID;
-            OwnerPlayerID = ownerPlayerID;
-            Name = name;
+            PlayerInformation = playerInformation;
             LocationX = locationX;
             LocationZ = locationZ;
             RotationEulerAngleY = rotationEulerAngleY;
@@ -43,8 +41,7 @@ namespace IsolatedIslandGame.Library
         public void UpdateFullData(Vessel vessel)
         {
             VesselID = vessel.VesselID;
-            OwnerPlayerID = vessel.OwnerPlayerID;
-            Name = vessel.Name;
+            PlayerInformation = vessel.PlayerInformation;
             LocationX = vessel.LocationX;
             LocationZ = vessel.LocationZ;
             RotationEulerAngleY = vessel.RotationEulerAngleY;
@@ -80,7 +77,7 @@ namespace IsolatedIslandGame.Library
             if (!ContainsDecoration(decoration.DecorationID))
             {
                 decorationDictionary.Add(decoration.DecorationID, decoration);
-                onDecorationChange?.Invoke(VesselID, decoration, DataChangeType.Add);
+                onDecorationChange?.Invoke(DataChangeType.Add, VesselID, decoration);
                 decoration.OnDecorationUpdate += UpdateDecoration;
             }
             else
@@ -94,7 +91,7 @@ namespace IsolatedIslandGame.Library
             {
                 Decoration decoration = decorationDictionary[decorationID];
                 decorationDictionary.Remove(decorationID);
-                onDecorationChange?.Invoke(VesselID, decoration, DataChangeType.Remove);
+                onDecorationChange?.Invoke(DataChangeType.Remove, VesselID, decoration);
                 return true;
             }
             else
@@ -104,7 +101,7 @@ namespace IsolatedIslandGame.Library
         }
         private void UpdateDecoration(Decoration decoration)
         {
-            onDecorationChange?.Invoke(VesselID, decoration, DataChangeType.Update);
+            onDecorationChange?.Invoke(DataChangeType.Update, VesselID, decoration);
         }
     }
 }

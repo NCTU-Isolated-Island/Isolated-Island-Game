@@ -35,5 +35,8 @@ namespace IsolatedIslandGame.Database.MySQL
 
         private MySQL_PlayerKnownBlueprintRepository playerKnownBlueprintRepository = new MySQL_PlayerKnownBlueprintRepository();
         public override PlayerKnownBlueprintRepository PlayerKnownBlueprintRepository { get { return playerKnownBlueprintRepository; } }
+
+        private MySQL_FriendRepository friendRepository = new MySQL_FriendRepository();
+        public override FriendRepository FriendRepository { get { return friendRepository; } }
     }
 }
