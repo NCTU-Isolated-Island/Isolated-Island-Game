@@ -195,7 +195,7 @@ namespace IsolatedIslandGame.Server
             if(player.Vessel == null)
             {
                 Vessel vessel;
-                if(DatabaseService.RepositoryList.VesselRepository.Create(player.PlayerID, player.Nickname, out vessel))
+                if(DatabaseService.RepositoryList.VesselRepository.Create(player, out vessel))
                 {
                     VesselManager.Instance.AddVessel(vessel);
                     player.BindVessel(vessel);

@@ -77,7 +77,7 @@ namespace IsolatedIslandGame.Library
         }
         public void BindVessel(Vessel vessel)
         {
-            if(vessel.OwnerPlayerID == PlayerID)
+            if(vessel.PlayerInformation.playerID == PlayerID)
             {
                 Vessel = vessel;
                 onBindVessel?.Invoke(Vessel);
@@ -110,14 +110,14 @@ namespace IsolatedIslandGame.Library
         }
         public void AddFriend(FriendInformation information)
         {
-            if(ContainsFriend(information.playerID))
+            if(ContainsFriend(information.playerInformation.playerID))
             {
-                friendInformationDictionary[information.playerID] = information;
+                friendInformationDictionary[information.playerInformation.playerID] = information;
                 onFriendInformationChange?.Invoke(DataChangeType.Update, information);
             }
             else
             {
-                friendInformationDictionary.Add(information.playerID, information);
+                friendInformationDictionary.Add(information.playerInformation.playerID, information);
                 onFriendInformationChange?.Invoke(DataChangeType.Add, information);
             }
         }

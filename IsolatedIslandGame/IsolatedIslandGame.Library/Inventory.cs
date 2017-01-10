@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library
 
         public IEnumerable<InventoryItemInfo> ItemInfos { get { return itemInfoDictionary.Values.OrderBy(x => x.PositionIndex); } }
 
-        public delegate void InventoryItemInfoChangeEventHandler(InventoryItemInfo info, DataChangeType changeType);
+        public delegate void InventoryItemInfoChangeEventHandler(DataChangeType changeType, InventoryItemInfo info);
         private event InventoryItemInfoChangeEventHandler onItemInfoChange;
         public event InventoryItemInfoChangeEventHandler OnItemInfoChange { add { onItemInfoChange += value; } remove { onItemInfoChange -= value; } }
 
@@ -81,14 +81,14 @@ namespace IsolatedIslandGame.Library
             {
                 itemInfoDictionary.Add(info.InventoryItemInfoID, info);
                 itemInfos[info.PositionIndex] = info;
-                onItemInfoChange?.Invoke(info, DataChangeType.Add);
+                onItemInfoChange?.Invoke(DataChangeType.Add, info);
             }
             else
             {
                 InventoryItemInfo existedInfo = itemInfoDictionary[info.InventoryItemInfoID];
                 existedInfo.Count = info.Count;
                 existedInfo.PositionIndex = info.PositionIndex;
-                onItemInfoChange?.Invoke(existedInfo, DataChangeType.Update);
+                onItemInfoChange?.Invoke(DataChangeType.Update, existedInfo);
             }
         }
         public void RemoveItemInfo(int itemInfoID)
@@ -98,7 +98,7 @@ namespace IsolatedIslandGame.Library
                 InventoryItemInfo info = itemInfoDictionary[itemInfoID];
                 itemInfoDictionary.Remove(itemInfoID);
                 itemInfos[info.PositionIndex] = null;
-                onItemInfoChange?.Invoke(info, DataChangeType.Remove);
+                onItemInfoChange?.Invoke(DataChangeType.Remove, info);
             }
         }
         public bool AddItem(Item item, int count)
@@ -107,7 +107,7 @@ namespace IsolatedIslandGame.Library
             if (FindInventoryItemInfoByItemID(item.ItemID, out info))
             {
                 info.Count += count;
-                onItemInfoChange?.Invoke(info, DataChangeType.Update);
+                onItemInfoChange?.Invoke(DataChangeType.Update, info);
                 return true;
             }
             else
@@ -119,7 +119,7 @@ namespace IsolatedIslandGame.Library
                     {
                         itemInfoDictionary.Add(info.InventoryItemInfoID, info);
                         itemInfos[info.PositionIndex] = info;
-                        onItemInfoChange?.Invoke(info, DataChangeType.Add);
+                        onItemInfoChange?.Invoke(DataChangeType.Add, info);
                         return true;
                     }
                     else
@@ -149,11 +149,11 @@ namespace IsolatedIslandGame.Library
                         }
                         itemInfos[info.PositionIndex] = null;
                         InventoryItemInfoFactory.Instance?.DeleteItemInfo(info.InventoryItemInfoID);
-                        onItemInfoChange?.Invoke(info, DataChangeType.Remove);
+                        onItemInfoChange?.Invoke(DataChangeType.Remove, info);
                     }
                     else
                     {
-                        onItemInfoChange?.Invoke(info, DataChangeType.Update);
+                        onItemInfoChange?.Invoke(DataChangeType.Update, info);
                     }
                     return true;
                 }

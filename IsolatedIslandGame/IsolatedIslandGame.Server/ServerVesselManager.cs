@@ -20,9 +20,9 @@ namespace IsolatedIslandGame.Server
             if (!ContainsVessel(vessel.VesselID))
             {
                 vesselDictionary.Add(vessel.VesselID, vessel);
-                vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
+                vesselDictionaryByOwnerPlayerID.Add(vessel.PlayerInformation.playerID, vessel);
                 AssemblyVessel(vessel);
-                onVesselChange(vessel, DataChangeType.Add);
+                onVesselChange(DataChangeType.Add, vessel);
             }
         }
 
@@ -60,9 +60,9 @@ namespace IsolatedIslandGame.Server
             {
                 Vessel vessel = vesselDictionary[vesselID];
                 vesselDictionary.Remove(vesselID);
-                vesselDictionaryByOwnerPlayerID.Remove(vessel.OwnerPlayerID);
+                vesselDictionaryByOwnerPlayerID.Remove(vessel.PlayerInformation.playerID);
                 DisassemblyVessel(vessel);
-                onVesselChange(vessel, DataChangeType.Remove);
+                onVesselChange(DataChangeType.Remove, vessel);
                 return true;
             }
             else
@@ -72,7 +72,7 @@ namespace IsolatedIslandGame.Server
         }
         private void InformVesselFullDataUpdated(Vessel vessel)
         {
-            onVesselChange?.Invoke(vessel, DataChangeType.Update);
+            onVesselChange?.Invoke(DataChangeType.Update, vessel);
         }
         private void AssemblyVessel(Vessel vessel)
         {

@@ -1,26 +1,33 @@
 ﻿using IsolatedIslandGame.Database.Repositories;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
 
 namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_VesselRepository : VesselRepository
     {
-        public override bool Create(int ownerPlayerID, string name, out Vessel vessel)
+        public override bool Create(Player player, out Vessel vessel)
         {
             string sqlString = @"INSERT INTO VesselCollection 
-                (OwnerPlayerID,Name) VALUES (@ownerPlayerID,@name) ;
+                (OwnerPlayerID) VALUES (@ownerPlayerID,@name) ;
                 SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("ownerPlayerID", ownerPlayerID);
-                command.Parameters.AddWithValue("name", name);
+                command.Parameters.AddWithValue("ownerPlayerID", player.PlayerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
                     {
                         int vesselID = reader.GetInt32(0);
-                        vessel = new Vessel(vesselID, ownerPlayerID, name, 0, 0, 0);
+                        vessel = new Vessel(vesselID, new PlayerInformation
+                        {
+                            playerID = player.PlayerID,
+                            nickname = player.Nickname,
+                            signature = player.Signature,
+                            groupType = player.GroupType,
+                            vesselID = vesselID
+                        }, 0, 0, 0);
                         return true;
                     }
                     else
@@ -35,8 +42,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             vessel = null;
             string sqlString = @"SELECT  
-                OwnerPlayerID, Name, LocationX, LocationZ, EulerAngleY
-                from VesselCollection WHERE VesselID = @vesselID;";
+                OwnerPlayerID, Nickname, Signature, GroupType, LocationX, LocationZ, EulerAngleY
+                from VesselCollection, PlayerCollection WHERE VesselID = @vesselID AND OwnerPlayerID = PlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@vesselID", vesselID);
@@ -45,11 +52,26 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int ownerPlayerID = reader.GetInt32(0);
-                        string name = reader.GetString(1);
-                        float locationX = reader.GetFloat(2);
-                        float locationZ = reader.GetFloat(3);
-                        float eulerAngleY = reader.GetFloat(4);
-                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleY);
+                        string nickname = reader.GetString(1);
+                        string signature = reader.GetString(2);
+                        GroupType groupType = (GroupType)reader.GetByte(3);
+                        float locationX = reader.GetFloat(4);
+                        float locationZ = reader.GetFloat(5);
+                        float eulerAngleY = reader.GetFloat(6);
+
+                        vessel = new Vessel(
+                            vesselID: vesselID,
+                            playerInformation: new PlayerInformation
+                            {
+                                playerID = ownerPlayerID,
+                                nickname = nickname,
+                                signature = signature,
+                                groupType = groupType,
+                                vesselID = vesselID
+                            },
+                            locationX: locationX,
+                            locationZ: locationZ,
+                            rotationEulerAngleY: eulerAngleY);
                     }
                 }
             }
@@ -71,8 +93,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             vessel = null;
             string sqlString = @"SELECT  
-                VesselID, Name, LocationX, LocationZ, EulerAngleY
-                from VesselCollection WHERE OwnerPlayerID = @ownerPlayerID;";
+                VesselID, Nickname, Signature, GroupType, LocationX, LocationZ, EulerAngleY
+                from VesselCollection, PlayerCollection WHERE OwnerPlayerID = @ownerPlayerID AND OwnerPlayerID = PlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@ownerPlayerID", ownerPlayerID);
@@ -81,11 +103,26 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int vesselID = reader.GetInt32(0);
-                        string name = reader.GetString(1);
-                        float locationX = reader.GetFloat(2);
-                        float locationZ = reader.GetFloat(3);
-                        float eulerAngleY = reader.GetFloat(4);
-                        vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleY);
+                        string nickname = reader.GetString(1);
+                        string signature = reader.GetString(2);
+                        GroupType groupType = (GroupType)reader.GetByte(3);
+                        float locationX = reader.GetFloat(4);
+                        float locationZ = reader.GetFloat(5);
+                        float eulerAngleY = reader.GetFloat(6);
+
+                        vessel = new Vessel(
+                            vesselID: vesselID,
+                            playerInformation: new PlayerInformation
+                            {
+                                playerID = ownerPlayerID,
+                                nickname = nickname,
+                                signature = signature,
+                                groupType = groupType,
+                                vesselID = vesselID
+                            },
+                            locationX: locationX,
+                            locationZ: locationZ,
+                            rotationEulerAngleY: eulerAngleY);
                     }
                 }
             }
@@ -106,11 +143,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override void Update(Vessel vessel)
         {
             string sqlString = @"UPDATE VesselCollection SET 
-                Name = @name, LocationX = @locationX, LocationZ = @locationZ, EulerAngleY = @eulerAngleY
+                LocationX = @locationX, LocationZ = @locationZ, EulerAngleY = @eulerAngleY
                 WHERE VesselID = @vesselID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@name", vessel.Name);
                 command.Parameters.AddWithValue("@locationX", vessel.LocationX);
                 command.Parameters.AddWithValue("@locationZ", vessel.LocationZ);
                 command.Parameters.AddWithValue("@eulerAngleY", vessel.RotationEulerAngleY);

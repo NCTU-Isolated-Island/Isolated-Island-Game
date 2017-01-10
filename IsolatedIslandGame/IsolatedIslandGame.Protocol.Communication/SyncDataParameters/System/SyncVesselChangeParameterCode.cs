@@ -2,12 +2,14 @@
 {
     public enum SyncVesselChangeParameterCode : byte
     {
+        DataChangeType,
         VesselID,
-        OwnerPlayerID,
-        Name,
+        PlayerID,
+        Nickname,
+        Signature,
+        GroupType,
         LocationX,
         LocationZ,
-        EulerAngleY,
-        DataChangeType
+        EulerAngleY
     }
 }

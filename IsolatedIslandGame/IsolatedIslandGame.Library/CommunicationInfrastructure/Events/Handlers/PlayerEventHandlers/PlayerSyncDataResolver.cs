@@ -21,16 +21,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             subject.EventManager.SendSyncDataEvent(syncCode, parameters);
         }
 
-        public void SyncInventoryItemInfoChange(InventoryItemInfo info, DataChangeType changeType)
+        public void SyncInventoryItemInfoChange(DataChangeType changeType, InventoryItemInfo info)
         {
             var parameters = new Dictionary<byte, object>
             {
+                { (byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType, (byte)changeType },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.InventoryID, subject.Inventory.InventoryID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.InventoryItemInfoID, info.InventoryItemInfoID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.ItemID, info.Item.ItemID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.ItemCount, info.Count },
-                { (byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex, info.PositionIndex },
-                { (byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType, (byte)changeType }
+                { (byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex, info.PositionIndex }
             };
             SendSyncData(PlayerSyncDataCode.InventoryItemInfoChange, parameters);
         }

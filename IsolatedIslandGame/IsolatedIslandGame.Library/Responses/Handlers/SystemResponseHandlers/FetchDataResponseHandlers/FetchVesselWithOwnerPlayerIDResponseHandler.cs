@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 6)
+                        if (parameters.Count != 8)
                         {
                             LogService.ErrorFormat(string.Format("FetchVesselWithOwnerPlayerIDResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -43,12 +43,27 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 try
                 {
                     int vesselID = (int)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.VesselID];
-                    int ownerPlayerID = (int)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.OwnerPlayerID];
-                    string ownerName = (string)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Name];
+                    int playerID = (int)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.PlayerID];
+                    string nickname = (string)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Nickname];
+                    string signature = (string)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Signature];
+                    GroupType groupType = (GroupType)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.GroupType];
                     float locationX = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.EulerAngleY];
-                    VesselManager.Instance.AddVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, eulerAngleY));
+
+                    VesselManager.Instance.AddVessel(new Vessel(
+                        vesselID: vesselID,
+                        playerInformation: new PlayerInformation
+                        {
+                            playerID = playerID,
+                            nickname = nickname,
+                            signature = signature,
+                            groupType = groupType,
+                            vesselID = vesselID
+                        }, 
+                        locationX: locationX,
+                        locationZ: locationZ,
+                        rotationEulerAngleY: eulerAngleY));
                     return true;
                 }
                 catch (InvalidCastException ex)
