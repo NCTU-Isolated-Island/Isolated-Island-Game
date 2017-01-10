@@ -164,6 +164,9 @@ namespace IsolatedIslandGame.Server
             };
             playerGetBlueprintFunctionDictionary.Add(player.PlayerID, playerGetBlueprintFunction); ;
             player.OnGetBlueprint += playerGetBlueprintFunction;
+
+            DatabaseService.RepositoryList.FriendRepository.ListOfFriendInformations(player.PlayerID).ForEach(x => player.AddFriend(x));
+            player.OnFriendInformationChange += player.EventManager.SyncDataResolver.SyncFriendInformationChange;
         }
         private void DisassemblyPlayer(Player player)
         {
@@ -184,6 +187,8 @@ namespace IsolatedIslandGame.Server
             Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
             player.OnGetBlueprint -= playerGetBlueprintFunction;
             playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
+
+            player.OnFriendInformationChange -= player.EventManager.SyncDataResolver.SyncFriendInformationChange;
         }
         private void CreateVessel(Player player)
         {
