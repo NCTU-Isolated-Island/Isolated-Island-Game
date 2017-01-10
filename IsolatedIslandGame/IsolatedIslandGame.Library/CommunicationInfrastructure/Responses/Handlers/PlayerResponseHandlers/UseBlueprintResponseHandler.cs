@@ -58,7 +58,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     Blueprint blueprint;
                     if(BlueprintManager.Instance.FindBlueprint(blueprintID, out blueprint))
                     {
-                        subject.TriggerUseBlueprintEvents(blueprint);
+                        subject.ResponseManager.UseBlueprintResponse(returnCode, blueprint);
                         return true;
                     }
                     else

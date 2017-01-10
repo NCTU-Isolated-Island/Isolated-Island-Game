@@ -21,6 +21,7 @@ namespace IsolatedIslandGame.Server
             {
                 vesselDictionary.Add(vessel.VesselID, vessel);
                 vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
+                AssemblyVessel(vessel);
                 onVesselChange(vessel, DataChangeType.Add);
             }
         }
@@ -60,6 +61,7 @@ namespace IsolatedIslandGame.Server
                 Vessel vessel = vesselDictionary[vesselID];
                 vesselDictionary.Remove(vesselID);
                 vesselDictionaryByOwnerPlayerID.Remove(vessel.OwnerPlayerID);
+                DisassemblyVessel(vessel);
                 onVesselChange(vessel, DataChangeType.Remove);
                 return true;
             }
