@@ -12,14 +12,13 @@ public class GameManager : MonoBehaviour
 
 	public static GameManager Instance { get; private set; }
 
-    public GameObject defaultShipModel;
 	public List<GameObject> elementModels;
-    public List<GameObject> shipModels;
+    public List<GameObject> ShipModels;
 
 	private Dictionary<int,GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
     private Dictionary<int,GameObject> VesselIDGameObject = new Dictionary<int, GameObject>(); //VesselID to GO
-    private Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // PlayerID to decorationID-decorationGO
-    private Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
+	public Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // PlayerID to decorationID-decorationGO
+	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
     public GameObject PlayerGameObject { get; private set; }
 
     private bool isInMainScene;
@@ -42,7 +41,6 @@ public class GameManager : MonoBehaviour
 			Destroy(gameObject);
 		}
 		DontDestroyOnLoad(gameObject);
-		defaultShipModel = Resources.Load<GameObject>("ShipGameObject");
 	}
     void Start()
     {
@@ -161,8 +159,11 @@ public class GameManager : MonoBehaviour
             GameObject userVesselGameObject;
             if (VesselIDGameObject.TryGetValue(vesselID, out userVesselGameObject))
             {
-                userVesselGameObject.transform.position = new Vector3(locationX, 0f, locationZ);
-                userVesselGameObject.transform.rotation = Quaternion.Euler(0f, rotationEulerAngleY, 0f);
+				userVesselGameObject.GetComponent<PlayerBehavior>().UpdateLocation
+				(
+					new Vector3(locationX, 0f, locationZ),
+					rotationEulerAngleY
+				);
             }
             else
             {
@@ -243,10 +244,28 @@ public class GameManager : MonoBehaviour
             {
                 case DataChangeType.Add:
                     {
-                        Dictionary<int, GameObject> decorationDictionary = new Dictionary<int, GameObject>();
+                    	Dictionary<int, GameObject> decorationDictionary = new Dictionary<int, GameObject>();
 
-                        GameObject userVesselGameObject = Instantiate(
-                            defaultShipModel,
+						int groupType;
+						switch (vessel.PlayerInformation.groupType) 
+						{
+						case GroupType.A:
+							groupType = 1;
+							break;
+						case GroupType.B:
+							groupType = 2;
+							break;
+						case GroupType.C:
+							groupType = 3;
+							break;
+						default:
+							groupType = 0;
+							break;
+						}
+						
+                        GameObject userVesselGameObject = Instantiate
+						(
+							ShipModels[groupType],
                             new Vector3(vessel.LocationX, 0f, vessel.LocationZ),
                             Quaternion.Euler(0f, vessel.RotationEulerAngleY, 0f)
                         ) as GameObject;
