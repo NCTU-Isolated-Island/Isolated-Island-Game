@@ -10,9 +10,19 @@ public class Test : MonoBehaviour {
 	
 	void Update () {
 
-		transform.position = Vector3.SmoothDamp(transform.position, Target.transform.position, ref vel, 0.3f);
-		transform.rotation = Quaternion.Slerp(transform.rotation, Target.transform.rotation,Time.deltaTime);
+		if(Input.touchCount == 1)
+		{
+			Touch touch = Input.GetTouch(0);
+			Target.transform.Rotate
+			(
+				touch.deltaPosition.y * 0.1f,
+				touch.deltaPosition.x * -0.1f,
+				0,
+				Space.World
+			);
 
+
+		}
 	}
 
 //	IEnumerator Move()

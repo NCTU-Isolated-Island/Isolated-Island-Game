@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
 	public static GameManager Instance { get; private set; }
 
-	public List<GameObject> elementModels;
+	public List<GameObject> elementModels; //Using itemID to sort
     public List<GameObject> ShipModels;
 
 	private Dictionary<int,GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 	public Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // PlayerID to decorationID-decorationGO
 	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
     public GameObject PlayerGameObject { get; private set; }
+	public int PlayerID;
 
     private bool isInMainScene;
 
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
         Far
     }
     private CameraStat cameraStat;
+
+	#region Setup
 
 	void Awake ()
     {
@@ -42,6 +45,7 @@ public class GameManager : MonoBehaviour
 		}
 		DontDestroyOnLoad(gameObject);
 	}
+
     void Start()
     {
         StartCoroutine(SlowUpdate());
@@ -53,6 +57,7 @@ public class GameManager : MonoBehaviour
         VesselManager.Instance.OnVesselDecorationChange += OnVesselDecorationChange;
         VesselManager.Instance.OnVesselChange += OnVesselChange;
     }
+
     void OnDestroy()
 	{
 		UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
@@ -70,6 +75,8 @@ public class GameManager : MonoBehaviour
 			yield return new WaitForSeconds(5f);
 		}
 	}
+
+	#endregion
 
 	void OnPlayerOnline(Player player)
 	{
@@ -103,11 +110,14 @@ public class GameManager : MonoBehaviour
 
             LocationSystem.Instance.StartLocationService();
 			SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
+
             foreach (Vessel vessel in VesselManager.Instance.Vessels)
             {
                 OnVesselChange(DataChangeType.Add, vessel);
             }
+
             GetPlayerVesselGameObject();
+			GetPlayerID();
 
 			PlayerController.Instance.gameObject.SetActive(true);
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
@@ -149,13 +159,17 @@ public class GameManager : MonoBehaviour
         }
 	}
 
+	void GetPlayerID()
+	{
+		PlayerID = UserManager.Instance.User.Player.PlayerID;
+	}
+
 	#region Vessel
 
 	void OnVesselTransformUpdated(int vesselID, float locationX, float locationZ, float rotationEulerAngleY)
 	{
         if(isInMainScene)
         {
-            print(vesselID + "UPDATED");
             GameObject userVesselGameObject;
             if (VesselIDGameObject.TryGetValue(vesselID, out userVesselGameObject))
             {
@@ -175,7 +189,7 @@ public class GameManager : MonoBehaviour
 	void OnVesselDecorationChange(DataChangeType changeType, int vesselID, Decoration decoration)
 	{
         if (isInMainScene)
-        {
+		{
             GameObject userVesselGameObject;
             if (VesselIDGameObject.TryGetValue(vesselID, out userVesselGameObject) && VesselDecoration.ContainsKey(vesselID))
             {
@@ -190,11 +204,20 @@ public class GameManager : MonoBehaviour
 
                             decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
                             decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
-                            decorationGameObject.name = string.Format("ID: {0}", decoration.DecorationID);
+							decorationGameObject.name = decoration.DecorationID.ToString();
+
                             if (!VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
                             {
+								//Find OwnerPlayerID by VesselID
+								Vessel v;
+								VesselManager.Instance.FindVessel(vesselID,out v);
+
                                 VesselDecoration[vesselID].Add(decoration.DecorationID, decorationGameObject);
-                            }
+
+							//TODO for some reason UserDecoration[v.PlayerInformation.playerID] already
+							// contain key "decoration.DecorationID"
+
+						   }
                             else
                             {
                                 Debug.LogFormat("Add Decoration to Vessel Fail, Decoration Already Existed, VesselID: {0}, DecorationID: {1}", vesselID, decoration.DecorationID);
@@ -204,8 +227,15 @@ public class GameManager : MonoBehaviour
                     case DataChangeType.Remove:
                         {
                             if (VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
-                            {
-                                Destroy(VesselDecoration[vesselID][decoration.DecorationID]);
+							{
+								//Find OwnerPlayerID by VesselID
+								Vessel v;
+								VesselManager.Instance.FindVessel(vesselID,out v);
+								
+	                            Destroy(VesselDecoration[vesselID][decoration.DecorationID]);
+									
+								UserDecoration[v.PlayerInformation.playerID].Remove(decoration.DecorationID);
+								VesselDecoration[vesselID].Remove(decoration.DecorationID);
                             }
                             else
                             {
@@ -269,6 +299,7 @@ public class GameManager : MonoBehaviour
                             new Vector3(vessel.LocationX, 0f, vessel.LocationZ),
                             Quaternion.Euler(0f, vessel.RotationEulerAngleY, 0f)
                         ) as GameObject;
+					
                         userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.PlayerInformation.playerID);
 
                         foreach (Decoration decoration in vessel.Decorations)
@@ -282,7 +313,7 @@ public class GameManager : MonoBehaviour
 
                                 decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
                                 decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
-                                decorationGameObject.name = "ID: " + decoration.DecorationID;
+								decorationGameObject.name = decoration.DecorationID.ToString();
 
                                 decorationDictionary.Add(decoration.DecorationID, decorationGameObject);
                             }
@@ -322,27 +353,35 @@ public class GameManager : MonoBehaviour
 
 	#endregion
 
-	internal void InsVesselGO()
-	{
-		
-	}
 
 	void OnGUI()
     {
-        if(UserManager.Instance.User.Player != null && UserManager.Instance.User.Player.Inventory != null)
-        {
-            foreach (InventoryItemInfo info in UserManager.Instance.User.Player.Inventory.ItemInfos)
-            {
-                GUILayout.Label(info.Item.ItemName + " : " + info.Count + " ID: " + info.Item.ItemID);
-            }
-            foreach(Vessel vessel in VesselManager.Instance.Vessels)
-            {
-                GUILayout.Label(string.Format("VesselName: {0}", vessel.PlayerInformation.nickname));
-                foreach (Decoration decoration in vessel.Decorations)
-                {
-                    GUILayout.Label(string.Format("DecorationID: {0}, MaterialName: {1}", decoration.DecorationID, decoration.Material.ItemName));
-                }
-            }
-        }
+//        if(UserManager.Instance.User.Player != null && UserManager.Instance.User.Player.Inventory != null)
+//        {
+//            foreach (InventoryItemInfo info in UserManager.Instance.User.Player.Inventory.ItemInfos)
+//            {
+//                GUILayout.Label(info.Item.ItemName + " : " + info.Count + " ID: " + info.Item.ItemID);
+//            }
+//            foreach(Vessel vessel in VesselManager.Instance.Vessels)
+//            {
+//                GUILayout.Label(string.Format("VesselName: {0}", vessel.PlayerInformation.nickname));
+//                foreach (Decoration decoration in vessel.Decorations)
+//                {
+//                    GUILayout.Label(string.Format("DecorationID: {0}, MaterialName: {1}", decoration.DecorationID, decoration.Material.ItemName));
+//                }
+//            }
+//        }
+		GUI.contentColor = Color.black;
+
+		foreach(Dictionary<int,GameObject> vessel in UserDecoration.Values)
+		{
+			
+			foreach(KeyValuePair<int,GameObject> decoration in vessel)
+			{
+				GUILayout.Label("ID: " + decoration.Key);
+			}
+
+			GUILayout.Label("------------");
+		}
 	}
 }
