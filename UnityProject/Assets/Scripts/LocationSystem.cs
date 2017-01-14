@@ -69,7 +69,7 @@ public class LocationSystem : MonoBehaviour {
 	public Vector3 GetInGameCoordinate()
 	{
 		//FOR DEVELOP
-		if(Input.location.status != LocationServiceStatus.Running)
+		if(Input.location.status != LocationServiceStatus.Running || true)
 		{
 			return new Vector3(TestLocation.transform.position.x,0f,TestLocation.transform.position.z);
 //			return Vector3.one;
