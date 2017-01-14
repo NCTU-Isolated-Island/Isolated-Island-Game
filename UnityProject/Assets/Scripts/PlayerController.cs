@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour {
 
 	public static PlayerController Instance;
 
+	public enum Mode{ PlacingMaterial,Default}
+	public Mode CurrentMode;
+	public GameObject CurrentSelectDecoration;
+
 	void Awake()
 	{
 		if(Instance == null){
@@ -26,6 +30,7 @@ public class PlayerController : MonoBehaviour {
 
 		//After Setting Up, Deactivate PlayerController, and wait for into MainScene
 		gameObject.SetActive(false);
+
 	}
 	void Update()
 	{
@@ -39,6 +44,11 @@ public class PlayerController : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.D))
 		{
 			FinishPlaceDecoration();
+		}
+
+		if(Input.GetMouseButtonDown(0))
+		{
+			SelectDecoration();
 		}
 
 		CheckDoubleClick();
@@ -164,6 +174,50 @@ public class PlayerController : MonoBehaviour {
 		UImanager.Instance.GameUI = UImanager.UI.Main_Boat;
 	}
 
+	void SelectDecoration()
+	{
+		
+
+		RaycastHit hitInfo = new RaycastHit();
+
+		bool hit = Physics.Raycast(
+			Camera.main.ScreenPointToRay(Input.mousePosition),
+			out hitInfo,
+			99999f,
+			LayerMask.GetMask("Decoration")
+		);
+
+		if(hit)
+		{
+			
+			if(CurrentSelectDecoration)
+			{
+				//先把之前的Decoration變回不透明
+				foreach(UnityEngine.Material entry in CurrentSelectDecoration.GetComponent<MeshRenderer>().materials)
+				{
+					entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 1f);
+				}
+			}
+
+
+			CurrentSelectDecoration = hitInfo.transform.gameObject;
+
+			//半透明效果 Material的Rendering Mode必須要調成Transparent 
+			foreach(UnityEngine.Material entry in CurrentSelectDecoration.GetComponent<MeshRenderer>().materials)
+			{
+				entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 0.5f);
+			}
+
+		}
+		else
+		{
+			//CurrentSelectDecoration = null;
+
+
+		}
+			
+
+	}
 
 
 	void PinchToZoom()
@@ -191,6 +245,22 @@ public class PlayerController : MonoBehaviour {
 
 		}
 	}
+
+	public void RemoveAllDecoration()
+	{
+		Vessel vessel;
+		VesselManager.Instance.FindVesselByOwnerPlayerID(UserManager.Instance.User.Player.PlayerID,out vessel);
+
+		foreach(Decoration entry in vessel.Decorations)
+		{
+			
+
+			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(entry.DecorationID);
+		}
+
+
+	}
+
 //
 //	//Still Have Bugs
 //	void TwoFingersRotate()
