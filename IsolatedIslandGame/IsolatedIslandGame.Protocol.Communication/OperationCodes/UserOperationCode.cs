@@ -5,6 +5,7 @@
         FetchData,
         PlayerOperation,
         SystemOperation,
-        Login
+        Login,
+        PlayerIDLogin
     }
 }

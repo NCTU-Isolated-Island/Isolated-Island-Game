@@ -8,50 +8,50 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_FriendRepository : FriendRepository
     {
-        public override void AddFriend(int senderPlayerID, int receiverPlayerID)
+        public override void AddFriend(int inviterPlayerID, int accepterPlayerID)
         {
             string sqlString = @"INSERT INTO FriendCollection 
-                (SenderPlayerID,ReceiverPlayerID,IsConfirmed) VALUES (@senderPlayerID,@receiverPlayerID,@isConfirmed);";
+                (InviterPlayerID,AccepterPlayerID,IsConfirmed) VALUES (@inviterPlayerID,@accepterPlayerID,@isConfirmed);";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@senderPlayerID", senderPlayerID);
-                command.Parameters.AddWithValue("@receiverPlayerID", receiverPlayerID);
+                command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
+                command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
                 command.Parameters.AddWithValue("@isConfirmed", false);
                 if (command.ExecuteNonQuery() <= 0)
                 {
-                    LogService.Error($"MySQL_FriendRepository AddFriend Error SenderPlayerID: {senderPlayerID}, ReceiverPlayerID: {receiverPlayerID}");
+                    LogService.Error($"MySQL_FriendRepository AddFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
                 }
             }
         }
 
-        public override void ConfirmFriend(int senderPlayerID, int receiverPlayerID)
+        public override void ConfirmFriend(int inviterPlayerID, int accepterPlayerID)
         {
             string sqlString = @"UPDATE FriendCollection SET 
                 IsConfirmed = @isConfirmed
-                WHERE SenderPlayerID = @senderPlayerID AND ReceiverPlayerID = @receiverPlayerID;";
+                WHERE InviterPlayerID = @inviterPlayerID AND AccepterPlayerID = @accepterPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@isConfirmed", true);
-                command.Parameters.AddWithValue("@senderPlayerID", senderPlayerID);
-                command.Parameters.AddWithValue("@receiverPlayerID", receiverPlayerID);
+                command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
+                command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
-                    LogService.Error($"MySQL_FriendRepository ConfirmFriend Error SenderPlayerID: {senderPlayerID}, ReceiverPlayerID: {receiverPlayerID}");
+                    LogService.Error($"MySQL_FriendRepository ConfirmFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
                 }
             }
         }
 
-        public override void DeleteFriend(int senderPlayerID, int receiverPlayerID)
+        public override void DeleteFriend(int inviterPlayerID, int accepterPlayerID)
         {
             string sqlString = @"DELETE FROM FriendCollection 
-                WHERE (SenderPlayerID = @senderPlayerID AND ReceiverPlayerID = @receiverPlayerID) OR (SenderPlayerID = @receiverPlayerID AND ReceiverPlayerID = @senderPlayerID);";
+                WHERE (InviterPlayerID = @inviterPlayerID AND AccepterPlayerID = @accepterPlayerID) OR (InviterPlayerID = @accepterPlayerID AND AccepterPlayerID = @inviterPlayerID);";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@senderPlayerID", senderPlayerID);
-                command.Parameters.AddWithValue("@receiverPlayerID", receiverPlayerID);
+                command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
+                command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
-                    LogService.Error($"MySQL_FriendRepository DeleteFriend Error SenderPlayerID: {senderPlayerID}, ReceiverPlayerID: {receiverPlayerID}");
+                    LogService.Error($"MySQL_FriendRepository DeleteFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
                 }
             }
         }
@@ -59,9 +59,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override List<FriendInformation> ListOfFriendInformations(int playerID)
         {
             List<FriendInformation> friendInformations = new List<FriendInformation>();
-            string sqlString = @"SELECT ReceiverPlayerID, IsConfirmed, Signature, Nickname, GroupType, VesselID 
+            string sqlString = @"SELECT AccepterPlayerID, IsConfirmed, Signature, Nickname, GroupType, VesselID 
                 from FriendCollection, PlayerCollection, Vesselcollection
-                WHERE SenderPlayerID = @playerID AND ReceiverPlayerID = PlayerID AND ReceiverPlayerID = OwnerPlayerID;";
+                WHERE InviterPlayerID = @playerID AND AccepterPlayerID = PlayerID AND AccepterPlayerID = OwnerPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@playerID", playerID);
@@ -86,15 +86,15 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 groupType = groupType,
                                 vesselID = vesselID
                             },
-                            isSender = true,
+                            isInviter = true,
                             isConfirmed = isConfirmed
                         });
                     }
                 }
             }
-            sqlString = @"SELECT SenderPlayerID, IsConfirmed, Signature, Nickname, GroupType, VesselID 
+            sqlString = @"SELECT InviterPlayerID, IsConfirmed, Signature, Nickname, GroupType, VesselID 
                 from FriendCollection, PlayerCollection, Vesselcollection
-                WHERE ReceiverPlayerID = @playerID AND SenderPlayerID = PlayerID AND SenderPlayerID = OwnerPlayerID;";
+                WHERE AccepterPlayerID = @playerID AND InviterPlayerID = PlayerID AND InviterPlayerID = OwnerPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@playerID", playerID);
@@ -119,7 +119,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 groupType = groupType,
                                 vesselID = vesselID
                             },
-                            isSender = false,
+                            isInviter = false,
                             isConfirmed = isConfirmed
                         });
                     }

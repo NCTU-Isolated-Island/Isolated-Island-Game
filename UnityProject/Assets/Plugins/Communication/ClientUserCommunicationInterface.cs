@@ -4,6 +4,7 @@ using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
+using System;
 
 namespace IsolatedIslandGame.Client.Communication
 {
@@ -57,6 +58,14 @@ namespace IsolatedIslandGame.Client.Communication
         }
 
         public override bool Login(ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
+        {
+            LogService.FatalFormat("ClientUser Login ");
+            debugMessage = "ClientUser Login";
+            errorCode = ErrorCode.InvalidOperation;
+            return false;
+        }
+
+        public override bool PlayerIDLogin(int playerID, string password, out string debugMessage, out ErrorCode errorCode)
         {
             LogService.FatalFormat("ClientUser Login ");
             debugMessage = "ClientUser Login";

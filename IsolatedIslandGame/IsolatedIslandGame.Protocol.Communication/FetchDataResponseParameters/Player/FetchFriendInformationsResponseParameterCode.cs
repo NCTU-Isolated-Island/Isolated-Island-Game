@@ -7,7 +7,7 @@
         Signature,
         GroupType,
         VesselID,
-        IsSender,
+        IsInviter,
         IsConfirmed
     }
 }

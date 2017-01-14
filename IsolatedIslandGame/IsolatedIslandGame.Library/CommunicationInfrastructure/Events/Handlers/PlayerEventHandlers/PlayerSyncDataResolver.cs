@@ -44,7 +44,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncFriendInformationChangeParameterCode.Signature, information.playerInformation.signature },
                 { (byte)SyncFriendInformationChangeParameterCode.GroupType, (byte)information.playerInformation.groupType },
                 { (byte)SyncFriendInformationChangeParameterCode.VesselID, information.playerInformation.vesselID },
-                { (byte)SyncFriendInformationChangeParameterCode.IsSender, information.isSender },
+                { (byte)SyncFriendInformationChangeParameterCode.IsInviter, information.isInviter },
                 { (byte)SyncFriendInformationChangeParameterCode.IsConfirmed, information.isConfirmed }
             };
             SendSyncData(PlayerSyncDataCode.FriendInformationChange, parameters);

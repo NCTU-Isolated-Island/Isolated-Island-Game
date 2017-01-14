@@ -10,6 +10,9 @@
         RemoveDecorationFromVessel,
         UpdateDecorationOnVessel,
         SynthesizeMaterial,
-        UseBlueprint
+        UseBlueprint,
+        InviteFriend,
+        AcceptFriend,
+        DeleteFriend
     }
 }

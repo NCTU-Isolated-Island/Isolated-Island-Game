@@ -1,8 +1,11 @@
 ﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Server.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace IsolatedIslandGame.Server
 {
@@ -96,6 +99,41 @@ namespace IsolatedIslandGame.Server
             else
             {
                 debugMessage = "facebook login fail";
+                errorCode = ErrorCode.Fail;
+                return false;
+            }
+        }
+        public bool PlayerLoginWithPlayerID(ServerUser user, int playerID, string password, out string debugMessage, out ErrorCode errorCode)
+        {
+            if (HashPassword(password) == HashPassword(SystemConfiguration.Instance.DatabasePassword))
+            {
+                debugMessage = null;
+                errorCode = ErrorCode.NoError;
+                Player player;
+                if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player))
+                {
+                    debugMessage = $"Player not in PlayerRepository, PlayerID: {playerID}";
+                    errorCode = ErrorCode.Fail;
+                    return false;
+                }
+                else
+                {
+                    player.BindUser(user);
+                    if (PlayerOnline(player))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        debugMessage = string.Format("PlayerID: {0} already Logined from IP: {1}", player.PlayerID, player.LastConnectedIPAddress?.ToString() ?? "");
+                        errorCode = ErrorCode.AlreadyExisted;
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                debugMessage = "playerID login fail";
                 errorCode = ErrorCode.Fail;
                 return false;
             }
@@ -201,6 +239,12 @@ namespace IsolatedIslandGame.Server
                     player.BindVessel(vessel);
                 }
             }
+        }
+        public string HashPassword(string password)
+        {
+            SHA512 sha512 = new SHA512CryptoServiceProvider();
+            string passwordHash = Convert.ToBase64String(sha512.ComputeHash(Encoding.Default.GetBytes(password)));
+            return passwordHash;
         }
     }
 }

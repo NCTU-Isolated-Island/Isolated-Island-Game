@@ -52,5 +52,9 @@ namespace IsolatedIslandGame.Server
         {
             return PlayerFactory.Instance.PlayerLogin(serverUser, facebookID, accessToken, out debugMessage, out errorCode);
         }
+        public override bool PlayerIDLogin(int playerID, string password, out string debugMessage, out ErrorCode errorCode)
+        {
+            return PlayerFactory.Instance.PlayerLoginWithPlayerID(serverUser, playerID, password, out debugMessage, out errorCode);
+        }
     }
 }

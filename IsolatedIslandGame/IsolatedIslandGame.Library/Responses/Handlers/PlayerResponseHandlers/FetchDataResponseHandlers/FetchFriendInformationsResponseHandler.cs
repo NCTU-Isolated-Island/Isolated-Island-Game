@@ -47,7 +47,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     string signature = (string)parameters[(byte)FetchFriendInformationsResponseParameterCode.Signature];
                     GroupType groupType = (GroupType)parameters[(byte)FetchFriendInformationsResponseParameterCode.GroupType];
                     int vesselID = (int)parameters[(byte)FetchFriendInformationsResponseParameterCode.VesselID];
-                    bool isSender = (bool)parameters[(byte)FetchFriendInformationsResponseParameterCode.IsSender];
+                    bool isInviter = (bool)parameters[(byte)FetchFriendInformationsResponseParameterCode.IsInviter];
                     bool isConfirmed = (bool)parameters[(byte)FetchFriendInformationsResponseParameterCode.IsConfirmed];
 
                     subject.AddFriend(new FriendInformation
@@ -60,7 +60,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             groupType = groupType,
                             vesselID = vesselID,
                         },
-                        isSender = isSender,
+                        isInviter = isInviter,
                         isConfirmed = isConfirmed
                     });
                     return true;

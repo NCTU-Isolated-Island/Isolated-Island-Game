@@ -26,7 +26,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             { (byte)FetchFriendInformationsResponseParameterCode.Signature, information.playerInformation.signature },
                             { (byte)FetchFriendInformationsResponseParameterCode.GroupType, (byte)information.playerInformation.groupType },
                             { (byte)FetchFriendInformationsResponseParameterCode.VesselID, information.playerInformation.vesselID },
-                            { (byte)FetchFriendInformationsResponseParameterCode.IsSender, information.isSender },
+                            { (byte)FetchFriendInformationsResponseParameterCode.IsInviter, information.isInviter },
                             { (byte)FetchFriendInformationsResponseParameterCode.IsConfirmed, information.isConfirmed }
                         };
                         SendResponse(fetchCode, result);
