@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class SyncVesselChangeHandler : SyncDataHandler<SystemManager, SystemSyncDataCode>
     {
-        public SyncVesselChangeHandler(SystemManager subject) : base(subject, 7)
+        public SyncVesselChangeHandler(SystemManager subject) : base(subject, 9)
         {
         }
         internal override bool Handle(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -17,15 +17,29 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             {
                 try
                 {
+                    DataChangeType changeType = (DataChangeType)parameters[(byte)SyncVesselChangeParameterCode.DataChangeType];
                     int vesselID = (int)parameters[(byte)SyncVesselChangeParameterCode.VesselID];
-                    int ownerPlayerID = (int)parameters[(byte)SyncVesselChangeParameterCode.OwnerPlayerID];
-                    string name = (string)parameters[(byte)SyncVesselChangeParameterCode.Name];
+                    int playerID = (int)parameters[(byte)SyncVesselChangeParameterCode.PlayerID];
+                    string nickname = (string)parameters[(byte)SyncVesselChangeParameterCode.Nickname];
+                    string signature = (string)parameters[(byte)SyncVesselChangeParameterCode.Signature];
+                    GroupType groupType = (GroupType)parameters[(byte)SyncVesselChangeParameterCode.GroupType];
                     float locationX = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleY];
-                    DataChangeType changeType = (DataChangeType)parameters[(byte)SyncVesselChangeParameterCode.DataChangeType];
 
-                    Vessel vessel = new Vessel(vesselID, ownerPlayerID, name, locationX, locationZ, eulerAngleY);
+                    Vessel vessel = new Vessel(
+                        vesselID: vesselID, 
+                        playerInformation: new PlayerInformation
+                        {
+                            playerID = playerID,
+                            nickname = nickname,
+                            signature = signature,
+                            groupType = groupType,
+                            vesselID = vesselID
+                        },
+                        locationX: locationX,
+                        locationZ: locationZ,
+                        rotationEulerAngleY: eulerAngleY);
                     switch(changeType)
                     {
                         case DataChangeType.Add:

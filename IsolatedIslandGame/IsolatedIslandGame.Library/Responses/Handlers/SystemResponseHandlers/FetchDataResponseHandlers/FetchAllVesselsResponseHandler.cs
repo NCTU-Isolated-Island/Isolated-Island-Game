@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 6)
+                        if (parameters.Count != 8)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllVesselsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -43,12 +43,27 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 try
                 {
                     int vesselID = (int)parameters[(byte)FetchAllVesselsResponseParameterCode.VesselID];
-                    int ownerPlayerID = (int)parameters[(byte)FetchAllVesselsResponseParameterCode.OwnerPlayerID];
-                    string ownerName = (string)parameters[(byte)FetchAllVesselsResponseParameterCode.Name];
+                    int playerID = (int)parameters[(byte)FetchAllVesselsResponseParameterCode.PlayerID];
+                    string nickname = (string)parameters[(byte)FetchAllVesselsResponseParameterCode.Nickname];
+                    string signature = (string)parameters[(byte)FetchAllVesselsResponseParameterCode.Signature];
+                    GroupType groupType = (GroupType)parameters[(byte)FetchAllVesselsResponseParameterCode.GroupType];
                     float locationX = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.EulerAngleY];
-                    VesselManager.Instance.AddVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, eulerAngleY));
+
+                    VesselManager.Instance.AddVessel(new Vessel(
+                        vesselID: vesselID,
+                        playerInformation: new PlayerInformation
+                        {
+                            playerID = playerID,
+                            nickname = nickname,
+                            signature = signature,
+                            groupType = groupType,
+                            vesselID = vesselID
+                        },
+                        locationX: locationX,
+                        locationZ: locationZ,
+                        rotationEulerAngleY: eulerAngleY));
                     return true;
                 }
                 catch (InvalidCastException ex)

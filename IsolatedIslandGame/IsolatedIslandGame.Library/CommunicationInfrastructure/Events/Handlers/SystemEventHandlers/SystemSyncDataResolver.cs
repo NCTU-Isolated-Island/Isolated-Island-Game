@@ -22,17 +22,19 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             subject.EventManager.SendSyncDataEvent(syncCode, parameters);
         }
 
-        public void SyncVesselChange(Vessel vessel, DataChangeType changeType)
+        public void SyncVesselChange(DataChangeType changeType, Vessel vessel)
         {
             var parameters = new Dictionary<byte, object>
             {
+                { (byte)SyncVesselChangeParameterCode.DataChangeType, (byte)changeType },
                 { (byte)SyncVesselChangeParameterCode.VesselID, vessel.VesselID },
-                { (byte)SyncVesselChangeParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
-                { (byte)SyncVesselChangeParameterCode.Name, vessel.Name },
+                { (byte)SyncVesselChangeParameterCode.PlayerID, vessel.PlayerInformation.playerID },
+                { (byte)SyncVesselChangeParameterCode.Nickname, vessel.PlayerInformation.nickname },
+                { (byte)SyncVesselChangeParameterCode.Signature, vessel.PlayerInformation.signature },
+                { (byte)SyncVesselChangeParameterCode.GroupType, (byte)vessel.PlayerInformation.groupType },
                 { (byte)SyncVesselChangeParameterCode.LocationX, vessel.LocationX },
                 { (byte)SyncVesselChangeParameterCode.LocationZ, vessel.LocationZ },
-                { (byte)SyncVesselChangeParameterCode.EulerAngleY, vessel.RotationEulerAngleY },
-                { (byte)SyncVesselChangeParameterCode.DataChangeType, (byte)changeType }
+                { (byte)SyncVesselChangeParameterCode.EulerAngleY, vessel.RotationEulerAngleY }
             };
             SendSyncData(SystemSyncDataCode.VesselChange, parameters);
         }
@@ -47,10 +49,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             };
             SendSyncData(SystemSyncDataCode.VesselTransform, parameters);
         }
-        public void SyncVesselDecorationChange(int vesselID, Decoration decoration, DataChangeType changeType)
+        public void SyncVesselDecorationChange(DataChangeType changeType, int vesselID, Decoration decoration)
         {
             var parameters = new Dictionary<byte, object>
             {
+                { (byte)SyncVesselDecorationChangeParameterCode.DataChangeType, (byte)changeType },
                 { (byte)SyncVesselDecorationChangeParameterCode.VesselID, vesselID },
                 { (byte)SyncVesselDecorationChangeParameterCode.DecorationID, decoration.DecorationID },
                 { (byte)SyncVesselDecorationChangeParameterCode.MaterialItemID, decoration.Material.ItemID },
@@ -59,8 +62,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncVesselDecorationChangeParameterCode.PositionZ, decoration.PositionZ },
                 { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleX, decoration.RotationEulerAngleX },
                 { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleY, decoration.RotationEulerAngleY },
-                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleZ, decoration.RotationEulerAngleZ },
-                { (byte)SyncVesselDecorationChangeParameterCode.DataChangeType, (byte)changeType }
+                { (byte)SyncVesselDecorationChangeParameterCode.EulerAngleZ, decoration.RotationEulerAngleZ }
             };
             SendSyncData(SystemSyncDataCode.VesselDecorationChange, parameters);
         }

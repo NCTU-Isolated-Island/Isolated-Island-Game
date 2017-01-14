@@ -3,8 +3,8 @@
     public enum GroupType : byte
     {
         No,
-        A,
-        B,
-        C
+        Animal,
+        Businessman,
+        Farmer
     }
 }

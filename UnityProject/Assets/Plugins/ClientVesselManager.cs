@@ -16,7 +16,7 @@ public class ClientVesselManager : VesselManager
 
     public override void AddVessel(Vessel vessel)
     {
-        if(ContainsVessel(vessel.VesselID) && ContainsVesselWithOwnerPlayerID(vessel.OwnerPlayerID))
+        if(ContainsVessel(vessel.VesselID) && ContainsVesselWithOwnerPlayerID(vessel.PlayerInformation.playerID))
         {
             Vessel existedVessel = vesselDictionary[vessel.VesselID];
             existedVessel.UpdateTransform(vessel.LocationX, vessel.LocationZ, vessel.RotationEulerAngleY);
@@ -24,23 +24,23 @@ public class ClientVesselManager : VesselManager
         else if(ContainsVessel(vessel.VesselID))
         {
             Vessel existedVessel = vesselDictionary[vessel.VesselID];
-            vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
+            vesselDictionaryByOwnerPlayerID.Add(vessel.PlayerInformation.playerID, vessel);
             existedVessel.UpdateFullData(vessel);
         }
-        else if (ContainsVesselWithOwnerPlayerID(vessel.OwnerPlayerID))
+        else if (ContainsVesselWithOwnerPlayerID(vessel.PlayerInformation.playerID))
         {
-            Vessel existedVessel = vesselDictionaryByOwnerPlayerID[vessel.OwnerPlayerID];
+            Vessel existedVessel = vesselDictionaryByOwnerPlayerID[vessel.PlayerInformation.playerID];
             vesselDictionary.Add(vessel.VesselID, vessel);
             existedVessel.UpdateFullData(vessel);
         }
         else
         {
             vesselDictionary.Add(vessel.VesselID, vessel);
-            vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
+            vesselDictionaryByOwnerPlayerID.Add(vessel.PlayerInformation.playerID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
             {
-                onVesselChange(vessel, DataChangeType.Add);
+                onVesselChange(DataChangeType.Add, vessel);
             }
         }
         SystemManager.Instance.OperationManager.FetchDataResolver.FetchVesselDecorations(vessel.VesselID);
@@ -55,12 +55,24 @@ public class ClientVesselManager : VesselManager
         }
         else
         {
-            vessel = new Vessel(vesselID, 0, "", 0, 0, 0);
+            vessel = new Vessel(
+                vesselID: vesselID,
+                playerInformation: new PlayerInformation
+                {
+                    playerID = 0,
+                    nickname = "讀取中",
+                    signature = "讀取中",
+                    groupType = GroupType.No,
+                    vesselID = vesselID
+                },
+                locationX: 0,
+                locationZ: 0,
+                rotationEulerAngleY: 0);
             vesselDictionary.Add(vessel.VesselID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
             {
-                onVesselChange(vessel, DataChangeType.Add);
+                onVesselChange(DataChangeType.Add, vessel);
             }
             SystemManager.Instance.OperationManager.FetchDataResolver.FetchVessel(vesselID);
             return true;
@@ -76,12 +88,24 @@ public class ClientVesselManager : VesselManager
         }
         else
         {
-            vessel = new Vessel(0, ownerPlayerID, "", 0, 0, 0);
-            vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
+            vessel = new Vessel(
+                vesselID: 0,
+                playerInformation: new PlayerInformation
+                {
+                    playerID = ownerPlayerID,
+                    nickname = "讀取中",
+                    signature = "讀取中",
+                    groupType = GroupType.No,
+                    vesselID = 0
+                },
+                locationX: 0,
+                locationZ: 0,
+                rotationEulerAngleY: 0);
+            vesselDictionaryByOwnerPlayerID.Add(vessel.PlayerInformation.playerID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
             {
-                onVesselChange(vessel, DataChangeType.Add);
+                onVesselChange(DataChangeType.Add, vessel);
             }
             SystemManager.Instance.OperationManager.FetchDataResolver.FetchVesselWithOwnerPlayerID(ownerPlayerID);
             return true;
@@ -94,10 +118,10 @@ public class ClientVesselManager : VesselManager
         {
             Vessel vessel = vesselDictionary[vesselID];
             vesselDictionary.Remove(vesselID);
-            vesselDictionaryByOwnerPlayerID.Remove(vessel.OwnerPlayerID);
+            vesselDictionaryByOwnerPlayerID.Remove(vessel.PlayerInformation.playerID);
             if (onVesselChange != null)
             {
-                onVesselChange(vessel, DataChangeType.Remove);
+                onVesselChange(DataChangeType.Remove, vessel);
             }
             DisassemblyVessel(vessel);
             return true;
@@ -124,7 +148,7 @@ public class ClientVesselManager : VesselManager
     {
         if(onVesselChange != null)
         {
-            onVesselChange(vessel, DataChangeType.Update);
+            onVesselChange(DataChangeType.Update, vessel);
         }
     }
     private void InformVesselTransformUpdated(int vesselID, float locationX, float locationY, float rotationEulerAngleY)
@@ -134,11 +158,11 @@ public class ClientVesselManager : VesselManager
             onVesselTransformUpdated(vesselID, locationX, locationY, rotationEulerAngleY);
         }
     }
-    private void InformVesselDecorationChange(int vesselID, Decoration decoration, DataChangeType changeType)
+    private void InformVesselDecorationChange(DataChangeType changeType, int vesselID, Decoration decoration)
     {
         if(onVesselDecorationChange != null)
         {
-            onVesselDecorationChange(vesselID, decoration, changeType);
+            onVesselDecorationChange(changeType, vesselID, decoration);
         }
     }
 }

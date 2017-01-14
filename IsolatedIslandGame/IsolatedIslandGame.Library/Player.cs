@@ -4,6 +4,7 @@ using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
 using IsolatedIslandGame.Protocol;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace IsolatedIslandGame.Library
@@ -23,6 +24,8 @@ namespace IsolatedIslandGame.Library
         public Vessel Vessel { get; private set; }
         private Dictionary<int, Blueprint> knownBlueprintDictionary;
         public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values; } }
+        private Dictionary<int, FriendInformation> friendInformationDictionary;
+        public IEnumerable<FriendInformation> FriendInformations { get { return friendInformationDictionary.Values.ToArray(); } }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -42,18 +45,9 @@ namespace IsolatedIslandGame.Library
         private event Action<Blueprint> onGetBlueprint;
         public event Action<Blueprint> OnGetBlueprint { add { onGetBlueprint += value; } remove { onGetBlueprint -= value; } }
 
-        #region response events
-        public delegate void DrawMaterialEventHandler(Item material, int count);
-        private event DrawMaterialEventHandler onDrawMaterial;
-        public event DrawMaterialEventHandler OnDrawMaterial { add { onDrawMaterial += value; } remove { onDrawMaterial -= value; } }
-
-        public delegate void SynthesizeMaterialEventHandler(Blueprint.ElementInfo[] requirements, Blueprint.ElementInfo[] products);
-        private event SynthesizeMaterialEventHandler onSynthesizeMaterial;
-        public event SynthesizeMaterialEventHandler OnSynthesizeMaterial { add { onSynthesizeMaterial += value; } remove { onSynthesizeMaterial -= value; } }
-
-        private event Action<Blueprint> onUseBlueprint;
-        public event Action<Blueprint> OnUseBlueprint { add { onUseBlueprint += value; } remove { onUseBlueprint -= value; } }
-        #endregion
+        public delegate void FriendInformationChangeEventHandler(DataChangeType changeType, FriendInformation information);
+        private event FriendInformationChangeEventHandler onFriendInformationChange;
+        public event FriendInformationChangeEventHandler OnFriendInformationChange { add { onFriendInformationChange += value; } remove { onFriendInformationChange -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -70,6 +64,7 @@ namespace IsolatedIslandGame.Library
             ResponseManager = new PlayerResponseManager(this);
 
             knownBlueprintDictionary = new Dictionary<int, Blueprint>();
+            friendInformationDictionary = new Dictionary<int, FriendInformation>();
         }
         public void BindUser(User user)
         {
@@ -82,7 +77,7 @@ namespace IsolatedIslandGame.Library
         }
         public void BindVessel(Vessel vessel)
         {
-            if(vessel.OwnerPlayerID == PlayerID)
+            if(vessel.PlayerInformation.playerID == PlayerID)
             {
                 Vessel = vessel;
                 onBindVessel?.Invoke(Vessel);
@@ -109,21 +104,31 @@ namespace IsolatedIslandGame.Library
             }
         }
 
-        internal void TriggerDrawMaterialEvents(int itemID, int itemCount)
+        public bool ContainsFriend(int friendPlayerID)
         {
-            Item item;
-            if(ItemManager.Instance.FindItem(itemID, out item))
+            return friendInformationDictionary.ContainsKey(friendPlayerID);
+        }
+        public void AddFriend(FriendInformation information)
+        {
+            if(ContainsFriend(information.playerInformation.playerID))
             {
-                onDrawMaterial?.Invoke(item, itemCount);
+                friendInformationDictionary[information.playerInformation.playerID] = information;
+                onFriendInformationChange?.Invoke(DataChangeType.Update, information);
+            }
+            else
+            {
+                friendInformationDictionary.Add(information.playerInformation.playerID, information);
+                onFriendInformationChange?.Invoke(DataChangeType.Add, information);
             }
         }
-        internal void TriggerSynthesizeMaterialEvents(Blueprint.ElementInfo[] requirements, Blueprint.ElementInfo[] products)
+        public void RemoveFriend(int friendPlayerID)
         {
-            onSynthesizeMaterial?.Invoke(requirements, products);
-        }
-        internal void TriggerUseBlueprintEvents(Blueprint blueprint)
-        {
-            onUseBlueprint?.Invoke(blueprint);
+            if(ContainsFriend(friendPlayerID))
+            {
+                FriendInformation information = friendInformationDictionary[friendPlayerID];
+                friendInformationDictionary.Remove(friendPlayerID);
+                onFriendInformationChange?.Invoke(DataChangeType.Remove, information);
+            }
         }
     }
 }

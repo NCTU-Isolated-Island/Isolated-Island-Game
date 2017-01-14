@@ -1,14 +1,14 @@
 ﻿using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
-using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System;
+using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.Player;
 using System;
 using System.Collections.Generic;
 
-namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.SystemResponseHandlers.FetchDataResponseHandlers
+namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.PlayerResponseHandlers.FetchDataResponseHandlers
 {
-    class FetchVesselResponseHandler : FetchDataResponseHandler<SystemManager, SystemFetchDataCode>
+    class FetchVesselResponseHandler : FetchDataResponseHandler<Player, PlayerFetchDataCode>
     {
-        public FetchVesselResponseHandler(SystemManager subject) : base(subject)
+        public FetchVesselResponseHandler(Player subject) : base(subject)
         {
         }
 
@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 6)
+                        if (parameters.Count != 8)
                         {
                             LogService.ErrorFormat(string.Format("FetchVesselResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -36,20 +36,44 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             }
         }
 
-        public override bool Handle(SystemFetchDataCode fetchCode, ErrorCode returnCode, string fetchDebugMessage, Dictionary<byte, object> parameters)
+        public override bool Handle(PlayerFetchDataCode fetchCode, ErrorCode returnCode, string fetchDebugMessage, Dictionary<byte, object> parameters)
         {
             if (base.Handle(fetchCode, returnCode, fetchDebugMessage, parameters))
             {
                 try
                 {
                     int vesselID = (int)parameters[(byte)FetchVesselResponseParameterCode.VesselID];
-                    int ownerPlayerID = (int)parameters[(byte)FetchVesselResponseParameterCode.OwnerPlayerID];
-                    string ownerName = (string)parameters[(byte)FetchVesselResponseParameterCode.Name];
+                    int playerID = (int)parameters[(byte)FetchVesselResponseParameterCode.PlayerID];
+                    string nickname = (string)parameters[(byte)FetchVesselResponseParameterCode.Nickname];
+                    string signature = (string)parameters[(byte)FetchVesselResponseParameterCode.Signature];
+                    GroupType groupType = (GroupType)parameters[(byte)FetchVesselResponseParameterCode.GroupType];
                     float locationX = (float)parameters[(byte)FetchVesselResponseParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)FetchVesselResponseParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)FetchVesselResponseParameterCode.EulerAngleY];
-                    VesselManager.Instance.AddVessel(new Vessel(vesselID, ownerPlayerID, ownerName, locationX, locationZ, eulerAngleY));
-                    return true;
+
+                    if(subject.PlayerID == playerID)
+                    {
+                        Vessel vessel = new Vessel(
+                            vesselID: vesselID,
+                            playerInformation: new PlayerInformation
+                            {
+                                playerID = playerID,
+                                nickname = nickname,
+                                signature = signature,
+                                groupType = groupType,
+                                vesselID = vesselID
+                            },
+                            locationX: locationX,
+                            locationZ: locationZ,
+                            rotationEulerAngleY: eulerAngleY);
+                        subject.BindVessel(vessel);
+                        VesselManager.Instance.AddVessel(vessel);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 catch (InvalidCastException ex)
                 {

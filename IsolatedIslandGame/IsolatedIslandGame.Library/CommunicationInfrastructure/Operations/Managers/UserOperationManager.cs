@@ -23,7 +23,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { UserOperationCode.FetchData, FetchDataResolver },
                 { UserOperationCode.PlayerOperation, new PlayerOperationResolver(user) },
                 { UserOperationCode.SystemOperation, new SystemOperationResolver(user) },
-                { UserOperationCode.Login, new LoginHandler(user) }
+                { UserOperationCode.Login, new LoginHandler(user) },
+                { UserOperationCode.PlayerIDLogin, new PlayerIDLoginHandler(user) },
             };
         }
 
@@ -83,6 +84,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)LoginParameterCode.AccessToken, accessToken }
             };
             SendOperation(UserOperationCode.Login, parameters);
+        }
+        public void PlayerIDLogin(int playerID, string password)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)PlayerIDLoginParameterCode.PlayerID, playerID },
+                { (byte)PlayerIDLoginParameterCode.Password, password }
+            };
+            SendOperation(UserOperationCode.PlayerIDLogin, parameters);
         }
     }
 }

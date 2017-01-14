@@ -25,8 +25,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         var result = new Dictionary<byte, object>
                         {
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.VesselID, vessel.VesselID },
-                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
-                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Name, vessel.Name },
+                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.PlayerID, vessel.PlayerInformation.playerID },
+                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Nickname, vessel.PlayerInformation.nickname },
+                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Signature, vessel.PlayerInformation.signature },
+                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.GroupType, (byte)vessel.PlayerInformation.groupType },
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationX, vessel.LocationX },
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationZ, vessel.LocationZ },
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.EulerAngleY, vessel.RotationEulerAngleY }

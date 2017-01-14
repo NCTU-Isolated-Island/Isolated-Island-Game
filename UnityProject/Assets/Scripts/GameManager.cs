@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
 			SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
             foreach (Vessel vessel in VesselManager.Instance.Vessels)
             {
-                OnVesselChange(vessel, DataChangeType.Add);
+                OnVesselChange(DataChangeType.Add, vessel);
             }
             GetPlayerVesselGameObject();
 
@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour
         }
 	}
 
-	void OnVesselDecorationChange(int vesselID, Decoration decoration, DataChangeType changeType)
+	void OnVesselDecorationChange(DataChangeType changeType, int vesselID, Decoration decoration)
 	{
         if (isInMainScene)
         {
@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour
         }
 	}//當船上的裝飾物更新時的回調事件
 
-	void OnVesselChange(Vessel vessel, DataChangeType changeType)
+	void OnVesselChange(DataChangeType changeType, Vessel vessel)
 	{
         if (isInMainScene)
         {
@@ -250,7 +250,7 @@ public class GameManager : MonoBehaviour
                             new Vector3(vessel.LocationX, 0f, vessel.LocationZ),
                             Quaternion.Euler(0f, vessel.RotationEulerAngleY, 0f)
                         ) as GameObject;
-                        userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.OwnerPlayerID);
+                        userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.PlayerInformation.playerID);
 
                         foreach (Decoration decoration in vessel.Decorations)
                         {
@@ -268,12 +268,12 @@ public class GameManager : MonoBehaviour
                                 decorationDictionary.Add(decoration.DecorationID, decorationGameObject);
                             }
                         }
-                        if (!UserGameObject.ContainsKey(vessel.OwnerPlayerID))
-                            UserGameObject.Add(vessel.OwnerPlayerID, userVesselGameObject);
+                        if (!UserGameObject.ContainsKey(vessel.PlayerInformation.playerID))
+                            UserGameObject.Add(vessel.PlayerInformation.playerID, userVesselGameObject);
                         if (!VesselIDGameObject.ContainsKey(vessel.VesselID))
                             VesselIDGameObject.Add(vessel.VesselID, userVesselGameObject);
-                        if (!UserDecoration.ContainsKey(vessel.OwnerPlayerID))
-                            UserDecoration.Add(vessel.OwnerPlayerID, decorationDictionary);
+                        if (!UserDecoration.ContainsKey(vessel.PlayerInformation.playerID))
+                            UserDecoration.Add(vessel.PlayerInformation.playerID, decorationDictionary);
                         if (!VesselDecoration.ContainsKey(vessel.VesselID))
                             VesselDecoration.Add(vessel.VesselID, decorationDictionary);
                     }
@@ -283,9 +283,9 @@ public class GameManager : MonoBehaviour
                         GameObject userVesselGameObject;
                         if (VesselIDGameObject.TryGetValue(vessel.VesselID, out userVesselGameObject))
                         {
-                            UserGameObject.Remove(vessel.OwnerPlayerID);
+                            UserGameObject.Remove(vessel.PlayerInformation.playerID);
                             VesselIDGameObject.Remove(vessel.VesselID);
-                            UserDecoration.Remove(vessel.OwnerPlayerID);
+                            UserDecoration.Remove(vessel.PlayerInformation.playerID);
                             VesselDecoration.Remove(vessel.VesselID);
 
                             Destroy(userVesselGameObject);
@@ -318,7 +318,7 @@ public class GameManager : MonoBehaviour
             }
             foreach(Vessel vessel in VesselManager.Instance.Vessels)
             {
-                GUILayout.Label(string.Format("VesselName: {0}", vessel.Name));
+                GUILayout.Label(string.Format("VesselName: {0}", vessel.PlayerInformation.nickname));
                 foreach (Decoration decoration in vessel.Decorations)
                 {
                     GUILayout.Label(string.Format("DecorationID: {0}, MaterialName: {1}", decoration.DecorationID, decoration.Material.ItemName));

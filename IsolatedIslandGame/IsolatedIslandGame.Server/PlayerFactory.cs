@@ -1,8 +1,11 @@
 ﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Server.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace IsolatedIslandGame.Server
 {
@@ -22,6 +25,23 @@ namespace IsolatedIslandGame.Server
         {
             playerDictionary = new Dictionary<int, Player>();
             playerGetBlueprintFunctionDictionary = new Dictionary<int, Action<Blueprint>>();
+        }
+        public bool ContainsPlayer(int playerID)
+        {
+            return playerDictionary.ContainsKey(playerID);
+        }
+        public bool FindPlayer(int playerID, out Player player)
+        {
+            if(ContainsPlayer(playerID))
+            {
+                player = playerDictionary[playerID];
+                return true;
+            }
+            else
+            {
+                player = null;
+                return false;
+            }
         }
         public bool PlayerLogin(ServerUser user, ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)
         {
@@ -83,9 +103,44 @@ namespace IsolatedIslandGame.Server
                 return false;
             }
         }
+        public bool PlayerLoginWithPlayerID(ServerUser user, int playerID, string password, out string debugMessage, out ErrorCode errorCode)
+        {
+            if (HashPassword(password) == HashPassword(SystemConfiguration.Instance.DatabasePassword))
+            {
+                debugMessage = null;
+                errorCode = ErrorCode.NoError;
+                Player player;
+                if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player))
+                {
+                    debugMessage = $"Player not in PlayerRepository, PlayerID: {playerID}";
+                    errorCode = ErrorCode.Fail;
+                    return false;
+                }
+                else
+                {
+                    player.BindUser(user);
+                    if (PlayerOnline(player))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        debugMessage = string.Format("PlayerID: {0} already Logined from IP: {1}", player.PlayerID, player.LastConnectedIPAddress?.ToString() ?? "");
+                        errorCode = ErrorCode.AlreadyExisted;
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                debugMessage = "playerID login fail";
+                errorCode = ErrorCode.Fail;
+                return false;
+            }
+        }
         public void PlayerLogout(Player player)
         {
-            if (playerDictionary.ContainsKey(player.PlayerID))
+            if (ContainsPlayer(player.PlayerID))
             {
                 UserFactory.Instance.UserDisconnect(player.User as ServerUser);
             }
@@ -93,7 +148,12 @@ namespace IsolatedIslandGame.Server
 
         public bool PlayerOnline(Player player)
         {
-            if (playerDictionary.ContainsKey(player.PlayerID))
+            Player existedPlayer;
+            if (FindPlayer(player.PlayerID, out existedPlayer))
+            {
+                PlayerOffline(existedPlayer);
+            }
+            if (ContainsPlayer(player.PlayerID))
             {
                 return false;
             }
@@ -108,7 +168,7 @@ namespace IsolatedIslandGame.Server
         }
         public void PlayerOffline(Player player)
         {
-            if (playerDictionary.ContainsKey(player.PlayerID))
+            if (ContainsPlayer(player.PlayerID))
             {
                 DisassemblyPlayer(player);
                 playerDictionary.Remove(player.PlayerID);
@@ -142,6 +202,9 @@ namespace IsolatedIslandGame.Server
             };
             playerGetBlueprintFunctionDictionary.Add(player.PlayerID, playerGetBlueprintFunction); ;
             player.OnGetBlueprint += playerGetBlueprintFunction;
+
+            DatabaseService.RepositoryList.FriendRepository.ListOfFriendInformations(player.PlayerID).ForEach(x => player.AddFriend(x));
+            player.OnFriendInformationChange += player.EventManager.SyncDataResolver.SyncFriendInformationChange;
         }
         private void DisassemblyPlayer(Player player)
         {
@@ -162,18 +225,26 @@ namespace IsolatedIslandGame.Server
             Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
             player.OnGetBlueprint -= playerGetBlueprintFunction;
             playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
+
+            player.OnFriendInformationChange -= player.EventManager.SyncDataResolver.SyncFriendInformationChange;
         }
         private void CreateVessel(Player player)
         {
             if(player.Vessel == null)
             {
                 Vessel vessel;
-                if(DatabaseService.RepositoryList.VesselRepository.Create(player.PlayerID, player.Nickname, out vessel))
+                if(DatabaseService.RepositoryList.VesselRepository.Create(player, out vessel))
                 {
                     VesselManager.Instance.AddVessel(vessel);
                     player.BindVessel(vessel);
                 }
             }
+        }
+        public string HashPassword(string password)
+        {
+            SHA512 sha512 = new SHA512CryptoServiceProvider();
+            string passwordHash = Convert.ToBase64String(sha512.ComputeHash(Encoding.Default.GetBytes(password)));
+            return passwordHash;
         }
     }
 }

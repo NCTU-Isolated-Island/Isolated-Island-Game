@@ -1,7 +1,8 @@
-﻿using Photon.SocketServer;
+﻿using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using Photon.SocketServer;
 using PhotonHostRuntimeInterfaces;
 using System;
-using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 
 namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 {
@@ -15,17 +16,24 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         {
             User = new ServerUser(new PhotonServerCommunicationInterface(this), new ServerUserCommunicationInterface(), RemoteIPAddress);
             UserFactory.Instance.UserConnect(User);
+            User.OnPlayerOffline += Disconnect;
         }
 
         protected override void OnDisconnect(DisconnectReason reasonCode, string reasonDetail)
         {
             Application.Log.InfoFormat("User Disconnect from: {0} because: {1}", RemoteIPAddress, reasonDetail);
             UserFactory.Instance.UserDisconnect(User);
+            User.OnPlayerOffline -= Disconnect;
         }
 
         protected override void OnOperationRequest(OperationRequest operationRequest, SendParameters sendParameters)
         {
             User.OperationManager.Operate((UserOperationCode)operationRequest.OperationCode, operationRequest.Parameters);
+        }
+
+        private void Disconnect(Player player)
+        {
+            Disconnect();
         }
     }
 }
