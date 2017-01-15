@@ -30,6 +30,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.UpdateDecorationOnVessel, new UpdateDecorationOnVesselHandler(player) },
                 { PlayerOperationCode.SynthesizeMaterial, new SynthesizeMaterialHandler(player) },
                 { PlayerOperationCode.UseBlueprint, new UseBlueprintHandler(player) },
+                { PlayerOperationCode.InviteFriend, new InviteFriendHandler(player) },
+                { PlayerOperationCode.AcceptFriend, new AcceptFriendHandler(player) },
+                { PlayerOperationCode.DeleteFriend, new DeleteFriendHandler(player) },
             };
         }
 
@@ -137,6 +140,30 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)UseBlueprintParameterCode.BlueprintID, blueprintID }
             };
             SendOperation(PlayerOperationCode.UseBlueprint, parameters);
+        }
+        public void InviteFriend(int accepterPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)InviteFriendParameterCode.AccepterPlayerID, accepterPlayerID }
+            };
+            SendOperation(PlayerOperationCode.InviteFriend, parameters);
+        }
+        public void AcceptFriend(int inviterPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)AcceptFriendParameterCode.InviterPlayerID, inviterPlayerID }
+            };
+            SendOperation(PlayerOperationCode.AcceptFriend, parameters);
+        }
+        public void DeleteFriend(int targetPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)DeleteFriendParameterCode.TargetPlayerID, targetPlayerID }
+            };
+            SendOperation(PlayerOperationCode.DeleteFriend, parameters);
         }
     }
 }

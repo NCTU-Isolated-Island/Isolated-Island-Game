@@ -21,5 +21,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         public abstract void CheckSystemVersion(string serverVersion, string clientVersion);
         public abstract bool Login(ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode);
         public abstract bool PlayerIDLogin(int playerID, string password, out string debugMessage, out ErrorCode errorCode);
+        public abstract bool InviteFriend(int inviterPlayerID, int accepterPlayerID);
+        public abstract bool AcceptFriend(int inviterPlayerID, int accepterPlayerID);
+        public abstract bool DeleteFriend(int selfPlayerID, int targetPlayerID);
     }
 }

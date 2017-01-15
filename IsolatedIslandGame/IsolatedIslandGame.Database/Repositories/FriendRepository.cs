@@ -5,9 +5,9 @@ namespace IsolatedIslandGame.Database.Repositories
 {
     public abstract class FriendRepository
     {
-        public abstract void AddFriend(int inviterPlayerID, int accepterPlayerID);
-        public abstract void ConfirmFriend(int inviterPlayerID, int accepterPlayerID);
-        public abstract void DeleteFriend(int inviterPlayerID, int accepterPlayerID);
+        public abstract bool AddFriend(int inviterPlayerID, int accepterPlayerID, out FriendInformation friendInformation);
+        public abstract bool ConfirmFriend(int inviterPlayerID, int accepterPlayerID, out FriendInformation friendInformation);
+        public abstract void DeleteFriend(int selfPlayerID, int targetPlayerID);
         public abstract List<FriendInformation> ListOfFriendInformations(int playerID);
     }
 }

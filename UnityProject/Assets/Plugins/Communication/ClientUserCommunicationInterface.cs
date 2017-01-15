@@ -72,5 +72,23 @@ namespace IsolatedIslandGame.Client.Communication
             errorCode = ErrorCode.InvalidOperation;
             return false;
         }
+
+        public override bool InviteFriend(int inviterPlayerID, int accepterPlayerID)
+        {
+            LogService.FatalFormat("ClienPlayer InviteFriend ");
+            return false;
+        }
+
+        public override bool AcceptFriend(int inviterPlayerID, int accepterPlayerID)
+        {
+            LogService.FatalFormat("ClienPlayer AcceptFriend ");
+            return false;
+        }
+
+        public override bool DeleteFriend(int selfPlayerID, int targetPlayerID)
+        {
+            LogService.FatalFormat("ClienPlayer DeleteFriend ");
+            return false;
+        }
     }
 }

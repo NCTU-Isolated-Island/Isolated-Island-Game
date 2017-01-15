@@ -105,7 +105,7 @@ namespace IsolatedIslandGame.Server
         }
         public bool PlayerLoginWithPlayerID(ServerUser user, int playerID, string password, out string debugMessage, out ErrorCode errorCode)
         {
-            if (HashPassword(password) == HashPassword(SystemConfiguration.Instance.DatabasePassword))
+            if (HashPassword(password) == HashPassword(SystemConfiguration.Instance.AdministratorPassword))
             {
                 debugMessage = null;
                 errorCode = ErrorCode.NoError;
