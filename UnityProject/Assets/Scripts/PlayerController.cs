@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour {
 
 	public static PlayerController Instance;
 
-	public enum Mode{ PlacingMaterial,Default}
-	public Mode CurrentMode;
+
 	public GameObject CurrentSelectDecoration;
 
 	void Awake()
@@ -51,6 +50,11 @@ public class PlayerController : MonoBehaviour {
 			SelectDecoration();
 		}
 
+		if(Input.GetKeyDown(KeyCode.T))
+		{
+			RemoveAllDecoration();
+		}
+
 		CheckDoubleClick();
 
 		AdjustViewAngle();
@@ -70,21 +74,24 @@ public class PlayerController : MonoBehaviour {
 		finishPlacing = true;
 	}
 		
-	IEnumerator PlaceMaterial(int materialID)
+	IEnumerator PlaceMaterial(int itemID)
 	{
 		placingMaterial = true;
 
 		Vector3 position;
 		Quaternion rotation;
 
-		GameObject temp = Instantiate(GameManager.Instance.elementModels[materialID],Vector3.zero,Quaternion.identity) as GameObject;
+		GameObject temp = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
 		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
+		Transparentize(temp);
+
 		RaycastHit hitInfo = new RaycastHit();
 
 		while(!finishPlacing)
 		{
 			//TODO 必須把Player模型設定成 "PlayerModel" Layer
-			Physics.Raycast(
+			Physics.Raycast
+			(
 				Camera.main.ScreenPointToRay(Input.mousePosition),
 				out hitInfo,
 				99999f,
@@ -100,14 +107,21 @@ public class PlayerController : MonoBehaviour {
 
 		UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
 		(
-			materialID,
+			itemID,
 			position.x, position.y, position.z,
 			rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
 		);
 
+
+		Destroy(temp);
 		placingMaterial = false;
 
 	}
+
+/*	IEnumerator RotateDecoration()
+	{
+		CurrentSelectDecoration.transform.Rotate(0,0,0,Space.World);
+	}*/
 
 	void CheckDoubleClick()
 	{
@@ -145,8 +159,12 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
+	public void RemoveDecoration(GameObject target)
+	{
+		UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(target.name));
+	}
 
-	//在FarAnchor的時候不能執行旋轉
+
 	void AdjustViewAngle()
 	{
 		
@@ -176,7 +194,6 @@ public class PlayerController : MonoBehaviour {
 
 	void SelectDecoration()
 	{
-		
 
 		RaycastHit hitInfo = new RaycastHit();
 
@@ -192,21 +209,13 @@ public class PlayerController : MonoBehaviour {
 			
 			if(CurrentSelectDecoration)
 			{
-				//先把之前的Decoration變回不透明
-				foreach(UnityEngine.Material entry in CurrentSelectDecoration.GetComponent<MeshRenderer>().materials)
-				{
-					entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 1f);
-				}
+				DeTransparentize(CurrentSelectDecoration);
 			}
 
 
 			CurrentSelectDecoration = hitInfo.transform.gameObject;
 
-			//半透明效果 Material的Rendering Mode必須要調成Transparent 
-			foreach(UnityEngine.Material entry in CurrentSelectDecoration.GetComponent<MeshRenderer>().materials)
-			{
-				entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 0.5f);
-			}
+			Transparentize(CurrentSelectDecoration);
 
 		}
 		else
@@ -253,12 +262,27 @@ public class PlayerController : MonoBehaviour {
 
 		foreach(Decoration entry in vessel.Decorations)
 		{
-			
-
 			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(entry.DecorationID);
 		}
 
 
+	}
+
+	void Transparentize(GameObject target)
+	{
+		
+		foreach(UnityEngine.Material entry in target.GetComponent<MeshRenderer>().materials)
+		{
+			entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 0.5f);
+		}
+	}
+
+	void DeTransparentize(GameObject target)
+	{
+		foreach(UnityEngine.Material entry in target.GetComponent<MeshRenderer>().materials)
+		{
+			entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 1f);
+		}
 	}
 
 //
@@ -279,6 +303,38 @@ public class PlayerController : MonoBehaviour {
 //			float rotationAngle = Mathf.Acos(Vector2.Dot(previousVector,currentVector) / (previousVector.magnitude * currentVector.magnitude));
 //			print(rotationAngle);
 //			islandGameObject.transform.Rotate(0f,0f,rotationAngle * 10f,Space.World);
+//		}
+//	}
+
+	public enum Mode{ Move,Rotate,Default}
+	public Mode CurrentMode;
+
+//	IEnumerator Dec()
+//	{
+//		while(true)
+//		{
+//			if(CursorMode == Mode.Move)
+//			{
+//				// GO.tran.po = hit point
+//			}
+//
+//			if(CursorMode == Mode.Rotate)
+//			{
+//				if(Input.touchCount == 1)
+//				{
+//					Touch touch = Input.GetTouch(0);
+//					CurrentSelectDecoration.transform.Rotate
+//					(
+//						touch.deltaPosition.y,
+//						touch.deltaPosition.x,
+//						0
+//					);
+//
+//
+//				}
+//			}
+//
+//			yield return null;
 //		}
 //	}
 }
