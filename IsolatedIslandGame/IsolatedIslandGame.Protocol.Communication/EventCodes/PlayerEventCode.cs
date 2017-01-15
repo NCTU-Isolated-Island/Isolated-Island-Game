@@ -3,6 +3,7 @@
     public enum PlayerEventCode : byte
     {
         SyncData,
-        GetBlueprint
+        GetBlueprint,
+        FriendInvited
     }
 }

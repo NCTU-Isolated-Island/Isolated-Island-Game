@@ -8,50 +8,106 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 {
     class MySQL_FriendRepository : FriendRepository
     {
-        public override void AddFriend(int inviterPlayerID, int accepterPlayerID)
+        public override bool AddFriend(int inviterPlayerID, int accepterPlayerID, out FriendInformation friendInformation)
         {
             string sqlString = @"INSERT INTO FriendCollection 
-                (InviterPlayerID,AccepterPlayerID,IsConfirmed) VALUES (@inviterPlayerID,@accepterPlayerID,@isConfirmed);";
+                (InviterPlayerID,AccepterPlayerID,IsConfirmed) VALUES (@inviterPlayerID,@accepterPlayerID,@isConfirmed);
+                SELECT Nickname, Signature, GroupType, VesselID FROM PlayerCollection, Vesselcollection
+                WHERE PlayerID = @accepterPlayerID AND PlayerID = OwnerPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
                 command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
                 command.Parameters.AddWithValue("@isConfirmed", false);
-                if (command.ExecuteNonQuery() <= 0)
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    LogService.Error($"MySQL_FriendRepository AddFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
+                    if (reader.Read())
+                    {
+                        string nickname = reader.GetString(0);
+                        string signature = reader.GetString(1);
+                        GroupType groupType = (GroupType)reader.GetByte(2);
+                        int vesselID = reader.GetInt32(3);
+                        friendInformation = new FriendInformation
+                        {
+                            playerInformation = new PlayerInformation
+                            {
+                                playerID = accepterPlayerID,
+                                nickname = nickname,
+                                signature = signature,
+                                groupType = groupType,
+                                vesselID = vesselID
+                            },
+                            isInviter = false,
+                            isConfirmed = false
+                        };
+                        return true;
+                    }
+                    else
+                    {
+                        LogService.Error($"MySQL_FriendRepository AddFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
+                        friendInformation = new FriendInformation();
+                        return false;
+                    }
                 }
             }
         }
 
-        public override void ConfirmFriend(int inviterPlayerID, int accepterPlayerID)
+        public override bool ConfirmFriend(int inviterPlayerID, int accepterPlayerID, out FriendInformation friendInformation)
         {
             string sqlString = @"UPDATE FriendCollection SET 
                 IsConfirmed = @isConfirmed
-                WHERE InviterPlayerID = @inviterPlayerID AND AccepterPlayerID = @accepterPlayerID;";
+                WHERE InviterPlayerID = @inviterPlayerID AND AccepterPlayerID = @accepterPlayerID;
+                SELECT Nickname, Signature, GroupType, VesselID FROM PlayerCollection, Vesselcollection
+                WHERE PlayerID = @inviterPlayerID AND PlayerID = OwnerPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@isConfirmed", true);
                 command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
                 command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
-                if (command.ExecuteNonQuery() <= 0)
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    LogService.Error($"MySQL_FriendRepository ConfirmFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
+                    if (reader.Read())
+                    {
+                        string nickname = reader.GetString(0);
+                        string signature = reader.GetString(1);
+                        GroupType groupType = (GroupType)reader.GetByte(2);
+                        int vesselID = reader.GetInt32(3);
+                        friendInformation = new FriendInformation
+                        {
+                            playerInformation = new PlayerInformation
+                            {
+                                playerID = inviterPlayerID,
+                                nickname = nickname,
+                                signature = signature,
+                                groupType = groupType,
+                                vesselID = vesselID
+                            },
+                            isInviter = true,
+                            isConfirmed = true
+                        };
+                        return true;
+                    }
+                    else
+                    {
+                        LogService.Error($"MySQL_FriendRepository ConfirmFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
+                        friendInformation = new FriendInformation();
+                        return false;
+                    }
                 }
             }
         }
 
-        public override void DeleteFriend(int inviterPlayerID, int accepterPlayerID)
+        public override void DeleteFriend(int selfPlayerID, int targetPlayerID)
         {
             string sqlString = @"DELETE FROM FriendCollection 
-                WHERE (InviterPlayerID = @inviterPlayerID AND AccepterPlayerID = @accepterPlayerID) OR (InviterPlayerID = @accepterPlayerID AND AccepterPlayerID = @inviterPlayerID);";
+                WHERE (InviterPlayerID = @selfPlayerID AND AccepterPlayerID = @targetPlayerID) OR (InviterPlayerID = @targetPlayerID AND AccepterPlayerID = @selfPlayerID);";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
-                command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
+                command.Parameters.AddWithValue("@selfPlayerID", selfPlayerID);
+                command.Parameters.AddWithValue("@targetPlayerID", targetPlayerID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
-                    LogService.Error($"MySQL_FriendRepository DeleteFriend Error InviterPlayerID: {inviterPlayerID}, AccepterPlayerID: {accepterPlayerID}");
+                    LogService.Error($"MySQL_FriendRepository DeleteFriend Error SelfPlayerID: {selfPlayerID}, TargetPlayerID: {targetPlayerID}");
                 }
             }
         }
@@ -86,7 +142,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 groupType = groupType,
                                 vesselID = vesselID
                             },
-                            isInviter = true,
+                            isInviter = false,
                             isConfirmed = isConfirmed
                         });
                     }
@@ -119,7 +175,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 groupType = groupType,
                                 vesselID = vesselID
                             },
-                            isInviter = false,
+                            isInviter = true,
                             isConfirmed = isConfirmed
                         });
                     }

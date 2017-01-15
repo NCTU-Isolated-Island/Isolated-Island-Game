@@ -93,6 +93,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
         {
             SystemManager.Initial(new ServerSystemManager());
             VesselManager.Initial(new ServerVesselManager());
+            FriendManager.InitialManager();
         }
     }
 }

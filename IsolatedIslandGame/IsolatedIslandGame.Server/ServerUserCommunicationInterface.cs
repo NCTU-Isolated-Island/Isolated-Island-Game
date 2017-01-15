@@ -5,6 +5,7 @@ using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
+using System;
 
 namespace IsolatedIslandGame.Server
 {
@@ -55,6 +56,21 @@ namespace IsolatedIslandGame.Server
         public override bool PlayerIDLogin(int playerID, string password, out string debugMessage, out ErrorCode errorCode)
         {
             return PlayerFactory.Instance.PlayerLoginWithPlayerID(serverUser, playerID, password, out debugMessage, out errorCode);
+        }
+
+        public override bool InviteFriend(int inviterPlayerID, int accepterPlayerID)
+        {
+            return FriendManager.Instance.InviteFriend(inviterPlayerID, accepterPlayerID);
+        }
+
+        public override bool AcceptFriend(int inviterPlayerID, int accepterPlayerID)
+        {
+            return FriendManager.Instance.AcceptFriend(inviterPlayerID, accepterPlayerID);
+        }
+
+        public override bool DeleteFriend(int selfPlayerID, int targetPlayerID)
+        {
+            return FriendManager.Instance.DeleteFriend(selfPlayerID, targetPlayerID);
         }
     }
 }

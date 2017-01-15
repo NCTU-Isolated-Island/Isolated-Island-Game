@@ -27,6 +27,8 @@ namespace IsolatedIslandGame.Server.Configuration
         public string DatabasePassword { get; set; }
         [XmlElement]
         public string Database { get; set; }
+        [XmlElement]
+        public string AdministratorPassword { get; set; }
 
         public SystemConfiguration() { }
         public static bool Load(string filePath, out SystemConfiguration configuration)
@@ -58,7 +60,8 @@ namespace IsolatedIslandGame.Server.Configuration
                     DatabaseHostname = "not set",
                     DatabaseUsername = "not set",
                     DatabasePassword = "not set",
-                    Database = "not set"
+                    Database = "not set",
+                    AdministratorPassword = "not set"
                 };
                 using (XmlWriter writer = XmlWriter.Create(filePath))
                 {
