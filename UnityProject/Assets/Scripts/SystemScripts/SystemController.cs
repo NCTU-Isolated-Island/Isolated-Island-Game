@@ -12,6 +12,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             ItemManager.Initial(new ClientItemManager());
             VesselManager.Initial(new ClientVesselManager());
             BlueprintManager.Initial(new ClientBlueprintManager());
+            PlayerInformationManager.InitialManager(new PlayerInformationManager());
         }
     }
 }

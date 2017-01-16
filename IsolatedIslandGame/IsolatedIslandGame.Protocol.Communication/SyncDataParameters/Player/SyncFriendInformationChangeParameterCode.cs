@@ -3,11 +3,7 @@
     public enum SyncFriendInformationChangeParameterCode : byte
     {
         DataChangeType,
-        PlayerID,
-        Nickname,
-        Signature,
-        GroupType,
-        VesselID,
+        FriendPlayerID,
         IsInviter,
         IsConfirmed
     }

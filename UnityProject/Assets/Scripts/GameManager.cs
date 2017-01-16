@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
 			UImanager.Instance.LoadResult(1);
 
 			//Create Charater by Uimanager ? (probably
-			UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.B);
+			UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.Businessman);
 		}
 		else
 		{
@@ -234,7 +234,7 @@ public class GameManager : MonoBehaviour
 								
 	                            Destroy(VesselDecoration[vesselID][decoration.DecorationID]);
 									
-								UserDecoration[v.PlayerInformation.playerID].Remove(decoration.DecorationID);
+								UserDecoration[v.OwnerPlayerID].Remove(decoration.DecorationID);
 								VesselDecoration[vesselID].Remove(decoration.DecorationID);
                             }
                             else
@@ -276,22 +276,12 @@ public class GameManager : MonoBehaviour
                     {
                     	Dictionary<int, GameObject> decorationDictionary = new Dictionary<int, GameObject>();
 
-						int groupType;
-						switch (vessel.PlayerInformation.groupType) 
-						{
-						case GroupType.A:
-							groupType = 1;
-							break;
-						case GroupType.B:
-							groupType = 2;
-							break;
-						case GroupType.C:
-							groupType = 3;
-							break;
-						default:
-							groupType = 0;
-							break;
-						}
+                        int groupType = 0;
+                        PlayerInformation playerInformation;
+                        if(PlayerInformationManager.Instance.FindPlayerInformation(vessel.OwnerPlayerID, out playerInformation))
+                        {
+                            groupType = (int)playerInformation.groupType;
+                        }
 						
                         GameObject userVesselGameObject = Instantiate
 						(
@@ -300,7 +290,7 @@ public class GameManager : MonoBehaviour
                             Quaternion.Euler(0f, vessel.RotationEulerAngleY, 0f)
                         ) as GameObject;
 					
-                        userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.PlayerInformation.playerID);
+                        userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.OwnerPlayerID);
 
                         foreach (Decoration decoration in vessel.Decorations)
                         {
@@ -318,12 +308,12 @@ public class GameManager : MonoBehaviour
                                 decorationDictionary.Add(decoration.DecorationID, decorationGameObject);
                             }
                         }
-                        if (!UserGameObject.ContainsKey(vessel.PlayerInformation.playerID))
-                            UserGameObject.Add(vessel.PlayerInformation.playerID, userVesselGameObject);
+                        if (!UserGameObject.ContainsKey(vessel.OwnerPlayerID))
+                            UserGameObject.Add(vessel.OwnerPlayerID, userVesselGameObject);
                         if (!VesselIDGameObject.ContainsKey(vessel.VesselID))
                             VesselIDGameObject.Add(vessel.VesselID, userVesselGameObject);
-                        if (!UserDecoration.ContainsKey(vessel.PlayerInformation.playerID))
-                            UserDecoration.Add(vessel.PlayerInformation.playerID, decorationDictionary);
+                        if (!UserDecoration.ContainsKey(vessel.OwnerPlayerID))
+                            UserDecoration.Add(vessel.OwnerPlayerID, decorationDictionary);
                         if (!VesselDecoration.ContainsKey(vessel.VesselID))
                             VesselDecoration.Add(vessel.VesselID, decorationDictionary);
                     }
@@ -333,9 +323,9 @@ public class GameManager : MonoBehaviour
                         GameObject userVesselGameObject;
                         if (VesselIDGameObject.TryGetValue(vessel.VesselID, out userVesselGameObject))
                         {
-                            UserGameObject.Remove(vessel.PlayerInformation.playerID);
+                            UserGameObject.Remove(vessel.OwnerPlayerID);
                             VesselIDGameObject.Remove(vessel.VesselID);
-                            UserDecoration.Remove(vessel.PlayerInformation.playerID);
+                            UserDecoration.Remove(vessel.OwnerPlayerID);
                             VesselDecoration.Remove(vessel.VesselID);
 
                             Destroy(userVesselGameObject);
@@ -356,27 +346,25 @@ public class GameManager : MonoBehaviour
 
 	void OnGUI()
     {
-//        if(UserManager.Instance.User.Player != null && UserManager.Instance.User.Player.Inventory != null)
-//        {
-//            foreach (InventoryItemInfo info in UserManager.Instance.User.Player.Inventory.ItemInfos)
-//            {
-//                GUILayout.Label(info.Item.ItemName + " : " + info.Count + " ID: " + info.Item.ItemID);
-//            }
-//            foreach(Vessel vessel in VesselManager.Instance.Vessels)
-//            {
-//                GUILayout.Label(string.Format("VesselName: {0}", vessel.PlayerInformation.nickname));
-//                foreach (Decoration decoration in vessel.Decorations)
-//                {
-//                    GUILayout.Label(string.Format("DecorationID: {0}, MaterialName: {1}", decoration.DecorationID, decoration.Material.ItemName));
-//                }
-//            }
-//        }
-		GUI.contentColor = Color.black;
-
-		foreach(Dictionary<int,GameObject> vessel in UserDecoration.Values)
+        //        if(UserManager.Instance.User.Player != null && UserManager.Instance.User.Player.Inventory != null)
+        //        {
+        //            foreach (InventoryItemInfo info in UserManager.Instance.User.Player.Inventory.ItemInfos)
+        //            {
+        //                GUILayout.Label(info.Item.ItemName + " : " + info.Count + " ID: " + info.Item.ItemID);
+        //            }
+        //            foreach(Vessel vessel in VesselManager.Instance.Vessels)
+        //            {
+        //                GUILayout.Label(string.Format("VesselName: {0}", vessel.PlayerInformation.nickname));
+        //                foreach (Decoration decoration in vessel.Decorations)
+        //                {
+        //                    GUILayout.Label(string.Format("DecorationID: {0}, MaterialName: {1}", decoration.DecorationID, decoration.Material.ItemName));
+        //                }
+        //            }
+        //        }
+        GUI.contentColor = Color.black;
+        foreach (Dictionary<int,GameObject> vessel in UserDecoration.Values)
 		{
-			
-			foreach(KeyValuePair<int,GameObject> decoration in vessel)
+            foreach (KeyValuePair<int,GameObject> decoration in vessel)
 			{
 				GUILayout.Label("ID: " + decoration.Key);
 			}

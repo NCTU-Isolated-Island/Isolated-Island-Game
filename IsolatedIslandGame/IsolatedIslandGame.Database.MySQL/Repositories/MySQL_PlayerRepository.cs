@@ -127,5 +127,41 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 player.GetBlueprint(blueprint);
             }
         }
+
+        public override bool ReadPlayerInformation(int playerID, out PlayerInformation playerInformation)
+        {
+            string sqlString = @"SELECT  
+                Nickname, Signature, GroupType, VesselID
+                from PlayerCollection, VesselCollection WHERE PlayerID = @playerID AND OwnerPlayerID = PlayerID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("@playerID", playerID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        string nickname = reader.IsDBNull(0) ? null : reader.GetString(0);
+                        string signature = reader.IsDBNull(1) ? null : reader.GetString(1);
+                        GroupType groupType = (GroupType)reader.GetByte(2);
+                        int vesselID = reader.GetInt32(3);
+
+                        playerInformation = new PlayerInformation
+                        {
+                            playerID = playerID,
+                            nickname = nickname,
+                            signature = signature,
+                            groupType = groupType,
+                            vesselID = vesselID
+                        };
+                        return true;
+                    }
+                    else
+                    {
+                        playerInformation = new PlayerInformation();
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }

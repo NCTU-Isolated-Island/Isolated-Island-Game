@@ -29,14 +29,7 @@ namespace IsolatedIslandGame.Server
                     {
                         accepter.AddFriend(new FriendInformation
                         {
-                            playerInformation = new PlayerInformation
-                            {
-                                playerID = inviter.PlayerID,
-                                nickname = inviter.Nickname,
-                                signature = inviter.Signature,
-                                groupType = inviter.GroupType,
-                                vesselID = inviter.Vessel.VesselID
-                            },
+                            friendPlayerID = inviter.PlayerID,
                             isInviter = true,
                             isConfirmed = false
                         });
@@ -67,14 +60,7 @@ namespace IsolatedIslandGame.Server
                     {
                         inviter.AddFriend(new FriendInformation
                         {
-                            playerInformation = new PlayerInformation
-                            {
-                                playerID = accepter.PlayerID,
-                                nickname = accepter.Nickname,
-                                signature = accepter.Signature,
-                                groupType = accepter.GroupType,
-                                vesselID = accepter.Vessel.VesselID
-                            },
+                            friendPlayerID = accepter.PlayerID,
                             isInviter = false,
                             isConfirmed = true
                         });

@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class SyncVesselChangeHandler : SyncDataHandler<SystemManager, SystemSyncDataCode>
     {
-        public SyncVesselChangeHandler(SystemManager subject) : base(subject, 9)
+        public SyncVesselChangeHandler(SystemManager subject) : base(subject, 6)
         {
         }
         internal override bool Handle(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -19,24 +19,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 {
                     DataChangeType changeType = (DataChangeType)parameters[(byte)SyncVesselChangeParameterCode.DataChangeType];
                     int vesselID = (int)parameters[(byte)SyncVesselChangeParameterCode.VesselID];
-                    int playerID = (int)parameters[(byte)SyncVesselChangeParameterCode.PlayerID];
-                    string nickname = (string)parameters[(byte)SyncVesselChangeParameterCode.Nickname];
-                    string signature = (string)parameters[(byte)SyncVesselChangeParameterCode.Signature];
-                    GroupType groupType = (GroupType)parameters[(byte)SyncVesselChangeParameterCode.GroupType];
+                    int ownerPlayerID = (int)parameters[(byte)SyncVesselChangeParameterCode.OwnerPlayerID];
                     float locationX = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleY];
 
                     Vessel vessel = new Vessel(
                         vesselID: vesselID, 
-                        playerInformation: new PlayerInformation
-                        {
-                            playerID = playerID,
-                            nickname = nickname,
-                            signature = signature,
-                            groupType = groupType,
-                            vesselID = vesselID
-                        },
+                        ownerPlayerID: ownerPlayerID,
                         locationX: locationX,
                         locationZ: locationZ,
                         rotationEulerAngleY: eulerAngleY);

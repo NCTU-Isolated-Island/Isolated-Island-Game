@@ -19,13 +19,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     foreach (var information in subject.FriendInformations)
                     {
+                        subject.SyncPlayerInformation(information.friendPlayerID);
                         var result = new Dictionary<byte, object>
                         {
-                            { (byte)FetchFriendInformationsResponseParameterCode.PlayerID, information.playerInformation.playerID },
-                            { (byte)FetchFriendInformationsResponseParameterCode.Nickname, information.playerInformation.nickname },
-                            { (byte)FetchFriendInformationsResponseParameterCode.Signature, information.playerInformation.signature },
-                            { (byte)FetchFriendInformationsResponseParameterCode.GroupType, (byte)information.playerInformation.groupType },
-                            { (byte)FetchFriendInformationsResponseParameterCode.VesselID, information.playerInformation.vesselID },
+                            { (byte)FetchFriendInformationsResponseParameterCode.FriendPlayerID, information.friendPlayerID },
                             { (byte)FetchFriendInformationsResponseParameterCode.IsInviter, information.isInviter },
                             { (byte)FetchFriendInformationsResponseParameterCode.IsConfirmed, information.isConfirmed }
                         };

@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.SystemResponseHandlers.FetchDataResponseHandlers
 {
-    class FetchAllVesselsResponseHandler : FetchDataResponseHandler<SystemManager, SystemFetchDataCode>
+    class FetchVesselWithOwnerPlayerIDResponseHandler : FetchDataResponseHandler<SystemManager, SystemFetchDataCode>
     {
-        public FetchAllVesselsResponseHandler(SystemManager subject) : base(subject)
+        public FetchVesselWithOwnerPlayerIDResponseHandler(SystemManager subject) : base(subject)
         {
         }
 
@@ -18,9 +18,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 8)
+                        if (parameters.Count != 5)
                         {
-                            LogService.ErrorFormat(string.Format("FetchAllVesselsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
+                            LogService.ErrorFormat(string.Format("FetchVesselWithOwnerPlayerIDResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
                         }
                         else
@@ -30,7 +30,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     }
                 default:
                     {
-                        LogService.ErrorFormat("FetchAllVesselsResponse Error DebugMessage: {0}", debugMessage);
+                        LogService.ErrorFormat("FetchVesselWithOwnerPlayerIDResponse Error DebugMessage: {0}", debugMessage);
                         return false;
                     }
             }
@@ -42,25 +42,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 try
                 {
-                    int vesselID = (int)parameters[(byte)FetchAllVesselsResponseParameterCode.VesselID];
-                    int playerID = (int)parameters[(byte)FetchAllVesselsResponseParameterCode.PlayerID];
-                    string nickname = (string)parameters[(byte)FetchAllVesselsResponseParameterCode.Nickname];
-                    string signature = (string)parameters[(byte)FetchAllVesselsResponseParameterCode.Signature];
-                    GroupType groupType = (GroupType)parameters[(byte)FetchAllVesselsResponseParameterCode.GroupType];
-                    float locationX = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.LocationX];
-                    float locationZ = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.LocationZ];
-                    float eulerAngleY = (float)parameters[(byte)FetchAllVesselsResponseParameterCode.EulerAngleY];
+                    int vesselID = (int)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.VesselID];
+                    int ownerPlayerID = (int)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.OwnerPlayerID];
+                    float locationX = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationX];
+                    float locationZ = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationZ];
+                    float eulerAngleY = (float)parameters[(byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.EulerAngleY];
 
                     VesselManager.Instance.AddVessel(new Vessel(
                         vesselID: vesselID,
-                        playerInformation: new PlayerInformation
-                        {
-                            playerID = playerID,
-                            nickname = nickname,
-                            signature = signature,
-                            groupType = groupType,
-                            vesselID = vesselID
-                        },
+                        ownerPlayerID: ownerPlayerID, 
                         locationX: locationX,
                         locationZ: locationZ,
                         rotationEulerAngleY: eulerAngleY));
@@ -68,7 +58,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 }
                 catch (InvalidCastException ex)
                 {
-                    LogService.Error("FetchAllVesselsResponse Parameter Cast Error");
+                    LogService.Error("FetchVesselWithOwnerPlayerIDResponse Parameter Cast Error");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;

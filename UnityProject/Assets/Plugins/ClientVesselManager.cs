@@ -16,7 +16,7 @@ public class ClientVesselManager : VesselManager
 
     public override void AddVessel(Vessel vessel)
     {
-        if(ContainsVessel(vessel.VesselID) && ContainsVesselWithOwnerPlayerID(vessel.PlayerInformation.playerID))
+        if(ContainsVessel(vessel.VesselID) && ContainsVesselWithOwnerPlayerID(vessel.OwnerPlayerID))
         {
             Vessel existedVessel = vesselDictionary[vessel.VesselID];
             existedVessel.UpdateTransform(vessel.LocationX, vessel.LocationZ, vessel.RotationEulerAngleY);
@@ -24,19 +24,19 @@ public class ClientVesselManager : VesselManager
         else if(ContainsVessel(vessel.VesselID))
         {
             Vessel existedVessel = vesselDictionary[vessel.VesselID];
-            vesselDictionaryByOwnerPlayerID.Add(vessel.PlayerInformation.playerID, vessel);
+            vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
             existedVessel.UpdateFullData(vessel);
         }
-        else if (ContainsVesselWithOwnerPlayerID(vessel.PlayerInformation.playerID))
+        else if (ContainsVesselWithOwnerPlayerID(vessel.OwnerPlayerID))
         {
-            Vessel existedVessel = vesselDictionaryByOwnerPlayerID[vessel.PlayerInformation.playerID];
+            Vessel existedVessel = vesselDictionaryByOwnerPlayerID[vessel.OwnerPlayerID];
             vesselDictionary.Add(vessel.VesselID, vessel);
             existedVessel.UpdateFullData(vessel);
         }
         else
         {
             vesselDictionary.Add(vessel.VesselID, vessel);
-            vesselDictionaryByOwnerPlayerID.Add(vessel.PlayerInformation.playerID, vessel);
+            vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
             {
@@ -57,14 +57,7 @@ public class ClientVesselManager : VesselManager
         {
             vessel = new Vessel(
                 vesselID: vesselID,
-                playerInformation: new PlayerInformation
-                {
-                    playerID = 0,
-                    nickname = "讀取中",
-                    signature = "讀取中",
-                    groupType = GroupType.No,
-                    vesselID = vesselID
-                },
+                ownerPlayerID: 0,
                 locationX: 0,
                 locationZ: 0,
                 rotationEulerAngleY: 0);
@@ -90,18 +83,11 @@ public class ClientVesselManager : VesselManager
         {
             vessel = new Vessel(
                 vesselID: 0,
-                playerInformation: new PlayerInformation
-                {
-                    playerID = ownerPlayerID,
-                    nickname = "讀取中",
-                    signature = "讀取中",
-                    groupType = GroupType.No,
-                    vesselID = 0
-                },
+                ownerPlayerID: ownerPlayerID,
                 locationX: 0,
                 locationZ: 0,
                 rotationEulerAngleY: 0);
-            vesselDictionaryByOwnerPlayerID.Add(vessel.PlayerInformation.playerID, vessel);
+            vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
             AssemblyVessel(vessel);
             if (onVesselChange != null)
             {
@@ -118,7 +104,7 @@ public class ClientVesselManager : VesselManager
         {
             Vessel vessel = vesselDictionary[vesselID];
             vesselDictionary.Remove(vesselID);
-            vesselDictionaryByOwnerPlayerID.Remove(vessel.PlayerInformation.playerID);
+            vesselDictionaryByOwnerPlayerID.Remove(vessel.OwnerPlayerID);
             if (onVesselChange != null)
             {
                 onVesselChange(DataChangeType.Remove, vessel);

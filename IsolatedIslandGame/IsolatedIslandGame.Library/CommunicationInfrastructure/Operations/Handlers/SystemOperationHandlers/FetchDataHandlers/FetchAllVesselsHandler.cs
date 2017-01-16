@@ -17,20 +17,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 try
                 {
-                    foreach(Vessel vessel in VesselManager.Instance.Vessels)
+                    foreach (Vessel vessel in VesselManager.Instance.Vessels)
                     {
+                        communicationInterface.User.Player.SyncPlayerInformation(vessel.OwnerPlayerID);
                         var result = new Dictionary<byte, object>
                         {
-                            { (byte)FetchAllVesselsResponseParameterCode.VesselID, vessel.VesselID },
-                            { (byte)FetchAllVesselsResponseParameterCode.PlayerID, vessel.PlayerInformation.playerID },
-                            { (byte)FetchAllVesselsResponseParameterCode.Nickname, vessel.PlayerInformation.nickname },
-                            { (byte)FetchAllVesselsResponseParameterCode.Signature, vessel.PlayerInformation.signature },
-                            { (byte)FetchAllVesselsResponseParameterCode.GroupType, (byte)vessel.PlayerInformation.groupType },
-                            { (byte)FetchAllVesselsResponseParameterCode.LocationX, vessel.LocationX },
-                            { (byte)FetchAllVesselsResponseParameterCode.LocationZ, vessel.LocationZ },
-                            { (byte)FetchAllVesselsResponseParameterCode.EulerAngleY, vessel.RotationEulerAngleY },
+                            { (byte)FetchVesselResponseParameterCode.VesselID, vessel.VesselID },
+                            { (byte)FetchVesselResponseParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
+                            { (byte)FetchVesselResponseParameterCode.LocationX, vessel.LocationX },
+                            { (byte)FetchVesselResponseParameterCode.LocationZ, vessel.LocationZ },
+                            { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.RotationEulerAngleY },
                         };
-                        SendResponse(communicationInterface, fetchCode, result);
+                        SendResponse(communicationInterface, SystemFetchDataCode.Vessel, result);
                     }
                     return true;
                 }

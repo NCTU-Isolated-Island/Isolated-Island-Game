@@ -24,6 +24,7 @@ namespace IsolatedIslandGame.Library
         public Vessel Vessel { get; private set; }
         private Dictionary<int, Blueprint> knownBlueprintDictionary;
         public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values; } }
+        private HashSet<int> knownPlayerIDSet;
         private Dictionary<int, FriendInformation> friendInformationDictionary;
         public IEnumerable<FriendInformation> FriendInformations { get { return friendInformationDictionary.Values.ToArray(); } }
 
@@ -48,6 +49,7 @@ namespace IsolatedIslandGame.Library
         public delegate void FriendInformationChangeEventHandler(DataChangeType changeType, FriendInformation information);
         private event FriendInformationChangeEventHandler onFriendInformationChange;
         public event FriendInformationChangeEventHandler OnFriendInformationChange { add { onFriendInformationChange += value; } remove { onFriendInformationChange -= value; } }
+
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -63,6 +65,7 @@ namespace IsolatedIslandGame.Library
             OperationManager = new PlayerOperationManager(this);
             ResponseManager = new PlayerResponseManager(this);
 
+            knownPlayerIDSet = new HashSet<int>();
             knownBlueprintDictionary = new Dictionary<int, Blueprint>();
             friendInformationDictionary = new Dictionary<int, FriendInformation>();
         }
@@ -77,7 +80,7 @@ namespace IsolatedIslandGame.Library
         }
         public void BindVessel(Vessel vessel)
         {
-            if(vessel.PlayerInformation.playerID == PlayerID)
+            if(vessel.OwnerPlayerID == PlayerID)
             {
                 Vessel = vessel;
                 onBindVessel?.Invoke(Vessel);
@@ -89,6 +92,19 @@ namespace IsolatedIslandGame.Library
             Signature = signature;
             GroupType = groupType;
             onCreateCharacter?.Invoke(this);
+        }
+
+        internal void SyncPlayerInformation(int playerID)
+        {
+            if(!knownPlayerIDSet.Contains(playerID))
+            {
+                PlayerInformation playerInformation;
+                if(PlayerInformationManager.Instance.FindPlayerInformation(playerID, out playerInformation))
+                {
+                    EventManager.SyncDataResolver.SyncPlayerInformation(playerInformation);
+                    knownPlayerIDSet.Add(playerID);
+                }
+            }
         }
 
         public bool IsKnownBlueprint(int blueprintID)
@@ -110,14 +126,14 @@ namespace IsolatedIslandGame.Library
         }
         public void AddFriend(FriendInformation information)
         {
-            if(ContainsFriend(information.playerInformation.playerID))
+            if(ContainsFriend(information.friendPlayerID))
             {
-                friendInformationDictionary[information.playerInformation.playerID] = information;
+                friendInformationDictionary[information.friendPlayerID] = information;
                 onFriendInformationChange?.Invoke(DataChangeType.Update, information);
             }
             else
             {
-                friendInformationDictionary.Add(information.playerInformation.playerID, information);
+                friendInformationDictionary.Add(information.friendPlayerID, information);
                 onFriendInformationChange?.Invoke(DataChangeType.Add, information);
             }
         }

@@ -13,7 +13,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
         internal PlayerSyncDataResolver(Player player) : base(player)
         {
             syncTable.Add(PlayerSyncDataCode.InventoryItemInfoChange, new SyncInventoryItemInfoChangeHandler(subject));
-            
+            syncTable.Add(PlayerSyncDataCode.PlayerInformation, new SyncPlayerInformationHandler(subject));
         }
 
         internal override void SendSyncData(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -36,18 +36,27 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
         }
         public void SyncFriendInformationChange(DataChangeType changeType, FriendInformation information)
         {
+            subject.SyncPlayerInformation(information.friendPlayerID);
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)SyncFriendInformationChangeParameterCode.DataChangeType, (byte)changeType },
-                { (byte)SyncFriendInformationChangeParameterCode.PlayerID, information.playerInformation.playerID },
-                { (byte)SyncFriendInformationChangeParameterCode.Nickname, information.playerInformation.nickname },
-                { (byte)SyncFriendInformationChangeParameterCode.Signature, information.playerInformation.signature },
-                { (byte)SyncFriendInformationChangeParameterCode.GroupType, (byte)information.playerInformation.groupType },
-                { (byte)SyncFriendInformationChangeParameterCode.VesselID, information.playerInformation.vesselID },
+                { (byte)SyncFriendInformationChangeParameterCode.FriendPlayerID, information.friendPlayerID },
                 { (byte)SyncFriendInformationChangeParameterCode.IsInviter, information.isInviter },
                 { (byte)SyncFriendInformationChangeParameterCode.IsConfirmed, information.isConfirmed }
             };
             SendSyncData(PlayerSyncDataCode.FriendInformationChange, parameters);
+        }
+        public void SyncPlayerInformation(PlayerInformation playerInformation)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncPlayerInformationParameterCode.PlayerID, playerInformation.playerID },
+                { (byte)SyncPlayerInformationParameterCode.Nickname, playerInformation.nickname },
+                { (byte)SyncPlayerInformationParameterCode.Signature, playerInformation.signature },
+                { (byte)SyncPlayerInformationParameterCode.GroupType, (byte)playerInformation.groupType },
+                { (byte)SyncPlayerInformationParameterCode.VesselID, playerInformation.vesselID }
+            };
+            SendSyncData(PlayerSyncDataCode.PlayerInformation, parameters);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public struct FriendInformation
     {
-        public PlayerInformation playerInformation;
+        public int friendPlayerID;
         public bool isInviter;
         public bool isConfirmed;
     }

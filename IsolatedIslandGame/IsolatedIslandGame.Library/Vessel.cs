@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Library
     public class Vessel
     {
         public int VesselID { get; private set; }
-        public PlayerInformation PlayerInformation { get; private set; }
+        public int OwnerPlayerID { get; private set; }
         public float LocationX { get; private set; }
         public float LocationZ { get; private set; }
         public float RotationEulerAngleY { get; private set; }
@@ -28,10 +28,10 @@ namespace IsolatedIslandGame.Library
         private event Action<Vessel> onVesselFullDataUpdated;
         public event Action<Vessel> OnVesselFullDataUpdated { add { onVesselFullDataUpdated += value; } remove { onVesselFullDataUpdated -= value; } }
 
-        public Vessel(int vesselID, PlayerInformation playerInformation, float locationX, float locationZ, float rotationEulerAngleY)
+        public Vessel(int vesselID, int ownerPlayerID, float locationX, float locationZ, float rotationEulerAngleY)
         {
             VesselID = vesselID;
-            PlayerInformation = playerInformation;
+            OwnerPlayerID = ownerPlayerID;
             LocationX = locationX;
             LocationZ = locationZ;
             RotationEulerAngleY = rotationEulerAngleY;
@@ -41,7 +41,7 @@ namespace IsolatedIslandGame.Library
         public void UpdateFullData(Vessel vessel)
         {
             VesselID = vessel.VesselID;
-            PlayerInformation = vessel.PlayerInformation;
+            OwnerPlayerID = vessel.OwnerPlayerID;
             LocationX = vessel.LocationX;
             LocationZ = vessel.LocationZ;
             RotationEulerAngleY = vessel.RotationEulerAngleY;

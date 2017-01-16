@@ -22,13 +22,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     Vessel vessel;
                     if(VesselManager.Instance.FindVesselByOwnerPlayerID(ownerPlayerID, out vessel))
                     {
+                        communicationInterface.User.Player.SyncPlayerInformation(vessel.OwnerPlayerID);
                         var result = new Dictionary<byte, object>
                         {
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.VesselID, vessel.VesselID },
-                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.PlayerID, vessel.PlayerInformation.playerID },
-                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Nickname, vessel.PlayerInformation.nickname },
-                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.Signature, vessel.PlayerInformation.signature },
-                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.GroupType, (byte)vessel.PlayerInformation.groupType },
+                            { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationX, vessel.LocationX },
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.LocationZ, vessel.LocationZ },
                             { (byte)FetchVesselWithOwnerPlayerIDResponseParameterCode.EulerAngleY, vessel.RotationEulerAngleY }

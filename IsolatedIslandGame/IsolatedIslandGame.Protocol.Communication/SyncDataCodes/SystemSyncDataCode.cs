@@ -4,6 +4,7 @@
     {
         VesselChange,
         VesselTransform,
-        VesselDecorationChange
+        VesselDecorationChange,
+        PlayerInformation
     }
 }

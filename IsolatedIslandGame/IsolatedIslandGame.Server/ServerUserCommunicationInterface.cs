@@ -21,7 +21,7 @@ namespace IsolatedIslandGame.Server
 
         public override void ErrorInform(string title, string message)
         {
-            LogService.ErrorFormat("User Identity:{0} ErrorInform Title: {1}, Message: {2}", user.IdentityInformation, title, message);
+            LogService.ErrorFormat("User Identity:{0} ErrorInform Title: {1}, Message: {2}", User.IdentityInformation, title, message);
         }
 
         public override void SendEvent(UserEventCode eventCode, Dictionary<byte, object> parameters)
@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Server
 
         public override void SendOperation(UserOperationCode operationCode, Dictionary<byte, object> parameters)
         {
-            LogService.FatalFormat("ServerUser SendOperation Identity: {0}, UserOperationCode: {1}", user.IdentityInformation, operationCode);
+            LogService.FatalFormat("ServerUser SendOperation Identity: {0}, UserOperationCode: {1}", User.IdentityInformation, operationCode);
         }
 
         public override void SendResponse(UserOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
@@ -46,7 +46,7 @@ namespace IsolatedIslandGame.Server
         }
         public override void CheckSystemVersion(string serverVersion, string clientVersion)
         {
-            LogService.FatalFormat("Server UpdateSystemVersion User Identity: {0}", user.IdentityInformation);
+            LogService.FatalFormat("Server UpdateSystemVersion User Identity: {0}", User.IdentityInformation);
         }
 
         public override bool Login(ulong facebookID, string accessToken, out string debugMessage, out ErrorCode errorCode)

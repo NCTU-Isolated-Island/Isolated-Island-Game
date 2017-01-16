@@ -9,7 +9,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
         public SystemFetchDataResponseResolver(SystemManager subject) : base(subject)
         {
             fetchResponseTable.Add(SystemFetchDataCode.Item, new FetchItemResponseHandler(subject));
-            fetchResponseTable.Add(SystemFetchDataCode.AllVessels, new FetchAllVesselsResponseHandler(subject));
             fetchResponseTable.Add(SystemFetchDataCode.Vessel, new FetchVesselResponseHandler(subject));
             fetchResponseTable.Add(SystemFetchDataCode.VesselWithOwnerPlayerID, new FetchVesselWithOwnerPlayerIDResponseHandler(subject));
             fetchResponseTable.Add(SystemFetchDataCode.VesselDecorations, new FetchVesselDecorationsResponseHandler(subject));
