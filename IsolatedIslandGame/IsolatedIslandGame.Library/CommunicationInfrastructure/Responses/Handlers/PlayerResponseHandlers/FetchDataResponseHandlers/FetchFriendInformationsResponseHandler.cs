@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 7)
+                        if (parameters.Count != 3)
                         {
                             LogService.ErrorFormat(string.Format("FetchFriendInformationsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -42,25 +42,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 try
                 {
-                    int playerID = (int)parameters[(byte)FetchFriendInformationsResponseParameterCode.PlayerID];
-                    string nickname = (string)parameters[(byte)FetchFriendInformationsResponseParameterCode.Nickname];
-                    string signature = (string)parameters[(byte)FetchFriendInformationsResponseParameterCode.Signature];
-                    GroupType groupType = (GroupType)parameters[(byte)FetchFriendInformationsResponseParameterCode.GroupType];
-                    int vesselID = (int)parameters[(byte)FetchFriendInformationsResponseParameterCode.VesselID];
-                    bool isSender = (bool)parameters[(byte)FetchFriendInformationsResponseParameterCode.IsSender];
+                    int friendPlayerID = (int)parameters[(byte)FetchFriendInformationsResponseParameterCode.FriendPlayerID];
+                    bool isInviter = (bool)parameters[(byte)FetchFriendInformationsResponseParameterCode.IsInviter];
                     bool isConfirmed = (bool)parameters[(byte)FetchFriendInformationsResponseParameterCode.IsConfirmed];
 
                     subject.AddFriend(new FriendInformation
                     {
-                        playerInformation = new PlayerInformation
-                        {
-                            playerID = playerID,
-                            nickname = nickname,
-                            signature = signature,
-                            groupType = groupType,
-                            vesselID = vesselID,
-                        },
-                        isSender = isSender,
+                        friendPlayerID = friendPlayerID,
+                        isInviter = isInviter,
                         isConfirmed = isConfirmed
                     });
                     return true;

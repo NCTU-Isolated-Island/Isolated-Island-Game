@@ -7,10 +7,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
 {
     public abstract class CommunicationInterface
     {
-        protected User user;
+        public User User { get; protected set; }
         public virtual void BindUser(User user)
         {
-            this.user = user;
+            User = user;
         }
         public abstract void SendEvent(UserEventCode eventCode, Dictionary<byte, object> parameters);
         public abstract void SendOperation(UserOperationCode operationCode, Dictionary<byte, object> parameters);

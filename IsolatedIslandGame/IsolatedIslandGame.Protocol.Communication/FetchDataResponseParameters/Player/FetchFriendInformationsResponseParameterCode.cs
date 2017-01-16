@@ -2,11 +2,7 @@
 {
     public enum FetchFriendInformationsResponseParameterCode : byte
     {
-        PlayerID,
-        Nickname,
-        Signature,
-        GroupType,
-        VesselID,
+        FriendPlayerID,
         IsInviter,
         IsConfirmed
     }

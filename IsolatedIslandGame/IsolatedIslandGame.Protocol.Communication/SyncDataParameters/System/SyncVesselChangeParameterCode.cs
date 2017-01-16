@@ -4,10 +4,7 @@
     {
         DataChangeType,
         VesselID,
-        PlayerID,
-        Nickname,
-        Signature,
-        GroupType,
+        OwnerPlayerID,
         LocationX,
         LocationZ,
         EulerAngleY

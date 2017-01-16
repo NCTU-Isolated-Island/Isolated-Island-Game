@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 8)
+                        if (parameters.Count != 5)
                         {
                             LogService.ErrorFormat(string.Format("FetchVesselResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -43,26 +43,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 try
                 {
                     int vesselID = (int)parameters[(byte)FetchVesselResponseParameterCode.VesselID];
-                    int playerID = (int)parameters[(byte)FetchVesselResponseParameterCode.PlayerID];
-                    string nickname = (string)parameters[(byte)FetchVesselResponseParameterCode.Nickname];
-                    string signature = (string)parameters[(byte)FetchVesselResponseParameterCode.Signature];
-                    GroupType groupType = (GroupType)parameters[(byte)FetchVesselResponseParameterCode.GroupType];
+                    int ownerPlayerID = (int)parameters[(byte)FetchVesselResponseParameterCode.OwnerPlayerID];
                     float locationX = (float)parameters[(byte)FetchVesselResponseParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)FetchVesselResponseParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)FetchVesselResponseParameterCode.EulerAngleY];
 
-                    if(subject.PlayerID == playerID)
+                    if(subject.PlayerID == ownerPlayerID)
                     {
                         Vessel vessel = new Vessel(
                             vesselID: vesselID,
-                            playerInformation: new PlayerInformation
-                            {
-                                playerID = playerID,
-                                nickname = nickname,
-                                signature = signature,
-                                groupType = groupType,
-                                vesselID = vesselID
-                            },
+                            ownerPlayerID: ownerPlayerID,
                             locationX: locationX,
                             locationZ: locationZ,
                             rotationEulerAngleY: eulerAngleY);

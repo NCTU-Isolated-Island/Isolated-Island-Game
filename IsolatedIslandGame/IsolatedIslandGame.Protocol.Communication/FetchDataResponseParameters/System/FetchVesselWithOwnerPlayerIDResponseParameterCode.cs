@@ -3,10 +3,7 @@
     public enum FetchVesselWithOwnerPlayerIDResponseParameterCode : byte
     {
         VesselID,
-        PlayerID,
-        Nickname,
-        Signature,
-        GroupType,
+        OwnerPlayerID,
         LocationX,
         LocationZ,
         EulerAngleY,

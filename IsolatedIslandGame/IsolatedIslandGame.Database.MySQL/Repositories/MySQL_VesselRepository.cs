@@ -20,14 +20,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int vesselID = reader.GetInt32(0);
-                        vessel = new Vessel(vesselID, new PlayerInformation
-                        {
-                            playerID = player.PlayerID,
-                            nickname = player.Nickname,
-                            signature = player.Signature,
-                            groupType = player.GroupType,
-                            vesselID = vesselID
-                        }, 0, 0, 0);
+                        vessel = new Vessel(vesselID, player.PlayerID, 0, 0, 0);
                         return true;
                     }
                     else
@@ -42,8 +35,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             vessel = null;
             string sqlString = @"SELECT  
-                OwnerPlayerID, Nickname, Signature, GroupType, LocationX, LocationZ, EulerAngleY
-                from VesselCollection, PlayerCollection WHERE VesselID = @vesselID AND OwnerPlayerID = PlayerID;";
+                OwnerPlayerID, LocationX, LocationZ, EulerAngleY
+                from VesselCollection WHERE VesselID = @vesselID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@vesselID", vesselID);
@@ -52,23 +45,13 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int ownerPlayerID = reader.GetInt32(0);
-                        string nickname = reader.GetString(1);
-                        string signature = reader.GetString(2);
-                        GroupType groupType = (GroupType)reader.GetByte(3);
-                        float locationX = reader.GetFloat(4);
-                        float locationZ = reader.GetFloat(5);
-                        float eulerAngleY = reader.GetFloat(6);
+                        float locationX = reader.GetFloat(1);
+                        float locationZ = reader.GetFloat(2);
+                        float eulerAngleY = reader.GetFloat(3);
 
                         vessel = new Vessel(
                             vesselID: vesselID,
-                            playerInformation: new PlayerInformation
-                            {
-                                playerID = ownerPlayerID,
-                                nickname = nickname,
-                                signature = signature,
-                                groupType = groupType,
-                                vesselID = vesselID
-                            },
+                            ownerPlayerID: ownerPlayerID,
                             locationX: locationX,
                             locationZ: locationZ,
                             rotationEulerAngleY: eulerAngleY);
@@ -93,8 +76,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             vessel = null;
             string sqlString = @"SELECT  
-                VesselID, Nickname, Signature, GroupType, LocationX, LocationZ, EulerAngleY
-                from VesselCollection, PlayerCollection WHERE OwnerPlayerID = @ownerPlayerID AND OwnerPlayerID = PlayerID;";
+                VesselID, LocationX, LocationZ, EulerAngleY
+                from VesselCollection WHERE OwnerPlayerID = @ownerPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@ownerPlayerID", ownerPlayerID);
@@ -103,23 +86,13 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         int vesselID = reader.GetInt32(0);
-                        string nickname = reader.GetString(1);
-                        string signature = reader.GetString(2);
-                        GroupType groupType = (GroupType)reader.GetByte(3);
-                        float locationX = reader.GetFloat(4);
-                        float locationZ = reader.GetFloat(5);
-                        float eulerAngleY = reader.GetFloat(6);
+                        float locationX = reader.GetFloat(1);
+                        float locationZ = reader.GetFloat(2);
+                        float eulerAngleY = reader.GetFloat(3);
 
                         vessel = new Vessel(
                             vesselID: vesselID,
-                            playerInformation: new PlayerInformation
-                            {
-                                playerID = ownerPlayerID,
-                                nickname = nickname,
-                                signature = signature,
-                                groupType = groupType,
-                                vesselID = vesselID
-                            },
+                            ownerPlayerID: ownerPlayerID,
                             locationX: locationX,
                             locationZ: locationZ,
                             rotationEulerAngleY: eulerAngleY);
