@@ -21,6 +21,7 @@ public class ShowBag_View : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
 	
 	// Update is called once per frame
 	void Update () {
+  
 	if(clicking)
         { clicking_time = clicking_time + Time.deltaTime;
              if(clicking_time>1.2f && SubButton1.activeInHierarchy == false)
@@ -34,7 +35,8 @@ public class ShowBag_View : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log("Down");
-        clicking = true;
+        if(UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Show_Bag)
+        { clicking = true; }    
     }
     public void OnPointerUp(PointerEventData eventData)
     {

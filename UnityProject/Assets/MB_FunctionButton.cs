@@ -18,8 +18,9 @@ public class MB_FunctionButton : MonoBehaviour
     public GameObject Bag;
     public GameObject ShowBag;
 
-    public Button FunctionButton1;
+    public GameObject my_boat_text1,my_boat_text2;
 
+    public Button FunctionButton1;
     public Button FunctionButton2;
 
 
@@ -44,6 +45,9 @@ public class MB_FunctionButton : MonoBehaviour
         FunctionButton0.onClick.AddListener(Button0);
         FunctionButton1.onClick.AddListener(Button1);
         FunctionButton2.onClick.AddListener(Button2);
+
+        my_boat_text1.GetComponent<Text>().text = (UIControl.GetComponent<UImanager>().player_name + "的船");
+        my_boat_text2.GetComponent<Text>().text = my_boat_text1.GetComponent<Text>().text;
     }
 
     void Update()

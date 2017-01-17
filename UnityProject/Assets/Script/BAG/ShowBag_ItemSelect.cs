@@ -5,23 +5,42 @@ using System.Collections;
 
 public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
 {
+    public GameObject UIControl;
     public GameObject DetailPanel;
-    public GameObject BAG;
-	// Use this for initialization
-	void Start () {
-	
-	}
+    public GameObject Bag;
+    public GameObject CombineAreaILocate;
+    public int ItemNo;
+    // Use this for initialization
+    void Start () {
+        UIControl  = GameObject.FindWithTag("UImanager");
+        if(!Bag)
+        {
+            Bag = UIControl.GetComponent<UImanager>().Bag;
+        }
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (BAG.GetComponent<ShowBag_pos>().enabled)
-        { choose(); }
+        if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Show_Bag)
+        { Show_Choose(); }
+        else if(UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
+        { Combine_Choose(); }
     }
-    void choose()
+    void Show_Choose()
     {
         DetailPanel.SetActive(true);
     }
-        // Update is called once per frame
-        void Update () {
-	
-	}
+    void Combine_Choose()
+    {
+        if (this.gameObject.GetComponent<Image>().sprite != null)
+        {
+            if (CombineAreaILocate != null)
+            {
+                CombineAreaILocate.transform.GetChild(0).GetComponent<Image>().sprite = null;
+                CombineAreaILocate.GetComponent<Combine_block>().ItemInHere = null;
+            }
+            CombineAreaILocate = Bag.GetComponent<ShowBag_pos>().CombineArea;
+            Bag.GetComponent<ShowBag_pos>().SetPicture(this.gameObject);
+            Bag.GetComponent<ShowBag_pos>().UpAndDown();
+        }
+    }
 }

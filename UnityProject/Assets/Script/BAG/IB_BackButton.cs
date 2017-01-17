@@ -11,7 +11,7 @@ public class IB_BackButton : MonoBehaviour, IPointerClickHandler
 	}
     public void OnPointerClick(PointerEventData eventData)
     {
-        Bag.GetComponent<Combine_pos>().UpAndDown();
+        Bag.GetComponent<ShowBag_pos>().UpAndDown();
     }
     // Update is called once per frame
     void Update () {

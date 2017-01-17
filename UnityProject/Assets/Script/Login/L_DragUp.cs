@@ -16,7 +16,11 @@ public class L_DragUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     // Use this for initialization
     void Start () {
+
+        
+
         UIControl = GameObject.FindWithTag("UImanager");
+        if(!Canvas)
         Login = UIControl.GetComponent<UImanager>().UIObject[0];
         DragStart = false;
         BGOriginPos = Login.transform.localPosition;
@@ -55,8 +59,8 @@ public class L_DragUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         if (DragStart)
         {
             if (Login.transform.localPosition.y - BGOriginPos.y > Canvas.GetComponent<RectTransform>().rect.height * 3 / 5)
-            { Login.active = false; BG_Black.active = false;
-				UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
+            {   Login.active = false; BG_Black.active = false;
+                UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
 				UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
 			}
             else
