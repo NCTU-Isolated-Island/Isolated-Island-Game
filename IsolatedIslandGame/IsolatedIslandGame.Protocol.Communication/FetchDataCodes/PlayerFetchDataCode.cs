@@ -7,6 +7,7 @@
         Vessel,
         VesselDecorations,
         AllKnownBlueprints,
-        FriendInformations
+        FriendInformations,
+        AllPlayerConversations
     }
 }

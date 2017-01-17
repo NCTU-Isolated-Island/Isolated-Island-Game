@@ -7,6 +7,7 @@ using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
+using System;
 
 namespace IsolatedIslandGame.Server
 {
@@ -103,6 +104,11 @@ namespace IsolatedIslandGame.Server
             {
                 return false;
             }
+        }
+
+        public override List<PlayerConversation> GetPlayerConversations(int playerID)
+        {
+            return DatabaseService.RepositoryList.PlayerConversationRepository.ListOfReceiver(playerID);
         }
     }
 }

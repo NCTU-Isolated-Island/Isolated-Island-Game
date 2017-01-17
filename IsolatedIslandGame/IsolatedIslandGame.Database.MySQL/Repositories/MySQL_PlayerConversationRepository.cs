@@ -43,7 +43,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             List<PlayerConversation> conversations = new List<PlayerConversation>();
             string sqlString = @"SELECT  
                 MessageID, HasRead, SenderPlayerID, SendTime, Content
-                from PlayerConversationCollection, PlayerMessageCollection 
+                from IsolatedIsland_PlayerData.PlayerConversationCollection, IsolatedIsland_TextData.PlayerMessageCollection 
                 WHERE ReceiverPlayerID = @receiverPlayerID AND MessageID = PlayerMessageID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
