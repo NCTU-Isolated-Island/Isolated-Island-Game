@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
+using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,9 @@ namespace IsolatedIslandGame.Library
         public delegate void FriendInformationChangeEventHandler(DataChangeType changeType, FriendInformation information);
         private event FriendInformationChangeEventHandler onFriendInformationChange;
         public event FriendInformationChangeEventHandler OnFriendInformationChange { add { onFriendInformationChange += value; } remove { onFriendInformationChange -= value; } }
+
+        private event Action<PlayerConversation> onGetPlayerConversation;
+        public event Action<PlayerConversation> OnGetPlayerConversation { add { onGetPlayerConversation += value; } remove { onGetPlayerConversation -= value; } }
 
         #endregion
 
@@ -145,6 +149,11 @@ namespace IsolatedIslandGame.Library
                 friendInformationDictionary.Remove(friendPlayerID);
                 onFriendInformationChange?.Invoke(DataChangeType.Remove, information);
             }
+        }
+        public void GetPlayerConversation(PlayerConversation conversation)
+        {
+            SyncPlayerInformation(conversation.message.senderPlayerID);
+            onGetPlayerConversation?.Invoke(conversation);
         }
     }
 }

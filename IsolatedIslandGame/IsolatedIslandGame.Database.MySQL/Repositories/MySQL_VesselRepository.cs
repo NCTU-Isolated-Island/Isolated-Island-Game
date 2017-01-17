@@ -10,7 +10,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override bool Create(Player player, out Vessel vessel)
         {
             string sqlString = @"INSERT INTO VesselCollection 
-                (OwnerPlayerID) VALUES (@ownerPlayerID,@name) ;
+                (OwnerPlayerID) VALUES (@ownerPlayerID) ;
                 SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {

@@ -15,5 +15,7 @@ namespace IsolatedIslandGame.Database
         public abstract BlueprintProductRepository BlueprintProductRepository { get; }
         public abstract PlayerKnownBlueprintRepository PlayerKnownBlueprintRepository { get; }
         public abstract FriendRepository FriendRepository { get; }
+        public abstract PlayerMessageRepository PlayerMessageRepository { get; }
+        public abstract PlayerConversationRepository PlayerConversationRepository { get; }
     }
 }

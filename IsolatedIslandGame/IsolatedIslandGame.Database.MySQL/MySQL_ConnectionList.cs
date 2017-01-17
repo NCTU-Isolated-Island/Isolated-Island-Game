@@ -1,4 +1,5 @@
-﻿using IsolatedIslandGame.Database;
+﻿using System;
+using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Database.Connections;
 using IsolatedIslandGame.Database.MySQL.Connections;
 
@@ -12,10 +13,14 @@ namespace IsolatedIslandGame.Database.MySQL
         private MySQL_SettingDataConnection settingDataConnection = new MySQL_SettingDataConnection();
         public override SettingDataConnection SettingDataConnection { get { return settingDataConnection; } }
 
+        private MySQL_TextDataConnection textDataConnection = new MySQL_TextDataConnection();
+        public override TextDataConnection TextDataConnection { get { return textDataConnection; } }
+
         public MySQL_ConnectionList()
         {
             childConnections.Add(playerDataConnection);
             childConnections.Add(settingDataConnection);
+            childConnections.Add(textDataConnection);
         }
     }
 }

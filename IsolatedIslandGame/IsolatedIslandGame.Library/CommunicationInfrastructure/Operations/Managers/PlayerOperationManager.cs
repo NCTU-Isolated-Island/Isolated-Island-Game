@@ -33,6 +33,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.InviteFriend, new InviteFriendHandler(player) },
                 { PlayerOperationCode.AcceptFriend, new AcceptFriendHandler(player) },
                 { PlayerOperationCode.DeleteFriend, new DeleteFriendHandler(player) },
+                { PlayerOperationCode.SendMessage, new SendMessageHandler(player) },
             };
         }
 
@@ -164,6 +165,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)DeleteFriendParameterCode.TargetPlayerID, targetPlayerID }
             };
             SendOperation(PlayerOperationCode.DeleteFriend, parameters);
+        }
+        public void SendMessage(int receiverPlayerID, string content)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SendMessageParameterCode.ReceiverPlayerID, receiverPlayerID },
+                { (byte)SendMessageParameterCode.Content, content }
+            };
+            SendOperation(PlayerOperationCode.SendMessage, parameters);
         }
     }
 }

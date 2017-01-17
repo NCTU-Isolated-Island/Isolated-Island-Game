@@ -24,5 +24,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         public abstract bool InviteFriend(int inviterPlayerID, int accepterPlayerID);
         public abstract bool AcceptFriend(int inviterPlayerID, int accepterPlayerID);
         public abstract bool DeleteFriend(int selfPlayerID, int targetPlayerID);
+        public abstract bool SendMessage(int senderPlayerID, int receiverPlayerID, string content);
     }
 }

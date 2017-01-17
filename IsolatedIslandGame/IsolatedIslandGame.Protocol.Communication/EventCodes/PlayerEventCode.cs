@@ -4,6 +4,7 @@
     {
         SyncData,
         GetBlueprint,
-        FriendInvited
+        FriendInvited,
+        GetPlayerConversation
     }
 }

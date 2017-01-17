@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Database.Repositories;
 using IsolatedIslandGame.Database.MySQL.Repositories;
+using System;
 
 namespace IsolatedIslandGame.Database.MySQL
 {
@@ -38,5 +39,11 @@ namespace IsolatedIslandGame.Database.MySQL
 
         private MySQL_FriendRepository friendRepository = new MySQL_FriendRepository();
         public override FriendRepository FriendRepository { get { return friendRepository; } }
+
+        private MySQL_PlayerMessageRepository playerMessageRepository = new MySQL_PlayerMessageRepository();
+        public override PlayerMessageRepository PlayerMessageRepository { get { return playerMessageRepository; } }
+
+        private MySQL_PlayerConversationRepository playerConversationRepository = new MySQL_PlayerConversationRepository();
+        public override PlayerConversationRepository PlayerConversationRepository { get { return playerConversationRepository; } }
     }
 }
