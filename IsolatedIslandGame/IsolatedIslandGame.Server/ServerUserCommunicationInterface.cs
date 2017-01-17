@@ -1,5 +1,7 @@
-﻿using IsolatedIslandGame.Library;
+﻿using IsolatedIslandGame.Database;
+using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.CommunicationInfrastructure;
+using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
@@ -71,6 +73,42 @@ namespace IsolatedIslandGame.Server
         public override bool DeleteFriend(int selfPlayerID, int targetPlayerID)
         {
             return FriendManager.Instance.DeleteFriend(selfPlayerID, targetPlayerID);
+        }
+
+        public override bool SendMessage(int senderPlayerID, int receiverPlayerID, string content)
+        {
+            PlayerMessage message;
+            if(DatabaseService.RepositoryList.PlayerMessageRepository.Create(senderPlayerID, content, out message))
+            {
+                PlayerConversation receiverConversation, senderConversation;
+                if(DatabaseService.RepositoryList.PlayerConversationRepository.Create(receiverPlayerID, message.playerMessageID, false, out receiverConversation) &&
+                   DatabaseService.RepositoryList.PlayerConversationRepository.Create(senderPlayerID, message.playerMessageID, true, out senderConversation))
+                {
+                    Player sender, receiver;
+                    if(PlayerFactory.Instance.FindPlayer(senderPlayerID, out sender))
+                    {
+                        sender.GetPlayerConversation(senderConversation);
+                    }
+                    if (PlayerFactory.Instance.FindPlayer(receiverPlayerID, out receiver))
+                    {
+                        receiver.GetPlayerConversation(receiverConversation);
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override List<PlayerConversation> GetPlayerConversations(int playerID)
+        {
+            return DatabaseService.RepositoryList.PlayerConversationRepository.ListOfReceiver(playerID);
         }
     }
 }

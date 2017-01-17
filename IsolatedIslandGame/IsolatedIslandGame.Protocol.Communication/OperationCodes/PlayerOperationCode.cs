@@ -13,6 +13,7 @@
         UseBlueprint,
         InviteFriend,
         AcceptFriend,
-        DeleteFriend
+        DeleteFriend,
+        SendMessage
     }
 }

@@ -5,6 +5,7 @@ using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
 using System;
+using IsolatedIslandGame.Library.TextData;
 
 namespace IsolatedIslandGame.Client.Communication
 {
@@ -89,6 +90,18 @@ namespace IsolatedIslandGame.Client.Communication
         {
             LogService.FatalFormat("ClienPlayer DeleteFriend ");
             return false;
+        }
+
+        public override bool SendMessage(int senderPlayerID, int receiverPlayerID, string content)
+        {
+            LogService.FatalFormat("ClienPlayer SendMessage ");
+            return false;
+        }
+
+        public override List<PlayerConversation> GetPlayerConversations(int playerID)
+        {
+            LogService.FatalFormat("ClienPlayer GetPlayerConversations ");
+            return new List<PlayerConversation>();
         }
     }
 }

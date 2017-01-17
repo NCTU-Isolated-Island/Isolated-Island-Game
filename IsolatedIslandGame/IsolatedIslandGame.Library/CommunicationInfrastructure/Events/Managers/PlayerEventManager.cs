@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers;
+using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.EventParameters.Player;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
@@ -23,6 +24,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             {
                 { PlayerEventCode.SyncData, SyncDataResolver },
                 { PlayerEventCode.GetBlueprint, new GetBlueprintHandler(player) },
+                { PlayerEventCode.GetPlayerConversation, new GetPlayerConversationHandler(player) },
             };
         }
 
@@ -70,6 +72,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)GetBlueprintParameterCode.Products, blueprint.Products.ToArray() }
             };
             SendEvent(PlayerEventCode.GetBlueprint, parameters);
+        }
+        public void GetPlayerConversation(PlayerConversation playerConversation)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)GetPlayerConversationParameterCode.PlayerMessageID, playerConversation.message.playerMessageID },
+                { (byte)GetPlayerConversationParameterCode.SenderPlayerID, playerConversation.message.senderPlayerID },
+                { (byte)GetPlayerConversationParameterCode.SendTime, playerConversation.message.sendTime.ToBinary() },
+                { (byte)GetPlayerConversationParameterCode.Content, playerConversation.message.content },
+                { (byte)GetPlayerConversationParameterCode.HasRead, playerConversation.hasRead }
+            };
+            SendEvent(PlayerEventCode.GetPlayerConversation, parameters);
         }
     }
 }

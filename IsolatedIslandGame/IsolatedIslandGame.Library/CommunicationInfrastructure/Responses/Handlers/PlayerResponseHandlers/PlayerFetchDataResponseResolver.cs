@@ -14,6 +14,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             fetchResponseTable.Add(PlayerFetchDataCode.VesselDecorations, new FetchVesselDecorationsResponseHandler(subject));
             fetchResponseTable.Add(PlayerFetchDataCode.AllKnownBlueprints, new FetchAllKnownBlueprintsResponseHandler(subject));
             fetchResponseTable.Add(PlayerFetchDataCode.FriendInformations, new FetchFriendInformationsResponseHandler(subject));
+            fetchResponseTable.Add(PlayerFetchDataCode.AllPlayerConversations, new FetchAllPlayerConversationsResponseHandler(subject));
         }
     }
 }

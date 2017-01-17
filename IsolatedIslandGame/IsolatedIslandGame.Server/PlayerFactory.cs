@@ -205,6 +205,8 @@ namespace IsolatedIslandGame.Server
 
             DatabaseService.RepositoryList.FriendRepository.ListOfFriendInformations(player.PlayerID).ForEach(x => player.AddFriend(x));
             player.OnFriendInformationChange += player.EventManager.SyncDataResolver.SyncFriendInformationChange;
+
+            player.OnGetPlayerConversation += player.EventManager.GetPlayerConversation;
         }
         private void DisassemblyPlayer(Player player)
         {
@@ -227,6 +229,7 @@ namespace IsolatedIslandGame.Server
             playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
 
             player.OnFriendInformationChange -= player.EventManager.SyncDataResolver.SyncFriendInformationChange;
+            player.OnGetPlayerConversation -= player.EventManager.GetPlayerConversation;
         }
         private void CreateVessel(Player player)
         {

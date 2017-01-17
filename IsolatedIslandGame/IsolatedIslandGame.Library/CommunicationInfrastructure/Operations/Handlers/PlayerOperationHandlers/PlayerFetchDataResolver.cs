@@ -17,6 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             fetchTable.Add(PlayerFetchDataCode.VesselDecorations, new FetchVesselDecorationsHandler(subject));
             fetchTable.Add(PlayerFetchDataCode.AllKnownBlueprints, new FetchAllKnownBlueprintsHandler(subject));
             fetchTable.Add(PlayerFetchDataCode.FriendInformations, new FetchFriendInformationsHandler(subject));
+            fetchTable.Add(PlayerFetchDataCode.AllPlayerConversations, new FetchAllPlayerConversationsHandler(subject));
         }
 
         internal override void SendResponse(PlayerOperationCode operationCode, Dictionary<byte, object> parameter)
@@ -65,6 +66,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         public void FetchFriendInformations()
         {
             SendOperation(PlayerFetchDataCode.FriendInformations, new Dictionary<byte, object>());
+        }
+        public void FetchAllPlayerConversations()
+        {
+            SendOperation(PlayerFetchDataCode.AllPlayerConversations, new Dictionary<byte, object>());
         }
     }
 }

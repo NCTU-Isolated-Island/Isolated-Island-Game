@@ -1,6 +1,5 @@
 ﻿using IsolatedIslandGame.Database.Repositories;
 using IsolatedIslandGame.Library;
-using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 
