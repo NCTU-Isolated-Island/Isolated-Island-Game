@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour {
 
 	public static PlayerController Instance;
 
-
 	public GameObject CurrentSelectDecoration;
 
 	void Awake()
@@ -29,7 +28,7 @@ public class PlayerController : MonoBehaviour {
 
 		//After Setting Up, Deactivate PlayerController, and wait for into MainScene
 		gameObject.SetActive(false);
-
+		CurrentMode = Mode.RotateX;
 	}
 	void Update()
 	{
@@ -50,17 +49,37 @@ public class PlayerController : MonoBehaviour {
 			SelectDecoration();
 		}
 
-		if(Input.GetKeyDown(KeyCode.T))
+		if(Input.GetKeyDown(KeyCode.A))
 		{
-			RemoveAllDecoration();
+			if(CurrentMode == null)
+			{
+				CurrentMode = Mode.RotateX;
+			}
+			else if(CurrentMode == Mode.RotateX)
+			{
+				CurrentMode = Mode.RotateY;
+			}
+			else if(CurrentMode == Mode.RotateY)
+			{
+				CurrentMode = Mode.RotateZ;
+			}
+			else if(CurrentMode == Mode.RotateZ)
+			{
+				CurrentMode = Mode.RotateX;
+			}
+		}
+
+		if(Input.GetKeyDown(KeyCode.E))
+		{
+			StartCoroutine(Dec(0));
 		}
 
 		CheckDoubleClick();
 
-		AdjustViewAngle();
+		//AdjustViewAngle();
 		PinchToZoom();
 	}
-		
+
 	public void StartPlaceDecoration()
 	{
 		//Check have that material
@@ -73,7 +92,7 @@ public class PlayerController : MonoBehaviour {
 	{
 		finishPlacing = true;
 	}
-		
+
 	IEnumerator PlaceMaterial(int itemID)
 	{
 		placingMaterial = true;
@@ -118,7 +137,7 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-/*	IEnumerator RotateDecoration()
+	/*	IEnumerator RotateDecoration()
 	{
 		CurrentSelectDecoration.transform.Rotate(0,0,0,Space.World);
 	}*/
@@ -167,7 +186,7 @@ public class PlayerController : MonoBehaviour {
 
 	void AdjustViewAngle()
 	{
-		
+
 		if(Input.touchCount == 1 && !placingMaterial)
 		{
 			Touch touch = Input.GetTouch(0);
@@ -206,7 +225,7 @@ public class PlayerController : MonoBehaviour {
 
 		if(hit)
 		{
-			
+
 			if(CurrentSelectDecoration)
 			{
 				DeTransparentize(CurrentSelectDecoration);
@@ -224,7 +243,7 @@ public class PlayerController : MonoBehaviour {
 
 
 		}
-			
+
 
 	}
 
@@ -248,7 +267,7 @@ public class PlayerController : MonoBehaviour {
 			// Find the difference in the distances between each frame.
 			float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
-			print(deltaMagnitudeDiff);
+
 			CameraManager.Instance.Zoom((deltaMagnitudeDiff * 0.001f) + 1);
 
 
@@ -270,7 +289,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Transparentize(GameObject target)
 	{
-		
+
 		foreach(UnityEngine.Material entry in target.GetComponent<MeshRenderer>().materials)
 		{
 			entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 0.5f);
@@ -285,57 +304,83 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-//
-//	//Still Have Bugs
-//	void TwoFingersRotate()
-//	{
-//		if(Input.touchCount == 2)
-//		{
-//			Touch touchZero = Input.GetTouch(0);
-//			Touch touchOne = Input.GetTouch(1);
-//
-//			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-//			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-//
-//			Vector2 previousVector = (touchZeroPrevPos - touchOnePrevPos);
-//			Vector2 currentVector = (touchZero.position - touchOne.position);
-//
-//			float rotationAngle = Mathf.Acos(Vector2.Dot(previousVector,currentVector) / (previousVector.magnitude * currentVector.magnitude));
-//			print(rotationAngle);
-//			islandGameObject.transform.Rotate(0f,0f,rotationAngle * 10f,Space.World);
-//		}
-//	}
+	//
+	//	//Still Have Bugs
+	//	void TwoFingersRotate()
+	//	{
+	//		if(Input.touchCount == 2)
+	//		{
+	//			Touch touchZero = Input.GetTouch(0);
+	//			Touch touchOne = Input.GetTouch(1);
+	//
+	//			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+	//			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+	//
+	//			Vector2 previousVector = (touchZeroPrevPos - touchOnePrevPos);
+	//			Vector2 currentVector = (touchZero.position - touchOne.position);
+	//
+	//			float rotationAngle = Mathf.Acos(Vector2.Dot(previousVector,currentVector) / (previousVector.magnitude * currentVector.magnitude));
+	//			print(rotationAngle);
+	//			islandGameObject.transform.Rotate(0f,0f,rotationAngle * 10f,Space.World);
+	//		}
+	//	}
 
-	public enum Mode{ Move,Rotate,Default}
+	public enum Mode{ Move,RotateX,RotateY,RotateZ,Default}
 	public Mode CurrentMode;
 
-//	IEnumerator Dec()
-//	{
-//		while(true)
-//		{
-//			if(CursorMode == Mode.Move)
-//			{
-//				// GO.tran.po = hit point
-//			}
-//
-//			if(CursorMode == Mode.Rotate)
-//			{
-//				if(Input.touchCount == 1)
-//				{
-//					Touch touch = Input.GetTouch(0);
-//					CurrentSelectDecoration.transform.Rotate
-//					(
-//						touch.deltaPosition.y,
-//						touch.deltaPosition.x,
-//						0
-//					);
-//
-//
-//				}
-//			}
-//
-//			yield return null;
-//		}
-//	}
+	IEnumerator Dec(int itemID)
+	{
+		//after 2 sec press 
+		//slide down inventory
+
+		//		GameObject temp = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
+		//		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
+		//		Transparentize(temp);
+
+
+		while(true)
+		{
+			switch (CurrentMode) {
+			case Mode.Move:
+				// GO.tran.po = hit point
+				break;
+
+			case Mode.RotateX:
+				if(Input.touchCount == 1)
+				{
+					Touch touch = Input.GetTouch(0);
+					CurrentSelectDecoration.transform.Rotate(touch.deltaPosition.y * 0.1f, 0 , 0 , Space.World);
+
+
+				}
+				break;
+
+			case Mode.RotateY:
+				if(Input.touchCount == 1)
+				{
+					Touch touch = Input.GetTouch(0);
+					CurrentSelectDecoration.transform.Rotate(0,touch.deltaPosition.x * -0.1f , 0 , Space.World);
+
+
+				}
+				break;
+			case Mode.RotateZ:
+				if(Input.touchCount == 1)
+				{
+					Touch touch = Input.GetTouch(0);
+
+					CurrentSelectDecoration.transform.Rotate(0,0,touch.deltaPosition.y * 0.1f,Space.World);
+
+				}
+				break;
+			default:
+				break;
+			}
+
+
+
+			yield return null;
+		}
+	}
 }
 
