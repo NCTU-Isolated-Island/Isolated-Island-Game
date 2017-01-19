@@ -10,6 +10,7 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
     public GameObject Bag;
     public GameObject CombineAreaILocate;
     public int ItemNo;
+    public int PositionIndex;
     // Use this for initialization
     void Start () {
         UIControl  = GameObject.FindWithTag("UImanager");

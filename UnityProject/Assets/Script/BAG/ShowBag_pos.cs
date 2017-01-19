@@ -4,11 +4,14 @@ using System.Collections;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Items;
 public class ShowBag_pos : MonoBehaviour {
+
+    public bool StopForTest;
+
     public GameObject UIControl;
     public GameObject canvas;
 
     public GameObject ShowBagPanel;
-    public GameObject BAG;
+   // public GameObject BagContent;
 
     public GameObject ShowWay_Button;
     public Button BackButton;
@@ -19,17 +22,20 @@ public class ShowBag_pos : MonoBehaviour {
     public GameObject ItemSet;
     float A_pos;
     float B_pos;
+
+    public bool BackOnce = false;
+
     // Use this for initialization
-    void Start () {
-        UIControl = GameObject.FindWithTag("UImanager");
+    void Start ()
+    {
+        SetGameObject();  
         A_pos = -canvas.GetComponent<RectTransform>().rect.height;
         B_pos = 0;
-        BackButton = this.gameObject.transform.GetChild(4).GetComponent<Button>();
-        BackButton.onClick.AddListener(BACK);
     }
-   public bool BackOnce = false;
-	// Update is called once per frame
-	void Update () {
+
+
+
+    void Update () {
         if (ShowBagPanel.activeInHierarchy == false)
         {
             if (!BackOnce)
@@ -39,27 +45,29 @@ public class ShowBag_pos : MonoBehaviour {
                 BackOnce = true;
             }
         }
-        else if (ShowBagPanel.activeInHierarchy == true)
+        else if (ShowBagPanel.activeInHierarchy == true  && this.gameObject.transform.position.y == A_pos)
         {
-            this.GetComponent<RectTransform>().localPosition = new Vector3(0, B_pos, 0);
-            if(BackOnce)
-            {
-                Reset_Bag();
-            }
+            UpAndDown();
+            if(!StopForTest)
+            Reset_Bag();
             BackOnce = false;
         }
       
     }
     public void Reset_Bag()
     {
-        /* foreach (InventoryItemInfo item in UserManager.Instance.User.Player.Inventory.ItemInfos)
-            {
-                GameObject Create = Instantiate(ItemSet, Content.transform);
-            if (item.Item.ItemID != 0)
-                Create.GetComponent<ShowBag_ItemSelect>().ItemNo = item.Item.ItemID;
-            if (item.Item.ItemName != null)
-                Create.transform.GetChild(0).GetComponent<Text>().text = item.Item.ItemName;
-            }*/
+        for (int i = 0, t = Content.transform.childCount - 1; t >= 0 && i < 30; i++, t--)
+        {
+            Destroy(Content.transform.GetChild(t).gameObject);
+        }
+          foreach (InventoryItemInfo item in UserManager.Instance.User.Player.Inventory.ItemInfos)
+             {
+                   GameObject Create = Instantiate(ItemSet, Content.transform);
+                  Create.GetComponent<ShowBag_ItemSelect>().ItemNo = item.Item.ItemID;
+                  Create.GetComponent<ShowBag_ItemSelect>().PositionIndex = item.PositionIndex;
+                  Create.transform.GetChild(0).GetComponent<Text>().text = item.Item.ItemName;
+             }
+
     }
     public void UpAndDown()
     {              
@@ -79,9 +87,32 @@ public class ShowBag_pos : MonoBehaviour {
     }
 
     void BACK()
-    {if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Show_Bag)
+    {
+        if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Show_Bag)
             UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
-     else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
+        else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
             UpAndDown();
+    }
+    void SetGameObject()
+    {
+        if (!UIControl)
+            UIControl = GameObject.FindWithTag("UImanager");
+        UImanager UI = UIControl.GetComponent<UImanager>();
+
+        if (!canvas)
+            canvas = UI.Canvas;
+        if (!ShowBagPanel)
+            ShowBagPanel = UI.UIObject[4];
+        // if (!BagContent)
+        //  BagContent = this.gameObject.transform.GetChild(2).gameObject;
+        if (!BackButton)
+            BackButton = this.gameObject.transform.GetChild(4).GetComponent<Button>();
+        BackButton.onClick.AddListener(BACK);
+        if (!MainBoat)
+            MainBoat = UI.UIObject[1];
+        if (!CombineArea)
+            CombineArea = UI.UIObject[5];
+        if (!Content)
+            Content = this.gameObject.transform.GetChild(2).GetChild(0).GetChild(0).gameObject;
     }
 }
