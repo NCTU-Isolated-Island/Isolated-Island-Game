@@ -12,11 +12,18 @@ public class ShowBag_View : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     public GameObject SubButton1, SubButton2;
 	// Use this for initialization
 	void Start () {
+
+        if (!UIControl)
         UIControl = GameObject.FindWithTag("UImanager");
+        if (!SubButton1)
+            SubButton1 = this.gameObject.transform.GetChild(0).gameObject;
+        if (!SubButton2)
+            SubButton2 = this.gameObject.transform.GetChild(1).gameObject;
+
         clicking = false;
         clicking_time = 0;
-        SubButton1.active = false;
-        SubButton2.active = false;
+        SubButton1.SetActive(false);
+        SubButton2.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -26,8 +33,8 @@ public class ShowBag_View : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
         { clicking_time = clicking_time + Time.deltaTime;
              if(clicking_time>1.2f && SubButton1.activeInHierarchy == false)
             {
-                SubButton1.active = true;
-                SubButton2.active = true;
+                SubButton1.SetActive(true);
+                SubButton2.SetActive(true);
             }
         }	
 	}
@@ -50,13 +57,13 @@ public class ShowBag_View : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
         {
             Debug.Log("Combine:" );
             SubButton2.GetComponent<ShowBag_ViewSub>().MouseIn = false;
-            UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Combine;
+            UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Combine);
         }
         else
         { Debug.Log("Up In None:" + clicking_time); }
         clicking = false;
         clicking_time = 0;
-        SubButton1.active = false;
-        SubButton2.active = false;
+        SubButton1.SetActive(false);
+        SubButton2.SetActive(false);
     }
 }

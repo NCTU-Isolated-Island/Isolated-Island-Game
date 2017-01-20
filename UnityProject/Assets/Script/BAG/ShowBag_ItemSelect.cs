@@ -13,11 +13,17 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
     public int PositionIndex;
     // Use this for initialization
     void Start () {
-        UIControl  = GameObject.FindWithTag("UImanager");
-        if(!Bag)
-        {
-            Bag = UIControl.GetComponent<UImanager>().Bag;
-        }
+        SetGameObject();
+    
+    }
+    public void SetGameObject()
+    {
+        if (!UIControl)
+            UIControl = GameObject.FindWithTag("UImanager");
+        if (!Bag)
+        {Bag = UIControl.GetComponent<UImanager>().Bag;}
+        if (!DetailPanel)
+            DetailPanel = Bag.transform.parent.GetChild(1).gameObject;
     }
     public void OnPointerClick(PointerEventData eventData)
     {

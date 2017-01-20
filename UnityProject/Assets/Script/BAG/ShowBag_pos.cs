@@ -20,7 +20,7 @@ public class ShowBag_pos : MonoBehaviour {
 
     public GameObject Content;
     public GameObject ItemSet;
-    float A_pos;
+    public float A_pos;
     float B_pos;
 
     public bool BackOnce = false;
@@ -31,12 +31,11 @@ public class ShowBag_pos : MonoBehaviour {
         SetGameObject();  
         A_pos = -canvas.GetComponent<RectTransform>().rect.height;
         B_pos = 0;
+        this.gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);
     }
 
-
-
     void Update () {
-        if (ShowBagPanel.activeInHierarchy == false)
+        if (ShowBagPanel.activeInHierarchy == false)//showbag關閉
         {
             if (!BackOnce)
             {
@@ -45,11 +44,9 @@ public class ShowBag_pos : MonoBehaviour {
                 BackOnce = true;
             }
         }
-        else if (ShowBagPanel.activeInHierarchy == true  && this.gameObject.transform.position.y == A_pos)
+        else if (ShowBagPanel.activeInHierarchy == true  && this.gameObject.transform.localPosition.y == A_pos)//showbag開啟
         {
             UpAndDown();
-            if(!StopForTest)
-            Reset_Bag();
             BackOnce = false;
         }
       
@@ -70,9 +67,13 @@ public class ShowBag_pos : MonoBehaviour {
 
     }
     public void UpAndDown()
-    {              
+    {
         if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - A_pos) < 1)
-        {this.GetComponent<RectTransform>().localPosition = new Vector3(0, B_pos, 0);}
+        {
+            this.GetComponent<RectTransform>().localPosition = new Vector3(0, B_pos, 0);
+            if (!StopForTest)
+            { Reset_Bag(); }
+        }
         else if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - B_pos) < 1)
         {this.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);}
     }
@@ -89,7 +90,10 @@ public class ShowBag_pos : MonoBehaviour {
     void BACK()
     {
         if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Show_Bag)
-            UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
+        {
+            // UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
+            UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Main_Boat);
+        }
         else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
             UpAndDown();
     }

@@ -60,7 +60,8 @@ public class L_CampSelect : MonoBehaviour
     {
         UIControl.GetComponent<UImanager>().CampNum = CampNum;
         UIControl.GetComponent<UImanager>().Create_Charter();
-        UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;     
+        //UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
+        UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Main_Boat);
     }
 
 }

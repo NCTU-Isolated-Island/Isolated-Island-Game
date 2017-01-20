@@ -17,24 +17,34 @@ public class L_DragUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     // Use this for initialization
     void Start () {
 
-        
+        SetGameObject();
 
-        UIControl = GameObject.FindWithTag("UImanager");
-        if(!Canvas)
-        Login = UIControl.GetComponent<UImanager>().UIObject[0];
+       
         DragStart = false;
         BGOriginPos = Login.transform.localPosition;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 		if(Login.GetComponent<L_Loading>().LoadingCase == 0)
         {
             DragStart = true;
-            BG_Black.active = true;
+            BG_Black.SetActive(true);
         }
 	}
-
+    void SetGameObject()
+    {
+        if (!UIControl)
+            UIControl = GameObject.FindWithTag("UImanager");
+        if (!Login)
+            Login = this.gameObject;
+        if (!Canvas)
+            Canvas = UIControl.GetComponent<UImanager>().Canvas;
+        if (!BG_Black)
+        { BG_Black = Canvas.transform.GetChild(2).gameObject; }
+        if (!BG_DarkBlue)
+        { BG_DarkBlue = this.gameObject.transform.GetChild(0).GetChild(0).gameObject; }
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (DragStart)
@@ -59,7 +69,7 @@ public class L_DragUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         if (DragStart)
         {
             if (Login.transform.localPosition.y - BGOriginPos.y > Canvas.GetComponent<RectTransform>().rect.height * 3 / 5)
-            {   Login.active = false; BG_Black.active = false;
+            {   Login.SetActive(false); BG_Black.SetActive(false);
                 UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
 				UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
 			}
@@ -67,7 +77,6 @@ public class L_DragUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
             {
                 Login.transform.localPosition = BGOriginPos;
             }
-        }
-          
+        }  
     }
 }

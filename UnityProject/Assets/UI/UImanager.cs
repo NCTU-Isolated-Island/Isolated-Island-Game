@@ -4,7 +4,7 @@ using UnityEngine;
 using IsolatedIslandGame.Library;
 public class UImanager : MonoBehaviour {
 
-    public enum UI { Login, Main_Boat, Other_Boat, Map, Show_Bag,Combine };
+    public enum UI { Login, Main_Boat, Other_Boat, Map, Show_Bag,Combine,Mission,Friend,Chat };
     public bool StopForTest;
     public UI GameUI;
     private int NowAt;
@@ -31,7 +31,7 @@ public class UImanager : MonoBehaviour {
         if(!StopForTest)
         { GameUI = UI.Login; ChangeUI(NowAt); }
     }
-	void ChangeUI(int a)
+	public void ChangeUI(int a)
     {
         GameUI = (UI)a;
         NowAt = a;
