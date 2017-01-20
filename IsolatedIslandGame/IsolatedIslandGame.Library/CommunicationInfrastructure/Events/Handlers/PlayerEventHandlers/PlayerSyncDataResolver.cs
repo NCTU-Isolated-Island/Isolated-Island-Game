@@ -14,6 +14,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
         {
             syncTable.Add(PlayerSyncDataCode.InventoryItemInfoChange, new SyncInventoryItemInfoChangeHandler(subject));
             syncTable.Add(PlayerSyncDataCode.PlayerInformation, new SyncPlayerInformationHandler(subject));
+            syncTable.Add(PlayerSyncDataCode.TransactionItemChange, new SyncTransactionItemChangeHandler(subject));
+            syncTable.Add(PlayerSyncDataCode.TransactionConfirm, new SyncTransactionConfirmHandler(subject));
         }
 
         internal override void SendSyncData(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -57,6 +59,27 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncPlayerInformationParameterCode.VesselID, playerInformation.vesselID }
             };
             SendSyncData(PlayerSyncDataCode.PlayerInformation, parameters);
+        }
+        public void SyncPlayerInformation(int transactionID, DataChangeType changeType, TransactionItemInfo info)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncTransactionItemChangeParameterCode.TransactionID, transactionID },
+                { (byte)SyncTransactionItemChangeParameterCode.DataChangeType, (byte)changeType },
+                { (byte)SyncTransactionItemChangeParameterCode.ItemID, info.Item.ItemID },
+                { (byte)SyncTransactionItemChangeParameterCode.ItemCount, info.Count },
+                { (byte)SyncTransactionItemChangeParameterCode.PositionIndex, info.PositionIndex }
+            };
+            SendSyncData(PlayerSyncDataCode.TransactionItemChange, parameters);
+        }
+        public void SyncPlayerInformation(int transactionID, int confirmedPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncTransactionConfirmParameterCode.TransactionID, transactionID },
+                { (byte)SyncTransactionConfirmParameterCode.ConfirmedPlayerID, confirmedPlayerID }
+            };
+            SendSyncData(PlayerSyncDataCode.TransactionConfirm, parameters);
         }
     }
 }

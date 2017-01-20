@@ -110,6 +110,26 @@ public class GameManager : MonoBehaviour
 			UImanager.Instance.LoadResult(0);
 			//SceneManager.LoadScene("MainScene");
 		}
+        UserManager.Instance.User.Player.ResponseManager.OnSynthesizeMaterialResponse += (returnCode, requirements, products) =>
+        {
+            switch(returnCode)
+            {
+                case ErrorCode.NoError:
+                    foreach(var requirement in requirements)
+                    {
+                        int requirementItemID = requirement.itemID;
+                        int requirementItemCount = requirement.itemCount;
+                        int requirementPositionIndex = requirement.positionIndex;
+                    }
+                    foreach (var product in products)
+                    {
+                        int productItemID = product.itemID;
+                        int productItemCount = product.itemCount;
+                        int productPositionIndex = product.positionIndex;
+                    }
+                    break;
+            }
+        };
 	}
 
 	void OnCreateCharacter(Player player)

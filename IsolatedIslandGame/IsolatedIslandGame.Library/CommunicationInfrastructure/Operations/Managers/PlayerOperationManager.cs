@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.PlayerOperationHandlers;
+using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
 using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
@@ -34,6 +35,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.AcceptFriend, new AcceptFriendHandler(player) },
                 { PlayerOperationCode.DeleteFriend, new DeleteFriendHandler(player) },
                 { PlayerOperationCode.SendMessage, new SendMessageHandler(player) },
+                { PlayerOperationCode.TransactionRequest, new TransactionRequestHandler(player) },
+                { PlayerOperationCode.AcceptTransaction, new AcceptTransactionHandler(player) },
+                { PlayerOperationCode.ChangeTransactionItem, new ChangeTransactionItemHandler(player) },
+                { PlayerOperationCode.ConfirmTransaction, new ConfirmTransactionHandler(player) },
             };
         }
 
@@ -174,6 +179,42 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)SendMessageParameterCode.Content, content }
             };
             SendOperation(PlayerOperationCode.SendMessage, parameters);
+        }
+        public void TransactionRequest(int targetPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)TransactionRequestParameterCode.TargetPlayerID, targetPlayerID }
+            };
+            SendOperation(PlayerOperationCode.TransactionRequest, parameters);
+        }
+        public void AcceptTransaction(int targetPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)AcceptTransactionParameterCode.TargetPlayerID, targetPlayerID }
+            };
+            SendOperation(PlayerOperationCode.AcceptTransaction, parameters);
+        }
+        public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)ChangeTransactionItemParameterCode.TransactionID, transactionID },
+                { (byte)ChangeTransactionItemParameterCode.DataChangeType, (byte)changeType },
+                { (byte)ChangeTransactionItemParameterCode.ItemID, info.Item.ItemID },
+                { (byte)ChangeTransactionItemParameterCode.ItemCount, info.Count },
+                { (byte)ChangeTransactionItemParameterCode.PositionIndex, info.PositionIndex }
+            };
+            SendOperation(PlayerOperationCode.ChangeTransactionItem, parameters);
+        }
+        public void ConfirmTransaction(int transactionID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)ConfirmTransactionParameterCode.TransactionID, transactionID }
+            };
+            SendOperation(PlayerOperationCode.ConfirmTransaction, parameters);
         }
     }
 }
