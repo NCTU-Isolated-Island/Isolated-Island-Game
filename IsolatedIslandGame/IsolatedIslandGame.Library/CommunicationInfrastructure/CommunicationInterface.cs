@@ -1,4 +1,5 @@
-﻿using IsolatedIslandGame.Library.TextData;
+﻿using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
@@ -27,5 +28,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         public abstract bool DeleteFriend(int selfPlayerID, int targetPlayerID);
         public abstract bool SendMessage(int senderPlayerID, int receiverPlayerID, string content);
         public abstract List<PlayerConversation> GetPlayerConversations(int playerID);
+
+        public abstract bool TransactionRequest(int requesterPlayerID, int accepterPlayerID);
+        public abstract bool AcceptTransaction(int requesterPlayerID, int accepterPlayerID);
+        public abstract bool ConfirmTransaction(int playerID, int transactionID);
+        public abstract bool ChangeTransactionItem(int playerID, int transactionID, DataChangeType changeType, TransactionItemInfo info);
     }
 }

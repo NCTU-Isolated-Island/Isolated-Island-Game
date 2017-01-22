@@ -21,20 +21,29 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 lock(subject.Inventory)
                 {
-                    bool isReallyHaveTheseMaterials = true;
-                    foreach (var info in elementInfos)
+                    if (BlueprintManager.Instance.Blueprints.Any(x => x.IsSufficientRequirements(elementInfos)))
                     {
-                        if (subject.Inventory.ItemCount(info.itemID) < info.itemCount)
+                        Blueprint blueprint = BlueprintManager.Instance.Blueprints.First(x => x.IsSufficientRequirements(elementInfos));
+                        bool inventoryCheck = true;
+
+                        foreach (var requirement in blueprint.Requirements)
                         {
-                            isReallyHaveTheseMaterials = false;
-                            break;
+                            if (!subject.Inventory.RemoveItemCheck(requirement.itemID, requirement.itemCount))
+                            {
+                                inventoryCheck = false;
+                                break;
+                            }
                         }
-                    }
-                    if (isReallyHaveTheseMaterials)
-                    {
-                        if (BlueprintManager.Instance.Blueprints.Any(x => x.IsSufficientRequirements(elementInfos)))
+                        foreach (var product in blueprint.Products)
                         {
-                            Blueprint blueprint = BlueprintManager.Instance.Blueprints.First(x => x.IsSufficientRequirements(elementInfos));
+                            if (!subject.Inventory.AddItemCheck(product.itemID, product.itemCount))
+                            {
+                                inventoryCheck = false;
+                                break;
+                            }
+                        }
+                        if (inventoryCheck)
+                        {
                             if (!subject.IsKnownBlueprint(blueprint.BlueprintID))
                             {
                                 subject.GetBlueprint(blueprint);
@@ -46,7 +55,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             foreach (var product in blueprint.Products)
                             {
                                 Item item;
-                                if(ItemManager.Instance.FindItem(product.itemID, out item))
+                                if (ItemManager.Instance.FindItem(product.itemID, out item))
                                 {
                                     subject.Inventory.AddItem(item, product.itemCount);
                                 }
@@ -61,15 +70,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         }
                         else
                         {
-                            LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, there is no such a blueprint", subject.IdentityInformation);
-                            SendError(operationCode, ErrorCode.InvalidOperation, "there is no such a blueprint");
+                            LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, Player doesn't have these materials", subject.IdentityInformation);
+                            SendError(operationCode, ErrorCode.PermissionDeny, "you don't have the materials");
                             return false;
                         }
                     }
                     else
                     {
-                        LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, Player doesn't have these materials", subject.IdentityInformation);
-                        SendError(operationCode, ErrorCode.PermissionDeny, "you don't have the materials");
+                        LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, there is no such a blueprint", subject.IdentityInformation);
+                        SendError(operationCode, ErrorCode.InvalidOperation, "there is no such a blueprint");
                         return false;
                     }
                 }

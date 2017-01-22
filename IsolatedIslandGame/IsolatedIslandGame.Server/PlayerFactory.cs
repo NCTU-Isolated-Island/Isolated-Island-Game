@@ -207,9 +207,17 @@ namespace IsolatedIslandGame.Server
             player.OnFriendInformationChange += player.EventManager.SyncDataResolver.SyncFriendInformationChange;
 
             player.OnGetPlayerConversation += player.EventManager.GetPlayerConversation;
+
+            player.OnTransactionRequest += player.EventManager.TransactionRequest;
+            player.OnTransactionStart += player.EventManager.StartTransaction;
         }
         private void DisassemblyPlayer(Player player)
         {
+            foreach(var transaction in player.Transactions)
+            {
+                transaction.EndTransaction(false);
+            }
+
             player.OnCreateCharacter -= DatabaseService.RepositoryList.PlayerRepository.Update;
             player.OnCreateCharacter -= CreateVessel;
 
@@ -229,7 +237,11 @@ namespace IsolatedIslandGame.Server
             playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
 
             player.OnFriendInformationChange -= player.EventManager.SyncDataResolver.SyncFriendInformationChange;
+
             player.OnGetPlayerConversation -= player.EventManager.GetPlayerConversation;
+
+            player.OnTransactionRequest -= player.EventManager.TransactionRequest;
+            player.OnTransactionStart -= player.EventManager.StartTransaction;
         }
         private void CreateVessel(Player player)
         {

@@ -25,6 +25,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { PlayerEventCode.SyncData, SyncDataResolver },
                 { PlayerEventCode.GetBlueprint, new GetBlueprintHandler(player) },
                 { PlayerEventCode.GetPlayerConversation, new GetPlayerConversationHandler(player) },
+                { PlayerEventCode.TransactionRequest, new TransactionRequestHandler(player) },
+                { PlayerEventCode.StartTransaction, new StartTransactionHandler(player) },
+                { PlayerEventCode.EndTransaction, new EndTransactionHandler(player) },
             };
         }
 
@@ -84,6 +87,33 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)GetPlayerConversationParameterCode.HasRead, playerConversation.hasRead }
             };
             SendEvent(PlayerEventCode.GetPlayerConversation, parameters);
+        }
+        public void TransactionRequest(int requesterPlayerID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)TransactionRequestParameterCode.RequesterPlayerID, requesterPlayerID }
+            };
+            SendEvent(PlayerEventCode.TransactionRequest, parameters);
+        }
+        public void StartTransaction(Transaction transaction)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)StartTransactionParameterCode.TransactionID, transaction.TransactionID },
+                { (byte)StartTransactionParameterCode.RequesterPlayerID, transaction.RequesterPlayerID },
+                { (byte)StartTransactionParameterCode.AccepterPlayerID, transaction.AccepterPlayerID }
+            };
+            SendEvent(PlayerEventCode.StartTransaction, parameters);
+        }
+        public void EndTransaction(int transactionID, bool isSuccessful)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)EndTransactionParameterCode.TransactionID, transactionID },
+                { (byte)EndTransactionParameterCode.IsSuccessful, isSuccessful }
+            };
+            SendEvent(PlayerEventCode.EndTransaction, parameters);
         }
     }
 }

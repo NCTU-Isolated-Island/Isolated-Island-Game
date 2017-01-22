@@ -35,7 +35,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     }
                     else
                     {
-                        message = default(PlayerMessage);
+                        message = new PlayerMessage();
                         return false;
                     }
                 }
@@ -69,7 +69,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     }
                     else
                     {
-                        message = default(PlayerMessage);
+                        message = new PlayerMessage();
                         return false;
                     }
                 }

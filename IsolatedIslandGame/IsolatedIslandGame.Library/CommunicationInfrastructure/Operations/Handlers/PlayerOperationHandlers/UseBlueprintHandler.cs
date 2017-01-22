@@ -35,18 +35,26 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     Blueprint blueprint;
                     if (BlueprintManager.Instance.FindBlueprint(blueprintID, out blueprint))
                     {
-                        bool isSufficientRequirements = true;
                         lock (subject.Inventory)
                         {
+                            bool inventoryCheck = true;
                             foreach (var requirement in blueprint.Requirements)
                             {
-                                if (subject.Inventory.ItemCount(requirement.itemID) < requirement.itemCount)
+                                if (!subject.Inventory.RemoveItemCheck(requirement.itemID, requirement.itemCount))
                                 {
-                                    isSufficientRequirements = false;
+                                    inventoryCheck = false;
                                     break;
                                 }
                             }
-                            if (isSufficientRequirements)
+                            foreach (var product in blueprint.Products)
+                            {
+                                if (!subject.Inventory.AddItemCheck(product.itemID, product.itemCount))
+                                {
+                                    inventoryCheck = false;
+                                    break;
+                                }
+                            }
+                            if (inventoryCheck)
                             {
                                 foreach (var requirement in blueprint.Requirements)
                                 {

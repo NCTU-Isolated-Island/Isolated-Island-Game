@@ -77,8 +77,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     if (reader.Read())
                     {
                         ulong facebookID = reader.GetUInt64(0);
-                        string nickname = reader.IsDBNull(1) ? null : reader.GetString(1);
-                        string signature = reader.IsDBNull(2) ? null : reader.GetString(2);
+                        string nickname = reader.IsDBNull(1) ? "" : reader.GetString(1);
+                        string signature = reader.IsDBNull(2) ? "" : reader.GetString(2);
                         GroupType groupType = (GroupType)reader.GetByte(3);
                         IPAddress lastConnectedIPAddress = reader.IsDBNull(4) ? IPAddress.None : IPAddress.Parse(reader.GetString(4));
                         player = new Player(playerID, facebookID, nickname, signature, groupType, lastConnectedIPAddress);

@@ -11,7 +11,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override bool Create(int vesselID, int materialItemID, float positionX, float positionY, float positionZ, float eulerAngleX, float eulerAngleY, float eulerAngleZ, out Decoration decoration)
         {
             string sqlString = @"INSERT INTO DecorationCollection 
-                (VesselID,MaterialItemID,PositionX,PositionY,PositionZ,EulerAngleX,EulerAngleY,EulerAngleZ) VALUES (@vesselID,@materialItemID,@positionX,@positionY,@positionZ,@eulerAngleX,@eulerAngleY,eulerAngleZ) ;
+                (VesselID,MaterialItemID,PositionX,PositionY,PositionZ,EulerAngleX,EulerAngleY,EulerAngleZ) VALUES (@vesselID,@materialItemID,@positionX,@positionY,@positionZ,@eulerAngleX,@eulerAngleY,@eulerAngleZ) ;
                 SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {

@@ -8,6 +8,7 @@
         PermissionDeny,
         Fail,
         NotExist,
-        AlreadyExisted
+        AlreadyExisted,
+        NotEnough
     }
 }

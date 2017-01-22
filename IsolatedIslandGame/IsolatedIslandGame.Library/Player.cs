@@ -23,11 +23,17 @@ namespace IsolatedIslandGame.Library
         public string IdentityInformation { get { return string.Format("Player ID: {0}", PlayerID); } }
         public Inventory Inventory { get; private set; }
         public Vessel Vessel { get; private set; }
+
         private Dictionary<int, Blueprint> knownBlueprintDictionary;
         public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values; } }
+
         private HashSet<int> knownPlayerIDSet;
+
         private Dictionary<int, FriendInformation> friendInformationDictionary;
         public IEnumerable<FriendInformation> FriendInformations { get { return friendInformationDictionary.Values.ToArray(); } }
+
+        private Dictionary<int, Transaction> transactionDictionary;
+        public IEnumerable<Transaction> Transactions { get { return transactionDictionary.Values; } }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -54,6 +60,12 @@ namespace IsolatedIslandGame.Library
         private event Action<PlayerConversation> onGetPlayerConversation;
         public event Action<PlayerConversation> OnGetPlayerConversation { add { onGetPlayerConversation += value; } remove { onGetPlayerConversation -= value; } }
 
+        private event Action<int> onTransactionRequest;
+        public event Action<int> OnTransactionRequest { add { onTransactionRequest += value; } remove { onTransactionRequest -= value; } }
+
+        private event Action<Transaction> onTransactionStart;
+        public event Action<Transaction> OnTransactionStart { add { onTransactionStart += value; } remove { onTransactionStart -= value; } }
+
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -72,6 +84,7 @@ namespace IsolatedIslandGame.Library
             knownPlayerIDSet = new HashSet<int>();
             knownBlueprintDictionary = new Dictionary<int, Blueprint>();
             friendInformationDictionary = new Dictionary<int, FriendInformation>();
+            transactionDictionary = new Dictionary<int, Transaction>();
         }
         public void BindUser(User user)
         {
@@ -154,6 +167,44 @@ namespace IsolatedIslandGame.Library
         {
             SyncPlayerInformation(conversation.message.senderPlayerID);
             onGetPlayerConversation?.Invoke(conversation);
+        }
+
+        public void TransactionRequest(int requesterPlayerID)
+        {
+            SyncPlayerInformation(requesterPlayerID);
+            onTransactionRequest?.Invoke(requesterPlayerID);
+        }
+        public bool ContainsTransaction(int transaction)
+        {
+            return transactionDictionary.ContainsKey(transaction);
+        }
+        public bool FindTransaction(int transactionID, out Transaction transaction)
+        {
+            if(ContainsTransaction(transactionID))
+            {
+                transaction = transactionDictionary[transactionID];
+                return true;
+            }
+            else
+            {
+                transaction = null;
+                return false;
+            }
+        }
+        public void AddTransaction(Transaction transaction)
+        {
+            if(!ContainsTransaction(transaction.TransactionID))
+            {
+                transactionDictionary.Add(transaction.TransactionID, transaction);
+                onTransactionStart?.Invoke(transaction);
+            }
+        }
+        public void RemoveTransaction(int transactionID)
+        {
+            if (ContainsTransaction(transactionID))
+            {
+                transactionDictionary.Remove(transactionID);
+            }
         }
     }
 }

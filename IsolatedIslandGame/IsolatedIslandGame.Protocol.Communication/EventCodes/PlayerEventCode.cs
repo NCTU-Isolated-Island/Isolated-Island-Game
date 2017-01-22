@@ -5,6 +5,9 @@
         SyncData,
         GetBlueprint,
         FriendInvited,
-        GetPlayerConversation
+        GetPlayerConversation,
+        TransactionRequest,
+        StartTransaction,
+        EndTransaction
     }
 }

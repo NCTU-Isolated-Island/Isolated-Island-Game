@@ -14,6 +14,10 @@
         InviteFriend,
         AcceptFriend,
         DeleteFriend,
-        SendMessage
+        SendMessage,
+        TransactionRequest,
+        AcceptTransaction,
+        ChangeTransactionItem,
+        ConfirmTransaction
     }
 }

@@ -4,6 +4,8 @@
     {
         InventoryItemInfoChange,
         FriendInformationChange,
-        PlayerInformation
+        PlayerInformation,
+        TransactionItemChange,
+        TransactionConfirm
     }
 }

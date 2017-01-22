@@ -1,6 +1,4 @@
-﻿using System;
-using IsolatedIslandGame.Database;
-using IsolatedIslandGame.Database.Connections;
+﻿using IsolatedIslandGame.Database.Connections;
 using IsolatedIslandGame.Database.MySQL.Connections;
 
 namespace IsolatedIslandGame.Database.MySQL
@@ -16,11 +14,15 @@ namespace IsolatedIslandGame.Database.MySQL
         private MySQL_TextDataConnection textDataConnection = new MySQL_TextDataConnection();
         public override TextDataConnection TextDataConnection { get { return textDataConnection; } }
 
+        private MySQL_ArchiveDataConnection archiveDataConnection = new MySQL_ArchiveDataConnection();
+        public override ArchiveDataConnection ArchiveDataConnection { get { return archiveDataConnection; } }
+
         public MySQL_ConnectionList()
         {
             childConnections.Add(playerDataConnection);
             childConnections.Add(settingDataConnection);
             childConnections.Add(textDataConnection);
+            childConnections.Add(archiveDataConnection);
         }
     }
 }
