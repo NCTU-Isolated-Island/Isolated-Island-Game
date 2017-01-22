@@ -88,20 +88,21 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             };
             SendEvent(PlayerEventCode.GetPlayerConversation, parameters);
         }
-        public void TransactionRequest(int targetPlayerID)
+        public void TransactionRequest(int requesterPlayerID)
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)TransactionRequestParameterCode.TargetPlayerID, targetPlayerID }
+                { (byte)TransactionRequestParameterCode.RequesterPlayerID, requesterPlayerID }
             };
             SendEvent(PlayerEventCode.TransactionRequest, parameters);
         }
-        public void StartTransaction(int transactionID, int targetPlayerID)
+        public void StartTransaction(Transaction transaction)
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)StartTransactionParameterCode.TransactionID, transactionID },
-                { (byte)StartTransactionParameterCode.TargetPlayerID, targetPlayerID }
+                { (byte)StartTransactionParameterCode.TransactionID, transaction.TransactionID },
+                { (byte)StartTransactionParameterCode.RequesterPlayerID, transaction.RequesterPlayerID },
+                { (byte)StartTransactionParameterCode.AccepterPlayerID, transaction.AccepterPlayerID }
             };
             SendEvent(PlayerEventCode.StartTransaction, parameters);
         }

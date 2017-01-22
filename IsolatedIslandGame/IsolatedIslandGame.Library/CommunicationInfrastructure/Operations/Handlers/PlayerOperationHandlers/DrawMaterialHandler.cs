@@ -1,4 +1,5 @@
-﻿using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+﻿using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.ResponseParameters.Player;
 using System;
 using System.Collections.Generic;
@@ -22,15 +23,24 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 lock(subject.Inventory)
                 {
-                    subject.Inventory.AddItem(randomItem, randomNumber);
-                    Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
+                    if(subject.Inventory.AddItemCheck(randomItem.ItemID, randomNumber))
                     {
-                        { (byte)DrawMaterialResponseParameterCode.ItemID, randomItem.ItemID },
-                        { (byte)DrawMaterialResponseParameterCode.ItemCount, randomNumber }
-                    };
-                    SendResponse(operationCode, responseParameters);
-                    LogService.InfoFormat("Player: {0}, DrawMaterial, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, randomNumber);
-                    return true;
+                        subject.Inventory.AddItem(randomItem, randomNumber);
+                        Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
+                        {
+                            { (byte)DrawMaterialResponseParameterCode.ItemID, randomItem.ItemID },
+                            { (byte)DrawMaterialResponseParameterCode.ItemCount, randomNumber }
+                        };
+                        SendResponse(operationCode, responseParameters);
+                        LogService.InfoFormat("Player: {0}, DrawMaterial, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, randomNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        SendError(operationCode, ErrorCode.Fail, "DrawMaterial Fail");
+                        LogService.ErrorFormat("Player: {0}, DrawMaterial Fail, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, randomNumber);
+                        return false;
+                    }
                 }
             }
             else

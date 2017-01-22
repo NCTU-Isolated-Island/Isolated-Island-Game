@@ -25,7 +25,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 lock(subject.Inventory)
                 {
-                    if (subject.Inventory.ItemCount(materialItemID) > 0)
+                    if (subject.Inventory.RemoveItemCheck(materialItemID, 1))
                     {
                         InventoryItemInfo info;
                         if(subject.Inventory.FindInventoryItemInfoByItemID(materialItemID, out info))

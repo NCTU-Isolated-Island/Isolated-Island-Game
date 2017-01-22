@@ -101,14 +101,13 @@ namespace IsolatedIslandGame.Library
                 onItemInfoChange?.Invoke(DataChangeType.Remove, info);
             }
         }
-        public bool AddItem(Item item, int count)
+        public void AddItem(Item item, int count)
         {
             InventoryItemInfo info;
             if (FindInventoryItemInfoByItemID(item.ItemID, out info))
             {
                 info.Count += count;
                 onItemInfoChange?.Invoke(DataChangeType.Update, info);
-                return true;
             }
             else
             {
@@ -120,20 +119,11 @@ namespace IsolatedIslandGame.Library
                         itemInfoDictionary.Add(info.InventoryItemInfoID, info);
                         itemInfos[info.PositionIndex] = info;
                         onItemInfoChange?.Invoke(DataChangeType.Add, info);
-                        return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
                 }
             }
         }
-        public bool RemoveItem(int itemID, int count)
+        public void RemoveItem(int itemID, int count)
         {
             if (ContainsItem(itemID) && ItemCount(itemID) >= count)
             {
@@ -155,6 +145,20 @@ namespace IsolatedIslandGame.Library
                     {
                         onItemInfoChange?.Invoke(DataChangeType.Update, info);
                     }
+                }
+            }
+        }
+        public bool AddItemCheck(int itemID, int count)
+        {
+            if (ContainsItem(itemID))
+            {
+                return true;
+            }
+            else
+            {
+                int positionIndex = Array.FindIndex(itemInfos, x => x == null);
+                if (positionIndex >= 0)
+                {
                     return true;
                 }
                 else
@@ -162,10 +166,10 @@ namespace IsolatedIslandGame.Library
                     return false;
                 }
             }
-            else
-            {
-                return false;
-            }
+        }
+        public bool RemoveItemCheck(int itemID, int count)
+        {
+            return ContainsItem(itemID) && ItemCount(itemID) >= count;
         }
     }
 }

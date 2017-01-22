@@ -2,6 +2,6 @@
 {
     public enum AcceptTransactionParameterCode : byte
     {
-        TargetPlayerID
+        RequesterPlayerID
     }
 }

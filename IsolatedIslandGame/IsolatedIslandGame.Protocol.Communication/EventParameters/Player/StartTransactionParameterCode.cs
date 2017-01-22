@@ -3,6 +3,7 @@
     public enum StartTransactionParameterCode : byte
     {
         TransactionID,
-        TargetPlayerID
+        RequesterPlayerID,
+        AccepterPlayerID
     }
 }

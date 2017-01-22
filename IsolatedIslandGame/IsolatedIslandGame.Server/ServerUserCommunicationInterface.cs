@@ -1,13 +1,13 @@
 ﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.CommunicationInfrastructure;
+using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
-using System;
 
 namespace IsolatedIslandGame.Server
 {
@@ -109,6 +109,59 @@ namespace IsolatedIslandGame.Server
         public override List<PlayerConversation> GetPlayerConversations(int playerID)
         {
             return DatabaseService.RepositoryList.PlayerConversationRepository.ListOfReceiver(playerID);
+        }
+
+        public override bool TransactionRequest(int requesterPlayerID, int accepterPlayerID)
+        {
+            Player accepter;
+            if(PlayerFactory.Instance.ContainsPlayer(requesterPlayerID) && PlayerFactory.Instance.FindPlayer(accepterPlayerID, out accepter))
+            {
+                accepter.TransactionRequest(requesterPlayerID);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool AcceptTransaction(int requesterPlayerID, int accepterPlayerID)
+        {
+            Transaction transaction;
+            if(TransactionManager.Instance.CreateTransaction(requesterPlayerID, accepterPlayerID, out transaction))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool ConfirmTransaction(int playerID, int transactionID)
+        {
+            Transaction transaction; ;
+            if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
+            {
+                return transaction.Confirm(playerID);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool ChangeTransactionItem(int playerID, int transactionID, DataChangeType changeType, TransactionItemInfo info)
+        {
+            Transaction transaction; ;
+            if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
+            {
+                return transaction.ChangeTransactionItem(playerID, changeType, info);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

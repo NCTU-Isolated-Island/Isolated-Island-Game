@@ -32,7 +32,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 else
                 {
                     LogService.Error($"MySQL_PlayerConversationRepository Create Error ReceiverPlayerID: {receiverPlayerID}, PlayerMessageID: {playerMessageID}");
-                    conversation = default(PlayerConversation);
+                    conversation = new PlayerConversation();
                     return false;
                 }
             }

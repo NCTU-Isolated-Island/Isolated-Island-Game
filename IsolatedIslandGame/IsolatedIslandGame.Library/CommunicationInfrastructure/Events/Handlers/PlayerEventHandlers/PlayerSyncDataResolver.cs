@@ -60,11 +60,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             };
             SendSyncData(PlayerSyncDataCode.PlayerInformation, parameters);
         }
-        public void SyncPlayerInformation(int transactionID, DataChangeType changeType, TransactionItemInfo info)
+        public void SyncTransactionItemChange(int transactionID, int playerID, DataChangeType changeType, TransactionItemInfo info)
         {
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)SyncTransactionItemChangeParameterCode.TransactionID, transactionID },
+                { (byte)SyncTransactionItemChangeParameterCode.PlayerID, playerID },
                 { (byte)SyncTransactionItemChangeParameterCode.DataChangeType, (byte)changeType },
                 { (byte)SyncTransactionItemChangeParameterCode.ItemID, info.Item.ItemID },
                 { (byte)SyncTransactionItemChangeParameterCode.ItemCount, info.Count },
@@ -72,7 +73,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             };
             SendSyncData(PlayerSyncDataCode.TransactionItemChange, parameters);
         }
-        public void SyncPlayerInformation(int transactionID, int confirmedPlayerID)
+        public void SyncTransactionConfirm(int transactionID, int confirmedPlayerID)
         {
             var parameters = new Dictionary<byte, object>
             {

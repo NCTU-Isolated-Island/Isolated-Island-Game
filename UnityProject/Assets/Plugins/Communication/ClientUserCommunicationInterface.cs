@@ -6,6 +6,7 @@ using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
 using System;
 using IsolatedIslandGame.Library.TextData;
+using IsolatedIslandGame.Library.Items;
 
 namespace IsolatedIslandGame.Client.Communication
 {
@@ -102,6 +103,30 @@ namespace IsolatedIslandGame.Client.Communication
         {
             LogService.FatalFormat("ClienPlayer GetPlayerConversations ");
             return new List<PlayerConversation>();
+        }
+
+        public override bool TransactionRequest(int requesterPlayerID, int accepterPlayerID)
+        {
+            LogService.FatalFormat("ClienPlayer TransactionRequest ");
+            return false;
+        }
+
+        public override bool AcceptTransaction(int requesterPlayerID, int accepterPlayerID)
+        {
+            LogService.FatalFormat("ClienPlayer AcceptTransaction ");
+            return false;
+        }
+
+        public override bool ConfirmTransaction(int playerID, int transactionID)
+        {
+            LogService.FatalFormat("ClienPlayer ConfirmTransaction ");
+            return false;
+        }
+
+        public override bool ChangeTransactionItem(int playerID, int transactionID, DataChangeType changeType, TransactionItemInfo info)
+        {
+            LogService.FatalFormat("ClienPlayer ChangeTransactionItem ");
+            return false;
         }
     }
 }

@@ -180,19 +180,19 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             };
             SendOperation(PlayerOperationCode.SendMessage, parameters);
         }
-        public void TransactionRequest(int targetPlayerID)
+        public void TransactionRequest(int accepterPlayerID)
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)TransactionRequestParameterCode.TargetPlayerID, targetPlayerID }
+                { (byte)TransactionRequestParameterCode.AccepterPlayerID, accepterPlayerID }
             };
             SendOperation(PlayerOperationCode.TransactionRequest, parameters);
         }
-        public void AcceptTransaction(int targetPlayerID)
+        public void AcceptTransaction(int requesterPlayerID)
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)AcceptTransactionParameterCode.TargetPlayerID, targetPlayerID }
+                { (byte)AcceptTransactionParameterCode.RequesterPlayerID, requesterPlayerID }
             };
             SendOperation(PlayerOperationCode.AcceptTransaction, parameters);
         }

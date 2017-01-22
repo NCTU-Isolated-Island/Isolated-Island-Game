@@ -19,27 +19,38 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 lock(subject.Vessel)
                 {
-                    if (subject.Vessel.ContainsDecoration(decorationID))
+                    lock(subject.Inventory)
                     {
-                        Decoration decoration;
-                        if(subject.Vessel.FindDecoration(decorationID, out decoration))
+                        if (subject.Vessel.ContainsDecoration(decorationID))
                         {
-                            Item material = decoration.Material;
-                            subject.Inventory.AddItem(material, 1);
-                            subject.Vessel.RemoveDecoration(decorationID);
-                            DecorationFactory.Instance.DeleteDecoration(decorationID);
-                            LogService.InfoFormat("Player: {0}, RemoveDecorationFromVessel, MaterialItemID: {1}", subject.IdentityInformation, material.ItemID);
-                            return true;
+                            Decoration decoration;
+                            if (subject.Vessel.FindDecoration(decorationID, out decoration))
+                            {
+                                Item material = decoration.Material;
+                                if (subject.Inventory.AddItemCheck(material.ItemID, 1))
+                                {
+                                    subject.Inventory.AddItem(material, 1);
+                                    subject.Vessel.RemoveDecoration(decorationID);
+                                    DecorationFactory.Instance.DeleteDecoration(decorationID);
+                                    LogService.InfoFormat("Player: {0}, RemoveDecorationFromVessel, MaterialItemID: {1}", subject.IdentityInformation, material.ItemID);
+                                    return true;
+                                }
+                                else
+                                {
+                                    LogService.ErrorFormat("Player: {0}, RemoveDecorationFromVessel AddItem To Inventory Fail, MaterialItemID: {1}", subject.IdentityInformation, material.ItemID);
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
                         }
                         else
                         {
+                            LogService.ErrorFormat("RemoveDecorationFromVessel error Player: {0}, the decoration is not existed DecorationID: {1}", subject.IdentityInformation, decorationID);
                             return false;
                         }
-                    }
-                    else
-                    {
-                        LogService.ErrorFormat("RemoveDecorationFromVessel error Player: {0}, the decoration is not existed DecorationID: {1}", subject.IdentityInformation, decorationID);
-                        return false;
                     }
                 }
             }
