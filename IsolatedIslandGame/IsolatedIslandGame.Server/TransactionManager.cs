@@ -13,7 +13,7 @@ namespace IsolatedIslandGame.Server
             Instance = new TransactionManager();
         }
 
-        private Dictionary<int, Transaction> transactionDictionary;
+        private Dictionary<int, Transaction> transactionDictionary = new Dictionary<int, Transaction>();
 
         public bool CreateTransaction(int requesterPlayerID, int accepterPlayerID, out Transaction transaction)
         {
@@ -112,6 +112,7 @@ namespace IsolatedIslandGame.Server
                                         requester.Inventory.AddItem(info.Item, info.Count);
                                     }
                                     transaction.EndTransaction(true);
+                                    DatabaseService.RepositoryList.TransactionRepository.Save(transaction);
                                 }
                                 else
                                 {

@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Library.UnitTest
         [TestMethod]
         public void IsSufficientRequirements_MethodTest1()
         {
-            Blueprint blueprint = new Blueprint(1, new Blueprint.ElementInfo[]
+            Blueprint blueprint = new Blueprint(1, false, false, new Blueprint.ElementInfo[]
             {
                 new Blueprint.ElementInfo { itemID = 1, itemCount = 5, positionIndex = 1 }
             }, new Blueprint.ElementInfo[]
@@ -22,7 +22,7 @@ namespace IsolatedIslandGame.Library.UnitTest
         [TestMethod]
         public void IsSufficientRequirements_MethodTest2()
         {
-            Blueprint blueprint = new Blueprint(1, new Blueprint.ElementInfo[]
+            Blueprint blueprint = new Blueprint(1, false, false, new Blueprint.ElementInfo[]
             {
                 new Blueprint.ElementInfo { itemID = 1, itemCount = 5, positionIndex = 1 }
             }, new Blueprint.ElementInfo[]
@@ -35,7 +35,7 @@ namespace IsolatedIslandGame.Library.UnitTest
         [TestMethod]
         public void IsSufficientRequirements_MethodTest3()
         {
-            Blueprint blueprint = new Blueprint(1, new Blueprint.ElementInfo[]
+            Blueprint blueprint = new Blueprint(1, false, false, new Blueprint.ElementInfo[]
             {
                 new Blueprint.ElementInfo { itemID = 1, itemCount = 2, positionIndex = 1 },
                 new Blueprint.ElementInfo { itemID = 1, itemCount = 2, positionIndex = 2 }
@@ -60,7 +60,7 @@ namespace IsolatedIslandGame.Library.UnitTest
         [TestMethod]
         public void IsSufficientRequirements_MethodTest4()
         {
-            Blueprint blueprint = new Blueprint(1, new Blueprint.ElementInfo[]
+            Blueprint blueprint = new Blueprint(1, false, false, new Blueprint.ElementInfo[]
             {
                 new Blueprint.ElementInfo { itemID = 1, itemCount = 2, positionIndex = 1 },
                 new Blueprint.ElementInfo { itemID = 2, itemCount = 4, positionIndex = 2 }

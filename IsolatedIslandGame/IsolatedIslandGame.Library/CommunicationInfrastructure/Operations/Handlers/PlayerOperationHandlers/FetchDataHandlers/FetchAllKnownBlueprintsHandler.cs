@@ -23,6 +23,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         var result = new Dictionary<byte, object>
                         {
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.BlueprintID, blueprint.BlueprintID },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.IsOrderless, blueprint.IsOrderless },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.IsBlueprintRequired, blueprint.IsBlueprintRequired },
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.Requirements, blueprint.Requirements.ToArray() },
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.Products, blueprint.Products.ToArray() }
                         };

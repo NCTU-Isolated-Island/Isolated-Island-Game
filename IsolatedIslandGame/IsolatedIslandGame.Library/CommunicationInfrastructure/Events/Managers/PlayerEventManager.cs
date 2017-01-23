@@ -71,6 +71,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.BlueprintID },
+                { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.IsOrderless },
+                { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.IsBlueprintRequired },
                 { (byte)GetBlueprintParameterCode.Requirements, blueprint.Requirements.ToArray() },
                 { (byte)GetBlueprintParameterCode.Products, blueprint.Products.ToArray() }
             };

@@ -21,9 +21,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 lock(subject.Inventory)
                 {
-                    if (BlueprintManager.Instance.Blueprints.Any(x => x.IsSufficientRequirements(elementInfos)))
+                    if (BlueprintManager.Instance.Blueprints.Any(x => !x.IsBlueprintRequired && x.IsSufficientRequirements(elementInfos)))
                     {
-                        Blueprint blueprint = BlueprintManager.Instance.Blueprints.First(x => x.IsSufficientRequirements(elementInfos));
+                        Blueprint blueprint = BlueprintManager.Instance.Blueprints.First(x => !x.IsBlueprintRequired && x.IsSufficientRequirements(elementInfos));
                         bool inventoryCheck = true;
 
                         foreach (var requirement in blueprint.Requirements)

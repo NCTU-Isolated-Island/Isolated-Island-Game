@@ -3,6 +3,8 @@
     public enum FetchAllKnownBlueprintsResponseParameterCode : byte
     {
         BlueprintID,
+        IsOrderless,
+        IsBlueprintRequired,
         Requirements,
         Products
     }
