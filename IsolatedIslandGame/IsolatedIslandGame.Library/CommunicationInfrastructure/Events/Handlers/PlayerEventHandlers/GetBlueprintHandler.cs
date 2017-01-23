@@ -7,7 +7,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class GetBlueprintHandler : EventHandler<Player, PlayerEventCode>
     {
-        public GetBlueprintHandler(Player subject) : base(subject, 3)
+        public GetBlueprintHandler(Player subject) : base(subject, 5)
         {
         }
 
@@ -18,10 +18,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 try
                 {
                     int blueprintID = (int)parameters[(byte)GetBlueprintParameterCode.BlueprintID];
+                    bool isOrderless = (bool)parameters[(byte)GetBlueprintParameterCode.IsOrderless];
+                    bool isBlueprintRequired = (bool)parameters[(byte)GetBlueprintParameterCode.IsBlueprintRequired];
                     Blueprint.ElementInfo[] requirements = (Blueprint.ElementInfo[])parameters[(byte)GetBlueprintParameterCode.Requirements];
                     Blueprint.ElementInfo[] products = (Blueprint.ElementInfo[])parameters[(byte)GetBlueprintParameterCode.Products];
 
-                    Blueprint blueprint = new Blueprint(blueprintID, requirements, products);
+                    Blueprint blueprint = new Blueprint(blueprintID, isOrderless, isBlueprintRequired, requirements, products);
                     BlueprintManager.Instance.AddBlueprint(blueprint);
                     subject.GetBlueprint(blueprint);
                     return true;

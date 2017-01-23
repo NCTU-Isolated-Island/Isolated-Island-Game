@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 3)
+                        if (parameters.Count != 5)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllKnownBlueprintsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -43,10 +43,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 try
                 {
                     int blueprintID = (int)parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.BlueprintID];
+                    bool isOrderless = (bool)parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.IsOrderless];
+                    bool isBlueprintRequired = (bool)parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.IsBlueprintRequired];
                     Blueprint.ElementInfo[] requirements = (Blueprint.ElementInfo[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.Requirements];
                     Blueprint.ElementInfo[] products = (Blueprint.ElementInfo[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.Products];
 
-                    Blueprint blueprint = new Blueprint(blueprintID, requirements, products);
+                    Blueprint blueprint = new Blueprint(blueprintID, isOrderless, isBlueprintRequired, requirements, products);
                     BlueprintManager.Instance.AddBlueprint(blueprint);
                     return true;
                 }
