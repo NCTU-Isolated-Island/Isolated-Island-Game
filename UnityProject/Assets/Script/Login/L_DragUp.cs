@@ -75,9 +75,7 @@ public class L_DragUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
                 {
                     BG_Black.SetActive(false); Login.SetActive(false);
                     BlackFade = false;
-                    BG_Black.GetComponent<Image>().color = new Color(0, 0, 0, 255);
-                    if (!StopForTest)
-                        UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
+                    BG_Black.GetComponent<Image>().color = new Color(0, 0, 0, 255);               
                     UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
                 }
 
@@ -128,6 +126,8 @@ public class L_DragUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
             {
                 DragStart = false;
                 MakeLoginDisappear = true;
+                if (!StopForTest)
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
             }
             else
             {

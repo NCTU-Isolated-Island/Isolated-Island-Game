@@ -50,6 +50,7 @@ public class Map_Control : MonoBehaviour {
     void ShowNear()
     {
         ShowNearBool = true;
+        this.gameObject.GetComponent<NearBoat_Control>().Reset();
        // this.gameObject.GetComponent<NearBoat_Control>().MoveList();
     }
 

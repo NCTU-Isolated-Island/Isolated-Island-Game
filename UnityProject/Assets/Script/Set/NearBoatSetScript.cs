@@ -15,7 +15,7 @@ public class NearBoatSetScript : MonoBehaviour, IPointerClickHandler
     public GameObject Speach;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         if (!UIControl)
             UIControl = GameObject.FindWithTag("UImanager");
@@ -46,11 +46,13 @@ public class NearBoatSetScript : MonoBehaviour, IPointerClickHandler
             CameraManager.Instance.ToNearAnchor(target);
         }    
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Other_Boat);
+        OtherBoat.GetComponent<OtherBoat_Control>().Reset(PlayerID);
     }
 
     public void SetInfo(int InPlayerID,string InPlayerName, GroupType InCamp, string InSpeach)
     {
         PlayerID = InPlayerID;
+        Debug.Log("InPlayerName");
         PlayerName.GetComponent<Text>().text = InPlayerName;
         switch (InCamp)
         {

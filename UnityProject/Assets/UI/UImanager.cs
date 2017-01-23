@@ -51,12 +51,9 @@ public class UImanager : MonoBehaviour
 
         if (a == 1)
         {
-            if (!StopForTest)
-            {
-                GameObject target;
-                GameManager.Instance.UserGameObject.TryGetValue(UserManager.Instance.User.Player.PlayerID, out target);
-                CameraManager.Instance.ToNearAnchor(target);
-            }
+          if(GameManager.Instance.PlayerGameObject)
+                CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+            
         }
         else if (a == 2 || a == 3 || a == 5)//需要黑幕特效->等下Update換
         {

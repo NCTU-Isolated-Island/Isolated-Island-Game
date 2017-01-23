@@ -47,6 +47,8 @@ public class NearBoat_Control : MonoBehaviour {
         View_Button.onClick.AddListener(View);
         StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
         CanvasWidth = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.width;
+
+        StopForTest= UIControl.GetComponent<UImanager>().StopForTest;
     }
     void Update()
     {
@@ -73,7 +75,7 @@ public class NearBoat_Control : MonoBehaviour {
             }
         }
     }
-    void Reset()
+  public  void Reset()
     {if (!StopForTest)
         {
 
@@ -82,14 +84,18 @@ public class NearBoat_Control : MonoBehaviour {
                 Destroy(NearBoatContent.transform.GetChild(t).gameObject);
             }
             foreach (var Boat in VesselManager.Instance.Vessels)//周圍的船
-            {
-                int OwnerID = Boat.OwnerPlayerID;
-                PlayerInformation Owner;
-                if (PlayerInformationManager.Instance.FindPlayerInformation(OwnerID, out Owner))
+            { if(Boat.OwnerPlayerID != UserManager.Instance.User.Player.PlayerID)
                 {
-                    GameObject NewBoat = Instantiate(NearBoatSet, NearBoatContent.transform);
-                    NewBoat.GetComponent<NearBoatSetScript>().SetInfo(Owner.playerID, Owner.nickname, Owner.groupType, Owner.signature);
+                    int OwnerID = Boat.OwnerPlayerID;
+                    PlayerInformation Owner;
+                    if (PlayerInformationManager.Instance.FindPlayerInformation(OwnerID, out Owner))
+                    {
+                        GameObject NewBoat = Instantiate(NearBoatSet, NearBoatContent.transform);
+                        Debug.Log(Owner.nickname);
+                        NewBoat.GetComponent<NearBoatSetScript>().SetInfo(Owner.playerID, Owner.nickname, Owner.groupType, Owner.signature);
+                    }
                 }
+               
             }
 
 
