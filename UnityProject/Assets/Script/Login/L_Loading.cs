@@ -13,8 +13,7 @@ public class L_Loading : MonoBehaviour {
     public GameObject GameTitle, Loading, DragUp;
     public GameObject MainBoat;
     public GameObject CreateChar;
-    //public Button FB_Button,NonFB_Button;
-    //public GameObject NameScreen;
+    float time = 0;
 
     // Use this for initialization
     void Start () {
@@ -22,8 +21,6 @@ public class L_Loading : MonoBehaviour {
         MainBoat = UIControl.GetComponent<UImanager>().UIObject[1];
         Loading.SetActive(true);
         DragUp.SetActive(false);
-        //FB_Button = CreateChar.transform.GetChild(0).GetComponent<Button>();
-        //FB_Button.onClick.AddListener(Next);
     }
 	
     public void ShowLoadingIcon()
@@ -38,7 +35,16 @@ public class L_Loading : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-		if(LoadingCase == 0)
+        if(LoadingCase == 2)
+        {
+            time += Time.deltaTime;
+            if(time>0.1)
+            {
+                Loading.transform.Rotate(new Vector3(0,0,-30));
+                time = 0;
+            }
+        }
+		else if(LoadingCase == 0)
         {
             GameTitle.SetActive(true);
             Loading.SetActive(false);

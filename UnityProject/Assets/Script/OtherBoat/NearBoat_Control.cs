@@ -11,12 +11,18 @@ public class NearBoat_Control : MonoBehaviour {
     public bool StopForTest;
     public bool ShowList;
 
+    public GameObject UIControl;
     public GameObject NearBoatPanel;
     public GameObject NearBoatSet;
     public GameObject NearBoatContent;
 
     public Button View_Button;
     public Button Back_Button;
+
+    float CanvasWidth;
+    public bool HideNearBool = false;
+    float passtime = 0;
+    int times = 0;
 
     // Use this for initialization
     void Start () {
@@ -26,6 +32,8 @@ public class NearBoat_Control : MonoBehaviour {
     }
    void SetGameObject()
     {
+        if (!UIControl)
+            UIControl = GameObject.FindWithTag("UImanager");
         if (!NearBoatPanel)
             NearBoatPanel = this.gameObject.transform.GetChild(4).gameObject;
         if (!NearBoatContent)
@@ -33,14 +41,19 @@ public class NearBoat_Control : MonoBehaviour {
 
         if (!Back_Button)
             Back_Button = NearBoatPanel.transform.GetChild(3).GetComponent<Button>();
-        Back_Button.onClick.AddListener(MoveList);
+        Back_Button.onClick.AddListener(HideList);
         if (!View_Button)
             View_Button = NearBoatPanel.transform.GetChild(4).GetComponent<Button>();
         View_Button.onClick.AddListener(View);
+        StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
+        CanvasWidth = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.width;
+
+        StopForTest= UIControl.GetComponent<UImanager>().StopForTest;
     }
     void Update()
     {
-        if(!StopForTest)
+       
+        if (!StopForTest)
             if(ShowList)
             {
                 time += Time.deltaTime;
@@ -49,8 +62,20 @@ public class NearBoat_Control : MonoBehaviour {
                     Reset();
                 }
             }
+
+        if (HideNearBool)
+        {
+            passtime += Time.deltaTime;
+            if (passtime > 0.05)
+            {
+                this.gameObject.transform.localPosition = this.gameObject.transform.localPosition + new Vector3(CanvasWidth / 10, 0, 0);
+                if (times < 9)
+                { times++; }
+                else { times = 0; HideNearBool = false; }
+            }
+        }
     }
-    void Reset()
+  public  void Reset()
     {if (!StopForTest)
         {
 
@@ -59,14 +84,18 @@ public class NearBoat_Control : MonoBehaviour {
                 Destroy(NearBoatContent.transform.GetChild(t).gameObject);
             }
             foreach (var Boat in VesselManager.Instance.Vessels)//周圍的船
-            {
-                int OwnerID = Boat.OwnerPlayerID;
-                PlayerInformation Owner;
-                if (PlayerInformationManager.Instance.FindPlayerInformation(OwnerID, out Owner))
+            { if(Boat.OwnerPlayerID != UserManager.Instance.User.Player.PlayerID)
                 {
-                    GameObject NewBoat = Instantiate(NearBoatSet, NearBoatContent.transform);
-                    NewBoat.GetComponent<NearBoatSetScript>().SetInfo(Owner.nickname, Owner.groupType, Owner.signature);
+                    int OwnerID = Boat.OwnerPlayerID;
+                    PlayerInformation Owner;
+                    if (PlayerInformationManager.Instance.FindPlayerInformation(OwnerID, out Owner))
+                    {
+                        GameObject NewBoat = Instantiate(NearBoatSet, NearBoatContent.transform);
+                        Debug.Log(Owner.nickname);
+                        NewBoat.GetComponent<NearBoatSetScript>().SetInfo(Owner.playerID, Owner.nickname, Owner.groupType, Owner.signature);
+                    }
                 }
+               
             }
 
 
@@ -97,9 +126,10 @@ public class NearBoat_Control : MonoBehaviour {
       
     }
     void View() { }
-  public  void MoveList()
+  public  void HideList()
     {
-        if(!ShowList)
+        HideNearBool = true;
+        /*if(!ShowList)
         {
             Reset();
             NearBoatPanel.transform.localPosition = new Vector3(0,45,0);
@@ -109,6 +139,6 @@ public class NearBoat_Control : MonoBehaviour {
         {
             NearBoatPanel.transform.localPosition = new Vector3(391, 45, 0);
             ShowList = false;
-        }
+        }*/
     }
 }

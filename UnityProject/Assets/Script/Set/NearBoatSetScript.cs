@@ -6,15 +6,16 @@ using IsolatedIslandGame.Protocol;
 using UnityEngine.EventSystems;
 public class NearBoatSetScript : MonoBehaviour, IPointerClickHandler
 {
-
+    public bool StopForTest;
     public GameObject UIControl;
     public GameObject OtherBoat;
+    public int PlayerID;
     public GameObject PlayerName;
     public GameObject Camp;
     public GameObject Speach;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         if (!UIControl)
             UIControl = GameObject.FindWithTag("UImanager");
@@ -27,18 +28,31 @@ public class NearBoatSetScript : MonoBehaviour, IPointerClickHandler
         if (!Camp)
             Speach = this.gameObject.transform.GetChild(4).gameObject;
     }
-
+    void Update()
+    {
+        StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Map)
             OtherBoat.GetComponent<OtherBoat_Control>().WhereIFrom = (int)UImanager.UI.Map;
         else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Friend)
             OtherBoat.GetComponent<OtherBoat_Control>().WhereIFrom = (int)UImanager.UI.Friend;
+
+        if(!StopForTest)
+        {
+            GameObject target;
+            GameManager.Instance.UserGameObject.TryGetValue(PlayerID, out target);
+            CameraManager.Instance.ToNearAnchor(target);
+        }    
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Other_Boat);
+        OtherBoat.GetComponent<OtherBoat_Control>().Reset(PlayerID);
     }
 
-    public void SetInfo(string InPlayerName, GroupType InCamp, string InSpeach)
+    public void SetInfo(int InPlayerID,string InPlayerName, GroupType InCamp, string InSpeach)
     {
+        PlayerID = InPlayerID;
+        Debug.Log("InPlayerName");
         PlayerName.GetComponent<Text>().text = InPlayerName;
         switch (InCamp)
         {

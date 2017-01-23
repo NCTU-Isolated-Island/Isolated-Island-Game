@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
+using IsolatedIslandGame.Library;
 public class MB_FunctionButton : MonoBehaviour
 {
     public GameObject UIControl;
-
-   // public GameObject MainBoat;
+    public bool StopForTest;
+    // public GameObject MainBoat;
     public GameObject FunctionList;
     private float y_value;
 
@@ -18,7 +18,7 @@ public class MB_FunctionButton : MonoBehaviour
     public GameObject Bag;
     public GameObject ShowBag;
 
-    public GameObject my_boat_text1,my_boat_text2;
+    public GameObject my_boat_text1, my_boat_text2;
 
     public Button FunctionButton1;
     public Button FunctionButton2;
@@ -26,11 +26,16 @@ public class MB_FunctionButton : MonoBehaviour
     public Button FunctionButton4;
 
     float A, B;
-    // Use this for initialization
+    bool ShowListBool = false;
+    bool GoRightOrLeft = false;
+    float passtime = 0;
+    int times = 0;
+
+
     void Start()
     {
         SetGameObject();
-       
+
     }
 
     public void SetGameObject()
@@ -39,8 +44,8 @@ public class MB_FunctionButton : MonoBehaviour
         B = -FunctionList.transform.parent.parent.GetComponent<RectTransform>().rect.width / 2 - FunctionList.transform.GetComponent<RectTransform>().rect.width / 2;
         y_value = FunctionList.GetComponent<RectTransform>().localPosition.y;
 
-        if(!ListButton)
-        ListButton = this.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Button>();
+        if (!ListButton)
+            ListButton = this.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Button>();
         ListButton.onClick.AddListener(ShowList);
 
         if (!MapButton)
@@ -64,60 +69,72 @@ public class MB_FunctionButton : MonoBehaviour
         FunctionButton3.onClick.AddListener(Button3);
         FunctionButton4.onClick.AddListener(Button4);
 
+        if (!StopForTest)
+        {
+            //UIControl.GetComponent<UImanager>().player_name = UserManager.Instance.User.Player.Nickname;
+            // UIControl.GetComponent<UImanager>().speech = UserManager.Instance.User.Player.Signature;
+        }
+
         my_boat_text1.GetComponent<Text>().text = (UIControl.GetComponent<UImanager>().player_name + "的船");
         my_boat_text2.GetComponent<Text>().text = my_boat_text1.GetComponent<Text>().text;
     }
 
 
 
-   /* void Update()
+    void Update()
     {
-        if(y_value != FunctionList.transform.GetComponent<RectTransform>().localPosition.y)
-        { y_value = FunctionList.transform.GetComponent<RectTransform>().localPosition.y; }
-    }*/
+        StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
+
+        if (ShowListBool)
+        {
+            passtime += Time.deltaTime;
+            if (passtime > 0.05)
+            {
+                if (GoRightOrLeft)
+                { FunctionList.transform.localPosition = FunctionList.transform.localPosition + new Vector3((A - B) / 4, 0, 0); }
+                else
+                { FunctionList.transform.localPosition = FunctionList.transform.localPosition - new Vector3((A - B) / 4, 0, 0); }
+                if (times < 3)
+                { times++; }
+                else { times = 0; ShowListBool = false; }
+            }
+        }
+    }
 
 
     void ShowList()
     {
-        if (FunctionList.transform.GetComponent<RectTransform>().localPosition.x == B)
-        {
-            FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(A, y_value, 0);      
-        }
-        else
-        {
-            FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
-        }
+        ShowListBool = true;
+        GoRightOrLeft = !GoRightOrLeft;
     }
+
+
     void ShowMap()
     {
         FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
+        GoRightOrLeft = false;
         UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Map;
     }
     void Button0()
     {
-       // Bag.GetComponent<ShowBag_pos>().enabled = true;
-       // ShowBag.active = true;
-       // MainBoat.active = false;
-        FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
+        ShowList();
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Show_Bag);
-        //UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Show_Bag;
     }
     void Button1()
     { }
     void Button2()
     {
-        FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
-        //UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Show_Bag;
+        ShowList();
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Mission);
     }
     void Button3()
     {
-        FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
+        ShowList();
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Friend);
     }
     void Button4()
     {
-        FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
+        ShowList();
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Chat);
     }
 }

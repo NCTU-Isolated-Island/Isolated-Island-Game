@@ -23,31 +23,44 @@ public class ShowBag_pos : MonoBehaviour {
     public float A_pos;
     float B_pos;
 
-    public bool BackOnce = false;
-
+    public bool BagOut, MoveBag;
+    bool ResetOnce = true;
+    float passtime = 0;
+    int times = 0;
     // Use this for initialization
     void Start ()
     {
-        SetGameObject();  
+        SetGameObject();
+        StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
         A_pos = -canvas.GetComponent<RectTransform>().rect.height;
         B_pos = 0;
         this.gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);
     }
 
     void Update () {
-        if (ShowBagPanel.activeInHierarchy == false)//showbag關閉
-        {
-            if (!BackOnce)
-            {
-                this.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0); 
+       
 
-                BackOnce = true;
-            }
-        }
-        else if (ShowBagPanel.activeInHierarchy == true  && this.gameObject.transform.localPosition.y == A_pos)//showbag開啟
+        if (MoveBag)
         {
-            UpAndDown();
-            BackOnce = false;
+            passtime += Time.deltaTime;
+            if (passtime > 0.05)
+            {
+                if(ResetOnce)
+                {
+                    if (!StopForTest)
+                    { Reset_Bag(); }
+                    ResetOnce = false;
+                }
+                if (BagOut)
+                    this.gameObject.transform.localPosition = this.gameObject.transform.localPosition + new Vector3(0, A_pos / 10, 0);
+                else
+                    this.gameObject.transform.localPosition = this.gameObject.transform.localPosition - new Vector3(0, A_pos / 10, 0);
+                if (times < 9)
+                { times++; }
+                else
+                { times = 0; MoveBag = false; BagOut = !BagOut; ResetOnce = true; }
+            }
+
         }
       
     }
@@ -66,16 +79,25 @@ public class ShowBag_pos : MonoBehaviour {
              }
 
     }
+    public void UpAndDownDirect()
+    {
+        if (BagOut)
+            this.gameObject.transform.localPosition = new Vector3(0, A_pos, 0);
+        else
+            this.gameObject.transform.localPosition = new Vector3(0, B_pos, 0);
+        BagOut = !BagOut; 
+    }
     public void UpAndDown()
     {
-        if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - A_pos) < 1)
+        MoveBag = true;
+       /* if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - A_pos) < 1)
         {
             this.GetComponent<RectTransform>().localPosition = new Vector3(0, B_pos, 0);
-            if (!StopForTest)
             { Reset_Bag(); }
+            ResetOnce = false;
         }
         else if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - B_pos) < 1)
-        {this.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);}
+        {this.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);}*/
     }
 
     public void SetPicture(GameObject ItemSelect)
@@ -93,6 +115,7 @@ public class ShowBag_pos : MonoBehaviour {
         {
             // UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
             UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Main_Boat);
+            UpAndDown();
         }
         else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
             UpAndDown();
@@ -108,15 +131,19 @@ public class ShowBag_pos : MonoBehaviour {
         if (!ShowBagPanel)
             ShowBagPanel = UI.UIObject[4];
         // if (!BagContent)
-        //  BagContent = this.gameObject.transform.GetChild(2).gameObject;
+        //  BagContent = this.gameObject.transform.GetChild(3).gameObject;
         if (!BackButton)
-            BackButton = this.gameObject.transform.GetChild(4).GetComponent<Button>();
+            BackButton = this.gameObject.transform.GetChild(5).GetComponent<Button>();
         BackButton.onClick.AddListener(BACK);
+        if(!ShowWay_Button)
+            ShowWay_Button = this.gameObject.transform.GetChild(6).gameObject;
         if (!MainBoat)
             MainBoat = UI.UIObject[1];
         if (!CombineArea)
             CombineArea = UI.UIObject[5];
         if (!Content)
-            Content = this.gameObject.transform.GetChild(2).GetChild(0).GetChild(0).gameObject;
+            Content = this.gameObject.transform.GetChild(3).GetChild(0).GetChild(0).gameObject;
+        ResetOnce = true;
+
     }
 }
