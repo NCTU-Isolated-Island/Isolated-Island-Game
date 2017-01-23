@@ -9,6 +9,7 @@ public class OtherBoat_Control : MonoBehaviour {
     public Button Back_Button;
     public int WhereIFrom;
     void Start () {
+        if(WhereIFrom ==0)
         WhereIFrom = 1;
         if (!UIControl)
             UIControl = GameObject.FindWithTag("UImanager");
@@ -18,10 +19,8 @@ public class OtherBoat_Control : MonoBehaviour {
     }
 	void Back()
     {
-        UIControl.GetComponent<UImanager>().ChangeUI(WhereIFrom);
+          UIControl.GetComponent<UImanager>().BlackFade = true;
+          UIControl.GetComponent<UImanager>().ChangeUI(WhereIFrom);
     }
-    // Update is called once per frame
-    void Update () {
-		
-	}
+  
 }

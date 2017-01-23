@@ -12,7 +12,7 @@ public class Combine_BackButton : MonoBehaviour {
     void Start ()
     {
         UIControl = GameObject.FindWithTag("UImanager");
-        C_BackButton = this.gameObject.GetComponent<Button>();
+        C_BackButton = this.transform.GetChild(5).GetComponent<Button>();
         C_BackButton.onClick.AddListener(Back);
     }
 	
@@ -22,6 +22,7 @@ public class Combine_BackButton : MonoBehaviour {
 	}
     void Back()
     {
-        UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Show_Bag;
+        UIControl.GetComponent<UImanager>().BlackFade = true;
+        UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Show_Bag);     
     }
 }

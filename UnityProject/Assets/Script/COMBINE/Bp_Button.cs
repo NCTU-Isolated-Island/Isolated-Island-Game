@@ -11,7 +11,7 @@ public class Bp_Button : MonoBehaviour {
     {
         
         // this.GetComponent<RectTransform>().localPosition = new Vector3(0, 90, 0);
-        yourButton = this.gameObject.transform.GetChild(0).GetComponent<Button>();
+        yourButton = this.gameObject.transform.GetChild(1).GetComponent<Button>();
         Bp_list.GetComponent<RectTransform>().localPosition = new Vector3(canvas.GetComponent<RectTransform>().rect.width / 2 + Bp_list.GetComponent<RectTransform>().rect.width / 2, 20, 0);
         yourButton.onClick.AddListener(move);
     }

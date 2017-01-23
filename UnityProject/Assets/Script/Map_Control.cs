@@ -13,6 +13,11 @@ public class Map_Control : MonoBehaviour {
 
     public GameObject FunctionList;
 
+    float CanvasWidth;
+    public bool ShowNearBool = false;
+    float passtime = 0;
+    int times = 0;
+
     float A, B, y_value;
 
     // Use this for initialization
@@ -24,22 +29,28 @@ public class Map_Control : MonoBehaviour {
     void Back()
     {
         FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
-        UIControl.GetComponent<UImanager>().GameUI = UImanager.UI.Main_Boat;
+        UIControl.GetComponent<UImanager>().BlackFade = true;
+        UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Main_Boat);
     }
-   void ShowList()
+    void Update()
     {
-        if (FunctionList.transform.GetComponent<RectTransform>().localPosition.x == B)
+        if(ShowNearBool)
         {
-            FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(A, y_value, 0);      
+            passtime += Time.deltaTime;
+            if(passtime>0.05)
+            {
+                this.gameObject.transform.localPosition = this.gameObject.transform.localPosition - new Vector3(CanvasWidth/10, 0,0);
+                if(times<9)
+                { times++; }
+                else { times = 0; ShowNearBool = false; }
+            }         
         }
-        else
-        {
-            FunctionList.GetComponent<RectTransform>().localPosition = new Vector3(B, y_value, 0);
-        }
+
     }
     void ShowNear()
     {
-        this.gameObject.GetComponent<NearBoat_Control>().MoveList();
+        ShowNearBool = true;
+       // this.gameObject.GetComponent<NearBoat_Control>().MoveList();
     }
 
     void SetGameObject()
@@ -56,7 +67,7 @@ public class Map_Control : MonoBehaviour {
 
         if (!ShowList_Button)
             ShowList_Button = this.gameObject.transform.GetChild(0).GetChild(0).GetComponent<Button>();
-        ShowList_Button.onClick.AddListener(ShowList);
+       // ShowList_Button.onClick.AddListener(ShowList);
 
         if (!Map_BackButton)
             Map_BackButton = this.gameObject.transform.GetChild(2).GetComponent<Button>();
@@ -65,5 +76,7 @@ public class Map_Control : MonoBehaviour {
         if (!ShowNear_Button)
             ShowNear_Button = this.gameObject.transform.GetChild(3).GetComponent<Button>();
         ShowNear_Button.onClick.AddListener(ShowNear);
+
+        CanvasWidth = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.width;
     }
 }

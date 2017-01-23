@@ -22,24 +22,62 @@ public class Mission_Control : MonoBehaviour {
     public Button View_Button;
     public Button Back_Button;
 
+    public bool MisOut, MoveMis;
+    bool ResetOnce = true;
+    float passtime = 0;
+    int times = 0;
+    float CanvasHeight;
     // Use this for initialization
     void Start () {
         SetGameObject();
+        StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
         ShowDetailBool = false;
         if (!StopForTest)
         { Reset(); }
+    }
+    void Update()
+    { 
+        if (MoveMis)
+        {
+            passtime += Time.deltaTime;
+            if (passtime > 0.05)
+            {
+                if (ResetOnce)
+                {
+                    if (!StopForTest)
+                    { Reset(); }
+                    ResetOnce = false;
+                }
+                if (MisOut)
+                    this.gameObject.transform.localPosition = this.gameObject.transform.localPosition - new Vector3(0, CanvasHeight / 10, 0);
+                else
+                    this.gameObject.transform.localPosition = this.gameObject.transform.localPosition + new Vector3(0, CanvasHeight / 10, 0);
+                if (times < 9)
+                { times++; }
+                else
+                {
+                    times = 0; MoveMis = false; MisOut = !MisOut; ResetOnce = true;
+                    if(MisOut == false)
+                    this.gameObject.SetActive(false);
+                }
+            }
+
+        }
+
     }
     void Back()
     {
         if(ShowDetailBool)
         { ShowDetail(); }
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Main_Boat);
+        MoveMis = true;     
     }
     void View()
     {
 
     }
-    void ShowDetail()
+
+   public void ShowDetail()
     {
         if(ShowDetailBool)
         {
@@ -55,7 +93,7 @@ public class Mission_Control : MonoBehaviour {
             Right.targetGraphic.color = new Color(255f, 255f, 255f, 255);
             Right.interactable = true;
         }
-        else if(!MissionDetailPanel)
+        else if(!ShowDetailBool)
         {
             MissionDetailPanel.SetActive(true);
             ShowDetailBool = true;
@@ -117,7 +155,15 @@ public class Mission_Control : MonoBehaviour {
 
         MissionDetailPanel.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(ShowDetail);
 
+        if (!Page1)
+            Page1 = MissionDetailPanel.transform.GetChild(5).gameObject;
+        if (!Page2)
+            Page2 = MissionDetailPanel.transform.GetChild(6).gameObject;
+
         Page = 1;
         CanvasWidth = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.width;
+        CanvasHeight = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.height;     
+
+        this.gameObject.transform.localPosition = new Vector3(0, -CanvasHeight , 0);
     }
 }

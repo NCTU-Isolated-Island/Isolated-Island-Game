@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 	public List<GameObject> elementModels; //Using itemID to sort
     public List<GameObject> ShipModels;
 
-	private Dictionary<int,GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
+	public Dictionary<int,GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
     private Dictionary<int,GameObject> VesselIDGameObject = new Dictionary<int, GameObject>(); //VesselID to GO
 	public Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // PlayerID to decorationID-decorationGO
 	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
