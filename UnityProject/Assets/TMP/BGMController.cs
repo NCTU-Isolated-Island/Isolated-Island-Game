@@ -11,10 +11,8 @@ public class BGMController : MonoBehaviour {
 
 	void OnTriggerStay(Collider EnterOcean)
     {
-        //
-        print(EnterOcean.name);
-        //
         if (Exited == false) return;
+        if (BGMDictionary.ContainsKey(EnterOcean.name) == false) return;
 
         string nextBGMpath = BGMDictionary[EnterOcean.name];
 
@@ -37,8 +35,8 @@ public class BGMController : MonoBehaviour {
 
     void Start() // for testing
     {
-        BGMDictionary["a_girl_from_osaka_1"] = "Sound1.mp3";
-        BGMDictionary["a_new_generation_1"] = "Sound2.mp3";
+        BGMDictionary["a_girl_from_osaka_1"] = "Sound1";
+        BGMDictionary["a_new_generation_1"] = "Sound2";
 
         Exited = true;
     }

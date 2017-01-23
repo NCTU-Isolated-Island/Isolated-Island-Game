@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.Audio;
 using System.Collections;
 
-public class AudioManager : MonoBehaviour {
+public class AudioManager : MonoBehaviour
+{
 
     public static AudioManager Instance { get; private set; }
 
     [SerializeField]
-    private AudioSource [] AudioPlayer;
+    private AudioSource[] AudioPlayer;
     public float MasterVolume;
 
     private int UsingPlayer; // 0 means using player1 , 1 means using player2
     private bool Fading;
+
+    private IEnumerator FadeCoroutine;
 
     void Awake()
     {
@@ -24,7 +26,7 @@ public class AudioManager : MonoBehaviour {
         Instance = this;
         UsingPlayer = 0;
         Fading = false;
-        MasterVolume = 1;
+        MasterVolume = 0.3f;
     }
 
     void ChangeUsingPlayer()
@@ -32,29 +34,28 @@ public class AudioManager : MonoBehaviour {
         UsingPlayer = 1 - UsingPlayer;
     }
 
-    bool SetVolume(float new_volume) // return success or not
+    public void SetMasterVolume(float value)
     {
-        if(Fading == true) return false;
-
-        AudioPlayer[UsingPlayer].volume = new_volume;
-
-        return true;
+        MasterVolume = value;
+        AudioPlayer[UsingPlayer].volume = value;
     }
 
-    public bool SetBGM(string SourceName)
+    public void SetBGM(string SourceName)
     {
-        //
-        print(SourceName);
-        //
-        AudioClip new_clip = AssetDatabase.LoadAssetAtPath("Assets/Resources/Audio/" + SourceName , typeof(AudioClip)) as AudioClip;
-        // can rewrite to (SourceName , FolderName)
+        AudioClip new_clip = Resources.Load("Audio/" + SourceName, typeof(AudioClip)) as AudioClip;
 
         ChangeUsingPlayer();
         AudioPlayer[UsingPlayer].clip = new_clip;
-        StartCoroutine(FadeMusic(5));
-
         AudioPlayer[UsingPlayer].Play();
-        return true;
+
+        if (FadeCoroutine != null)
+        {
+            StopCoroutine(FadeCoroutine);
+            print("stop");
+        }
+
+        FadeCoroutine = FadeMusic(5);
+        StartCoroutine(FadeCoroutine);
     }
 
     IEnumerator FadeMusic(float OverTime)
@@ -62,12 +63,13 @@ public class AudioManager : MonoBehaviour {
         Fading = true;
 
         float pass_time = 0;
-        float IngVolume = AudioPlayer[1 - UsingPlayer].volume;
+        float OriVol0 = AudioPlayer[UsingPlayer].volume;
+        float OriVol1 = AudioPlayer[1 - UsingPlayer].volume;
 
         while (pass_time < OverTime)
         {
-            AudioPlayer[UsingPlayer].volume = Mathf.Lerp(0, MasterVolume, pass_time / OverTime);
-            AudioPlayer[1 - UsingPlayer].volume = Mathf.Lerp(IngVolume, 0, pass_time / OverTime);
+            AudioPlayer[UsingPlayer].volume = Mathf.Lerp(OriVol0, MasterVolume, pass_time / OverTime);
+            AudioPlayer[1 - UsingPlayer].volume = Mathf.Lerp(OriVol1, 0, pass_time / OverTime);
             pass_time += Time.deltaTime;
             yield return null;
         }
@@ -78,13 +80,13 @@ public class AudioManager : MonoBehaviour {
     }
 
     //
-
+    
     void Start()
     {
         GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<BGMController>();
         GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<Rigidbody>();
         GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
-
+    
     //
 }

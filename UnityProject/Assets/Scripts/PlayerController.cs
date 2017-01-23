@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
 	private float lastTimeClick = -99f ;
 
 	public static PlayerController Instance;
-
+	public List<GameObject> InArea;
 	public GameObject CurrentSelectDecoration;
 
 	void Awake()
@@ -74,10 +74,29 @@ public class PlayerController : MonoBehaviour {
 			StartCoroutine(Dec(0));
 		}
 
+		if(Input.GetKeyDown(KeyCode.Y))
+		{
+			StartCoroutine(GetCurrentArea());
+		}
+
 		CheckDoubleClick();
 
 		//AdjustViewAngle();
 		PinchToZoom();
+	}
+
+	IEnumerator GetCurrentArea()
+	{
+		PlayerController.Instance.InArea.Clear(); // 清除上次掃描記錄
+		GameObject probe = Instantiate
+			(
+				Resources.Load("AreaProbe"), GameManager.Instance.PlayerGameObject.transform.position, Quaternion.identity
+			) as GameObject;
+
+		yield return new WaitForFixedUpdate();
+		yield return new WaitForFixedUpdate();
+
+		Destroy(probe);
 	}
 
 	public void StartPlaceDecoration()
