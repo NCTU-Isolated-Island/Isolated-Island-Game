@@ -33,7 +33,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncInventoryItemInfoChangeParameterCode.InventoryItemInfoID, info.InventoryItemInfoID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.ItemID, info.Item.ItemID },
                 { (byte)SyncInventoryItemInfoChangeParameterCode.ItemCount, info.Count },
-                { (byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex, info.PositionIndex }
+                { (byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex, info.PositionIndex },
+                { (byte)SyncInventoryItemInfoChangeParameterCode.IsFavorite, info.IsFavorite }
             };
             SendSyncData(PlayerSyncDataCode.InventoryItemInfoChange, parameters);
         }

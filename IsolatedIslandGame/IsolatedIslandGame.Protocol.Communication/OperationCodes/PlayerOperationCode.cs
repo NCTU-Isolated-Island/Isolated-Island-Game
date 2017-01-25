@@ -18,6 +18,7 @@
         TransactionRequest,
         AcceptTransaction,
         ChangeTransactionItem,
-        ConfirmTransaction
+        ConfirmTransaction,
+        SetFavoriteItem
     }
 }

@@ -12,6 +12,7 @@ namespace IsolatedIslandGame.Server.Items
                 itemID: itemID,
                 itemCount: count,
                 positionIndex: positionIndex,
+                isFavorite: false,
                 info: out info );
         }
 

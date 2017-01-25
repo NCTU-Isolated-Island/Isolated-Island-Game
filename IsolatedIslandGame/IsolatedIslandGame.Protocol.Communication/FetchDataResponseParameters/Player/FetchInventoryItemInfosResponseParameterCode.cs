@@ -6,6 +6,7 @@
         InventoryItemInfoID,
         ItemID,
         ItemCount,
-        PositionIndex
+        PositionIndex,
+        IsisFavorite
     }
 }
