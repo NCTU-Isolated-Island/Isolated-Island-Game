@@ -80,6 +80,7 @@ namespace IsolatedIslandGame.Library
             if(!ContainsInventoryItemInfo(info.InventoryItemInfoID))
             {
                 itemInfoDictionary.Add(info.InventoryItemInfoID, info);
+                info.OnInventoryItemInfoUpdate += UpdateItemInfo;
                 itemInfos[info.PositionIndex] = info;
                 onItemInfoChange?.Invoke(DataChangeType.Add, info);
             }
@@ -97,6 +98,7 @@ namespace IsolatedIslandGame.Library
             {
                 InventoryItemInfo info = itemInfoDictionary[itemInfoID];
                 itemInfoDictionary.Remove(itemInfoID);
+                info.OnInventoryItemInfoUpdate -= UpdateItemInfo;
                 itemInfos[info.PositionIndex] = null;
                 onItemInfoChange?.Invoke(DataChangeType.Remove, info);
             }
@@ -117,6 +119,7 @@ namespace IsolatedIslandGame.Library
                     if (InventoryItemInfoFactory.Instance != null && InventoryItemInfoFactory.Instance.CreateItemInfo(InventoryID, item.ItemID, count, positionIndex, out info))
                     {
                         itemInfoDictionary.Add(info.InventoryItemInfoID, info);
+                        info.OnInventoryItemInfoUpdate += UpdateItemInfo;
                         itemInfos[info.PositionIndex] = info;
                         onItemInfoChange?.Invoke(DataChangeType.Add, info);
                     }
@@ -136,6 +139,7 @@ namespace IsolatedIslandGame.Library
                         if (itemInfoDictionary.ContainsKey(info.InventoryItemInfoID))
                         {
                             itemInfoDictionary.Remove(info.InventoryItemInfoID);
+                            info.OnInventoryItemInfoUpdate -= UpdateItemInfo;
                         }
                         itemInfos[info.PositionIndex] = null;
                         InventoryItemInfoFactory.Instance?.DeleteItemInfo(info.InventoryItemInfoID);
@@ -170,6 +174,10 @@ namespace IsolatedIslandGame.Library
         public bool RemoveItemCheck(int itemID, int count)
         {
             return ContainsItem(itemID) && ItemCount(itemID) >= count;
+        }
+        private void UpdateItemInfo(InventoryItemInfo info)
+        {
+            onItemInfoChange?.Invoke(DataChangeType.Update, info);
         }
     }
 }

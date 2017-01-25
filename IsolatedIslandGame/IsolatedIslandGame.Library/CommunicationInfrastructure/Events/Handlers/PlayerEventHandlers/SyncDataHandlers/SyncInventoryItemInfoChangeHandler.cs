@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class SyncInventoryItemInfoChangeHandler : SyncDataHandler<Player, PlayerSyncDataCode>
     {
-        public SyncInventoryItemInfoChangeHandler(Player subject) : base(subject, 6)
+        public SyncInventoryItemInfoChangeHandler(Player subject) : base(subject, 7)
         {
         }
         internal override bool Handle(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -18,12 +18,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             {
                 try
                 {
+                    DataChangeType changeType = (DataChangeType)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType];
                     int inventoryID = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.InventoryID];
                     int inventoryItemInfoID = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.InventoryItemInfoID];
                     int itemID = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.ItemID];
                     int itemCount = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.ItemCount];
                     int positionIndex = (int)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.PositionIndex];
-                    DataChangeType changeType = (DataChangeType)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.DataChangeType];
+                    bool isFavorite = (bool)parameters[(byte)SyncInventoryItemInfoChangeParameterCode.IsFavorite];
+
                     if (subject.Inventory.InventoryID == inventoryID)
                     {
                         Item item;
@@ -33,7 +35,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                             inventoryItemInfoID: inventoryItemInfoID,
                             item: item,
                             count: itemCount,
-                            positionIndex: positionIndex);
+                            positionIndex: positionIndex,
+                            isFavorite: isFavorite);
                             switch (changeType)
                             {
                                 case DataChangeType.Add:

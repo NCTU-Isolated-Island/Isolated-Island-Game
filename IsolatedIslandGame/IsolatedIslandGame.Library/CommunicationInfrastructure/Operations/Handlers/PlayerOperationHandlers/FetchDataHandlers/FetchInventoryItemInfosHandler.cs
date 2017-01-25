@@ -30,7 +30,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)FetchInventoryItemInfosResponseParameterCode.InventoryItemInfoID, info.InventoryItemInfoID },
                                 { (byte)FetchInventoryItemInfosResponseParameterCode.ItemID, info.Item.ItemID },
                                 { (byte)FetchInventoryItemInfosResponseParameterCode.ItemCount, info.Count },
-                                { (byte)FetchInventoryItemInfosResponseParameterCode.PositionIndex, info.PositionIndex }
+                                { (byte)FetchInventoryItemInfosResponseParameterCode.PositionIndex, info.PositionIndex },
+                                { (byte)FetchInventoryItemInfosResponseParameterCode.IsisFavorite, info.IsFavorite }
                             };
                             SendResponse(fetchCode, result);
                         }

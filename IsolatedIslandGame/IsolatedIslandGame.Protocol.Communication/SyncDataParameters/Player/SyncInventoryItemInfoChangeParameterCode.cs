@@ -7,6 +7,7 @@
         InventoryItemInfoID,
         ItemID,
         ItemCount,
-        PositionIndex
+        PositionIndex,
+        IsFavorite
     }
 }
