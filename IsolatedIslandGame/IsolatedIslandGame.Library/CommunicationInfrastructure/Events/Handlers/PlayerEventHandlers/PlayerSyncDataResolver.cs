@@ -13,6 +13,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
         internal PlayerSyncDataResolver(Player player) : base(player)
         {
             syncTable.Add(PlayerSyncDataCode.InventoryItemInfoChange, new SyncInventoryItemInfoChangeHandler(subject));
+            syncTable.Add(PlayerSyncDataCode.FriendInformationChange, new SyncFriendInformationChangeHandler(subject));
             syncTable.Add(PlayerSyncDataCode.PlayerInformation, new SyncPlayerInformationHandler(subject));
             syncTable.Add(PlayerSyncDataCode.TransactionItemChange, new SyncTransactionItemChangeHandler(subject));
             syncTable.Add(PlayerSyncDataCode.TransactionConfirm, new SyncTransactionConfirmHandler(subject));

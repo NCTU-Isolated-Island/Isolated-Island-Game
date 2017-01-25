@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 			UImanager.Instance.LoadResult(0);
 			//SceneManager.LoadScene("MainScene");
 		}
-	}
+    }
 
 	void OnCreateCharacter(Player player)
 	{
