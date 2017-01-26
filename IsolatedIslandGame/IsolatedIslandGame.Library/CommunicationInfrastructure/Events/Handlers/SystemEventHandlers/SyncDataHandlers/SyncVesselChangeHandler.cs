@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class SyncVesselChangeHandler : SyncDataHandler<SystemManager, SystemSyncDataCode>
     {
-        public SyncVesselChangeHandler(SystemManager subject) : base(subject, 6)
+        public SyncVesselChangeHandler(SystemManager subject) : base(subject, 7)
         {
         }
         internal override bool Handle(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -23,13 +23,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     float locationX = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)SyncVesselChangeParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)SyncVesselChangeParameterCode.EulerAngleY];
+                    OceanType locatedOceanType = (OceanType)parameters[(byte)SyncVesselChangeParameterCode.LocatedOceanType];
 
                     Vessel vessel = new Vessel(
                         vesselID: vesselID, 
                         ownerPlayerID: ownerPlayerID,
                         locationX: locationX,
                         locationZ: locationZ,
-                        rotationEulerAngleY: eulerAngleY);
+                        rotationEulerAngleY: eulerAngleY,
+                        locatedOceanType: locatedOceanType);
                     switch(changeType)
                     {
                         case DataChangeType.Add:

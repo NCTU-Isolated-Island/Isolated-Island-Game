@@ -5,6 +5,7 @@
         VesselID,
         LocationX,
         LocationZ,
-        EulerAngleY
+        EulerAngleY,
+        LocatedOceanType
     }
 }

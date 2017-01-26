@@ -37,18 +37,20 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncVesselChangeParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
                 { (byte)SyncVesselChangeParameterCode.LocationX, vessel.LocationX },
                 { (byte)SyncVesselChangeParameterCode.LocationZ, vessel.LocationZ },
-                { (byte)SyncVesselChangeParameterCode.EulerAngleY, vessel.RotationEulerAngleY }
+                { (byte)SyncVesselChangeParameterCode.EulerAngleY, vessel.RotationEulerAngleY },
+                { (byte)SyncVesselChangeParameterCode.LocatedOceanType, vessel.LocatedOceanType }
             };
             SendSyncData(SystemSyncDataCode.VesselChange, parameters);
         }
-        public void SyncVesselTransform(int vesselID, float locationX, float locationY, float rotationEulerAngleY)
+        public void SyncVesselTransform(int vesselID, float locationX, float locationY, float rotationEulerAngleY, OceanType locatedOceanType)
         {
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)SyncVesselTransformParameterCode.VesselID, vesselID },
                 { (byte)SyncVesselTransformParameterCode.LocationX, locationX },
                 { (byte)SyncVesselTransformParameterCode.LocationZ, locationY },
-                { (byte)SyncVesselTransformParameterCode.EulerAngleY, rotationEulerAngleY }
+                { (byte)SyncVesselTransformParameterCode.EulerAngleY, rotationEulerAngleY },
+                { (byte)SyncVesselTransformParameterCode.LocatedOceanType, locatedOceanType }
             };
             SendSyncData(SystemSyncDataCode.VesselTransform, parameters);
         }

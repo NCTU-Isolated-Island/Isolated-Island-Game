@@ -7,6 +7,7 @@
         OwnerPlayerID,
         LocationX,
         LocationZ,
-        EulerAngleY
+        EulerAngleY,
+        LocatedOceanType
     }
 }

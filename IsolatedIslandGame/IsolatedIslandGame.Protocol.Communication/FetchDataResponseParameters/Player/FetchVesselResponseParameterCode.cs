@@ -7,5 +7,6 @@
         LocationX,
         LocationZ,
         EulerAngleY,
+        LocatedOceanType
     }
 }

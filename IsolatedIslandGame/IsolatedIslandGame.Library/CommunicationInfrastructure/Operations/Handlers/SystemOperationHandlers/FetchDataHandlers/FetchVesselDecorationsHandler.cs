@@ -1,6 +1,6 @@
 ﻿using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
-using IsolatedIslandGame.Protocol.Communication.FetchDataParameters.Player;
-using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.Player;
+using IsolatedIslandGame.Protocol.Communication.FetchDataParameters.System;
+using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System;
 using System;
 using System.Collections.Generic;
 

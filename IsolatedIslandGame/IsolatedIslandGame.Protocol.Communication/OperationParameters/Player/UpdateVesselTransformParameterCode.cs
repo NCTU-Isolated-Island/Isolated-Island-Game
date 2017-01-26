@@ -4,6 +4,7 @@
     {
         LocationX,
         LocatiomZ,
-        EulerAngleY
+        EulerAngleY,
+        LocatedOceanType
     }
 }

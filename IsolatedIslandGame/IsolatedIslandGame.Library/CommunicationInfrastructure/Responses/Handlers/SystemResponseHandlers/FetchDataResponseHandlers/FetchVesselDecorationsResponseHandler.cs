@@ -1,7 +1,7 @@
 ﻿using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
-using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.Player;
+using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System;
 using System;
 using System.Collections.Generic;
 

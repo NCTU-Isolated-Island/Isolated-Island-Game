@@ -86,13 +86,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         {
             SendOperation(PlayerOperationCode.DrawMaterial, new Dictionary<byte, object>());
         }
-        public void UpdateVesselTransform(float locationX, float locationZ, float rotationEulerAngleY)
+        public void UpdateVesselTransform(float locationX, float locationZ, float rotationEulerAngleY, OceanType locatedOceanType)
         {
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)UpdateVesselTransformParameterCode.LocationX, locationX },
                 { (byte)UpdateVesselTransformParameterCode.LocatiomZ, locationZ },
-                { (byte)UpdateVesselTransformParameterCode.EulerAngleY, rotationEulerAngleY }
+                { (byte)UpdateVesselTransformParameterCode.EulerAngleY, rotationEulerAngleY },
+                { (byte)UpdateVesselTransformParameterCode.LocatedOceanType, locatedOceanType }
             };
             SendOperation(PlayerOperationCode.UpdateVesselTransform, parameters);
         }

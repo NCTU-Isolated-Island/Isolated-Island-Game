@@ -1,4 +1,5 @@
-﻿using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
+﻿using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataParameters.System;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class SyncVesselTransformHandler : SyncDataHandler<SystemManager, SystemSyncDataCode>
     {
-        public SyncVesselTransformHandler(SystemManager subject) : base(subject, 4)
+        public SyncVesselTransformHandler(SystemManager subject) : base(subject, 5)
         {
         }
         internal override bool Handle(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -20,11 +21,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     float locationX = (float)parameters[(byte)SyncVesselTransformParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)SyncVesselTransformParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)SyncVesselTransformParameterCode.EulerAngleY];
+                    OceanType locatedOceanType = (OceanType)parameters[(byte)SyncVesselTransformParameterCode.LocatedOceanType];
 
                     Vessel vessel;
                     if(VesselManager.Instance.FindVessel(vesselID, out vessel))
                     {
-                        vessel.UpdateTransform(locationX, locationZ, eulerAngleY);
+                        vessel.UpdateTransform(locationX, locationZ, eulerAngleY, locatedOceanType);
                         return true;
                     }
                     else

@@ -27,7 +27,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             { (byte)FetchVesselResponseParameterCode.OwnerPlayerID, vessel.OwnerPlayerID },
                             { (byte)FetchVesselResponseParameterCode.LocationX, vessel.LocationX },
                             { (byte)FetchVesselResponseParameterCode.LocationZ, vessel.LocationZ },
-                            { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.RotationEulerAngleY }
+                            { (byte)FetchVesselResponseParameterCode.EulerAngleY, vessel.RotationEulerAngleY },
+                            { (byte)FetchVesselResponseParameterCode.LocatedOceanType, vessel.LocatedOceanType },
                         };
                         SendResponse(fetchCode, result);
                         return true;

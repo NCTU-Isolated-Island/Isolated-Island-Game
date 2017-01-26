@@ -1,4 +1,5 @@
-﻿using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+﻿using IsolatedIslandGame.Protocol;
+using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.Player;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 {
     class UpdateVesselTransformHandler : PlayerOperationHandler
     {
-        public UpdateVesselTransformHandler(Player subject) : base(subject, 3)
+        public UpdateVesselTransformHandler(Player subject) : base(subject, 4)
         {
         }
 
@@ -17,10 +18,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 float locationX = (float)parameters[(byte)UpdateVesselTransformParameterCode.LocationX];
                 float locationZ = (float)parameters[(byte)UpdateVesselTransformParameterCode.LocatiomZ];
                 float eulerAngleY = (float)parameters[(byte)UpdateVesselTransformParameterCode.EulerAngleY];
+                OceanType locatedOceanType = (OceanType)parameters[(byte)UpdateVesselTransformParameterCode.LocatedOceanType];
 
-                if(subject.Vessel != null)
+                if (subject.Vessel != null)
                 {
-                    subject.Vessel.UpdateTransform(locationX, locationZ, eulerAngleY);
+                    subject.Vessel.UpdateTransform(locationX, locationZ, eulerAngleY, locatedOceanType);
                     return true;
                 }
                 else
