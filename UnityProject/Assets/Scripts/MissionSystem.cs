@@ -5,7 +5,7 @@ using UnityEngine;
 public class MissionSystem : MonoBehaviour {
 
 	public static MissionSystem Instance;
-
+//	public List<Mission> Missions;
 
 	void Awake()
 	{
@@ -20,8 +20,15 @@ public class MissionSystem : MonoBehaviour {
 
 	}
 
+	void OnGetNewMission()
+	{
+		//store data to Missions
+	}
+
+	//開始執行任務 QRCODE
 	public void GetMissionOne()
 	{
+		
 		//qrcode~~~
 	}
 
@@ -37,3 +44,8 @@ public class MissionSystem : MonoBehaviour {
 
 
 }
+
+//class Mission
+//{
+//	
+//}

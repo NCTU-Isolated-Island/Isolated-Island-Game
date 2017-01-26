@@ -12,10 +12,17 @@ public class PlayerController : MonoBehaviour {
 	private bool finishPlacing = false; // 完成放置素材
 	private bool placingMaterial = false; //正在放置素材
 	private float lastTimeClick = -99f ;
+	private bool doneDecorating = false;
 
 	public static PlayerController Instance;
 	public List<GameObject> InArea;
 	public GameObject CurrentSelectDecoration;
+
+	public enum State {Default, Decorating, Rotating}
+	public State CurrentState = State.Default;
+
+	public delegate void PlayerAction();
+	public static event PlayerAction OnGetArea;
 
 	void Awake()
 	{
@@ -26,9 +33,13 @@ public class PlayerController : MonoBehaviour {
 		}
 		DontDestroyOnLoad(gameObject);
 
+		Input.gyro.enabled = true;
+
 		//After Setting Up, Deactivate PlayerController, and wait for into MainScene
 		gameObject.SetActive(false);
-		CurrentMode = Mode.RotateX;
+
+
+
 	}
 	void Update()
 	{
@@ -49,43 +60,39 @@ public class PlayerController : MonoBehaviour {
 			SelectDecoration();
 		}
 
-		if(Input.GetKeyDown(KeyCode.A))
-		{
-			if(CurrentMode == null)
-			{
-				CurrentMode = Mode.RotateX;
-			}
-			else if(CurrentMode == Mode.RotateX)
-			{
-				CurrentMode = Mode.RotateY;
-			}
-			else if(CurrentMode == Mode.RotateY)
-			{
-				CurrentMode = Mode.RotateZ;
-			}
-			else if(CurrentMode == Mode.RotateZ)
-			{
-				CurrentMode = Mode.RotateX;
-			}
-		}
+
 
 		if(Input.GetKeyDown(KeyCode.E))
 		{
-			StartCoroutine(Dec(0));
+			StartCoroutine(Decorate());
+		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			CurrentState = State.Decorating;
+		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			CurrentState = State.Rotating;
 		}
 
 		if(Input.GetKeyDown(KeyCode.Y))
 		{
-			StartCoroutine(GetCurrentArea());
+			StopCoroutine(GetCurrentArea());
 		}
 
 		CheckDoubleClick();
 
-		//AdjustViewAngle();
-		PinchToZoom();
+		if(CurrentState == State.Default)
+		{
+			AdjustViewAngle();
+			PinchToZoom();
+		}
+
 	}
 
-	IEnumerator GetCurrentArea()
+	public IEnumerator GetCurrentArea()
 	{
 		PlayerController.Instance.InArea.Clear(); // 清除上次掃描記錄
 		GameObject probe = Instantiate
@@ -97,13 +104,16 @@ public class PlayerController : MonoBehaviour {
 		yield return new WaitForFixedUpdate();
 
 		Destroy(probe);
+
+		if(OnGetArea != null)
+			OnGetArea.Invoke();
 	}
 
 	public void StartPlaceDecoration()
 	{
 		//Check have that material
 		finishPlacing = false;
-		StartCoroutine(PlaceMaterial(2));
+		StartCoroutine(PlaceMaterial(1));
 
 	}
 
@@ -136,8 +146,7 @@ public class PlayerController : MonoBehaviour {
 				LayerMask.GetMask("PlayerModel")
 			);
 			temp.transform.position = hitInfo.point;
-			yield return null;
-		}
+			yield return null;}
 
 
 		position = temp.transform.localPosition;
@@ -266,7 +275,6 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-
 	void PinchToZoom()
 	{
 		if (Input.touchCount == 2)
@@ -344,62 +352,50 @@ public class PlayerController : MonoBehaviour {
 	//		}
 	//	}
 
-	public enum Mode{ Move,RotateX,RotateY,RotateZ,Default}
-	public Mode CurrentMode;
-
-	IEnumerator Dec(int itemID)
+	IEnumerator Decorate()
 	{
-		//after 2 sec press 
-		//slide down inventory
+		CurrentState = State.Decorating;
 
-		//		GameObject temp = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
-		//		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
-		//		Transparentize(temp);
+		GameObject temp = Instantiate(GameManager.Instance.elementModels[1],Vector3.zero,Quaternion.identity) as GameObject;
+		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
 
+		RaycastHit hitInfo = new RaycastHit();
 
-		while(true)
+		while(!doneDecorating)
 		{
-			switch (CurrentMode) {
-			case Mode.Move:
-				// GO.tran.po = hit point
-				break;
-
-			case Mode.RotateX:
-				if(Input.touchCount == 1)
-				{
-					Touch touch = Input.GetTouch(0);
-					CurrentSelectDecoration.transform.Rotate(touch.deltaPosition.y * 0.1f, 0 , 0 , Space.World);
-
-
-				}
-				break;
-
-			case Mode.RotateY:
-				if(Input.touchCount == 1)
-				{
-					Touch touch = Input.GetTouch(0);
-					CurrentSelectDecoration.transform.Rotate(0,touch.deltaPosition.x * -0.1f , 0 , Space.World);
-
-
-				}
-				break;
-			case Mode.RotateZ:
-				if(Input.touchCount == 1)
-				{
-					Touch touch = Input.GetTouch(0);
-
-					CurrentSelectDecoration.transform.Rotate(0,0,touch.deltaPosition.y * 0.1f,Space.World);
-
-				}
-				break;
-			default:
-				break;
+			if(CurrentState == State.Decorating)
+			{
+				Physics.Raycast
+				(
+					Camera.main.ScreenPointToRay(Input.mousePosition),
+					out hitInfo,
+					99999f,
+					LayerMask.GetMask("PlayerModel")
+				);
+				temp.transform.position = hitInfo.point;
+			}
+			if(CurrentState == State.Rotating)
+			{
+				temp.transform.rotation = Quaternion.Euler(90,0,0) * Quaternion.Euler
+					(
+						Input.gyro.attitude.eulerAngles.x * -1,
+						Input.gyro.attitude.eulerAngles.y * -1,
+						Input.gyro.attitude.eulerAngles.z
+					) * Quaternion.Euler
+					(
+						Input.gyro.attitude.eulerAngles.x * -1,
+						Input.gyro.attitude.eulerAngles.y * -1,
+						Input.gyro.attitude.eulerAngles.z
+					);
 			}
 
-
-
 			yield return null;
+
 		}
+
+		print("DONE");
+		CurrentState = State.Default;
+		//finalize
 	}
 }
 

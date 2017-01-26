@@ -7,13 +7,36 @@ public class Test : MonoBehaviour {
 
 	void Start()
 	{
-		initialPos = transform.position;
+		Input.gyro.enabled = true;
+		AB();
 	}
 
-	void Update()
+	IEnumerator AB ()
 	{
-		transform.position = initialPos + Vector3.up * Mathf.Sin(Time.time * 1.5f) * 0.3f;
-		transform.Rotate(0f,20f * Time.deltaTime, 0f);
+		print(Time.time);
+		yield return new WaitForSeconds(1f);
+		print(Time.time);
 	}
+
+
+
+//	void Update()
+//	{
+//		transform.rotation = Quaternion.Euler(90,0,0) * Quaternion.Euler
+//			(
+//				Input.gyro.attitude.eulerAngles.x * -1,
+//				Input.gyro.attitude.eulerAngles.y * -1,
+//				Input.gyro.attitude.eulerAngles.z
+//			) * Quaternion.Euler
+//			(
+//				Input.gyro.attitude.eulerAngles.x * -1,
+//				Input.gyro.attitude.eulerAngles.y * -1,
+//				Input.gyro.attitude.eulerAngles.z
+//			);
+//
+//
+//
+//	}
+
 
 }
