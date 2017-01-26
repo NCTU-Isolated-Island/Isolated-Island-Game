@@ -12,12 +12,15 @@ public class Chat_Control : MonoBehaviour
     public GameObject UIControl;
     public GameObject ChatSet;
     public GameObject ChatContent;
-   
+    public GameObject ChatBPanel;
+
     public Button Back_Button;
+    public Button Back2_Button;
     public Button View_Button;
 
     public bool ChaOut, MoveCha;
     bool ResetOnce = true;
+    public bool HideChatB = false;
     float passtime = 0;
     int times = 0;
     float CanvasWidth;
@@ -58,10 +61,21 @@ public class Chat_Control : MonoBehaviour
             }
 
         }
+        if (HideChatB)
+        {
+            passtime += Time.deltaTime;
+            if (passtime > 0.05)
+            {
+                ChatBPanel.transform.localPosition = ChatBPanel.transform.localPosition + new Vector3(CanvasWidth / 10, 0, 0);
+                if (times < 9)
+                { times++; }
+                else { times = 0; HideChatB = false; }
+            }
+        }
     }
     void Reset()
     {
-
+        //寫讀取所有人資料
     }
 
     void BACK()
@@ -70,6 +84,11 @@ public class Chat_Control : MonoBehaviour
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Main_Boat);
         MoveCha = true;
     }
+    void BACK2()
+    {
+
+
+    }
     void SetGameObject()
     {
         if (!UIControl)
@@ -77,10 +96,14 @@ public class Chat_Control : MonoBehaviour
         if (!ChatSet) ;
         if (!ChatContent)
             ChatContent = this.transform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).gameObject;
-       
+       if(!ChatBPanel)
+            ChatBPanel = this.transform.GetChild(1).gameObject;
         if (!Back_Button)
             Back_Button = this.gameObject.transform.GetChild(0).GetChild(3).GetComponent<Button>();
         Back_Button.onClick.AddListener(BACK);
+        if(!Back2_Button)
+            Back2_Button = this.gameObject.transform.GetChild(1).GetChild(3).GetComponent<Button>();
+        Back2_Button.onClick.AddListener(BACK2);
         if (!View_Button)
             View_Button = this.gameObject.transform.GetChild(0).GetChild(4).GetComponent<Button>();
 
