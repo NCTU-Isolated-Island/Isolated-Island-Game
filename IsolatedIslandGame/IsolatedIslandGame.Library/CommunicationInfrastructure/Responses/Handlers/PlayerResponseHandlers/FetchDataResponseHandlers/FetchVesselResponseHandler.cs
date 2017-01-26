@@ -47,15 +47,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     float locationX = (float)parameters[(byte)FetchVesselResponseParameterCode.LocationX];
                     float locationZ = (float)parameters[(byte)FetchVesselResponseParameterCode.LocationZ];
                     float eulerAngleY = (float)parameters[(byte)FetchVesselResponseParameterCode.EulerAngleY];
+                    OceanType locatedOceanType = (OceanType)parameters[(byte)FetchVesselResponseParameterCode.LocatedOceanType];
 
-                    if(subject.PlayerID == ownerPlayerID)
+                    if (subject.PlayerID == ownerPlayerID)
                     {
                         Vessel vessel = new Vessel(
                             vesselID: vesselID,
                             ownerPlayerID: ownerPlayerID,
                             locationX: locationX,
                             locationZ: locationZ,
-                            rotationEulerAngleY: eulerAngleY);
+                            rotationEulerAngleY: eulerAngleY,
+                            locatedOceanType: locatedOceanType);
                         subject.BindVessel(vessel);
                         VesselManager.Instance.AddVessel(vessel);
                         return true;

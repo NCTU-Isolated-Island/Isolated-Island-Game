@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
 	private bool isInMainScene;
 
+
 	public enum CameraStat
 	{
 		Near,
@@ -110,7 +111,7 @@ public class GameManager : MonoBehaviour
 			UImanager.Instance.LoadResult(0);
 			//SceneManager.LoadScene("MainScene");
 		}
-    }
+	}
 
 	void OnCreateCharacter(Player player)
 	{
@@ -136,6 +137,8 @@ public class GameManager : MonoBehaviour
 
 			PlayerController.Instance.gameObject.SetActive(true);
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
+
+
 		}
 		else
 		{
@@ -145,15 +148,53 @@ public class GameManager : MonoBehaviour
 		//TODO 設定完之後再把顯示出遊戲畫面（在這之前可能顯示loading bar
 	}
 
-	public void OnPlayerLocationChange(Vector3 position,float eulerAngleY)
+	public IEnumerator OnPlayerLocationChange(Vector3 position,float eulerAngleY)
 	{
 		PlayerGameObject.GetComponent<PlayerBehavior>().UpdateLocation(position,eulerAngleY);
+
+		yield return PlayerController.Instance.GetCurrentArea();
+
+		OceanType type = OceanType.Unknown;
+
+		//目前如果是在海域重疊區域先以Type大的為準
+		foreach(GameObject entry in PlayerController.Instance.InArea)
+		{
+			switch (entry.name) {
+			case "a_girl_from_osaka_1":
+				type = OceanType.Type1;
+				break;
+			case "a_new_generation_1":
+				type = OceanType.Type2;
+				break;
+			case "cosy_and_warm_1":
+				type = OceanType.Type3;
+				break;
+			case "hopeful_journey_1":
+				type = OceanType.Type4;
+				break;
+			case "indy_racing_1":
+				type = OceanType.Type5;
+				break;
+			case "lost_soul_1":
+				type = OceanType.Type6;
+				break;
+			case "winter_light_1":
+				type = OceanType.Type7;
+				break;
+			default:
+				break;
+			}
+
+
+		}
+
 
 		UserManager.Instance.User.Player.OperationManager.UpdateVesselTransform
 		(
 			position.x,
 			position.z,
-			eulerAngleY
+			eulerAngleY,
+			type
 		);
 	}
 
@@ -181,7 +222,7 @@ public class GameManager : MonoBehaviour
 
 	#region Vessel
 
-	void OnVesselTransformUpdated(int vesselID, float locationX, float locationZ, float rotationEulerAngleY)
+	void OnVesselTransformUpdated(int vesselID, float locationX, float locationZ, float rotationEulerAngleY, OceanType oceanType)
 	{
 		if(isInMainScene)
 		{

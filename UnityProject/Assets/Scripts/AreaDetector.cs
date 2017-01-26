@@ -10,11 +10,21 @@ public class AreaDetector : MonoBehaviour {
 		{
 			if(!PlayerController.Instance.InArea.Contains(this.gameObject))
 				PlayerController.Instance.InArea.Add(this.gameObject);
+			
+			print(name);
+
+			//
+			switch (name) {
+			case "ABC":
+				break;
+
+			default:
+				break;
+			}
+
+
 
 		}
-
-
-
 
 	}
 }

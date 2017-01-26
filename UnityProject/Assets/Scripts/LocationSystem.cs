@@ -28,12 +28,13 @@ public class LocationSystem : MonoBehaviour {
 		{
 			
 			transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
+
+			StartCoroutine(GameManager.Instance.OnPlayerLocationChange
+				(
+					GetInGameCoordinate(),
+					transform.eulerAngles.y
+				));
 			
-			GameManager.Instance.OnPlayerLocationChange
-			(
-				GetInGameCoordinate(),
-				transform.eulerAngles.y
-			);
 
 			previousLocation = GetInGameCoordinate();
 			updateTime = ConvertFromUnixTimestamp(Input.location.lastData.timestamp);
