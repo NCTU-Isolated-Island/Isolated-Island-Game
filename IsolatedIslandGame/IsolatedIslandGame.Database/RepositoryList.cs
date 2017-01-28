@@ -29,6 +29,7 @@ namespace IsolatedIslandGame.Database
         #region archive data
         public abstract TransactionRepository TransactionRepository { get; }
         public abstract TransactionItemInfoRepository TransactionItemInfoRepository { get; }
+        public abstract IslandMaterialRepository IslandMaterialRepository { get; }
         #endregion
     }
 }
