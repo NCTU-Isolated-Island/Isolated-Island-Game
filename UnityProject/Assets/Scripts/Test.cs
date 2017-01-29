@@ -8,14 +8,16 @@ public class Test : MonoBehaviour {
 	void Start()
 	{
 		Input.gyro.enabled = true;
-		AB();
+		StartCoroutine(AB());
 	}
 
 	IEnumerator AB ()
 	{
-		print(Time.time);
-		yield return new WaitForSeconds(1f);
-		print(Time.time);
+		while(true)
+		{
+			transform.rotation = Quaternion.
+										
+		}
 	}
 
 

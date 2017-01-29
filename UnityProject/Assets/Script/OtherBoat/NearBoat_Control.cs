@@ -113,16 +113,7 @@ public class NearBoat_Control : MonoBehaviour {
             }
             bool isSufficient = b.IsSufficientRequirements(new List<Blueprint.ElementInfo> { new Blueprint.ElementInfo { itemID = thinginA, positionIndex = placeA, itemCount = 1 } });
         }*/
-        //抽素材
-        /*UserManager.Instance.User.Player.OperationManager.DrawMaterial();
-        UserManager.Instance.User.Player.ResponseManager.OnDrawMaterialResponse += (returnCode, item, count) => 
-        {
-            switch(returnCode)
-            {
-                case IsolatedIslandGame.Protocol.ErrorCode.NoError:
-                    break;
-            }
-        };*/
+       
       
     }
     void View() { }
