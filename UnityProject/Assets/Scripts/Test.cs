@@ -3,21 +3,14 @@ using System.Collections;
 
 public class Test : MonoBehaviour {
 
-	Vector3 initialPos;
+	public GameObject test;
 
 	void Start()
 	{
 		Input.gyro.enabled = true;
-		StartCoroutine(AB());
-	}
 
-	IEnumerator AB ()
-	{
-		while(true)
-		{
-			transform.rotation = Quaternion.
-										
-		}
+		AuxCameraSystem.Instance.Show3DObject(test, new Vector3(0,-3,7));
+
 	}
 
 

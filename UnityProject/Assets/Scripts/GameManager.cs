@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
 
 		UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
 		UserManager.Instance.User.Player.OnCreateCharacter -= OnCreateCharacter;
+		UserManager.Instance.User.Player.OnGetPlayerConversation -= OnGetPlayerConversation;
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 		VesselManager.Instance.OnVesselTransformUpdated -= OnVesselTransformUpdated;
 		VesselManager.Instance.OnVesselDecorationChange -= OnVesselDecorationChange;
@@ -93,11 +94,15 @@ public class GameManager : MonoBehaviour
 	}
 
 	#endregion
+	void OnGetPlayerConversation(IsolatedIslandGame.Library.TextData.PlayerConversation conversation)
+	{
+		print(conversation.message.senderPlayerID + " : " +conversation.message.content );
+	}
 
 	void OnPlayerOnline(Player player)
 	{
 		UserManager.Instance.User.Player.OnCreateCharacter += OnCreateCharacter;
-
+		UserManager.Instance.User.Player.OnGetPlayerConversation += OnGetPlayerConversation;
 		if (UserManager.Instance.User.Player.GroupType == GroupType.No)
 		{
 			//SceneManager.LoadScene("RegisterScene");
@@ -138,6 +143,8 @@ public class GameManager : MonoBehaviour
 			PlayerController.Instance.gameObject.SetActive(true);
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
 
+			print("ON");
+			UserManager.Instance.User.Player.OperationManager.SendMessage(23,"FirstMessageTest");
 
 		}
 		else

@@ -30,6 +30,7 @@ public class QRCodeSystem : MonoBehaviour {
 	void Update()
 	{
 		
+
 	}
 
 	public void StartReading()
