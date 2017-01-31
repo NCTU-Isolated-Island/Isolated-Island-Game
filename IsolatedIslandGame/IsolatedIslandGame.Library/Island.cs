@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library
@@ -46,8 +47,8 @@ namespace IsolatedIslandGame.Library
         private Dictionary<int, PlayerMaterialInfo> todayMaterialRanking = new Dictionary<int, PlayerMaterialInfo>();
         private Dictionary<int, PlayerScoreInfo> playerScoreRanking = new Dictionary<int, PlayerScoreInfo>();
 
-        public IEnumerable<PlayerMaterialInfo> TodayMaterialRanking { get { return todayMaterialRanking.Values; } }
-        public IEnumerable<PlayerScoreInfo> PlayerScoreRanking { get { return playerScoreRanking.Values; } }
+        public IEnumerable<PlayerMaterialInfo> TodayMaterialRanking { get { return todayMaterialRanking.Values.ToArray(); } }
+        public IEnumerable<PlayerScoreInfo> PlayerScoreRanking { get { return playerScoreRanking.Values.ToArray(); } }
 
         public delegate void TotalScoreUpdatedEventHandler(GroupType groupType, int score);
         private event TotalScoreUpdatedEventHandler onTotalScoreUpdated;
@@ -62,9 +63,6 @@ namespace IsolatedIslandGame.Library
         public delegate void SendMaterialEventHandler(Player player, Material material);
         private event SendMaterialEventHandler onSendMaterial;
         public event SendMaterialEventHandler OnSendMaterial { add { onSendMaterial += value; } remove { onSendMaterial -= value; } }
-
-        private event Action onResetTodayMaterialRanking;
-        public event Action OnResetTodayMaterialRanking { add { onResetTodayMaterialRanking += value; } remove { onResetTodayMaterialRanking -= value; } }
 
         private Island() { }
         public int GetTotalScore(GroupType groupType)
@@ -98,6 +96,7 @@ namespace IsolatedIslandGame.Library
                     {
                         UpdatePlayerScoreRanking(new PlayerScoreInfo { playerID = player.PlayerID, score = material.Score });
                     }
+                    onSendMaterial?.Invoke(player, material);
                     return true;
                 }
                 else
@@ -148,7 +147,6 @@ namespace IsolatedIslandGame.Library
         public void ResetTodayMaterialRanking()
         {
             todayMaterialRanking.Clear();
-            onResetTodayMaterialRanking?.Invoke();
         }
     }
 }

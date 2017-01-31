@@ -6,6 +6,9 @@
         AllVessels,
         Vessel,
         VesselWithOwnerPlayerID,
-        VesselDecorations
+        VesselDecorations,
+        IslandTotalScore,
+        IslandTodayMaterialRanking,
+        IslandPlayerScoreRanking,
     }
 }

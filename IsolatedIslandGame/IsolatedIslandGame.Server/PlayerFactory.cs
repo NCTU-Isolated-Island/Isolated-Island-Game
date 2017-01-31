@@ -4,6 +4,7 @@ using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Server.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -19,6 +20,8 @@ namespace IsolatedIslandGame.Server
         }
 
         private Dictionary<int, Player> playerDictionary;
+        public IEnumerable<Player> Players { get { return playerDictionary.Values.ToArray(); } }
+
         private Dictionary<int, Action<Blueprint>> playerGetBlueprintFunctionDictionary;
 
         private PlayerFactory()

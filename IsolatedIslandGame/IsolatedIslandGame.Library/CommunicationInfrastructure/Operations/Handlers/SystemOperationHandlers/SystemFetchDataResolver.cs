@@ -20,7 +20,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { SystemFetchDataCode.AllVessels, new FetchAllVesselsHandler(subject) },
                 { SystemFetchDataCode.Vessel, new FetchVesselHandler(subject) },
                 { SystemFetchDataCode.VesselWithOwnerPlayerID, new FetchVesselWithOwnerPlayerIDHandler(subject) },
-                { SystemFetchDataCode.VesselDecorations, new FetchVesselDecorationsHandler(subject) }
+                { SystemFetchDataCode.VesselDecorations, new FetchVesselDecorationsHandler(subject) },
+                { SystemFetchDataCode.IslandTotalScore, new FetchIslandTotalScoreHandler(subject) },
+                { SystemFetchDataCode.IslandTodayMaterialRanking, new FetchIslandTodayMaterialRankingHandler(subject) },
+                { SystemFetchDataCode.IslandPlayerScoreRanking, new FetchIslandPlayerScoreRankingHandler(subject) }
             };
         }
 
@@ -88,6 +91,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { (byte)FetchVesselDecorationsParameterCode.VesselID, vesselID }
             };
             SendOperation(SystemFetchDataCode.VesselDecorations, parameters);
+        }
+        public void FetchIslandTotalScore()
+        {
+            SendOperation(SystemFetchDataCode.IslandTotalScore, new Dictionary<byte, object>());
+        }
+        public void FetchIslandTodayMaterialRanking()
+        {
+            SendOperation(SystemFetchDataCode.IslandTodayMaterialRanking, new Dictionary<byte, object>());
+        }
+        public void FetchIslandPlayerScoreRanking()
+        {
+            SendOperation(SystemFetchDataCode.IslandPlayerScoreRanking, new Dictionary<byte, object>());
         }
     }
 }

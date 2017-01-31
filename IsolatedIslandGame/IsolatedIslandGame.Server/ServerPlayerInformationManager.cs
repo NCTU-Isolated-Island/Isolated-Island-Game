@@ -11,14 +11,21 @@ namespace IsolatedIslandGame.Server
         }
         public override bool FindPlayerInformation(int playerID, out PlayerInformation playerInformation)
         {
-            if(DatabaseService.RepositoryList.PlayerRepository.ReadPlayerInformation(playerID, out playerInformation))
+            if(!base.FindPlayerInformation(playerID, out playerInformation))
             {
-                AddPlayerInformation(playerInformation);
-                return true;
+                if (DatabaseService.RepositoryList.PlayerRepository.ReadPlayerInformation(playerID, out playerInformation))
+                {
+                    AddPlayerInformation(playerInformation);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                return true;
             }
         }
     }

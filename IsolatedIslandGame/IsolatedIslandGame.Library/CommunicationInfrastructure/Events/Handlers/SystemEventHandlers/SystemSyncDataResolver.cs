@@ -16,6 +16,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             syncTable.Add(SystemSyncDataCode.VesselTransform, new SyncVesselTransformHandler(subject));
             syncTable.Add(SystemSyncDataCode.VesselDecorationChange, new SyncVesselDecorationChangeHandler(subject));
             syncTable.Add(SystemSyncDataCode.PlayerInformation, new SyncPlayerInformationHandler(subject));
+            syncTable.Add(SystemSyncDataCode.IslandTotalScoreUpdated, new SyncIslandTotalScoreUpdatedHandler(subject));
+            syncTable.Add(SystemSyncDataCode.IslandTodayMaterialRankingUpdated, new SyncIslandTodayMaterialRankingUpdatedHandler(subject));
+            syncTable.Add(SystemSyncDataCode.IslandPlayerScoreRankingUpdated, new SyncIslandPlayerScoreRankingUpdatedHandler(subject));
         }
 
         internal override void SendSyncData(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -82,6 +85,33 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncPlayerInformationParameterCode.VesselID, playerInformation.vesselID }
             };
             SendSyncData(SystemSyncDataCode.PlayerInformation, parameters);
+        }
+        public void SyncIslandTotalScoreUpdated(GroupType groupType, int totalScore)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncIslandTotalScoreUpdatedParameterCode.GroupType, (byte)groupType },
+                { (byte)SyncIslandTotalScoreUpdatedParameterCode.TotalScore, totalScore }
+            };
+            SendSyncData(SystemSyncDataCode.IslandTotalScoreUpdated, parameters);
+        }
+        public void SyncIslandTodayMaterialRankingUpdated(Island.PlayerMaterialInfo info)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncIslandTodayMaterialRankingUpdatedParameterCode.PlayerID, info.playerID },
+                { (byte)SyncIslandTodayMaterialRankingUpdatedParameterCode.MaterialItemID, info.materialItemID }
+            };
+            SendSyncData(SystemSyncDataCode.IslandTodayMaterialRankingUpdated, parameters);
+        }
+        public void SyncIslandPlayerScoreRankingUpdated(Island.PlayerScoreInfo info)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncIslandPlayerScoreRankingUpdatedParameterCode.PlayerID, info.playerID },
+                { (byte)SyncIslandPlayerScoreRankingUpdatedParameterCode.Score, info.score }
+            };
+            SendSyncData(SystemSyncDataCode.IslandPlayerScoreRankingUpdated, parameters);
         }
     }
 }

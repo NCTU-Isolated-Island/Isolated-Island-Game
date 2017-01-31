@@ -5,6 +5,9 @@
         VesselChange,
         VesselTransform,
         VesselDecorationChange,
-        PlayerInformation
+        PlayerInformation,
+        IslandTotalScoreUpdated,
+        IslandTodayMaterialRankingUpdated,
+        IslandPlayerScoreRankingUpdated,
     }
 }

@@ -41,6 +41,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.ConfirmTransaction, new ConfirmTransactionHandler(player) },
                 { PlayerOperationCode.SetFavoriteItem, new SetFavoriteItemHandler(player) },
                 { PlayerOperationCode.ReadPlayerMessage, new ReadPlayerMessageHandler(player) },
+                { PlayerOperationCode.SendMaterialToIsland, new SendMaterialToIslandHandler(player) },
             };
         }
 
@@ -235,6 +236,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)ReadPlayerMessageParameterCode.PlayerMessageID, playerMessageID }
             };
             SendOperation(PlayerOperationCode.ReadPlayerMessage, parameters);
+        }
+        public void SendMaterialToIsland(int materialItemID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SendMaterialToIslandParameterCode.MaterialItemID, materialItemID }
+            };
+            SendOperation(PlayerOperationCode.SendMaterialToIsland, parameters);
         }
     }
 }

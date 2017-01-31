@@ -114,7 +114,7 @@ namespace IsolatedIslandGame.Library
             onCreateCharacter?.Invoke(this);
         }
 
-        internal void SyncPlayerInformation(int playerID)
+        public void SyncPlayerInformation(int playerID)
         {
             if(!knownPlayerIDSet.Contains(playerID))
             {
