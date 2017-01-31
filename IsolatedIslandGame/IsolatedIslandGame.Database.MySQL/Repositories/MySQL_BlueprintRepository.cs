@@ -15,8 +15,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@isOrderless", isOrderless);
-                command.Parameters.AddWithValue("@isBlueprintRequired", isBlueprintRequired);
+                command.Parameters.AddWithValue("isOrderless", isOrderless);
+                command.Parameters.AddWithValue("isBlueprintRequired", isBlueprintRequired);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -41,7 +41,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE BlueprintID = @blueprintID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@blueprintID", blueprintID);
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_BlueprintRepository Delete Blueprint Error BlueprintID: {0}", blueprintID);

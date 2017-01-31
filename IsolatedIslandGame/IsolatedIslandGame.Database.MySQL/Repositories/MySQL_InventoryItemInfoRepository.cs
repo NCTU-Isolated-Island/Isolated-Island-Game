@@ -53,7 +53,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from InventoryItemInfoCollection WHERE InventoryItemInfoID = @inventoryItemInfoID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inventoryItemInfoID", inventoryItemInfoID);
+                command.Parameters.AddWithValue("inventoryItemInfoID", inventoryItemInfoID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -91,12 +91,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE InventoryItemInfoID = @inventoryItemInfoID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inventoryID", inventoryID);
-                command.Parameters.AddWithValue("@itemID", info.Item.ItemID);
-                command.Parameters.AddWithValue("@itemCount", info.Count);
-                command.Parameters.AddWithValue("@positionIndex", info.PositionIndex);
-                command.Parameters.AddWithValue("@isFavorite", info.IsFavorite);
-                command.Parameters.AddWithValue("@inventoryItemInfoID", info.InventoryItemInfoID);
+                command.Parameters.AddWithValue("inventoryID", inventoryID);
+                command.Parameters.AddWithValue("itemID", info.Item.ItemID);
+                command.Parameters.AddWithValue("itemCount", info.Count);
+                command.Parameters.AddWithValue("positionIndex", info.PositionIndex);
+                command.Parameters.AddWithValue("isFavorite", info.IsFavorite);
+                command.Parameters.AddWithValue("inventoryItemInfoID", info.InventoryItemInfoID);
 
                 if (command.ExecuteNonQuery() <= 0)
                 {
@@ -110,7 +110,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE InventoryItemInfoID = @inventoryItemInfoID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inventoryItemInfoID", inventoryItemInfoID);
+                command.Parameters.AddWithValue("inventoryItemInfoID", inventoryItemInfoID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_InventoryItemInfoRepository Delete InventoryItemInfo Error InventoryItemInfoID: {0}", inventoryItemInfoID);
@@ -127,7 +127,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE InventoryID = @inventoryID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inventoryID", inventoryID);
+                command.Parameters.AddWithValue("inventoryID", inventoryID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())

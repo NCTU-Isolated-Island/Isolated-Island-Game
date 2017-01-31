@@ -69,6 +69,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     subject.Player.OperationManager.FetchDataResolver.FetchAllKnownBlueprints();
                     subject.Player.OperationManager.FetchDataResolver.FetchFriendInformations();
                     subject.Player.OperationManager.FetchDataResolver.FetchAllPlayerConversations();
+
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTotalScore();
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTodayMaterialRanking();
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandPlayerScoreRanking();
+
                     Vessel vessel;
                     if(VesselManager.Instance.FindVesselByOwnerPlayerID(playerID, out vessel))
                     {

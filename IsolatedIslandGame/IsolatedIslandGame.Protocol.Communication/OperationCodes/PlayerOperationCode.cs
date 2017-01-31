@@ -20,5 +20,7 @@
         ChangeTransactionItem,
         ConfirmTransaction,
         SetFavoriteItem,
+        ReadPlayerMessage,
+        SendMaterialToIsland
     }
 }

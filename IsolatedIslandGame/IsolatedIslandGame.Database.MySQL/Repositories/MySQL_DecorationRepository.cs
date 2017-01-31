@@ -55,7 +55,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from DecorationCollection WHERE DecorationID = @decorationID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@decorationID", decorationID);
+                command.Parameters.AddWithValue("decorationID", decorationID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -95,14 +95,14 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("vesselID", vesselID);
-                command.Parameters.AddWithValue("@materialItemID", decoration.Material.ItemID);
-                command.Parameters.AddWithValue("@positionX", decoration.PositionX);
-                command.Parameters.AddWithValue("@positionY", decoration.PositionY);
-                command.Parameters.AddWithValue("@positionZ", decoration.PositionZ);
-                command.Parameters.AddWithValue("@eulerAngleX", decoration.RotationEulerAngleX);
-                command.Parameters.AddWithValue("@eulerAngleY", decoration.RotationEulerAngleY);
-                command.Parameters.AddWithValue("@eulerAngleZ", decoration.RotationEulerAngleZ);
-                command.Parameters.AddWithValue("@decorationID", decoration.DecorationID);
+                command.Parameters.AddWithValue("materialItemID", decoration.Material.ItemID);
+                command.Parameters.AddWithValue("positionX", decoration.PositionX);
+                command.Parameters.AddWithValue("positionY", decoration.PositionY);
+                command.Parameters.AddWithValue("positionZ", decoration.PositionZ);
+                command.Parameters.AddWithValue("eulerAngleX", decoration.RotationEulerAngleX);
+                command.Parameters.AddWithValue("eulerAngleY", decoration.RotationEulerAngleY);
+                command.Parameters.AddWithValue("eulerAngleZ", decoration.RotationEulerAngleZ);
+                command.Parameters.AddWithValue("decorationID", decoration.DecorationID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_DecorationRepository Save Decoration Error DecorationID: {0}", decoration.DecorationID);
@@ -115,7 +115,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE DecorationID = @decorationID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@decorationID", decorationID);
+                command.Parameters.AddWithValue("decorationID", decorationID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_DecorationRepository Delete Decoration Error DecorationID: {0}", decorationID);
@@ -131,7 +131,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE VesselID = @vesselID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@vesselID", vesselID);
+                command.Parameters.AddWithValue("vesselID", vesselID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())

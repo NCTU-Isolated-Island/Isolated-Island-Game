@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Server
     {
         public static UserFactory Instance { get; private set; }
         
-        public static void InitialFactory()
+        public static void Initial()
         {
             Instance = new UserFactory();
         }

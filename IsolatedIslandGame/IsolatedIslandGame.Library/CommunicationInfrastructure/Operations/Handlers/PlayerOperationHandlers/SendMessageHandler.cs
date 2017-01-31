@@ -1,5 +1,4 @@
-﻿using IsolatedIslandGame.Protocol;
-using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+﻿using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.Player;
 using System.Collections.Generic;
 
@@ -15,7 +14,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                throw new System.NotImplementedException();
+                int receiverPlayerID = (int)parameters[(byte)SendMessageParameterCode.ReceiverPlayerID];
+                string content = (string)parameters[(byte)SendMessageParameterCode.Content];
+
+                return subject.User.CommunicationInterface.SendMessage(subject.PlayerID, receiverPlayerID, content);
             }
             else
             {

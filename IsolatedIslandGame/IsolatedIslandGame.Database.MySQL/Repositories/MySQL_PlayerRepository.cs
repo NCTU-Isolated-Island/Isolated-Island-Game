@@ -23,8 +23,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     SELECT LAST_INSERT_ID();";
                 using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
                 {
-                    command.Parameters.AddWithValue("@facebookID", facebookID);
-                    command.Parameters.AddWithValue("@registerDate", DateTime.Now);
+                    command.Parameters.AddWithValue("facebookID", facebookID);
+                    command.Parameters.AddWithValue("registerDate", DateTime.Now);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -47,7 +47,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             using (MySqlCommand command = new MySqlCommand("SELECT PlayerID FROM PlayerCollection WHERE FacebookID = @facebookID;", DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@facebookID", facebookID);
+                command.Parameters.AddWithValue("facebookID", facebookID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -71,7 +71,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from PlayerCollection WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerID", playerID);
+                command.Parameters.AddWithValue("playerID", playerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -103,11 +103,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@nickname", player.Nickname ?? "");
-                command.Parameters.AddWithValue("@signature", player.Signature ?? "");
-                command.Parameters.AddWithValue("@groupType", (byte)player.GroupType);
-                command.Parameters.AddWithValue("@lastConnectedIPAddress", player.LastConnectedIPAddress.ToString());
-                command.Parameters.AddWithValue("@playerID", player.PlayerID);
+                command.Parameters.AddWithValue("nickname", player.Nickname ?? "");
+                command.Parameters.AddWithValue("signature", player.Signature ?? "");
+                command.Parameters.AddWithValue("groupType", (byte)player.GroupType);
+                command.Parameters.AddWithValue("lastConnectedIPAddress", player.LastConnectedIPAddress.ToString());
+                command.Parameters.AddWithValue("playerID", player.PlayerID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQLPlayerRepository Save Player no affected row from PlayerID:{0}, IPAddress:{1}", player.PlayerID, player.LastConnectedIPAddress);
@@ -135,7 +135,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from PlayerCollection, VesselCollection WHERE PlayerID = @playerID AND OwnerPlayerID = PlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerID", playerID);
+                command.Parameters.AddWithValue("playerID", playerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())

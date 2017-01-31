@@ -13,10 +13,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 (BlueprintID,ItemID,ItemCount,PositionIndex) VALUES (@blueprintID,@itemID,@itemCount,@positionIndex) ;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@blueprintID", blueprintID);
-                command.Parameters.AddWithValue("@itemID", requirement.itemID);
-                command.Parameters.AddWithValue("@itemCount", requirement.itemCount);
-                command.Parameters.AddWithValue("@positionIndex", requirement.positionIndex);
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
+                command.Parameters.AddWithValue("itemID", requirement.itemID);
+                command.Parameters.AddWithValue("itemCount", requirement.itemCount);
+                command.Parameters.AddWithValue("positionIndex", requirement.positionIndex);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_BlueprintRequirement Create BlueprintRequirement Error BlueprintID: {0}, RequirementInfo: ItemID:{1}, ItemCount: {2}, PositionIndex: {3}", blueprintID, requirement.itemID, requirement.itemCount, requirement.positionIndex);
@@ -31,10 +31,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE BlueprintID = @blueprintID AND ItemID = @itemID AND ItemCount = @itemCount AND PositionIndex = @positionIndex;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@blueprintID", blueprintID);
-                command.Parameters.AddWithValue("@itemID", requirement.itemID);
-                command.Parameters.AddWithValue("@itemCount", requirement.itemCount);
-                command.Parameters.AddWithValue("@positionIndex", requirement.positionIndex);
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
+                command.Parameters.AddWithValue("itemID", requirement.itemID);
+                command.Parameters.AddWithValue("itemCount", requirement.itemCount);
+                command.Parameters.AddWithValue("positionIndex", requirement.positionIndex);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_BlueprintRequirementRepository Delete BlueprintRequirement Error BlueprintID: {0}, RequirementInfo: ItemID:{1}, ItemCount: {2}, PositionIndex: {3}", blueprintID, requirement.itemID, requirement.itemCount, requirement.positionIndex);
@@ -51,7 +51,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE BlueprintID = @blueprintID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@blueprintID", blueprintID);
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())

@@ -77,7 +77,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from MaterialCollection WHERE ItemID = @itemID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@itemID", itemID);
+                command.Parameters.AddWithValue("itemID", itemID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -92,7 +92,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from ItemCollection WHERE ItemID = @itemID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@itemID", itemID);
+                command.Parameters.AddWithValue("itemID", itemID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -124,9 +124,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE ItemID = @itemID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@itemName", item.ItemName);
-                command.Parameters.AddWithValue("@description", item.Description);
-                command.Parameters.AddWithValue("@itemID", item.ItemID);
+                command.Parameters.AddWithValue("itemName", item.ItemName);
+                command.Parameters.AddWithValue("description", item.Description);
+                command.Parameters.AddWithValue("itemID", item.ItemID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_ItemRepository Save Item Error ItemID: {0}", item.ItemID);
@@ -139,7 +139,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE ItemID = @itemID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@itemID", itemID);
+                command.Parameters.AddWithValue("itemID", itemID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_ItemRepository Delete Item Error ItemID: {0}", itemID);

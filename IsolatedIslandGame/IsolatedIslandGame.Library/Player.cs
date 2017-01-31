@@ -53,6 +53,9 @@ namespace IsolatedIslandGame.Library
         private event Action<Blueprint> onGetBlueprint;
         public event Action<Blueprint> OnGetBlueprint { add { onGetBlueprint += value; } remove { onGetBlueprint -= value; } }
 
+        private event Action<PlayerInformation> onGetPlayerInformation;
+        public event Action<PlayerInformation> OnGetPlayerInformation { add { onGetPlayerInformation += value; } remove { onGetPlayerInformation -= value; } }
+
         public delegate void FriendInformationChangeEventHandler(DataChangeType changeType, FriendInformation information);
         private event FriendInformationChangeEventHandler onFriendInformationChange;
         public event FriendInformationChangeEventHandler OnFriendInformationChange { add { onFriendInformationChange += value; } remove { onFriendInformationChange -= value; } }
@@ -111,15 +114,15 @@ namespace IsolatedIslandGame.Library
             onCreateCharacter?.Invoke(this);
         }
 
-        internal void SyncPlayerInformation(int playerID)
+        public void SyncPlayerInformation(int playerID)
         {
             if(!knownPlayerIDSet.Contains(playerID))
             {
                 PlayerInformation playerInformation;
                 if(PlayerInformationManager.Instance.FindPlayerInformation(playerID, out playerInformation))
                 {
-                    EventManager.SyncDataResolver.SyncPlayerInformation(playerInformation);
                     knownPlayerIDSet.Add(playerID);
+                    onGetPlayerInformation?.Invoke(playerInformation);
                 }
             }
         }

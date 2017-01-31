@@ -58,6 +58,9 @@ namespace IsolatedIslandGame.Database.MySQL
 
         private MySQL_TransactionItemInfoRepository transactionItemInfoRepository = new MySQL_TransactionItemInfoRepository();
         public override TransactionItemInfoRepository TransactionItemInfoRepository { get { return transactionItemInfoRepository; } }
+
+        private MySQL_IslandMaterialRepository islandMaterialRepository = new MySQL_IslandMaterialRepository();
+        public override IslandMaterialRepository IslandMaterialRepository { get { return islandMaterialRepository; } }
         #endregion
     }
 }

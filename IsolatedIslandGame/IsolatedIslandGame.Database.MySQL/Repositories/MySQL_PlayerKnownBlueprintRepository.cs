@@ -13,8 +13,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 (PlayerID,BlueprintID) VALUES (@playerID,@blueprintID);";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerID", playerID);
-                command.Parameters.AddWithValue("@blueprintID", blueprintID);
+                command.Parameters.AddWithValue("playerID", playerID);
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_PlayerKnownBlueprintRepository AddRelation PlayerKnownBlueprint Error PlayerID: {0}, BlueprintID: {1}", playerID, blueprintID);
@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerID", playerID);
+                command.Parameters.AddWithValue("playerID", playerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())

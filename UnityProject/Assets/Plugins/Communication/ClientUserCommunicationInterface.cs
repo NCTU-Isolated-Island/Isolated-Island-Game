@@ -128,5 +128,11 @@ namespace IsolatedIslandGame.Client.Communication
             LogService.FatalFormat("ClienPlayer ChangeTransactionItem ");
             return false;
         }
+
+        public override bool ReadPlayerMessage(int playerID, int playerMessageID)
+        {
+            LogService.FatalFormat("ClienPlayer ReadPlayerMessage ");
+            return false;
+        }
     }
 }

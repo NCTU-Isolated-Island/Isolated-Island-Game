@@ -8,6 +8,7 @@ using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
+using System;
 
 namespace IsolatedIslandGame.Server
 {
@@ -162,6 +163,11 @@ namespace IsolatedIslandGame.Server
             {
                 return false;
             }
+        }
+
+        public override bool ReadPlayerMessage(int playerID, int playerMessageID)
+        {
+            return DatabaseService.RepositoryList.PlayerConversationRepository.SetPlayerMessageRead(playerID, playerMessageID);
         }
     }
 }
