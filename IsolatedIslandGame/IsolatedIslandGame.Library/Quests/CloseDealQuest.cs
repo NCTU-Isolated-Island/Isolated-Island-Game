@@ -6,11 +6,11 @@ using IsolatedIslandGame.Protocol;
 
 namespace IsolatedIslandGame.Library.Quests
 {
-    public class QR_CodeQuest : Quest
+    public class CloseDealQuest : Quest
     {
-        public override QuestType QuestType { get { return QuestType.QR_Code; } }
+        public override QuestType QuestType { get { return QuestType.CloseDeal; } }
 
-        public QR_CodeQuest(int questID) : base(questID)
+        public CloseDealQuest(int questID) : base(questID)
         {
         }
     }
