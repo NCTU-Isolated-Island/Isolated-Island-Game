@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.PlayerOperationHandlers
 {
-    class SendMessageHandler : PlayerOperationHandler
+    class ReadPlayerMessageHandler : PlayerOperationHandler
     {
-        public SendMessageHandler(Player subject) : base(subject, 2)
+        public ReadPlayerMessageHandler(Player subject) : base(subject, 1)
         {
         }
 
@@ -14,10 +14,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                int receiverPlayerID = (int)parameters[(byte)SendMessageParameterCode.ReceiverPlayerID];
-                string content = (string)parameters[(byte)SendMessageParameterCode.Content];
+                int playerMessageID = (int)parameters[(byte)ReadPlayerMessageParameterCode.PlayerMessageID];
 
-                return subject.User.CommunicationInterface.SendMessage(subject.PlayerID, receiverPlayerID, content);
+                return subject.User.CommunicationInterface.ReadPlayerMessage(subject.PlayerID, playerMessageID); ;
             }
             else
             {

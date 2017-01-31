@@ -40,6 +40,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.ChangeTransactionItem, new ChangeTransactionItemHandler(player) },
                 { PlayerOperationCode.ConfirmTransaction, new ConfirmTransactionHandler(player) },
                 { PlayerOperationCode.SetFavoriteItem, new SetFavoriteItemHandler(player) },
+                { PlayerOperationCode.ReadPlayerMessage, new ReadPlayerMessageHandler(player) },
             };
         }
 
@@ -226,6 +227,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)SetFavoriteItemParameterCode.InventoryItemInfoID, inventoryItemInfoID }
             };
             SendOperation(PlayerOperationCode.SetFavoriteItem, parameters);
+        }
+        public void ReadPlayerMessage(int playerMessageID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)ReadPlayerMessageParameterCode.PlayerMessageID, playerMessageID }
+            };
+            SendOperation(PlayerOperationCode.ReadPlayerMessage, parameters);
         }
     }
 }

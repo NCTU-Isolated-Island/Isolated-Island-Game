@@ -47,7 +47,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE ReceiverPlayerID = @receiverPlayerID AND MessageID = PlayerMessageID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@receiverPlayerID", receiverPlayerID);
+                command.Parameters.AddWithValue("receiverPlayerID", receiverPlayerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -73,6 +73,26 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
             return conversations;
+        }
+
+        public override bool SetPlayerMessageRead(int playerID, int playerMessageID)
+        {
+            string sqlString = @"UPDATE PlayerConversationCollection SET HasRead  = true
+                WHERE ReceiverPlayerID = @playerID AND MessageID = @playerMessageID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("playerID", playerID);
+                command.Parameters.AddWithValue("playerMessageID", playerMessageID);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_PlayerConversationRepository SetPlayerMessageRead Error PlayerID: {playerID}, PlayerMessageID: {playerMessageID}");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
     }
 }

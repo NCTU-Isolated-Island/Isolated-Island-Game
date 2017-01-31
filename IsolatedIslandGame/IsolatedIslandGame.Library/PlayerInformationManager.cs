@@ -5,7 +5,7 @@ namespace IsolatedIslandGame.Library
     public class PlayerInformationManager
     {
         public static PlayerInformationManager Instance { get; private set; }
-        public static void InitialManager(PlayerInformationManager playerInformationManager)
+        public static void Initial(PlayerInformationManager playerInformationManager)
         {
             Instance = playerInformationManager;
         }

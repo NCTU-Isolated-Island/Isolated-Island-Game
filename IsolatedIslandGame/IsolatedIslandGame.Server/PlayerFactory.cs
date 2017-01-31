@@ -13,7 +13,7 @@ namespace IsolatedIslandGame.Server
     {
         public static PlayerFactory Instance { get; private set; }
 
-        public static void InitialFactory()
+        public static void Initial()
         {
             Instance = new PlayerFactory();
         }
@@ -203,6 +203,8 @@ namespace IsolatedIslandGame.Server
             playerGetBlueprintFunctionDictionary.Add(player.PlayerID, playerGetBlueprintFunction); ;
             player.OnGetBlueprint += playerGetBlueprintFunction;
 
+            player.OnGetPlayerInformation += player.EventManager.SyncDataResolver.SyncPlayerInformation;
+
             DatabaseService.RepositoryList.FriendRepository.ListOfFriendInformations(player.PlayerID).ForEach(x => player.AddFriend(x));
             player.OnFriendInformationChange += player.EventManager.SyncDataResolver.SyncFriendInformationChange;
 
@@ -235,6 +237,8 @@ namespace IsolatedIslandGame.Server
             Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
             player.OnGetBlueprint -= playerGetBlueprintFunction;
             playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
+
+            player.OnGetPlayerInformation -= player.EventManager.SyncDataResolver.SyncPlayerInformation;
 
             player.OnFriendInformationChange -= player.EventManager.SyncDataResolver.SyncFriendInformationChange;
 

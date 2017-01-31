@@ -13,9 +13,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 (InviterPlayerID,AccepterPlayerID,IsConfirmed) VALUES (@inviterPlayerID,@accepterPlayerID,@isConfirmed);";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
-                command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
-                command.Parameters.AddWithValue("@isConfirmed", false);
+                command.Parameters.AddWithValue("inviterPlayerID", inviterPlayerID);
+                command.Parameters.AddWithValue("accepterPlayerID", accepterPlayerID);
+                command.Parameters.AddWithValue("isConfirmed", false);
                 if (command.ExecuteNonQuery() > 0)
                 {
                     friendInformation = new FriendInformation
@@ -42,9 +42,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE InviterPlayerID = @inviterPlayerID AND AccepterPlayerID = @accepterPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@isConfirmed", true);
-                command.Parameters.AddWithValue("@inviterPlayerID", inviterPlayerID);
-                command.Parameters.AddWithValue("@accepterPlayerID", accepterPlayerID);
+                command.Parameters.AddWithValue("isConfirmed", true);
+                command.Parameters.AddWithValue("inviterPlayerID", inviterPlayerID);
+                command.Parameters.AddWithValue("accepterPlayerID", accepterPlayerID);
                 if (command.ExecuteNonQuery() > 0)
                 {
                     friendInformation = new FriendInformation
@@ -70,8 +70,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE (InviterPlayerID = @selfPlayerID AND AccepterPlayerID = @targetPlayerID) OR (InviterPlayerID = @targetPlayerID AND AccepterPlayerID = @selfPlayerID);";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@selfPlayerID", selfPlayerID);
-                command.Parameters.AddWithValue("@targetPlayerID", targetPlayerID);
+                command.Parameters.AddWithValue("selfPlayerID", selfPlayerID);
+                command.Parameters.AddWithValue("targetPlayerID", targetPlayerID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.Error($"MySQL_FriendRepository DeleteFriend Error SelfPlayerID: {selfPlayerID}, TargetPlayerID: {targetPlayerID}");
@@ -86,7 +86,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE InviterPlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerID", playerID);
+                command.Parameters.AddWithValue("playerID", playerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -107,7 +107,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE AccepterPlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerID", playerID);
+                command.Parameters.AddWithValue("playerID", playerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())

@@ -20,5 +20,6 @@
         ChangeTransactionItem,
         ConfirmTransaction,
         SetFavoriteItem,
+        ReadPlayerMessage
     }
 }

@@ -49,7 +49,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from PlayerMessageCollection WHERE PlayerMessageID = @playerMessageID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerMessageID", playerMessageID);
+                command.Parameters.AddWithValue("playerMessageID", playerMessageID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -85,7 +85,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE SenderPlayerID = @senderPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@senderPlayerID", senderPlayerID);
+                command.Parameters.AddWithValue("senderPlayerID", senderPlayerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())

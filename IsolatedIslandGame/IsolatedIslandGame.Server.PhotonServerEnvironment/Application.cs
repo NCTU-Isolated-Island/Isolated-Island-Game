@@ -11,6 +11,7 @@ using IsolatedIslandGame.Server.Items;
 using log4net.Config;
 using Photon.SocketServer;
 using System.IO;
+using System;
 
 namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 {
@@ -29,6 +30,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             SetupServices();
             SetupFactories();
             SetupManagers();
+            Scheduler.Inital(TimeSpan.FromSeconds(1));
             
             Log.Info("PhotonServer Setup Successiful.......");
         }
@@ -43,7 +45,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             return new Peer(initRequest);
         }
 
-        protected void SetupLog()
+        private void SetupLog()
         {
             log4net.GlobalContext.Properties["Photon:ApplicationLogPath"] = Path.Combine(ApplicationPath, "log");
             FileInfo file = new FileInfo(Path.Combine(BinaryPath, "log4net.config"));
@@ -54,7 +56,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             }
             LogService.InitialService(Log.Info, Log.InfoFormat, Log.Error, Log.ErrorFormat, Log.Fatal, Log.FatalFormat);
         }
-        protected void SetupConfiguration()
+        private void SetupConfiguration()
         {
             SystemConfiguration config;
             if(SystemConfiguration.Load(Path.Combine(ApplicationPath, "config", "system.config"), out config))
@@ -67,7 +69,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             }
             Photon.SocketServer.Protocol.TryRegisterCustomType(typeof(Blueprint.ElementInfo), (byte)SerializationTypeCode.BlueprintElementInfo, SerializationHelper.Serialize<Blueprint.ElementInfo>, SerializationHelper.Deserialize<Blueprint.ElementInfo>);
         }
-        protected void SetupServices()
+        private void SetupServices()
         {
             FacebookService.InitialService();
             DatabaseService.Initial(new MySQL_DatabaseService());
@@ -80,22 +82,23 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
                 Log.Info("Database Setup Successiful.......");
             }
         }
-        protected void SetupFactories()
+        private void SetupFactories()
         {
-            UserFactory.InitialFactory();
-            PlayerFactory.InitialFactory();
+            UserFactory.Initial();
+            PlayerFactory.Initial();
             ItemManager.Initial(new ItemFactory());
             InventoryItemInfoFactory.Initial(new ServerInventoryItemInfoFactory());
             DecorationFactory.Initial(new ServerDecorationFactory());
             BlueprintManager.Initial(new BlueprintFactory());
         }
-        protected void SetupManagers()
+        private void SetupManagers()
         {
             SystemManager.Initial(new ServerSystemManager());
             VesselManager.Initial(new ServerVesselManager());
             FriendManager.InitialManager();
-            PlayerInformationManager.InitialManager(new ServerPlayerInformationManager());
-            TransactionManager.InitialManager();
+            PlayerInformationManager.Initial(new ServerPlayerInformationManager());
+            TransactionManager.Initial();
+            IslandManager.Initial();
         }
     }
 }

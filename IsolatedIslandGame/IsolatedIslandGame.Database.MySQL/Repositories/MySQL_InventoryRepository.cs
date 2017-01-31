@@ -39,7 +39,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from InventoryCollection WHERE InventoryID = @inventoryID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inventoryID", inventoryID);
+                command.Parameters.AddWithValue("inventoryID", inventoryID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -71,7 +71,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from InventoryCollection WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@playerID", playerID);
+                command.Parameters.AddWithValue("playerID", playerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -103,8 +103,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE InventoryID = @inventoryID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@capacity", inventory.Capacity);
-                command.Parameters.AddWithValue("@inventoryID", inventory.InventoryID);
+                command.Parameters.AddWithValue("capacity", inventory.Capacity);
+                command.Parameters.AddWithValue("inventoryID", inventory.InventoryID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_InventoryRepository Save Inventory Error InventoryID: {0}", inventory.InventoryID);
@@ -121,7 +121,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE InventoryID = @inventoryID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@inventoryID", inventoryID);
+                command.Parameters.AddWithValue("inventoryID", inventoryID);
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQL_InventoryRepository Delete Inventory Error InventoryID: {0}", inventoryID);

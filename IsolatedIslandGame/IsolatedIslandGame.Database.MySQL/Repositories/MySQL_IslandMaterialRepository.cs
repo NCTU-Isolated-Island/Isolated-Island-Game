@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 WHERE GroupType = @groupType GROUP BY GroupType;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("@groupType", (byte)groupType);
+                command.Parameters.AddWithValue("groupType", (byte)groupType);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -36,7 +36,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             List<Island.PlayerMaterialInfo> infos = new List<Island.PlayerMaterialInfo>();
             string sqlString = @"SELECT SenderPlayerID, MaterialItemID 
                 FROM IslandMaterialCollection 
-                WHERE DATE(SendTime) = CURRENT_DATE;";
+                WHERE DATE(DATE_SUB(SendTime, INTERVAL 6 HOUR)) = DATE(DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 6 HOUR));";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())

@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Server
     {
         public static TransactionManager Instance { get; private set; }
 
-        public static void InitialManager()
+        public static void Initial()
         {
             Instance = new TransactionManager();
         }
