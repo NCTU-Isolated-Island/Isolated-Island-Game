@@ -5,13 +5,13 @@ namespace IsolatedIslandGame.Server
 {
     public class ServerPlayerInformationManager : PlayerInformationManager
     {
-        public override bool ContainsPlayerInformation(int playerID)
-        {
-            return true;
-        }
         public override bool FindPlayerInformation(int playerID, out PlayerInformation playerInformation)
         {
-            if(!base.FindPlayerInformation(playerID, out playerInformation))
+            if(base.FindPlayerInformation(playerID, out playerInformation))
+            {
+                return true;
+            }
+            else
             {
                 if (DatabaseService.RepositoryList.PlayerRepository.ReadPlayerInformation(playerID, out playerInformation))
                 {
@@ -22,10 +22,6 @@ namespace IsolatedIslandGame.Server
                 {
                     return false;
                 }
-            }
-            else
-            {
-                return true;
             }
         }
     }
