@@ -3,19 +3,14 @@ using System.Collections;
 
 public class Test : MonoBehaviour {
 
-	Vector3 initialPos;
+	public GameObject test;
 
 	void Start()
 	{
 		Input.gyro.enabled = true;
-		AB();
-	}
 
-	IEnumerator AB ()
-	{
-		print(Time.time);
-		yield return new WaitForSeconds(1f);
-		print(Time.time);
+		AuxCameraSystem.Instance.Show3DObject(test, new Vector3(0,-3,7));
+
 	}
 
 
