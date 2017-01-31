@@ -27,10 +27,11 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 
             SetupLog();
             SetupConfiguration();
+            Scheduler.Inital(TimeSpan.FromSeconds(1));
             SetupServices();
             SetupFactories();
             SetupManagers();
-            Scheduler.Inital(TimeSpan.FromSeconds(1));
+            
             
             Log.Info("PhotonServer Setup Successiful.......");
         }
