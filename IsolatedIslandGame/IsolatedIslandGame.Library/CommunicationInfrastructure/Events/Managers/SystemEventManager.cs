@@ -21,6 +21,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             eventTable = new Dictionary<SystemEventCode, EventHandler<SystemManager, SystemEventCode>>
             {
                 { SystemEventCode.SyncData, SyncDataResolver },
+                { SystemEventCode.IslandResetTodayMaterialRanking, new IslandResetTodayMaterialRankingHandler(systemManager) },
             };
         }
 
@@ -62,6 +63,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
             SendEvent(SystemEventCode.SyncData, syncDataParameters);
+        }
+
+        public void IslandResetTodayMaterialRanking()
+        {
+            SendEvent(SystemEventCode.IslandResetTodayMaterialRanking, new Dictionary<byte, object>());
         }
     }
 }

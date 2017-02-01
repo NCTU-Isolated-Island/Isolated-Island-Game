@@ -10,7 +10,7 @@ namespace IsolatedIslandGame.Library.Quests
     {
         public override QuestType QuestType { get { return QuestType.QR_Code; } }
 
-        public QR_CodeQuest(int questID) : base(questID)
+        public QR_CodeQuest(int questID, string questName, string description, bool isTimeLimited, DateTime dueTime) : base(questID, questName, description, isTimeLimited, dueTime)
         {
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using IsolatedIslandGame.Library;
 using System.Threading;
 
 namespace IsolatedIslandGame.Server
@@ -29,7 +29,7 @@ namespace IsolatedIslandGame.Server
         {
             lock(tasks)
             {
-                while (tasks.Any() && DateTime.Now <= tasks.First().Key)
+                while (tasks.Any() && DateTime.Now >= tasks.First().Key)
                 {
                     var firstTask = tasks.First();
                     firstTask.Value();

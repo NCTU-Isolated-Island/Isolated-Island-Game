@@ -10,7 +10,7 @@ namespace IsolatedIslandGame.Library.Quests
     {
         public override QuestType QuestType { get { return QuestType.MutiplayerSynthesize; } }
 
-        public MutiplayerSynthesizeQuest(int questID) : base(questID)
+        public MutiplayerSynthesizeQuest(int questID, string questName, string description, bool isTimeLimited, DateTime dueTime) : base(questID, questName, description, isTimeLimited, dueTime)
         {
         }
     }

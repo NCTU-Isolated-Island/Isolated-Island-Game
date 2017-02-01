@@ -10,7 +10,7 @@ namespace IsolatedIslandGame.Library.Quests
     {
         public override QuestType QuestType { get { return QuestType.SendMessage; } }
 
-        public SendMessageQuest(int questID) : base(questID)
+        public SendMessageQuest(int questID, string questName, string description, bool isTimeLimited, DateTime dueTime) : base(questID, questName, description, isTimeLimited, dueTime)
         {
         }
     }
