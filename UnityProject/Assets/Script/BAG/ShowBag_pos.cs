@@ -3,7 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Items;
-public class ShowBag_pos : MonoBehaviour {
+public class ShowBag_pos : MonoBehaviour
+{
 
     public bool StopForTest;
 
@@ -11,7 +12,6 @@ public class ShowBag_pos : MonoBehaviour {
     public GameObject canvas;
 
     public GameObject ShowBagPanel;
-   // public GameObject BagContent;
 
     public GameObject ShowWay_Button;
     public Button BackButton;
@@ -22,30 +22,104 @@ public class ShowBag_pos : MonoBehaviour {
     public GameObject ItemSet;
     public float A_pos;
     float B_pos;
+    int ChangeViewControl;
 
     public bool BagOut, MoveBag;
     bool ResetOnce = true;
     float passtime = 0;
     int times = 0;
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         SetGameObject();
         StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
         A_pos = -canvas.GetComponent<RectTransform>().rect.height;
         B_pos = 0;
+        ChangeViewControl = 0;
         this.gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);
     }
+   public void ChangeView()//改變排列順序
+    {
+        int Total = Content.transform.childCount;
+        if (ChangeViewControl == 0)//照位置
+        {
+            Debug.Log("照位置排列");
+            for(int i = Total-1;i>0;i-- )
+            {
+                for(int t = Total-1;t>0; t--)
+                {
+                    GameObject A = Content.transform.GetChild(t).gameObject;
+                    GameObject B = Content.transform.GetChild(t-1).gameObject;
+                    if(A.GetComponent<ShowBag_ItemSelect>().PositionIndex < B.GetComponent<ShowBag_ItemSelect>().PositionIndex)
+                    {
+                        A.transform.SetSiblingIndex(t-1);
+                    }
+                }
+            }
+            ChangeViewControl = 1;
+        }
+       else if(ChangeViewControl == 1)//照ID
+        {
+            Debug.Log("照ID排列");
+            for (int i = Total - 1; i > 0; i--)
+            {
+                for (int t = Total - 1; t > 0; t--)
+                {
+                    GameObject A = Content.transform.GetChild(t).gameObject;
+                    GameObject B = Content.transform.GetChild(t - 1).gameObject;
+                    if (A.GetComponent<ShowBag_ItemSelect>().ItemNo < B.GetComponent<ShowBag_ItemSelect>().ItemNo)
+                    {
+                        A.transform.SetSiblingIndex(t - 1);
+                    }
+                }
+            }
+            ChangeViewControl = 2;
+        }
+       else if(ChangeViewControl == 2)//照最愛
+        {
+            Debug.Log("照ID+最愛排列");
+            for (int i = Total; i > 0; i--)
+            {
+                for (int t = Total -1 ; t > 0; t--)
+                {
+                    GameObject A = Content.transform.GetChild(t).gameObject;
+                    GameObject B = Content.transform.GetChild(t - 1).gameObject;
+                    if(A.GetComponent<ShowBag_ItemSelect>().FavoriteBool == true && B.GetComponent<ShowBag_ItemSelect>().FavoriteBool == false)
+                    {
+                     
+                        A.transform.SetSiblingIndex(t-1);
+                    }
+                    if (B.GetComponent<ShowBag_ItemSelect>().FavoriteBool == true && A.GetComponent<ShowBag_ItemSelect>().FavoriteBool == false)
+                    {
 
-    void Update () {
-       
+                    }
+                    else
+                    {
+                        if (A.GetComponent<ShowBag_ItemSelect>().ItemNo < B.GetComponent<ShowBag_ItemSelect>().ItemNo)
+                        {
+                           
+                            A.transform.SetSiblingIndex(t - 1);
+                        }
+                    }                  
+                }
+            }
+            ChangeViewControl = 0;
+        }
+            
+
+
+    }
+    void Update()
+    {
+
 
         if (MoveBag)
         {
             passtime += Time.deltaTime;
             if (passtime > 0.05)
             {
-                if(ResetOnce)
+                if (ResetOnce)
                 {
                     if (!StopForTest)
                     { Reset_Bag(); }
@@ -62,7 +136,7 @@ public class ShowBag_pos : MonoBehaviour {
             }
 
         }
-      
+
     }
     public void Reset_Bag()
     {
@@ -70,14 +144,18 @@ public class ShowBag_pos : MonoBehaviour {
         {
             Destroy(Content.transform.GetChild(t).gameObject);
         }
-          foreach (InventoryItemInfo item in UserManager.Instance.User.Player.Inventory.ItemInfos)
-             {
-                   GameObject Create = Instantiate(ItemSet, Content.transform);
-                  Create.GetComponent<ShowBag_ItemSelect>().ItemNo = item.Item.ItemID;
-                  Create.GetComponent<ShowBag_ItemSelect>().PositionIndex = item.PositionIndex;
-                  Create.transform.GetChild(0).GetComponent<Text>().text = item.Item.ItemName;
-             }
-
+        foreach (InventoryItemInfo item in UserManager.Instance.User.Player.Inventory.ItemInfos)
+        {
+            GameObject Create = Instantiate(ItemSet, Content.transform);
+            Create.GetComponent<ShowBag_ItemSelect>().ItemNo = item.Item.ItemID;
+            Create.GetComponent<ShowBag_ItemSelect>().inventoryItemInfoID = item.InventoryItemInfoID;
+            Create.GetComponent<ShowBag_ItemSelect>().PositionIndex = item.PositionIndex;
+            Create.GetComponent<ShowBag_ItemSelect>().FavoriteBool = item.IsFavorite;
+            Create.GetComponent<ShowBag_ItemSelect>().ItemName = item.Item.ItemName;
+            Create.GetComponent<ShowBag_ItemSelect>().ItemDescribe = item.Item.Description;
+            Create.transform.GetChild(0).GetComponent<Text>().text = item.Item.ItemName;
+        }
+        ChangeView();
     }
     public void UpAndDownDirect()
     {
@@ -85,19 +163,19 @@ public class ShowBag_pos : MonoBehaviour {
             this.gameObject.transform.localPosition = new Vector3(0, A_pos, 0);
         else
             this.gameObject.transform.localPosition = new Vector3(0, B_pos, 0);
-        BagOut = !BagOut; 
+        BagOut = !BagOut;
     }
     public void UpAndDown()
     {
         MoveBag = true;
-       /* if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - A_pos) < 1)
-        {
-            this.GetComponent<RectTransform>().localPosition = new Vector3(0, B_pos, 0);
-            { Reset_Bag(); }
-            ResetOnce = false;
-        }
-        else if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - B_pos) < 1)
-        {this.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);}*/
+        /* if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - A_pos) < 1)
+         {
+             this.GetComponent<RectTransform>().localPosition = new Vector3(0, B_pos, 0);
+             { Reset_Bag(); }
+             ResetOnce = false;
+         }
+         else if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - B_pos) < 1)
+         {this.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);}*/
     }
 
     public void SetPicture(GameObject ItemSelect)
@@ -135,7 +213,7 @@ public class ShowBag_pos : MonoBehaviour {
         if (!BackButton)
             BackButton = this.gameObject.transform.GetChild(5).GetComponent<Button>();
         BackButton.onClick.AddListener(BACK);
-        if(!ShowWay_Button)
+        if (!ShowWay_Button)
             ShowWay_Button = this.gameObject.transform.GetChild(6).gameObject;
         if (!MainBoat)
             MainBoat = UI.UIObject[1];

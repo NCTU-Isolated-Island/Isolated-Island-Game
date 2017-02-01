@@ -22,6 +22,8 @@ public class Mission_Control : MonoBehaviour {
     public Button View_Button;
     public Button Back_Button;
 
+    public Sprite[] Pic_ICON;
+
     public bool MisOut, MoveMis;
     bool ResetOnce = true;
     float passtime = 0;

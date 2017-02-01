@@ -11,17 +11,22 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
     public GameObject CombineAreaILocate;
     public int ItemNo;
     public int PositionIndex;
+    public int inventoryItemInfoID;
+    public string ItemName;
+    public string ItemDescribe;
+    public bool FavoriteBool;
     // Use this for initialization
-    void Start () {
+    void Awake()
+    {
         SetGameObject();
-    
+
     }
     public void SetGameObject()
     {
         if (!UIControl)
             UIControl = GameObject.FindWithTag("UImanager");
         if (!Bag)
-        {Bag = UIControl.GetComponent<UImanager>().Bag;}
+        { Bag = UIControl.GetComponent<UImanager>().Bag; }
         if (!DetailPanel)
             DetailPanel = Bag.transform.parent.GetChild(1).gameObject;
     }
@@ -29,12 +34,17 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
     {
         if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Show_Bag)
         { Show_Choose(); }
-        else if(UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
+        else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
         { Combine_Choose(); }
     }
     void Show_Choose()
     {
         DetailPanel.SetActive(true);
+        DetailPanel.GetComponent<ShowBag_DetailPanel>().ItemCallMe = this.gameObject;
+        DetailPanel.GetComponent<ShowBag_DetailPanel>().FavoriteBool = FavoriteBool;
+        DetailPanel.GetComponent<ShowBag_DetailPanel>().inventoryItemInfoID = inventoryItemInfoID;
+        DetailPanel.GetComponent<ShowBag_DetailPanel>().Text.GetComponent<Text>().text = ItemName;
+        DetailPanel.GetComponent<ShowBag_DetailPanel>().Text.transform.GetChild(0).GetComponent<Text>().text = ItemDescribe;
     }
     void Combine_Choose()
     {
