@@ -6,10 +6,10 @@ public class MB_FunctionButton : MonoBehaviour
 {
     public GameObject UIControl;
     public bool StopForTest;
-    public GameObject FunctionList;
     private float y_value;
-
+    
     public Button ListButton;
+    public GameObject FunctionList;
 
     public Button MapButton;
 

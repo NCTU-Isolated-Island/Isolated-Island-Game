@@ -25,6 +25,9 @@ public class Chat_Control : MonoBehaviour
     int times = 0;
     float CanvasWidth;
 
+    public Button ListButton;
+    public GameObject FunctionList;
+
     // Use this for initialization
     void Start()
     {
@@ -47,9 +50,9 @@ public class Chat_Control : MonoBehaviour
                     ResetOnce = false;
                 }
                 if (ChaOut)
-                    this.gameObject.transform.localPosition = this.gameObject.transform.localPosition + new Vector3(CanvasWidth / 10, 0, 0);
-                else
                     this.gameObject.transform.localPosition = this.gameObject.transform.localPosition - new Vector3(CanvasWidth / 10, 0, 0);
+                else
+                    this.gameObject.transform.localPosition = this.gameObject.transform.localPosition + new Vector3(CanvasWidth / 10, 0, 0);
                 if (times < 9)
                 { times++; }
                 else
@@ -66,7 +69,7 @@ public class Chat_Control : MonoBehaviour
             passtime += Time.deltaTime;
             if (passtime > 0.05)
             {
-                ChatBPanel.transform.localPosition = ChatBPanel.transform.localPosition + new Vector3(CanvasWidth / 10, 0, 0);
+                ChatBPanel.transform.localPosition = ChatBPanel.transform.localPosition - new Vector3(CanvasWidth / 10, 0, 0);
                 if (times < 9)
                 { times++; }
                 else { times = 0; HideChatB = false; }
@@ -108,7 +111,16 @@ public class Chat_Control : MonoBehaviour
             View_Button = this.gameObject.transform.GetChild(0).GetChild(4).GetComponent<Button>();
 
         CanvasWidth = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.width;
-        this.gameObject.transform.localPosition = new Vector3(CanvasWidth, 0, 0);
-    }
 
+        this.gameObject.transform.localPosition = new Vector3(-CanvasWidth, 0, 0);
+        if (!ListButton)
+            ListButton = this.gameObject.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Button>();
+        ListButton.onClick.AddListener(ShowList);
+        if (!FunctionList)
+            FunctionList = UIControl.GetComponent<UImanager>().FunctionList;
+    }
+    void ShowList()
+    {
+        FunctionList.GetComponent<FunctionList_Control>().ShowList();
+    }
 }

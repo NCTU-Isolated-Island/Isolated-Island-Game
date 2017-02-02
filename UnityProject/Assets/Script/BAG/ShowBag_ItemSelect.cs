@@ -29,6 +29,7 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
         { Bag = UIControl.GetComponent<UImanager>().Bag; }
         if (!DetailPanel)
             DetailPanel = Bag.transform.parent.GetChild(1).gameObject;
+        
     }
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -45,6 +46,7 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
         DetailPanel.GetComponent<ShowBag_DetailPanel>().inventoryItemInfoID = inventoryItemInfoID;
         DetailPanel.GetComponent<ShowBag_DetailPanel>().Text.GetComponent<Text>().text = ItemName;
         DetailPanel.GetComponent<ShowBag_DetailPanel>().Text.transform.GetChild(0).GetComponent<Text>().text = ItemDescribe;
+        DetailPanel.transform.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + ItemNo);
     }
     void Combine_Choose()
     {

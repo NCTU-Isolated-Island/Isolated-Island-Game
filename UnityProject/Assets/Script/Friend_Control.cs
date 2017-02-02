@@ -21,6 +21,9 @@ public class Friend_Control : MonoBehaviour {
     int times = 0;
     float CanvasWidth;
 
+    public Button ListButton;
+    public GameObject FunctionList;
+
     // Use this for initialization
     void Start () {
        
@@ -100,6 +103,15 @@ public class Friend_Control : MonoBehaviour {
 
         CanvasWidth = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.width;
         this.gameObject.transform.localPosition = new Vector3(CanvasWidth,0 , 0);
+
+        if (!ListButton)
+            ListButton = this.gameObject.transform.GetChild(1).GetChild(0).GetComponent<Button>();
+        ListButton.onClick.AddListener(ShowList);
+        if (!FunctionList)
+            FunctionList = UIControl.GetComponent<UImanager>().FunctionList;
     }
-           
+    void ShowList()
+    {
+        FunctionList.GetComponent<FunctionList_Control>().ShowList();
+    }
 }

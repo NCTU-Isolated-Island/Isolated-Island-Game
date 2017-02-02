@@ -24,6 +24,9 @@ public class Mission_Control : MonoBehaviour {
 
     public Sprite[] Pic_ICON;
 
+    public Button ListButton;
+    public GameObject FunctionList;
+
     public bool MisOut, MoveMis;
     bool ResetOnce = true;
     float passtime = 0;
@@ -89,7 +92,7 @@ public class Mission_Control : MonoBehaviour {
             Page1.transform.localPosition = new Vector3(0, 0, 0);
             Page2.transform.localPosition = new Vector3(CanvasWidth, 0, 0);
             Page = 1;
-            MissionDetailPanel.transform.GetChild(3).GetComponent<Text>().text = ("Page 1/2");
+            MissionDetailPanel.transform.GetChild(5).GetComponent<Text>().text = ("Page 1/2");
             Left.targetGraphic.color = new Color(255f, 255f, 255f, 130f);
             Left.interactable = false;
             Right.targetGraphic.color = new Color(255f, 255f, 255f, 255);
@@ -110,7 +113,7 @@ public class Mission_Control : MonoBehaviour {
             Page2.transform.localPosition = new Vector3(0, 0, 0);
 
             Page = 2;
-            MissionDetailPanel.transform.GetChild(3).GetComponent<Text>().text = ("Page 2/2");
+            MissionDetailPanel.transform.GetChild(5).GetComponent<Text>().text = ("Page 2/2");
             Right.targetGraphic.color = new Color(255f, 255f, 255f, 130f);
             Right.interactable = false;
             Left.targetGraphic.color = new Color(255f, 255f, 255f, 255);
@@ -122,7 +125,7 @@ public class Mission_Control : MonoBehaviour {
             Page2.transform.localPosition = new Vector3(CanvasWidth, 0, 0);
 
             Page = 1;
-            MissionDetailPanel.transform.GetChild(3).GetComponent<Text>().text = ("Page 1/2");
+            MissionDetailPanel.transform.GetChild(5).GetComponent<Text>().text = ("Page 1/2");
             Left.targetGraphic.color = new Color(255f, 255f, 255f, 130f);
             Left.interactable = false;
             Right.targetGraphic.color = new Color(255f, 255f, 255f, 255);
@@ -150,22 +153,32 @@ public class Mission_Control : MonoBehaviour {
             View_Button = this.gameObject.transform.GetChild(4).GetComponent<Button>();
         View_Button.onClick.AddListener(View);
 
-        Right =  MissionDetailPanel.transform.GetChild(2).GetComponent<Button>();
+        Right =  MissionDetailPanel.transform.GetChild(4).GetComponent<Button>();
         Right.onClick.AddListener(ChangePage);
-        Left = MissionDetailPanel.transform.GetChild(4).GetComponent<Button>();
+        Left = MissionDetailPanel.transform.GetChild(6).GetComponent<Button>();
         Left.onClick.AddListener(ChangePage);
 
-        MissionDetailPanel.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(ShowDetail);
+        MissionDetailPanel.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(ShowDetail);
 
         if (!Page1)
-            Page1 = MissionDetailPanel.transform.GetChild(5).gameObject;
+            Page1 = MissionDetailPanel.transform.GetChild(7).gameObject;
         if (!Page2)
-            Page2 = MissionDetailPanel.transform.GetChild(6).gameObject;
+            Page2 = MissionDetailPanel.transform.GetChild(8).gameObject;
 
         Page = 1;
         CanvasWidth = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.width;
         CanvasHeight = UIControl.GetComponent<UImanager>().Canvas.GetComponent<RectTransform>().rect.height;     
 
         this.gameObject.transform.localPosition = new Vector3(0, -CanvasHeight , 0);
+
+        if (!ListButton)
+            ListButton = this.gameObject.transform.GetChild(2).GetChild(0).GetComponent<Button>();
+        ListButton.onClick.AddListener(ShowList);
+        if (!FunctionList)
+            FunctionList = UIControl.GetComponent<UImanager>().FunctionList;
+    }
+    void ShowList()
+    {
+        FunctionList.GetComponent<FunctionList_Control>().ShowList();
     }
 }

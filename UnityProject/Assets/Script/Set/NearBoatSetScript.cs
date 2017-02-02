@@ -41,12 +41,17 @@ public class NearBoatSetScript : MonoBehaviour, IPointerClickHandler
 
         if(!StopForTest)
         {
+
             GameObject target;
             GameManager.Instance.UserGameObject.TryGetValue(PlayerID, out target);
-            CameraManager.Instance.ToNearAnchor(target);
+            if (target != null)
+            {
+                CameraManager.Instance.ToNearAnchor(target);
+                UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Other_Boat);
+                OtherBoat.GetComponent<OtherBoat_Control>().Reset(PlayerID);
+            }              
         }    
-        UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Other_Boat);
-        OtherBoat.GetComponent<OtherBoat_Control>().Reset(PlayerID);
+       
     }
 
     public void SetInfo(int InPlayerID,string InPlayerName, GroupType InCamp, string InSpeach)

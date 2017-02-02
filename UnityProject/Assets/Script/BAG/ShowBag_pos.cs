@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Protocol;
 public class ShowBag_pos : MonoBehaviour
 {
 
@@ -18,6 +19,8 @@ public class ShowBag_pos : MonoBehaviour
     public GameObject MainBoat;
     public GameObject CombineArea;
 
+    //public GameObject ItemPic;
+
     public GameObject Content;
     public GameObject ItemSet;
     public float A_pos;
@@ -28,6 +31,9 @@ public class ShowBag_pos : MonoBehaviour
     bool ResetOnce = true;
     float passtime = 0;
     int times = 0;
+
+    public Button ListButton;
+    public GameObject FunctionList;
 
     // Use this for initialization
     void Start()
@@ -122,7 +128,7 @@ public class ShowBag_pos : MonoBehaviour
                 if (ResetOnce)
                 {
                     if (!StopForTest)
-                    { Reset_Bag(); }
+                    { ChangeViewControl = 0; Reset_Bag(); }
                     ResetOnce = false;
                 }
                 if (BagOut)
@@ -148,6 +154,13 @@ public class ShowBag_pos : MonoBehaviour
         {
             GameObject Create = Instantiate(ItemSet, Content.transform);
             Create.GetComponent<ShowBag_ItemSelect>().ItemNo = item.Item.ItemID;
+           
+               if(Resources.Load("2D/" + item.Item.ItemID) != null)
+                {
+                    Debug.Log(1230);               
+                    Create.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + item.Item.ItemID);
+            }
+            
             Create.GetComponent<ShowBag_ItemSelect>().inventoryItemInfoID = item.InventoryItemInfoID;
             Create.GetComponent<ShowBag_ItemSelect>().PositionIndex = item.PositionIndex;
             Create.GetComponent<ShowBag_ItemSelect>().FavoriteBool = item.IsFavorite;
@@ -211,10 +224,10 @@ public class ShowBag_pos : MonoBehaviour
         // if (!BagContent)
         //  BagContent = this.gameObject.transform.GetChild(3).gameObject;
         if (!BackButton)
-            BackButton = this.gameObject.transform.GetChild(5).GetComponent<Button>();
+            BackButton = this.gameObject.transform.GetChild(4).GetComponent<Button>();
         BackButton.onClick.AddListener(BACK);
         if (!ShowWay_Button)
-            ShowWay_Button = this.gameObject.transform.GetChild(6).gameObject;
+            ShowWay_Button = this.gameObject.transform.GetChild(3).gameObject;
         if (!MainBoat)
             MainBoat = UI.UIObject[1];
         if (!CombineArea)
@@ -222,6 +235,33 @@ public class ShowBag_pos : MonoBehaviour
         if (!Content)
             Content = this.gameObject.transform.GetChild(3).GetChild(0).GetChild(0).gameObject;
         ResetOnce = true;
+        /*if (!ItemPic)
+            ItemPic = UI.ItemPic;*/
 
+        /*UserManager.Instance.User.Player.Inventory.OnItemInfoChange += (changeType, info) =>
+        {
+            switch (changeType)
+            {
+                case DataChangeType.Add://有一格空的被填入東西了
+                    Reset_Bag();               //使用info來調整UI
+                    break;
+                case DataChangeType.Remove://有一格東西變空了
+                    Reset_Bag();                     //使用info來調整UI
+                    break;
+                case DataChangeType.Update://更新一格內的資訊
+                    Reset_Bag();                      //使用info來調整UI
+                    break;
+            }
+        };*/
+
+        if (!ListButton)
+            ListButton = this.gameObject.transform.GetChild(1).GetChild(0).GetComponent<Button>();
+        ListButton.onClick.AddListener(ShowList);
+        if (!FunctionList)
+            FunctionList = UIControl.GetComponent<UImanager>().FunctionList;
+    }
+    void ShowList()
+    {
+        FunctionList.GetComponent<FunctionList_Control>().ShowList();
     }
 }
