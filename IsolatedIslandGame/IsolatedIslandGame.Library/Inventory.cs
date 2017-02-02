@@ -89,6 +89,7 @@ namespace IsolatedIslandGame.Library
                 InventoryItemInfo existedInfo = itemInfoDictionary[info.InventoryItemInfoID];
                 existedInfo.Count = info.Count;
                 existedInfo.PositionIndex = info.PositionIndex;
+                existedInfo.IsFavorite = info.IsFavorite;
                 onItemInfoChange?.Invoke(DataChangeType.Update, existedInfo);
             }
         }

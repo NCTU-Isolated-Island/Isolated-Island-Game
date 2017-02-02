@@ -26,6 +26,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         {
                             InventoryItemInfo info;
                             subject.Inventory.FindInventoryItemInfo(inventoryItemInfoID, out info);
+                            info.IsFavorite = info.IsFavorite;
+                            subject.Inventory.LoadItemInfo(info);
                             return true;
                         }
                         else
