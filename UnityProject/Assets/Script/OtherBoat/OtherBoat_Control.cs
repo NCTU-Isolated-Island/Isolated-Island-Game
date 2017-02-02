@@ -52,7 +52,7 @@ public class OtherBoat_Control : MonoBehaviour {
         SetGameObject();
         PlayerInformation Owner;
         PlayerInformationManager.Instance.FindPlayerInformation(InOwnerID, out Owner);
-        Title.GetComponent<Text>().text = (Owner.nickname + "的船");
+        Title.GetComponent<Text>().text = (Owner.nickname );
         Name.GetComponent<Text>().text = Owner.nickname;
         switch (Owner.groupType)
         {

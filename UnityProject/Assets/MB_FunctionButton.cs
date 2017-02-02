@@ -43,7 +43,7 @@ public class MB_FunctionButton : MonoBehaviour
         MapButton.onClick.AddListener(ShowMap);
 
         if(!StopForTest)
-        my_boat_text1.GetComponent<Text>().text = (UserManager.Instance.User.Player.Nickname + "的船");
+        my_boat_text1.GetComponent<Text>().text = (UserManager.Instance.User.Player.Nickname);
         my_boat_text2.GetComponent<Text>().text = my_boat_text1.GetComponent<Text>().text;
 
         StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
