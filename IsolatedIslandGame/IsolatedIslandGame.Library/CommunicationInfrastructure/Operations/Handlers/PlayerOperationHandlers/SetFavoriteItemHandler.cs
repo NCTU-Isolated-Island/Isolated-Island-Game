@@ -26,11 +26,13 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         {
                             InventoryItemInfo info;
                             subject.Inventory.FindInventoryItemInfo(inventoryItemInfoID, out info);
+                            info.IsFavorite = info.IsFavorite;
+                            subject.Inventory.LoadItemInfo(info);
                             return true;
                         }
                         else
                         {
-                            LogService.ErrorFormat("SetFavoriteItem error Player: {0}, the ItemInfo is not existed InventoryItemInfoID: {1}", inventoryItemInfoID);
+                            LogService.Error($"SetFavoriteItem error Player: {subject.IdentityInformation}, the ItemInfo is not existed InventoryItemInfoID: {inventoryItemInfoID}");
                             return false;
                         }
                     }

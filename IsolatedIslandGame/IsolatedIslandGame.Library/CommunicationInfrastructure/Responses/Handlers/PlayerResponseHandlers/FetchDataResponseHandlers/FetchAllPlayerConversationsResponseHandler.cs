@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 5)
+                        if (parameters.Count != 6)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllPlayerConversationsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -47,6 +47,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     int senderPlayerID = (int)parameters[(byte)FetchAllPlayerConversationsResponseParameterCode.SenderPlayerID];
                     DateTime sendTime = DateTime.FromBinary((long)parameters[(byte)FetchAllPlayerConversationsResponseParameterCode.SendTime]);
                     string content = (string)parameters[(byte)FetchAllPlayerConversationsResponseParameterCode.Content];
+                    int receiverPlayerID = (int)parameters[(byte)FetchAllPlayerConversationsResponseParameterCode.ReceiverPlayerID];
                     bool hasRead = (bool)parameters[(byte)FetchAllPlayerConversationsResponseParameterCode.HasRead];
 
                     subject.GetPlayerConversation(new PlayerConversation
@@ -58,6 +59,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             sendTime = sendTime,
                             content = content
                         },
+                        receiverPlayerID = receiverPlayerID,
                         hasRead = hasRead
                     });
                     return true;

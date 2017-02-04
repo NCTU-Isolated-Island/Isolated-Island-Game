@@ -6,6 +6,7 @@
         SenderPlayerID,
         SendTime,
         Content,
+        ReceiverPlayerID,
         HasRead
     }
 }

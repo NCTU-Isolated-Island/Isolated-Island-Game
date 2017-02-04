@@ -64,6 +64,9 @@ namespace IsolatedIslandGame.Library
         private event SendMaterialEventHandler onSendMaterial;
         public event SendMaterialEventHandler OnSendMaterial { add { onSendMaterial += value; } remove { onSendMaterial -= value; } }
 
+        private event Action onResetTodayMaterialRanking;
+        public event Action OnResetTodayMaterialRanking { add { onResetTodayMaterialRanking += value; } remove { onResetTodayMaterialRanking -= value; } }
+
         private Island() { }
         public int GetTotalScore(GroupType groupType)
         {
@@ -147,6 +150,7 @@ namespace IsolatedIslandGame.Library
         public void ResetTodayMaterialRanking()
         {
             todayMaterialRanking.Clear();
+            onResetTodayMaterialRanking?.Invoke();
         }
     }
 }

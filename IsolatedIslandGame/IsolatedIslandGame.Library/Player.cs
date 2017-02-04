@@ -169,6 +169,7 @@ namespace IsolatedIslandGame.Library
         public void GetPlayerConversation(PlayerConversation conversation)
         {
             SyncPlayerInformation(conversation.message.senderPlayerID);
+            SyncPlayerInformation(conversation.receiverPlayerID);
             onGetPlayerConversation?.Invoke(conversation);
         }
 

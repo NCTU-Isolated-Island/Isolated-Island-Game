@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class GetPlayerConversationHandler : EventHandler<Player, PlayerEventCode>
     {
-        public GetPlayerConversationHandler(Player subject) : base(subject, 5)
+        public GetPlayerConversationHandler(Player subject) : base(subject, 6)
         {
         }
 
@@ -22,6 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     int senderPlayerID = (int)parameters[(byte)GetPlayerConversationParameterCode.SenderPlayerID];
                     DateTime sendTime = DateTime.FromBinary((long)parameters[(byte)GetPlayerConversationParameterCode.SendTime]);
                     string content = (string)parameters[(byte)GetPlayerConversationParameterCode.Content];
+                    int receiverPlayerID = (int)parameters[(byte)GetPlayerConversationParameterCode.ReceiverPlayerID];
                     bool hasRead = (bool)parameters[(byte)GetPlayerConversationParameterCode.HasRead];
 
                     subject.GetPlayerConversation(new PlayerConversation
@@ -33,6 +34,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                             sendTime = sendTime,
                             content = content
                         },
+                        receiverPlayerID = receiverPlayerID,
                         hasRead = hasRead
                     });
                     return true;

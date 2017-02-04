@@ -21,7 +21,7 @@ namespace IsolatedIslandGame.Server
                 Island.Instance.UpdateTodayMaterialRanking(info);
             }
             LogService.Info($"Island ResetTodayMaterialRanking");
-            Scheduler.Instance.AddTask(DateTime.Today + TimeSpan.FromHours(6), ResetTodayMaterialRanking);
+            Scheduler.Instance.AddTask(DateTime.Today + TimeSpan.FromHours(30), ResetTodayMaterialRanking);
         }
 
         private IslandManager()
@@ -31,6 +31,7 @@ namespace IsolatedIslandGame.Server
             Island.Instance.OnTotalScoreUpdated += SystemManager.Instance.EventManager.SyncDataResolver.SyncIslandTotalScoreUpdated;
             Island.Instance.OnTodayMaterialRankingUpdated += SyncTodayMaterialRankingUpdated;
             Island.Instance.OnPlayerScoreRankingUpdated += SyncPlayerScoreRankingUpdated;
+            Island.Instance.OnResetTodayMaterialRanking += SystemManager.Instance.EventManager.IslandResetTodayMaterialRanking;
 
             for (GroupType groupType = GroupType.Animal; groupType <= GroupType.Farmer; groupType++)
             {
@@ -45,7 +46,14 @@ namespace IsolatedIslandGame.Server
             {
                 Island.Instance.UpdateTodayMaterialRanking(info);
             }
-            Scheduler.Instance.AddTask(DateTime.Today + TimeSpan.FromHours(6), ResetTodayMaterialRanking);
+            if(DateTime.Today + TimeSpan.FromHours(6) <= DateTime.Now)
+            {
+                Scheduler.Instance.AddTask(DateTime.Today + TimeSpan.FromHours(30), ResetTodayMaterialRanking);
+            }
+            else
+            {
+                Scheduler.Instance.AddTask(DateTime.Today + TimeSpan.FromHours(6), ResetTodayMaterialRanking);
+            }
         }
         private void SaveSendMaterialRecord(Player player, Material material)
         {

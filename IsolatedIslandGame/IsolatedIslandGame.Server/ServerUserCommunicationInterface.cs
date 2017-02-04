@@ -81,18 +81,17 @@ namespace IsolatedIslandGame.Server
             PlayerMessage message;
             if(DatabaseService.RepositoryList.PlayerMessageRepository.Create(senderPlayerID, content, out message))
             {
-                PlayerConversation receiverConversation, senderConversation;
-                if(DatabaseService.RepositoryList.PlayerConversationRepository.Create(receiverPlayerID, message.playerMessageID, false, out receiverConversation) &&
-                   DatabaseService.RepositoryList.PlayerConversationRepository.Create(senderPlayerID, message.playerMessageID, true, out senderConversation))
+                PlayerConversation conversation;
+                if(DatabaseService.RepositoryList.PlayerConversationRepository.Create(receiverPlayerID, message.playerMessageID, false, out conversation))
                 {
                     Player sender, receiver;
                     if(PlayerFactory.Instance.FindPlayer(senderPlayerID, out sender))
                     {
-                        sender.GetPlayerConversation(senderConversation);
+                        sender.GetPlayerConversation(conversation);
                     }
                     if (PlayerFactory.Instance.FindPlayer(receiverPlayerID, out receiver))
                     {
-                        receiver.GetPlayerConversation(receiverConversation);
+                        receiver.GetPlayerConversation(conversation);
                     }
                     return true;
                 }
@@ -167,7 +166,31 @@ namespace IsolatedIslandGame.Server
 
         public override bool ReadPlayerMessage(int playerID, int playerMessageID)
         {
-            return DatabaseService.RepositoryList.PlayerConversationRepository.SetPlayerMessageRead(playerID, playerMessageID);
+            if (DatabaseService.RepositoryList.PlayerConversationRepository.SetPlayerMessageRead(playerID, playerMessageID))
+            {
+                PlayerConversation conversation;
+                if (DatabaseService.RepositoryList.PlayerConversationRepository.Read(playerID, playerMessageID, out conversation))
+                {
+                    Player sender, receiver;
+                    if (PlayerFactory.Instance.FindPlayer(conversation.message.senderPlayerID, out sender))
+                    {
+                        sender.GetPlayerConversation(conversation);
+                    }
+                    if (PlayerFactory.Instance.FindPlayer(conversation.receiverPlayerID, out receiver))
+                    {
+                        receiver.GetPlayerConversation(conversation);
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

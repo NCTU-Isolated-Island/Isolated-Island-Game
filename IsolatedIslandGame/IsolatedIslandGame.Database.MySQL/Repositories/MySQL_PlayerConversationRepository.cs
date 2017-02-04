@@ -25,6 +25,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     conversation = new PlayerConversation
                     {
                         message = message,
+                        receiverPlayerID = receiverPlayerID,
                         hasRead = hasRead
                     };
                     return true;
@@ -37,7 +38,48 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
+        public override bool Read(int receiverPlayerID, int playerMessageID, out PlayerConversation conversation)
+        {
+            string sqlString = @"SELECT  
+                MessageID, HasRead, SenderPlayerID, SendTime, Content
+                from IsolatedIsland_PlayerData.PlayerConversationCollection, IsolatedIsland_TextData.PlayerMessageCollection 
+                WHERE ReceiverPlayerID = @receiverPlayerID AND MessageID = @playerMessageID AND MessageID = PlayerMessageID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("receiverPlayerID", receiverPlayerID);
+                command.Parameters.AddWithValue("playerMessageID", playerMessageID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int messageID = reader.GetInt32(0);
+                        bool hasRead = reader.GetBoolean(1);
+                        int senderPlayerID = reader.GetInt32(2);
+                        DateTime sendTime = reader.GetDateTime(3);
+                        string content = reader.GetString(4);
 
+                        conversation = new PlayerConversation
+                        {
+                            message = new PlayerMessage
+                            {
+                                playerMessageID = messageID,
+                                senderPlayerID = senderPlayerID,
+                                sendTime = sendTime,
+                                content = content
+                            },
+                            receiverPlayerID = receiverPlayerID,
+                            hasRead = hasRead
+                        };
+                        return true;
+                    }
+                    else
+                    {
+                        conversation = new PlayerConversation();
+                        return false;
+                    }
+                }
+            }
+        }
         public override List<PlayerConversation> ListOfReceiver(int receiverPlayerID)
         {
             List<PlayerConversation> conversations = new List<PlayerConversation>();
@@ -67,6 +109,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 sendTime = sendTime,
                                 content = content
                             },
+                            receiverPlayerID = receiverPlayerID,
                             hasRead = hasRead
                         });
                     }
