@@ -17,8 +17,11 @@ public class UImanager : MonoBehaviour
     public GameObject[] UIObject;
     public static UImanager Instance;
     public GameObject Bag;
+    //public GameObject ItemPic;
     public GameObject Canvas;
     public GameObject BG_Black;
+
+    public GameObject FunctionList;
 
     float CanvasHeight;
     public bool BlackFade = false;
@@ -41,7 +44,21 @@ public class UImanager : MonoBehaviour
 
         NowAt = (int)GameUI;
         if (!StopForTest)
-        { GameUI = UI.Login; ChangeUI(NowAt); }
+        {
+            GameUI = UI.Login;
+            ChangeUI(NowAt);
+            for (int i = 0; i < UIObject.Length; i++)
+            {
+                if (i == NowAt)
+                {
+                    UIObject[i].SetActive(true);
+                }
+                else
+                {
+                    UIObject[i].SetActive(false);
+                }
+            }
+        }
         CanvasHeight = Canvas.GetComponent<RectTransform>().rect.height;
     }
     public void ChangeUI(int a)
@@ -64,21 +81,50 @@ public class UImanager : MonoBehaviour
             if (a == 4)
             {
                 Bag.GetComponent<ShowBag_pos>().UpAndDown();
+
+                if (UIObject[6].activeInHierarchy)
+                { UIObject[6].GetComponent<Mission_Control>().MoveMis = true; }
+                if (UIObject[7].activeInHierarchy)
+                { UIObject[7].GetComponent<Friend_Control>().MoveFri = true; }
+                if (UIObject[8].activeInHierarchy)
+                { UIObject[8].GetComponent<Chat_Control>().MoveCha = true; }
             }
             else if (a == 6)
-            {
+            {        
                 UIObject[6].SetActive(true);
                 UIObject[6].GetComponent<Mission_Control>().MoveMis = true;
+
+                if(Bag.GetComponent<ShowBag_pos>().BagOut)
+                {Bag.GetComponent<ShowBag_pos>().UpAndDown();}
+                if (UIObject[7].activeInHierarchy)
+                { UIObject[7].GetComponent<Friend_Control>().MoveFri = true; }
+                if(UIObject[8].activeInHierarchy)
+                { UIObject[8].GetComponent<Chat_Control>().MoveCha = true; }
+
             }
             else if (a == 7)
             {
                 UIObject[7].SetActive(true);
                 UIObject[7].GetComponent<Friend_Control>().MoveFri = true;
+
+                if (Bag.GetComponent<ShowBag_pos>().BagOut)
+                { Bag.GetComponent<ShowBag_pos>().UpAndDown(); }
+                if (UIObject[6].activeInHierarchy)
+                { UIObject[6].GetComponent<Mission_Control>().MoveMis = true; }
+                if (UIObject[8].activeInHierarchy)
+                { UIObject[8].GetComponent<Chat_Control>().MoveCha = true; }
             }
             else if (a == 8)
             {
                 UIObject[8].SetActive(true);
                 UIObject[8].GetComponent<Chat_Control>().MoveCha = true;
+
+                if (Bag.GetComponent<ShowBag_pos>().BagOut)
+                { Bag.GetComponent<ShowBag_pos>().UpAndDown(); }
+                if (UIObject[6].activeInHierarchy)
+                { UIObject[6].GetComponent<Mission_Control>().MoveMis = true; }
+                if (UIObject[7].activeInHierarchy)
+                { UIObject[7].GetComponent<Friend_Control>().MoveFri = true; }
             }
 
            /* else

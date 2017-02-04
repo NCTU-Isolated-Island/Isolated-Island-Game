@@ -6,10 +6,10 @@ public class MB_FunctionButton : MonoBehaviour
 {
     public GameObject UIControl;
     public bool StopForTest;
-    public GameObject FunctionList;
     private float y_value;
-
+    
     public Button ListButton;
+    public GameObject FunctionList;
 
     public Button MapButton;
 
@@ -43,7 +43,7 @@ public class MB_FunctionButton : MonoBehaviour
         MapButton.onClick.AddListener(ShowMap);
 
         if(!StopForTest)
-        my_boat_text1.GetComponent<Text>().text = (UserManager.Instance.User.Player.Nickname + "的船");
+        my_boat_text1.GetComponent<Text>().text = (UserManager.Instance.User.Player.Nickname);
         my_boat_text2.GetComponent<Text>().text = my_boat_text1.GetComponent<Text>().text;
 
         StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
