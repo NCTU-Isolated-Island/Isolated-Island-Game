@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using IsolatedIslandGame.Library;
-using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Client;
 using System.Linq;
 using UnityEngine.UI;
 public class NearBoat_Control : MonoBehaviour {
@@ -27,15 +27,14 @@ public class NearBoat_Control : MonoBehaviour {
     // Use this for initialization
     void Start () {
         time = 0;
-        SetGameObject();
-
+        SetGameObject();     
     }
    void SetGameObject()
     {
         if (!UIControl)
             UIControl = GameObject.FindWithTag("UImanager");
         if (!NearBoatPanel)
-            NearBoatPanel = this.gameObject.transform.GetChild(4).gameObject;
+            NearBoatPanel = this.gameObject.transform.GetChild(3).gameObject;
         if (!NearBoatContent)
             NearBoatContent = NearBoatPanel.transform.GetChild(2).GetChild(0).GetChild(0).gameObject;
 
@@ -76,7 +75,8 @@ public class NearBoat_Control : MonoBehaviour {
         }
     }
   public  void Reset()
-    {if (!StopForTest)
+    {
+        if (!StopForTest)
         {
 
             for (int i = 0, t = NearBoatContent.transform.childCount - 1; t >= 0 && i < 30; i++, t--)//清空

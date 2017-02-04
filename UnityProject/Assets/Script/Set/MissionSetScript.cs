@@ -11,6 +11,9 @@ public class MissionSetScript : MonoBehaviour, IPointerClickHandler
     public GameObject UIControl;
     public GameObject Mission;
     public GameObject DetailPanel;
+
+    public Sprite[] Pic_ICON;
+
     public int MissionID;
     public string MissionName;
     public string MissionTime;

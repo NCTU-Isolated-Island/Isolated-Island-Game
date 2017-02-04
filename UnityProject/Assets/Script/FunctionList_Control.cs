@@ -122,6 +122,7 @@ public class FunctionList_Control : MonoBehaviour
     {
         //開啟抽素材動畫
         //抽素材
+        Debug.Log("你剛抽了個新素材");
         UserManager.Instance.User.Player.OperationManager.DrawMaterial();
         UserManager.Instance.User.Player.ResponseManager.OnDrawMaterialResponse += (returnCode, item, count) =>
         {
