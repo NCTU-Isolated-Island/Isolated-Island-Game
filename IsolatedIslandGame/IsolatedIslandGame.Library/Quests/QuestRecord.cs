@@ -1,29 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.Quests
 {
     public class QuestRecord
     {
         public Quest Quest { get; private set; }
+        private List<QuestRequirementRecord> requirementRecords = new List<QuestRequirementRecord>();
+        public IEnumerable<QuestRequirementRecord> RequirementRecords { get { return requirementRecords.ToArray(); } }
 
-        private bool isFinished;
-        public bool IsFinished
-        {
-            get { return isFinished; }
-            protected set
-            {
-                isFinished = value;
-                onQuestFinished?.Invoke(this);
-            }
-        }
+        public bool IsFinished { get { return requirementRecords.TrueForAll(x => x.IsSufficient); } }
 
-        private event Action<QuestRecord> onQuestFinished;
-        public event Action<QuestRecord> OnQuestFinished { add { onQuestFinished += value; } remove { onQuestFinished -= value; } }
+        private event Action<QuestRecord> onQuestStatusChange;
+        public event Action<QuestRecord> OnQuestStatusChange { add { onQuestStatusChange += value; } remove { onQuestStatusChange -= value; } }
 
-        protected QuestRecord(Quest quest, bool isFinished)
+        public QuestRecord(Quest quest, List<QuestRequirementRecord> requirementRecords)
         {
             Quest = quest;
-            IsFinished = isFinished;
+            this.requirementRecords = requirementRecords;
+            foreach(var requirementRecord in requirementRecords)
+            {
+                requirementRecord.OnRequirementStatusChange += (record) =>
+                {
+                    onQuestStatusChange?.Invoke(this);
+                };
+            }
         }
     }
 }

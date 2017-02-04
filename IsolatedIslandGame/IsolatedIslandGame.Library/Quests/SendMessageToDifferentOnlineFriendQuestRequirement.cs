@@ -2,19 +2,19 @@
 {
     public class SendMessageToDifferentOnlineFriendQuestRequirement : QuestRequirement
     {
-        public int FriendCount { get; private set; }
+        public int RequiredOnlinedFriendNumber { get; private set; }
 
         public override string Description
         {
             get
             {
-                return $"發送訊息給{FriendCount}位不同的好友";
+                return $"發送訊息給{RequiredOnlinedFriendNumber}位不同的好友";
             }
         }
 
-        public SendMessageToDifferentOnlineFriendQuestRequirement(int friendCount)
+        public SendMessageToDifferentOnlineFriendQuestRequirement(int requiredOnlinedFriendNumber)
         {
-            FriendCount = friendCount;
+            RequiredOnlinedFriendNumber = requiredOnlinedFriendNumber;
         }
     }
 }

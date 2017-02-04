@@ -80,16 +80,16 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        public override List<PlayerConversation> ListOfReceiver(int receiverPlayerID)
+        public override List<PlayerConversation> ListOfPlayer(int playerID)
         {
             List<PlayerConversation> conversations = new List<PlayerConversation>();
             string sqlString = @"SELECT  
                 MessageID, HasRead, SenderPlayerID, SendTime, Content
                 from IsolatedIsland_PlayerData.PlayerConversationCollection, IsolatedIsland_TextData.PlayerMessageCollection 
-                WHERE ReceiverPlayerID = @receiverPlayerID AND MessageID = PlayerMessageID;";
+                WHERE (ReceiverPlayerID = @playerID OR SenderPlayerID = @playerID) AND MessageID = PlayerMessageID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("receiverPlayerID", receiverPlayerID);
+                command.Parameters.AddWithValue("playerID", playerID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -109,7 +109,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 sendTime = sendTime,
                                 content = content
                             },
-                            receiverPlayerID = receiverPlayerID,
+                            receiverPlayerID = playerID,
                             hasRead = hasRead
                         });
                     }
