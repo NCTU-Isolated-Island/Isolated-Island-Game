@@ -12,7 +12,7 @@ public class MessageManager : MonoBehaviour {
 
 	public static MessageManager Instance;
 
-	public List<PlayerConversation> Conversations;
+	public List<PlayerConversation> Conversations = new List<PlayerConversation>();
 
 	void Awake()
 	{

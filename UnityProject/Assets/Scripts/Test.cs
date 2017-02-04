@@ -9,7 +9,8 @@ public class Test : MonoBehaviour {
 	{
 		Input.gyro.enabled = true;
 
-		AuxCameraSystem.Instance.Show3DObject(test, new Vector3(0,-3,7));
+		AuxCameraSystem.Instance.RotationSpeed = 15;
+		AuxCameraSystem.Instance.Show3DObject(test,new Vector3(0,-2,3),Quaternion.Euler(30,0,0));
 
 	}
 
