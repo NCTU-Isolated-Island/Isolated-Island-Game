@@ -12,6 +12,12 @@
             }
         }
 
+        public GiveItemQuestReward(int questRewardID, Item item, int itemCount) : base(questRewardID)
+        {
+            Item = item;
+            ItemCount = itemCount;
+        }
+
         public override void GiveReward(Player player)
         {
             player.Inventory.AddItem(Item, ItemCount);

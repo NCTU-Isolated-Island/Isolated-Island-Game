@@ -25,6 +25,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             { (byte)FetchAllPlayerConversationsResponseParameterCode.SenderPlayerID, conversation.message.senderPlayerID },
                             { (byte)FetchAllPlayerConversationsResponseParameterCode.SendTime, conversation.message.sendTime.ToBinary() },
                             { (byte)FetchAllPlayerConversationsResponseParameterCode.Content, conversation.message.content },
+                            { (byte)FetchAllPlayerConversationsResponseParameterCode.ReceiverPlayerID, conversation.receiverPlayerID },
                             { (byte)FetchAllPlayerConversationsResponseParameterCode.HasRead, conversation.hasRead }
                         };
                         SendResponse(fetchCode, result);

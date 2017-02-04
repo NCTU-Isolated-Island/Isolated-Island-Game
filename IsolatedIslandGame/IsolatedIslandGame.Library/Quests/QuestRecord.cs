@@ -2,10 +2,9 @@
 
 namespace IsolatedIslandGame.Library.Quests
 {
-    public abstract class QuestRecord
+    public class QuestRecord
     {
         public Quest Quest { get; private set; }
-        public abstract string QuestProgressDescription { get; }
 
         private bool isFinished;
         public bool IsFinished
