@@ -103,7 +103,7 @@ public class Chat_Control : MonoBehaviour
         People.Add(UserManager.Instance.User.Player.PlayerID);
         for (int i = MessageAmount-1;i>=0;i--)
         {
-         //  if(Conversations[i].message.senderPlayerID)
+           if(Conversations[i].message.senderPlayerID)
             //從最後的訊息開始記錄所有對話對象與最後的句子 People.add();
         }
 

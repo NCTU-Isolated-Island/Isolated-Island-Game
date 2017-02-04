@@ -143,11 +143,9 @@ public class GameManager : MonoBehaviour
 			PlayerController.Instance.gameObject.SetActive(true);
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
 
-<<<<<<< HEAD
 			print("ON");
 			//UserManager.Instance.User.Player.OperationManager.SendMessage(23,"FirstMessageTest");
-=======
->>>>>>> origin/master
+
 
 		}
 		else

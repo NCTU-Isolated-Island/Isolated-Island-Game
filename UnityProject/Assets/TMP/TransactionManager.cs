@@ -65,17 +65,12 @@ public class TransactionManager : MonoBehaviour
         //UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
 
         // Get GameObject
-<<<<<<< HEAD
+
         MyTransactionItem = new TransactionItemSlot[8];
         OpponentTransactionItem = new TransactionItemSlot[8];
 
         for (int i=0;i<8;i++)
-=======
-        MyTransactionItem = new TransactionItemSlot[4];
-        OpponentTransactionItem = new TransactionItemSlot[4];
 
-        for (int i=0;i<4;i++)
->>>>>>> origin/master
         {
             MyTransactionItem[i] = new TransactionItemSlot();
             MyTransactionItem[i].itemImage = GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).GetComponent<Image>();
@@ -90,11 +85,8 @@ public class TransactionManager : MonoBehaviour
         ID2ImageDict = new Dictionary<int, Sprite>();
     }
 
-<<<<<<< HEAD
     void OnPlayerOnline(Player player)//<-學起來
-=======
-    void OnPlayerOnline(Player player)
->>>>>>> origin/master
+
     {
         // Event Register
         UserManager.Instance.User.Player.OnTransactionRequest += OnReceiveTransactionRequest;
