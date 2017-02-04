@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using IsolatedIslandGame.Library.TextData;
 using UnityEngine.UI;
 using IsolatedIslandGame.Library;
 public class Chat_Control : MonoBehaviour
@@ -20,13 +21,23 @@ public class Chat_Control : MonoBehaviour
 
     public bool ChaOut, MoveCha;
     bool ResetOnce = true;
-    public bool HideChatB = false;
+    public bool MoveChaDetail,ChaDetailOut;
+
     float passtime = 0;
     int times = 0;
     float CanvasWidth;
 
     public Button ListButton;
     public GameObject FunctionList;
+    public GameObject MessageManager;
+
+    List<PlayerConversation> Conversations;
+    List<int> People;
+
+    public  void SetMessage()
+    {
+       
+    }
 
     // Use this for initialization
     void Start()
@@ -64,21 +75,49 @@ public class Chat_Control : MonoBehaviour
             }
 
         }
-        if (HideChatB)
+        if (MoveChaDetail)
         {
             passtime += Time.deltaTime;
             if (passtime > 0.05)
-            {
-                ChatBPanel.transform.localPosition = ChatBPanel.transform.localPosition - new Vector3(CanvasWidth / 10, 0, 0);
+            {               
+                if (ChaDetailOut)
+                    ChatBPanel.transform.localPosition = ChatBPanel.transform.localPosition - new Vector3(CanvasWidth / 10, 0, 0);
+                else
+                    ChatBPanel.transform.localPosition = ChatBPanel.transform.localPosition + new Vector3(CanvasWidth / 10, 0, 0);
                 if (times < 9)
                 { times++; }
-                else { times = 0; HideChatB = false; }
+                else
+                {
+                    times = 0; MoveChaDetail = false; ChaDetailOut = !ChaDetailOut;                  
+                }
             }
         }
     }
     void Reset()
     {
-        //寫讀取所有人資料
+        Conversations.Clear();
+        Conversations = MessageManager.GetComponent<MessageManager>().Conversations;
+        int MessageAmount = Conversations.Count;
+
+        People.Clear();
+
+        for (int i = MessageAmount-1;i>=0;i--)
+        {
+            //從最後的訊息開始記錄所有對話對象與最後的句子 People.add();
+        }
+
+        //點選對話對象後，執行以下式子
+            int Person = 0;
+            for (int l = 0; l < MessageAmount; l++)
+            {
+               if(Conversations[l].message.senderPlayerID == Person)
+                 {
+                //在該人物的對話紀錄下面生成文字氣泡
+                int TextLong = Conversations[l].message.content.Length;
+                  //根據對話長度調整對話框大小 
+                }
+            }
+        
     }
 
     void BACK()
@@ -90,7 +129,7 @@ public class Chat_Control : MonoBehaviour
     void BACK2()
     {
 
-
+        MoveChaDetail = true;
     }
     void SetGameObject()
     {

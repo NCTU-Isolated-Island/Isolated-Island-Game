@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
 	#endregion
 	void OnGetPlayerConversation(IsolatedIslandGame.Library.TextData.PlayerConversation conversation)
 	{
-		print(conversation.message.senderPlayerID + " : " +conversation.message.content );
+		//print(conversation.message.senderPlayerID + " : " +conversation.message.content );
 	}
 
 	void OnPlayerOnline(Player player)
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
 
 			print("ON");
-			UserManager.Instance.User.Player.OperationManager.SendMessage(23,"FirstMessageTest");
+			//UserManager.Instance.User.Player.OperationManager.SendMessage(23,"FirstMessageTest");
 
 		}
 		else
