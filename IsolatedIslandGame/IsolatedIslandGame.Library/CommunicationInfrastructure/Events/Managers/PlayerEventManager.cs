@@ -86,6 +86,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)GetPlayerConversationParameterCode.SenderPlayerID, playerConversation.message.senderPlayerID },
                 { (byte)GetPlayerConversationParameterCode.SendTime, playerConversation.message.sendTime.ToBinary() },
                 { (byte)GetPlayerConversationParameterCode.Content, playerConversation.message.content },
+                { (byte)GetPlayerConversationParameterCode.ReceiverPlayerID, playerConversation.receiverPlayerID },
                 { (byte)GetPlayerConversationParameterCode.HasRead, playerConversation.hasRead }
             };
             SendEvent(PlayerEventCode.GetPlayerConversation, parameters);

@@ -3,5 +3,6 @@
     public enum SystemEventCode : byte
     {
         SyncData,
+        IslandResetTodayMaterialRanking
     }
 }

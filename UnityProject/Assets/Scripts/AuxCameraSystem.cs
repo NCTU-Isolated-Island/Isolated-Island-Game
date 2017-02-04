@@ -6,6 +6,7 @@ public class AuxCameraSystem : MonoBehaviour {
 
 	public static AuxCameraSystem Instance;
 	public Camera AuxCamera;
+	public float RotationSpeed = 30;
 
 	private bool hasModel = false;
 	private GameObject model;
@@ -19,14 +20,14 @@ public class AuxCameraSystem : MonoBehaviour {
 		}
 
 		AuxCamera = GetComponentInChildren<Camera>();
-			
+
 	}
 
 	void Update()
 	{
 		if(hasModel)
 		{
-			model.transform.Rotate(0,30 * Time.deltaTime,0);
+			model.transform.Rotate(0,RotationSpeed * Time.deltaTime,0);
 		}
 	}
 
@@ -37,11 +38,12 @@ public class AuxCameraSystem : MonoBehaviour {
 		AuxCamera.enabled = false;
 	}
 
-	public void Show3DObject(GameObject model, Vector3 localPosition)
+	public void Show3DObject(GameObject model, Vector3 modelPosition, Quaternion cameraRotation)
 	{
 		this.model = Instantiate(model,this.transform) as GameObject;
-		this.model.transform.localPosition = localPosition;
+		this.model.transform.localPosition = modelPosition;
 		this.model.layer = LayerMask.NameToLayer("SecondCamera");
+		AuxCamera.transform.localRotation = cameraRotation;
 		hasModel = true;
 	}
 
