@@ -51,8 +51,8 @@ public class GameManager : MonoBehaviour
 	{
 		StartCoroutine(SlowUpdate());
 
-		PhotonService.Instance.OnConnectChange += DebugLogin;
-		//FacebookService.LoginWithFacbook();
+		//PhotonService.Instance.OnConnectChange += DebugLogin;
+		FacebookService.LoginWithFacbook();
 
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
 		SceneManager.sceneLoaded += OnSceneLoaded;
@@ -67,14 +67,14 @@ public class GameManager : MonoBehaviour
 		if(status == true)
 		{
 			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(22,"TestServer");
+			UserManager.Instance.User.OperationManager.PlayerIDLogin(23,"TestServer");
 		}
 	}
 
 
 	void OnDestroy()
 	{
-		PhotonService.Instance.OnConnectChange -= DebugLogin;
+		//PhotonService.Instance.OnConnectChange -= DebugLogin;
 
 		UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
 		UserManager.Instance.User.Player.OnCreateCharacter -= OnCreateCharacter;
