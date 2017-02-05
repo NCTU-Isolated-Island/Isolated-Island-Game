@@ -144,6 +144,19 @@ namespace IsolatedIslandGame.Library
         {
             return friendInformationDictionary.ContainsKey(friendPlayerID);
         }
+        public bool FindFriend(int friendPlayerID, out FriendInformation information)
+        {
+            if(ContainsFriend(friendPlayerID))
+            {
+                information = friendInformationDictionary[friendPlayerID];
+                return true;
+            }
+            else
+            {
+                information = new FriendInformation();
+                return false;
+            }
+        }
         public void AddFriend(FriendInformation information)
         {
             if(ContainsFriend(information.friendPlayerID))

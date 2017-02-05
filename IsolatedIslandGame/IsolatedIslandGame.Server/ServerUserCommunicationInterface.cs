@@ -108,7 +108,7 @@ namespace IsolatedIslandGame.Server
 
         public override List<PlayerConversation> GetPlayerConversations(int playerID)
         {
-            return DatabaseService.RepositoryList.PlayerConversationRepository.ListOfReceiver(playerID);
+            return DatabaseService.RepositoryList.PlayerConversationRepository.ListOfPlayer(playerID);
         }
 
         public override bool TransactionRequest(int requesterPlayerID, int accepterPlayerID)

@@ -2,19 +2,24 @@
 {
     public class SendMessageToDifferentOnlineFriendQuestRequirement : QuestRequirement
     {
-        public int FriendCount { get; private set; }
+        public int RequiredOnlinedFriendNumber { get; private set; }
 
         public override string Description
         {
             get
             {
-                return $"發送訊息給{FriendCount}位不同的好友";
+                return $"發送訊息給{RequiredOnlinedFriendNumber}位不同的好友";
             }
         }
 
-        public SendMessageToDifferentOnlineFriendQuestRequirement(int friendCount)
+        public SendMessageToDifferentOnlineFriendQuestRequirement(int questRequirementID, int requiredOnlinedFriendNumber) : base(questRequirementID)
         {
-            FriendCount = friendCount;
+            RequiredOnlinedFriendNumber = requiredOnlinedFriendNumber;
+        }
+
+        public override bool CreateRequirementRecord(Player player, out QuestRequirementRecord record)
+        {
+            return QuestRecordFactory.Instance.CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(player, this, out record);
         }
     }
 }

@@ -13,13 +13,13 @@ namespace IsolatedIslandGame.Database
         public abstract PlayerKnownBlueprintRepository PlayerKnownBlueprintRepository { get; }
         public abstract FriendRepository FriendRepository { get; }
         public abstract PlayerConversationRepository PlayerConversationRepository { get; }
-        #endregion
+        public abstract QuestRecordRepository QuestRecordRepository { get; }
+    #endregion
 
-        #region setting data
-        public abstract ItemRepository ItemRepository { get; }
+    #region setting data
+    public abstract ItemRepository ItemRepository { get; }
         public abstract BlueprintRepository BlueprintRepository { get; }
-        public abstract BlueprintRequirementRepository BlueprintRequirementRepository { get; }
-        public abstract BlueprintProductRepository BlueprintProductRepository { get; }
+        public abstract QuestRepository QuestRepository { get; }
         #endregion
 
         #region text data
