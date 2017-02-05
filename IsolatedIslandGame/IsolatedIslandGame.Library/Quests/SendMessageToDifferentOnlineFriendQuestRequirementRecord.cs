@@ -28,7 +28,7 @@ namespace IsolatedIslandGame.Library.Quests
         private event Action<QuestRequirementRecord> onRequirementStatusChange;
         public override event Action<QuestRequirementRecord> OnRequirementStatusChange { add { onRequirementStatusChange += value; } remove { onRequirementStatusChange -= value; } }
 
-        public SendMessageToDifferentOnlineFriendQuestRequirementRecord(Player player, QuestRequirement requirement, HashSet<int> onlineFriendPlayerIDSet) : base(player, requirement)
+        public SendMessageToDifferentOnlineFriendQuestRequirementRecord(int questRequirementRecordID, Player player, QuestRequirement requirement, HashSet<int> onlineFriendPlayerIDSet) : base(questRequirementRecordID, player, requirement)
         {
             this.onlineFriendPlayerIDSet = onlineFriendPlayerIDSet;
 

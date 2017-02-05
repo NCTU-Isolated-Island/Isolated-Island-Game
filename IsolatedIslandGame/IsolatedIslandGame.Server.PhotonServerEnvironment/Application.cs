@@ -10,8 +10,8 @@ using IsolatedIslandGame.Server.Configuration;
 using IsolatedIslandGame.Server.Items;
 using log4net.Config;
 using Photon.SocketServer;
-using System.IO;
 using System;
+using System.IO;
 
 namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 {
@@ -91,6 +91,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             InventoryItemInfoFactory.Initial(new ServerInventoryItemInfoFactory());
             DecorationFactory.Initial(new ServerDecorationFactory());
             BlueprintManager.Initial(new BlueprintFactory());
+            QuestFactory.Initial();
         }
         private void SetupManagers()
         {

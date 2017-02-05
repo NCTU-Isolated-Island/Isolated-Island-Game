@@ -27,11 +27,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             }
             for(int i = 0; i < requirements.Length; i++)
             {
-                DatabaseService.RepositoryList.BlueprintRequirementRepository.Create(blueprintID, requirements[i]);
+                CreateRequirement(blueprintID, requirements[i]);
             }
             for (int i = 0; i < products.Length; i++)
             {
-                DatabaseService.RepositoryList.BlueprintRequirementRepository.Create(blueprintID, products[i]);
+                CreateProduct(blueprintID, products[i]);
             }
             return new Blueprint(blueprintID, isOrderless, isBlueprintRequired, requirements, products);
         }
@@ -73,11 +73,129 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             List<Blueprint> blueprints = new List<Blueprint>();
             foreach (BlueprintInfo blueprintInfo in blueprintInfos)
             {
-                Blueprint.ElementInfo[] requirements = DatabaseService.RepositoryList.BlueprintRequirementRepository.ListOfBlueprint(blueprintInfo.blueprintID).ToArray();
-                Blueprint.ElementInfo[] products = DatabaseService.RepositoryList.BlueprintProductRepository.ListOfBlueprint(blueprintInfo.blueprintID).ToArray();
+                Blueprint.ElementInfo[] requirements = ListRequirementsOfBlueprint(blueprintInfo.blueprintID).ToArray();
+                Blueprint.ElementInfo[] products = ListProductsOfBlueprint(blueprintInfo.blueprintID).ToArray();
                 blueprints.Add(new Blueprint(blueprintInfo.blueprintID, blueprintInfo.isOrderless, blueprintInfo.isBlueprintRequired, requirements, products));
             }
             return blueprints;
+        }
+
+        public override Blueprint.ElementInfo CreateRequirement(int blueprintID, Blueprint.ElementInfo requirement)
+        {
+            string sqlString = @"INSERT INTO BlueprintRequirementCollection 
+                (BlueprintID,ItemID,ItemCount,PositionIndex) VALUES (@blueprintID,@itemID,@itemCount,@positionIndex) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
+                command.Parameters.AddWithValue("itemID", requirement.itemID);
+                command.Parameters.AddWithValue("itemCount", requirement.itemCount);
+                command.Parameters.AddWithValue("positionIndex", requirement.positionIndex);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.ErrorFormat("MySQL_BlueprintRequirement Create BlueprintRequirement Error BlueprintID: {0}, RequirementInfo: ItemID:{1}, ItemCount: {2}, PositionIndex: {3}", blueprintID, requirement.itemID, requirement.itemCount, requirement.positionIndex);
+                }
+            }
+            return requirement;
+        }
+
+        public override void DeleteRequirement(int blueprintID, Blueprint.ElementInfo requirement)
+        {
+            string sqlString = @"DELETE FROM BlueprintRequirementCollection 
+                WHERE BlueprintID = @blueprintID AND ItemID = @itemID AND ItemCount = @itemCount AND PositionIndex = @positionIndex;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
+                command.Parameters.AddWithValue("itemID", requirement.itemID);
+                command.Parameters.AddWithValue("itemCount", requirement.itemCount);
+                command.Parameters.AddWithValue("positionIndex", requirement.positionIndex);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.ErrorFormat("MySQL_BlueprintRequirementRepository Delete BlueprintRequirement Error BlueprintID: {0}, RequirementInfo: ItemID:{1}, ItemCount: {2}, PositionIndex: {3}", blueprintID, requirement.itemID, requirement.itemCount, requirement.positionIndex);
+                }
+            }
+        }
+
+        public override List<Blueprint.ElementInfo> ListRequirementsOfBlueprint(int blueprintID)
+        {
+            List<Blueprint.ElementInfo> requirements = new List<Blueprint.ElementInfo>();
+            string sqlString = @"SELECT  
+                ItemID, ItemCount, PositionIndex
+                from BlueprintRequirementCollection 
+                WHERE BlueprintID = @blueprintID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int itemID = reader.GetInt32(0);
+                        int itemCount = reader.GetInt32(1);
+                        int positionIndex = reader.GetInt32(2);
+                        requirements.Add(new Blueprint.ElementInfo { itemID = itemID, itemCount = itemCount, positionIndex = positionIndex });
+                    }
+                }
+            }
+            return requirements;
+        }
+
+        public override Blueprint.ElementInfo CreateProduct(int blueprintID, Blueprint.ElementInfo product)
+        {
+            string sqlString = @"INSERT INTO BlueprintProductCollection 
+                (BlueprintID,ItemID,ItemCount,PositionIndex) VALUES (@blueprintID,@itemID,@itemCount,@positionIndex) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
+                command.Parameters.AddWithValue("itemID", product.itemID);
+                command.Parameters.AddWithValue("itemCount", product.itemCount);
+                command.Parameters.AddWithValue("positionIndex", product.positionIndex);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.ErrorFormat("MySQL_BlueprintProductRequirement Create BlueprintProduct Error BlueprintID: {0}, RequirementInfo: ItemID:{1}, ItemCount: {2}, PositionIndex: {3}", blueprintID, product.itemID, product.itemCount, product.positionIndex);
+                }
+            }
+            return product;
+        }
+
+        public override void DeleteProduct(int blueprintID, Blueprint.ElementInfo product)
+        {
+            string sqlString = @"DELETE FROM BlueprintProductCollection 
+                WHERE BlueprintID = @blueprintID AND ItemID = @itemID AND ItemCount = @itemCount AND PositionIndex = @positionIndex;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("blueprintID", blueprintID);
+                command.Parameters.AddWithValue("itemID", product.itemID);
+                command.Parameters.AddWithValue("itemCount", product.itemCount);
+                command.Parameters.AddWithValue("positionIndex", product.positionIndex);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.ErrorFormat("MySQL_BlueprintProductRepository Delete BlueprintProduct Error BlueprintID: {0}, ProductInfo: ItemID:{1}, ItemCount: {2}, PositionIndex: {3}", blueprintID, product.itemID, product.itemCount, product.positionIndex);
+                }
+            }
+        }
+
+        public override List<Blueprint.ElementInfo> ListProductsOfBlueprint(int blueprintID)
+        {
+            List<Blueprint.ElementInfo> products = new List<Blueprint.ElementInfo>();
+            string sqlString = @"SELECT  
+                ItemID, ItemCount, PositionIndex
+                from BlueprintProductCollection 
+                WHERE BlueprintID = @blueprintID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("@blueprintID", blueprintID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int itemID = reader.GetInt32(0);
+                        int itemCount = reader.GetInt32(1);
+                        int positionIndex = reader.GetInt32(2);
+                        products.Add(new Blueprint.ElementInfo { itemID = itemID, itemCount = itemCount, positionIndex = positionIndex });
+                    }
+                }
+            }
+            return products;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace IsolatedIslandGame.Library
             Instance = manager;
         }
 
-        protected Dictionary<int, Blueprint> blueprintDictionary;
+        protected Dictionary<int, Blueprint> blueprintDictionary = new Dictionary<int, Blueprint>();
         public IEnumerable<Blueprint> Blueprints { get { return blueprintDictionary.Values; } }
         public int BlueprintCount { get { return blueprintDictionary.Count; } }
 
@@ -20,7 +20,6 @@ namespace IsolatedIslandGame.Library
 
         protected BlueprintManager()
         {
-            blueprintDictionary = new Dictionary<int, Blueprint>();
         }
         public bool ContainsBlueprint(int blueprintID)
         {

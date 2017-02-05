@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using IsolatedIslandGame.Library.Quests;
+﻿using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IsolatedIslandGame.Library.UnitTest
@@ -13,7 +13,7 @@ namespace IsolatedIslandGame.Library.UnitTest
         [TestMethod]
         public void SendMessageToDifferentOnlineFriendQuestTest1()
         {
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendQuestRequirement(2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendQuestRequirement(1, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -22,7 +22,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             {
                 new GiveItemQuestReward(1, new Item(1, "TestItem 1", "TestItem 1"), 1)
             },
-            "TestSendMessageToDifferentOnlineFriendQuest", false, DateTime.Now);
+            "TestSendMessageToDifferentOnlineFriendQuest");
 
             Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
             player1.BindInventory(new Inventory(1, 40));
@@ -60,10 +60,27 @@ namespace IsolatedIslandGame.Library.UnitTest
             VesselManager.Instance.AddVessel(new Vessel(2, 2, 0, 0, 0, OceanType.Unknown));
             VesselManager.Instance.AddVessel(new Vessel(3, 3, 0, 0, 0, OceanType.Unknown));
 
-            QuestRecord record = new QuestRecord(quest, new List<QuestRequirementRecord>()
+            QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
             {
-                new SendMessageToDifferentOnlineFriendQuestRequirementRecord(player1, requirement, new HashSet<int>())
+                new SendMessageToDifferentOnlineFriendQuestRequirementRecord(1, player1, requirement, new HashSet<int>())
             });
+            record.OnQuestStatusChange += (recordState) =>
+            {
+                if(recordState.IsFinished)
+                {
+                    foreach(var questReward in recordState.Quest.Rewards)
+                    {
+                        if(questReward.GiveRewardCheck(player1))
+                        {
+                            questReward.GiveReward(player1);
+                        }
+                        else
+                        {
+                            Assert.Fail();
+                        }
+                    }
+                }
+            };
 
             Assert.IsFalse(record.IsFinished);
             Assert.IsTrue(VesselManager.Instance.ContainsVesselWithOwnerPlayerID(2));

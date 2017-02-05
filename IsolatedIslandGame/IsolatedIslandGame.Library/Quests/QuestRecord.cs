@@ -5,6 +5,8 @@ namespace IsolatedIslandGame.Library.Quests
 {
     public class QuestRecord
     {
+        public int QuestRecordID { get; private set; }
+        public int PlayerID { get; private set; }
         public Quest Quest { get; private set; }
         private List<QuestRequirementRecord> requirementRecords = new List<QuestRequirementRecord>();
         public IEnumerable<QuestRequirementRecord> RequirementRecords { get { return requirementRecords.ToArray(); } }
@@ -14,8 +16,10 @@ namespace IsolatedIslandGame.Library.Quests
         private event Action<QuestRecord> onQuestStatusChange;
         public event Action<QuestRecord> OnQuestStatusChange { add { onQuestStatusChange += value; } remove { onQuestStatusChange -= value; } }
 
-        public QuestRecord(Quest quest, List<QuestRequirementRecord> requirementRecords)
+        public QuestRecord(int questRecordID, int playerID, Quest quest, List<QuestRequirementRecord> requirementRecords)
         {
+            QuestRecordID = questRecordID;
+            PlayerID = playerID;
             Quest = quest;
             this.requirementRecords = requirementRecords;
             foreach(var requirementRecord in requirementRecords)

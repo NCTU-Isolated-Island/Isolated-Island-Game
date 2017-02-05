@@ -1,7 +1,5 @@
-﻿using IsolatedIslandGame.Database;
+﻿using IsolatedIslandGame.Database.MySQL.Repositories;
 using IsolatedIslandGame.Database.Repositories;
-using IsolatedIslandGame.Database.MySQL.Repositories;
-using System;
 
 namespace IsolatedIslandGame.Database.MySQL
 {
@@ -31,6 +29,9 @@ namespace IsolatedIslandGame.Database.MySQL
 
         private MySQL_PlayerConversationRepository playerConversationRepository = new MySQL_PlayerConversationRepository();
         public override PlayerConversationRepository PlayerConversationRepository { get { return playerConversationRepository; } }
+
+        private MySQL_QuestRecordRepository questRecordRepository = new MySQL_QuestRecordRepository();
+        public override QuestRecordRepository QuestRecordRepository { get { return questRecordRepository; } }
         #endregion
 
         #region setting data
@@ -40,11 +41,8 @@ namespace IsolatedIslandGame.Database.MySQL
         private MySQL_BlueprintRepository blueprintRepository = new MySQL_BlueprintRepository();
         public override BlueprintRepository BlueprintRepository { get { return blueprintRepository; } }
 
-        private MySQL_BlueprintRequirementRepository blueprintRequirementRepository = new MySQL_BlueprintRequirementRepository();
-        public override BlueprintRequirementRepository BlueprintRequirementRepository { get { return blueprintRequirementRepository; } }
-
-        private MySQL_BlueprintProductRepository blueprintProductRepository = new MySQL_BlueprintProductRepository();
-        public override BlueprintProductRepository BlueprintProductRepository { get { return blueprintProductRepository; } }
+        private MySQL_QuestRepository questRepository = new MySQL_QuestRepository();
+        public override QuestRepository QuestRepository { get { return questRepository; } }
         #endregion
 
         #region text data
