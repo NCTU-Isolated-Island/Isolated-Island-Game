@@ -4,7 +4,7 @@
     {
         public int QuestRequirementID { get; private set; }
         public abstract string Description { get; }
-        public abstract QuestRequirementRecord CreateRequirementRecord(Player player);
+        public abstract bool CreateRequirementRecord(Player player, out QuestRequirementRecord record);
 
         protected QuestRequirement(int questRequirementID)
         {

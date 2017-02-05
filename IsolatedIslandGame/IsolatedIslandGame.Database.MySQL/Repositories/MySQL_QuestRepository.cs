@@ -43,7 +43,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             return quests;
         }
 
-        public override List<QuestRequirement> ListRequirementsOfQuest(int questID)
+        protected override List<QuestRequirement> ListRequirementsOfQuest(int questID)
         {
             List<int> requirementIDs = new List<int>();
             string sqlString = @"SELECT QuestRequirementID from QuestRequirementCollection 
@@ -72,7 +72,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             return requirements;
         }
 
-        public override List<QuestReward> ListRewardsOfQuest(int questID)
+        protected override List<QuestReward> ListRewardsOfQuest(int questID)
         {
             List<int> rewardIDs = new List<int>();
             string sqlString = @"SELECT QuestRewardID from QuestRewardCollection 

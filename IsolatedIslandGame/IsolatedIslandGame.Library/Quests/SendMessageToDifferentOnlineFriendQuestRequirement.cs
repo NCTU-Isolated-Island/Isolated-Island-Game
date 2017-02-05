@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IsolatedIslandGame.Library.Quests
+﻿namespace IsolatedIslandGame.Library.Quests
 {
     public class SendMessageToDifferentOnlineFriendQuestRequirement : QuestRequirement
     {
@@ -19,9 +17,9 @@ namespace IsolatedIslandGame.Library.Quests
             RequiredOnlinedFriendNumber = requiredOnlinedFriendNumber;
         }
 
-        public override QuestRequirementRecord CreateRequirementRecord(Player player)
+        public override bool CreateRequirementRecord(Player player, out QuestRequirementRecord record)
         {
-            throw new NotImplementedException();
+            return QuestRecordFactory.Instance.CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(player, this, out record);
         }
     }
 }

@@ -17,9 +17,9 @@ namespace IsolatedIslandGame.Database.Repositories
 
         public abstract List<Quest> ListAll();
 
-        public abstract List<QuestRequirement> ListRequirementsOfQuest(int questID);
+        protected abstract List<QuestRequirement> ListRequirementsOfQuest(int questID);
 
-        public abstract List<QuestReward> ListRewardsOfQuest(int questID);
+        protected abstract List<QuestReward> ListRewardsOfQuest(int questID);
 
         #region Specialize QuestRequirement
         protected abstract bool SpecializeRequirementToSendMessageToDifferentOnlineFriendRequirement(int requirementID, out QuestRequirement requirement);
