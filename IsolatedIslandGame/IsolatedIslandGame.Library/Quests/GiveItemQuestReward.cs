@@ -1,31 +1,55 @@
-﻿namespace IsolatedIslandGame.Library.Quests
+﻿using MsgPack.Serialization;
+
+namespace IsolatedIslandGame.Library.Quests
 {
     public class GiveItemQuestReward : QuestReward
     {
-        public Item Item { get; private set; }
+        public int ItemID { get; private set; }
         public int ItemCount { get; private set; }
         public override string Description
         {
             get
             {
-                return $"{Item.ItemName} x{ItemCount}";
+                Item item;
+                if(ItemManager.Instance.FindItem(ItemID, out item))
+                {
+                    return $"{item.ItemName} x{ItemCount}";
+                }
+                else
+                {
+                    return $"未知的物品 x{ItemCount}";
+                }
             }
         }
 
-        public GiveItemQuestReward(int questRewardID, Item item, int itemCount) : base(questRewardID)
+        [MessagePackDeserializationConstructor]
+        public GiveItemQuestReward() { }
+        public GiveItemQuestReward(int questRewardID, int itemID, int itemCount) : base(questRewardID)
         {
-            Item = item;
+            ItemID = itemID;
             ItemCount = itemCount;
         }
 
         public override void GiveReward(Player player)
         {
-            player.Inventory.AddItem(Item, ItemCount);
+            Item item;
+            if (ItemManager.Instance.FindItem(ItemID, out item))
+            {
+                player.Inventory.AddItem(item, ItemCount);
+            }
         }
 
         public override bool GiveRewardCheck(Player player)
         {
-            return player.Inventory.AddItemCheck(Item.ItemID, ItemCount);
+            Item item;
+            if (ItemManager.Instance.FindItem(ItemID, out item))
+            {
+                return player.Inventory.AddItemCheck(item.ItemID, ItemCount);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

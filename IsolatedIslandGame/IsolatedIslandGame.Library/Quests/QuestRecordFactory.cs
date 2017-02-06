@@ -9,6 +9,7 @@
         }
 
         public abstract bool CreateQuestRecord(Player player, Quest quest, out QuestRecord record);
-        public abstract bool CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(Player player, QuestRequirement requirement, out QuestRequirementRecord record);
+        public abstract bool CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(int questRecordID, Player player, QuestRequirement requirement, out QuestRequirementRecord record);
+        public abstract bool AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(int requirementRecordID, int onlineFriendPlayerID);
     }
 }

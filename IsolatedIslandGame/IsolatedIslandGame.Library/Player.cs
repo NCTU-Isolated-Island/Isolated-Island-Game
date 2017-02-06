@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
+using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
 using System;
@@ -24,16 +25,19 @@ namespace IsolatedIslandGame.Library
         public Inventory Inventory { get; private set; }
         public Vessel Vessel { get; private set; }
 
-        private Dictionary<int, Blueprint> knownBlueprintDictionary;
-        public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values; } }
+        private Dictionary<int, Blueprint> knownBlueprintDictionary = new Dictionary<int, Blueprint>();
+        public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values.ToArray(); } }
 
-        private HashSet<int> knownPlayerIDSet;
+        private HashSet<int> knownPlayerIDSet = new HashSet<int>();
 
-        private Dictionary<int, FriendInformation> friendInformationDictionary;
+        private Dictionary<int, FriendInformation> friendInformationDictionary = new Dictionary<int, FriendInformation>();
         public IEnumerable<FriendInformation> FriendInformations { get { return friendInformationDictionary.Values.ToArray(); } }
 
-        private Dictionary<int, Transaction> transactionDictionary;
-        public IEnumerable<Transaction> Transactions { get { return transactionDictionary.Values; } }
+        private Dictionary<int, Transaction> transactionDictionary = new Dictionary<int, Transaction>();
+        public IEnumerable<Transaction> Transactions { get { return transactionDictionary.Values.ToArray(); } }
+
+        private Dictionary<int, QuestRecord> questRecordDictionary = new Dictionary<int, QuestRecord>();
+        public IEnumerable<QuestRecord> QuestRecords { get { return questRecordDictionary.Values.ToArray(); } }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -69,6 +73,8 @@ namespace IsolatedIslandGame.Library
         private event Action<Transaction> onTransactionStart;
         public event Action<Transaction> OnTransactionStart { add { onTransactionStart += value; } remove { onTransactionStart -= value; } }
 
+        private event Action<QuestRecord> onQuestRecordChange;
+        public event Action<QuestRecord> OnQuestRecordChange { add { onQuestRecordChange += value; } remove { onQuestRecordChange -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -83,11 +89,6 @@ namespace IsolatedIslandGame.Library
             EventManager = new PlayerEventManager(this);
             OperationManager = new PlayerOperationManager(this);
             ResponseManager = new PlayerResponseManager(this);
-
-            knownPlayerIDSet = new HashSet<int>();
-            knownBlueprintDictionary = new Dictionary<int, Blueprint>();
-            friendInformationDictionary = new Dictionary<int, FriendInformation>();
-            transactionDictionary = new Dictionary<int, Transaction>();
         }
         public void BindUser(User user)
         {
@@ -191,9 +192,9 @@ namespace IsolatedIslandGame.Library
             SyncPlayerInformation(requesterPlayerID);
             onTransactionRequest?.Invoke(requesterPlayerID);
         }
-        public bool ContainsTransaction(int transaction)
+        public bool ContainsTransaction(int transactionID)
         {
-            return transactionDictionary.ContainsKey(transaction);
+            return transactionDictionary.ContainsKey(transactionID);
         }
         public bool FindTransaction(int transactionID, out Transaction transaction)
         {
@@ -221,6 +222,37 @@ namespace IsolatedIslandGame.Library
             if (ContainsTransaction(transactionID))
             {
                 transactionDictionary.Remove(transactionID);
+            }
+        }
+
+        public bool ContainsQuestRecord(int questRecordID)
+        {
+            return questRecordDictionary.ContainsKey(questRecordID);
+        }
+        public bool FindQuestRecord(int questRecordID, out QuestRecord questRecord)
+        {
+            if (ContainsQuestRecord(questRecordID))
+            {
+                questRecord = questRecordDictionary[questRecordID];
+                return true;
+            }
+            else
+            {
+                questRecord = null;
+                return false;
+            }
+        }
+        public void AddQuestRecord(QuestRecord questRecord)
+        {
+            if (ContainsTransaction(questRecord.QuestRecordID))
+            {
+                questRecordDictionary[questRecord.QuestRecordID] = questRecord;
+                onQuestRecordChange?.Invoke(questRecord);
+            }
+            else
+            {
+                questRecordDictionary.Add(questRecord.QuestRecordID, questRecord);
+                onQuestRecordChange?.Invoke(questRecord);
             }
         }
     }

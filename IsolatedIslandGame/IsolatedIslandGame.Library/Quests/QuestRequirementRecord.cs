@@ -17,5 +17,6 @@ namespace IsolatedIslandGame.Library.Quests
             this.player = player;
             Requirement = requirement;
         }
+        internal abstract void RegisterObserverEvents();
     }
 }

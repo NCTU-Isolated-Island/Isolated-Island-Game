@@ -141,17 +141,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         int itemID = reader.GetInt32(0);
                         int itemCount = reader.GetInt32(1);
-                        Item item;
-                        if(ItemManager.Instance.FindItem(itemID, out item))
-                        {
-                            reward = new GiveItemQuestReward(rewardID, item, itemCount);
-                            return true;
-                        }
-                        else
-                        {
-                            reward = null;
-                            return false;
-                        }
+
+                        reward = new GiveItemQuestReward(rewardID, itemID, itemCount);
+                        return true;
                     }
                     else
                     {

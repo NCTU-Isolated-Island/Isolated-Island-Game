@@ -17,6 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             fetchTable = new Dictionary<SystemFetchDataCode, SystemFetchDataHandler>
             {
                 { SystemFetchDataCode.Item, new FetchItemHandler(subject) },
+                { SystemFetchDataCode.AllItems, new FetchAllItemsHandler(subject) },
                 { SystemFetchDataCode.AllVessels, new FetchAllVesselsHandler(subject) },
                 { SystemFetchDataCode.Vessel, new FetchVesselHandler(subject) },
                 { SystemFetchDataCode.VesselWithOwnerPlayerID, new FetchVesselWithOwnerPlayerIDHandler(subject) },
@@ -63,6 +64,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { (byte)FetchItemParameterCode.ItemID, itemID }
             };
             SendOperation(SystemFetchDataCode.Item, parameters);
+        }
+        public void FetchAllItems()
+        {
+            SendOperation(SystemFetchDataCode.AllItems, new Dictionary<byte, object>());
         }
         public void FetchAllVessels()
         {

@@ -6,14 +6,14 @@ namespace IsolatedIslandGame.Library.Quests
 {
     public class SendMessageToDifferentOnlineFriendQuestRequirementRecord : QuestRequirementRecord
     {
-        private HashSet<int> onlineFriendPlayerIDSet = new HashSet<int>();
-        public IEnumerable<int> OnlineFriendPlayerIDs { get { return onlineFriendPlayerIDSet.ToArray(); } }
+        private HashSet<int> onlineFriendPlayerID_Set = new HashSet<int>();
+        public IEnumerable<int> OnlineFriendPlayerIDs { get { return onlineFriendPlayerID_Set.ToArray(); } }
 
         public override bool IsSufficient
         {
             get
             {
-                return onlineFriendPlayerIDSet.Count >= (Requirement as SendMessageToDifferentOnlineFriendQuestRequirement).RequiredOnlinedFriendNumber;
+                return onlineFriendPlayerID_Set.Count >= (Requirement as SendMessageToDifferentOnlineFriendQuestRequirement).RequiredOnlinedFriendNumber;
             }
         }
 
@@ -21,7 +21,7 @@ namespace IsolatedIslandGame.Library.Quests
         {
             get
             {
-                return $"人數： {onlineFriendPlayerIDSet.Count}/{(Requirement as SendMessageToDifferentOnlineFriendQuestRequirement).RequiredOnlinedFriendNumber}";
+                return $"人數： {onlineFriendPlayerID_Set.Count}/{(Requirement as SendMessageToDifferentOnlineFriendQuestRequirement).RequiredOnlinedFriendNumber}";
             }
         }
 
@@ -30,18 +30,26 @@ namespace IsolatedIslandGame.Library.Quests
 
         public SendMessageToDifferentOnlineFriendQuestRequirementRecord(int questRequirementRecordID, Player player, QuestRequirement requirement, HashSet<int> onlineFriendPlayerIDSet) : base(questRequirementRecordID, player, requirement)
         {
-            this.onlineFriendPlayerIDSet = onlineFriendPlayerIDSet;
-
+            this.onlineFriendPlayerID_Set = onlineFriendPlayerIDSet;
+        }
+        internal override void RegisterObserverEvents()
+        {
             player.OnGetPlayerConversation += (conversation) =>
             {
-                if(!IsSufficient && conversation.message.senderPlayerID == player.PlayerID && player.ContainsFriend(conversation.receiverPlayerID) && VesselManager.Instance.ContainsVesselWithOwnerPlayerID(conversation.receiverPlayerID))
+                if (!IsSufficient && conversation.message.senderPlayerID == player.PlayerID && player.ContainsFriend(conversation.receiverPlayerID) && VesselManager.Instance.ContainsVesselWithOwnerPlayerID(conversation.receiverPlayerID))
                 {
                     FriendInformation info;
-                    if(player.FindFriend(conversation.receiverPlayerID, out info) && info.isConfirmed)
+                    if (player.FindFriend(conversation.receiverPlayerID, out info) && info.isConfirmed)
                     {
-                        if (onlineFriendPlayerIDSet.Add(conversation.receiverPlayerID))
+                        lock (onlineFriendPlayerID_Set)
                         {
-                            onRequirementStatusChange?.Invoke(this);
+                            if (!onlineFriendPlayerID_Set.Contains(conversation.receiverPlayerID))
+                            {
+                                if (onlineFriendPlayerID_Set.Add(conversation.receiverPlayerID) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(QuestRequirementRecordID, conversation.receiverPlayerID)))
+                                {
+                                    onRequirementStatusChange?.Invoke(this);
+                                }
+                            }
                         }
                     }
                 }

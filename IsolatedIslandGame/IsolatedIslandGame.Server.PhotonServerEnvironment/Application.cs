@@ -5,9 +5,9 @@ using IsolatedIslandGame.Database.MySQL;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.CommunicationInfrastructure;
 using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol.Communication;
 using IsolatedIslandGame.Server.Configuration;
-using IsolatedIslandGame.Server.Items;
 using log4net.Config;
 using Photon.SocketServer;
 using System;
@@ -88,10 +88,11 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             UserFactory.Initial();
             PlayerFactory.Initial();
             ItemManager.Initial(new ItemFactory());
-            InventoryItemInfoFactory.Initial(new ServerInventoryItemInfoFactory());
-            DecorationFactory.Initial(new ServerDecorationFactory());
+            InventoryItemInfoFactory.Initial(new Items.ServerInventoryItemInfoFactory());
+            DecorationFactory.Initial(new Items.ServerDecorationFactory());
             BlueprintManager.Initial(new BlueprintFactory());
-            QuestFactory.Initial();
+            QuestManager.Initial(new QuestFactory());
+            QuestRecordFactory.Initial(new Quests.ServerQuestRecordFactory());
         }
         private void SetupManagers()
         {

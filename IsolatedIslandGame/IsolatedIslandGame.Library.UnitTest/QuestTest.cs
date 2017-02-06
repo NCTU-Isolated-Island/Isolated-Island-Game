@@ -1,4 +1,5 @@
 ﻿using IsolatedIslandGame.Library.Quests;
+using IsolatedIslandGame.Library.CommunicationInfrastructure;
 using IsolatedIslandGame.Protocol;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -13,6 +14,9 @@ namespace IsolatedIslandGame.Library.UnitTest
         [TestMethod]
         public void SendMessageToDifferentOnlineFriendQuestTest1()
         {
+            ItemManager.Initial(new TestItemManager());
+            ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
+
             QuestRequirement requirement = new SendMessageToDifferentOnlineFriendQuestRequirement(1, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
@@ -20,7 +24,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             },
             new List<QuestReward>
             {
-                new GiveItemQuestReward(1, new Item(1, "TestItem 1", "TestItem 1"), 1)
+                new GiveItemQuestReward(1, 1, 1)
             },
             "TestSendMessageToDifferentOnlineFriendQuest");
 
@@ -64,7 +68,8 @@ namespace IsolatedIslandGame.Library.UnitTest
             {
                 new SendMessageToDifferentOnlineFriendQuestRequirementRecord(1, player1, requirement, new HashSet<int>())
             });
-            record.OnQuestStatusChange += (recordState) =>
+            record.RegisterObserverEvents();
+            record.OnQuestRecordStatusChange += (recordState) =>
             {
                 if(recordState.IsFinished)
                 {
@@ -127,6 +132,49 @@ namespace IsolatedIslandGame.Library.UnitTest
             });
             Assert.IsTrue(record.IsFinished);
             Assert.AreEqual($"人數： 2/2", record.RequirementRecords.First().ProgressStatus);
+        }
+
+        [TestMethod]
+        public void QuestRecordSerializationTest1()
+        {
+            ItemManager.Initial(new TestItemManager());
+            ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
+
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendQuestRequirement(1, 2);
+            Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
+            {
+                requirement
+            },
+            new List<QuestReward>
+            {
+                new GiveItemQuestReward(1, 1, 1)
+            },
+            "TestSendMessageToDifferentOnlineFriendQuest");
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
+            {
+                new SendMessageToDifferentOnlineFriendQuestRequirementRecord(1, player1, requirement, new HashSet<int>())
+            });
+            record.RegisterObserverEvents();
+
+            byte[] serializedData = SerializationHelper.TypeSerialize(quest);
+            Assert.IsNotNull(serializedData);
+            Quest deserializadQuest = SerializationHelper.TypeDeserialize<Quest>(serializedData);
+            Assert.IsNotNull(deserializadQuest);
+            List<QuestRequirement> originRequirements = quest.Requirements.ToList(), deserializedRequirements = deserializadQuest.Requirements.ToList();
+            Assert.AreEqual(originRequirements.Count, deserializedRequirements.Count);
+            for(int i = 0; i < originRequirements.Count; i++)
+            {
+                Assert.AreEqual(originRequirements[i].QuestRequirementID, deserializedRequirements[i].QuestRequirementID);
+                Assert.AreEqual(originRequirements[i].Description, deserializedRequirements[i].Description);
+            }
+            List<QuestReward> originRewards = quest.Rewards.ToList(), deserializedRewards = deserializadQuest.Rewards.ToList();
+            Assert.AreEqual(originRewards.Count, deserializedRewards.Count);
+            for (int i = 0; i < originRewards.Count; i++)
+            {
+                Assert.AreEqual(originRewards[i].QuestRewardID, deserializedRewards[i].QuestRewardID);
+                Assert.AreEqual(originRewards[i].Description, deserializedRewards[i].Description);
+            }
         }
     }
 }

@@ -143,7 +143,14 @@ namespace IsolatedIslandGame.Server
             Transaction transaction; ;
             if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
             {
-                return transaction.ChangeConfirmStatus(playerID, isConfirmed);
+                if(isConfirmed)
+                {
+                    return transaction.ChangeConfirmStatus(playerID, isConfirmed);
+                }
+                else
+                {
+                    return transaction.ChangeConfirmStatus(transaction.RequesterPlayerID, isConfirmed) && transaction.ChangeConfirmStatus(transaction.AccepterPlayerID, isConfirmed);
+                }
             }
             else
             {

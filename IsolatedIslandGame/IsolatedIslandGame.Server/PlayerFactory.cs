@@ -215,6 +215,12 @@ namespace IsolatedIslandGame.Server
 
             player.OnTransactionRequest += player.EventManager.TransactionRequest;
             player.OnTransactionStart += player.EventManager.StartTransaction;
+
+            foreach(var questRecord in DatabaseService.RepositoryList.QuestRecordRepository.ListOfPlayer(player))
+            {
+                questRecord.RegisterObserverEvents();
+                player.AddQuestRecord(questRecord);
+            }
         }
         private void DisassemblyPlayer(Player player)
         {

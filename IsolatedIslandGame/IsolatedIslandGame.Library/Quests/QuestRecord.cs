@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests
 {
@@ -13,9 +14,11 @@ namespace IsolatedIslandGame.Library.Quests
 
         public bool IsFinished { get { return requirementRecords.TrueForAll(x => x.IsSufficient); } }
 
-        private event Action<QuestRecord> onQuestStatusChange;
-        public event Action<QuestRecord> OnQuestStatusChange { add { onQuestStatusChange += value; } remove { onQuestStatusChange -= value; } }
+        private event Action<QuestRecord> onQuestRecordStatusChange;
+        public event Action<QuestRecord> OnQuestRecordStatusChange { add { onQuestRecordStatusChange += value; } remove { onQuestRecordStatusChange -= value; } }
 
+        [MessagePackDeserializationConstructor]
+        public QuestRecord() { }
         public QuestRecord(int questRecordID, int playerID, Quest quest, List<QuestRequirementRecord> requirementRecords)
         {
             QuestRecordID = questRecordID;
@@ -26,9 +29,13 @@ namespace IsolatedIslandGame.Library.Quests
             {
                 requirementRecord.OnRequirementStatusChange += (record) =>
                 {
-                    onQuestStatusChange?.Invoke(this);
+                    onQuestRecordStatusChange?.Invoke(this);
                 };
             }
+        }
+        public void RegisterObserverEvents()
+        {
+            requirementRecords.ForEach(x => x.RegisterObserverEvents());
         }
     }
 }
