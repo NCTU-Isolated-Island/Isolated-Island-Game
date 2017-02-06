@@ -135,7 +135,7 @@ namespace IsolatedIslandGame.Server
                 transactionDictionary.Remove(transactionID);
             }
         }
-        private void CheckTransactionEnd(int transactionID, int playerID)
+        private void CheckTransactionEnd(int transactionID, int playerID, bool isConfirmed)
         {
             Transaction transaction;
             if (FindTransaction(transactionID, out transaction))
@@ -148,8 +148,8 @@ namespace IsolatedIslandGame.Server
         }
         private void AssemblyTransaction(Transaction transaction, Player requester, Player accepter)
         {
-            transaction.OnTransactionConfirmed += requester.EventManager.SyncDataResolver.SyncTransactionConfirm;
-            transaction.OnTransactionConfirmed += accepter.EventManager.SyncDataResolver.SyncTransactionConfirm;
+            transaction.OnTransactionConfirmed += requester.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
+            transaction.OnTransactionConfirmed += accepter.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
 
             transaction.OnTransactionItemChange += requester.EventManager.SyncDataResolver.SyncTransactionItemChange;
             transaction.OnTransactionItemChange += accepter.EventManager.SyncDataResolver.SyncTransactionItemChange;
@@ -164,8 +164,8 @@ namespace IsolatedIslandGame.Server
         }
         private void DisassemblyTransaction(Transaction transaction, Player requester, Player accepter)
         {
-            transaction.OnTransactionConfirmed -= requester.EventManager.SyncDataResolver.SyncTransactionConfirm;
-            transaction.OnTransactionConfirmed -= accepter.EventManager.SyncDataResolver.SyncTransactionConfirm;
+            transaction.OnTransactionConfirmed -= requester.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
+            transaction.OnTransactionConfirmed -= accepter.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
 
             transaction.OnTransactionItemChange -= requester.EventManager.SyncDataResolver.SyncTransactionItemChange;
             transaction.OnTransactionItemChange -= accepter.EventManager.SyncDataResolver.SyncTransactionItemChange;

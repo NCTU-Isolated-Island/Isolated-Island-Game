@@ -1,8 +1,9 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.SyncDataParameters.Player
 {
-    public enum SyncTransactionConfirmParameterCode : byte
+    public enum SyncTransactionConfirmStatusChangeParameterCode : byte
     {
         TransactionID,
-        ConfirmedPlayerID
+        PlayerID,
+        IsConfirmed
     }
 }

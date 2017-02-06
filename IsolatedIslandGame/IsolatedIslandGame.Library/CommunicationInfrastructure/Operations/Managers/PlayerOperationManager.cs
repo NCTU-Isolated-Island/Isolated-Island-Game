@@ -38,7 +38,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.TransactionRequest, new TransactionRequestHandler(player) },
                 { PlayerOperationCode.AcceptTransaction, new AcceptTransactionHandler(player) },
                 { PlayerOperationCode.ChangeTransactionItem, new ChangeTransactionItemHandler(player) },
-                { PlayerOperationCode.ConfirmTransaction, new ConfirmTransactionHandler(player) },
+                { PlayerOperationCode.ChangeTransactionConfirmStatus, new ChangeTransactionConfirmStatusHandler(player) },
+                { PlayerOperationCode.CancelTransaction, new CancelTransactionHandler(player) },
                 { PlayerOperationCode.SetFavoriteItem, new SetFavoriteItemHandler(player) },
                 { PlayerOperationCode.ReadPlayerMessage, new ReadPlayerMessageHandler(player) },
                 { PlayerOperationCode.SendMaterialToIsland, new SendMaterialToIslandHandler(player) },
@@ -212,13 +213,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             };
             SendOperation(PlayerOperationCode.ChangeTransactionItem, parameters);
         }
-        public void ConfirmTransaction(int transactionID)
+        public void ChangeTransactionConfirmStatus(int transactionID, bool isConfirmed)
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)ConfirmTransactionParameterCode.TransactionID, transactionID }
-            };
-            SendOperation(PlayerOperationCode.ConfirmTransaction, parameters);
+                { (byte)ChangeTransactionConfirmStatusParameterCode.TransactionID, transactionID },
+                { (byte)ChangeTransactionConfirmStatusParameterCode.IsConfirmed, isConfirmed }
+        };
+            SendOperation(PlayerOperationCode.ChangeTransactionConfirmStatus, parameters);
         }
         public void SetFavoriteItem(int inventoryID, int inventoryItemInfoID)
         {
@@ -244,6 +246,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)SendMaterialToIslandParameterCode.MaterialItemID, materialItemID }
             };
             SendOperation(PlayerOperationCode.SendMaterialToIsland, parameters);
+        }
+        public void CancelTransaction(int transactionID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)CancelTransactionParameterCode.TransactionID, transactionID }
+            };
+            SendOperation(PlayerOperationCode.CancelTransaction, parameters);
         }
     }
 }

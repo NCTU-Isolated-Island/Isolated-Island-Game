@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             syncTable.Add(PlayerSyncDataCode.FriendInformationChange, new SyncFriendInformationChangeHandler(subject));
             syncTable.Add(PlayerSyncDataCode.PlayerInformation, new SyncPlayerInformationHandler(subject));
             syncTable.Add(PlayerSyncDataCode.TransactionItemChange, new SyncTransactionItemChangeHandler(subject));
-            syncTable.Add(PlayerSyncDataCode.TransactionConfirm, new SyncTransactionConfirmHandler(subject));
+            syncTable.Add(PlayerSyncDataCode.TransactionConfirmStatusChange, new SyncTransactionConfirmStatusChangeHandler(subject));
         }
 
         internal override void SendSyncData(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -75,14 +75,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             };
             SendSyncData(PlayerSyncDataCode.TransactionItemChange, parameters);
         }
-        public void SyncTransactionConfirm(int transactionID, int confirmedPlayerID)
+        public void SyncTransactionConfirmStatusChange(int transactionID, int confirmedPlayerID, bool isConfirmed)
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)SyncTransactionConfirmParameterCode.TransactionID, transactionID },
-                { (byte)SyncTransactionConfirmParameterCode.ConfirmedPlayerID, confirmedPlayerID }
+                { (byte)SyncTransactionConfirmStatusChangeParameterCode.TransactionID, transactionID },
+                { (byte)SyncTransactionConfirmStatusChangeParameterCode.PlayerID, confirmedPlayerID },
+                { (byte)SyncTransactionConfirmStatusChangeParameterCode.IsConfirmed, isConfirmed }
             };
-            SendSyncData(PlayerSyncDataCode.TransactionConfirm, parameters);
+            SendSyncData(PlayerSyncDataCode.TransactionConfirmStatusChange, parameters);
         }
     }
 }

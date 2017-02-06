@@ -6,6 +6,6 @@
         FriendInformationChange,
         PlayerInformation,
         TransactionItemChange,
-        TransactionConfirm
+        TransactionConfirmStatusChange
     }
 }
