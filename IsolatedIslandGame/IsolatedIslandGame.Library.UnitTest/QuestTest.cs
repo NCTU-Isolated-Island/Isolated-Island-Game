@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -60,15 +60,16 @@ namespace IsolatedIslandGame.Library.UnitTest
             });
 
             VesselManager.Initial(new TestVesselManager());
-            VesselManager.Instance.AddVessel(new Vessel(1, 1, 0, 0, 0, OceanType.Unknown));
+            player1.BindVessel(new Vessel(1, 1, 0, 0, 0, OceanType.Unknown));
+            VesselManager.Instance.AddVessel(player1.Vessel);
             VesselManager.Instance.AddVessel(new Vessel(2, 2, 0, 0, 0, OceanType.Unknown));
             VesselManager.Instance.AddVessel(new Vessel(3, 3, 0, 0, 0, OceanType.Unknown));
 
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
             {
-                new SendMessageToDifferentOnlineFriendQuestRequirementRecord(1, player1, requirement, new HashSet<int>())
+                new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(1, requirement, new HashSet<int>())
             });
-            record.RegisterObserverEvents();
+            record.RegisterObserverEvents(player1);
             record.OnQuestRecordStatusChange += (recordState) =>
             {
                 if(recordState.IsFinished)
@@ -135,12 +136,12 @@ namespace IsolatedIslandGame.Library.UnitTest
         }
 
         [TestMethod]
-        public void QuestRecordSerializationTest1()
+        public void QuestSerializationTest1()
         {
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -150,12 +151,6 @@ namespace IsolatedIslandGame.Library.UnitTest
                 new GiveItemQuestReward(1, 1, 1)
             },
             "TestSendMessageToDifferentOnlineFriendQuest");
-            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
-            QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
-            {
-                new SendMessageToDifferentOnlineFriendQuestRequirementRecord(1, player1, requirement, new HashSet<int>())
-            });
-            record.RegisterObserverEvents();
 
             byte[] serializedData = SerializationHelper.TypeSerialize(quest);
             Assert.IsNotNull(serializedData);
@@ -174,6 +169,41 @@ namespace IsolatedIslandGame.Library.UnitTest
             {
                 Assert.AreEqual(originRewards[i].QuestRewardID, deserializedRewards[i].QuestRewardID);
                 Assert.AreEqual(originRewards[i].Description, deserializedRewards[i].Description);
+            }
+        }
+        [TestMethod]
+        public void QuestRecordSerializationTest1()
+        {
+            ItemManager.Initial(new TestItemManager());
+            ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
+
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
+            Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
+            {
+                requirement
+            },
+            new List<QuestReward>
+            {
+                new GiveItemQuestReward(1, 1, 1)
+            },
+            "TestSendMessageToDifferentOnlineFriendQuest");
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
+            {
+                new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(1, requirement, new HashSet<int> { 2, 3 })
+            });
+            record.RegisterObserverEvents(player1);
+
+            byte[] serializedData = SerializationHelper.TypeSerialize(record);
+            Assert.IsNotNull(serializedData);
+            QuestRecord deserializadQuestRecord = SerializationHelper.TypeDeserialize<QuestRecord>(serializedData);
+            Assert.IsNotNull(deserializadQuestRecord);
+            List<QuestRequirementRecord> originRequirementRecords = record.RequirementRecords.ToList(), deserializedRequirementRecords = deserializadQuestRecord.RequirementRecords.ToList();
+            Assert.AreEqual(originRequirementRecords.Count, deserializedRequirementRecords.Count);
+            for (int i = 0; i < originRequirementRecords.Count; i++)
+            {
+                Assert.AreEqual(originRequirementRecords[i].QuestRequirementRecordID, deserializedRequirementRecords[i].QuestRequirementRecordID);
+                Assert.AreEqual(originRequirementRecords[i].ProgressStatus, deserializedRequirementRecords[i].ProgressStatus);
             }
         }
     }

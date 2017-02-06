@@ -39,9 +39,9 @@ namespace IsolatedIslandGame.Library
             QuestDescription = questDescription;
         }
 
-        public bool CreateRecord(Player player, out QuestRecord record)
+        public bool CreateRecord(int playerID, out QuestRecord record)
         {
-            return QuestRecordFactory.Instance.CreateQuestRecord(player, this, out record);
+            return QuestRecordFactory.Instance.CreateQuestRecord(playerID, this, out record);
         }
     }
 }

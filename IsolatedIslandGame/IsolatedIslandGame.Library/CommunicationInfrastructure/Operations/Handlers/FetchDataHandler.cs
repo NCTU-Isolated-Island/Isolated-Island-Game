@@ -14,10 +14,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             this.correctParameterCount = correctParameterCount;
         }
 
-        public virtual bool Handle(TFetchDataCode fetchCode, Dictionary<byte, object> parameter)
+        public virtual bool Handle(TFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
             string debugMessage;
-            if (CheckParameter(parameter, out debugMessage))
+            if (CheckParameter(parameters, out debugMessage))
             {
                 return true;
             }

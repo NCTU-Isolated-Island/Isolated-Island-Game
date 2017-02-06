@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library
 {
-    public abstract class BlueprintManager
+    public class BlueprintManager
     {
         public static BlueprintManager Instance { get; private set; }
         public static void Initial(BlueprintManager manager)
@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library
         private event BlueprintChangeEventHandler onBlueprintChange;
         public event BlueprintChangeEventHandler OnBlueprintChange { add { onBlueprintChange += value; } remove { onBlueprintChange -= value; } }
 
-        protected BlueprintManager()
+        public BlueprintManager()
         {
         }
         public bool ContainsBlueprint(int blueprintID)

@@ -5,6 +5,7 @@ namespace IsolatedIslandGame.Library.Quests
 {
     public abstract class QuestRequirement
     {
+        [MessagePackMember(0)]
         public int QuestRequirementID { get; private set; }
         public abstract QuestRequirementType QuestRequirementType { get; }
         public abstract string Description { get; }
@@ -16,6 +17,6 @@ namespace IsolatedIslandGame.Library.Quests
             QuestRequirementID = questRequirementID;
         }
 
-        public abstract bool CreateRequirementRecord(int questRecordID, Player player, out QuestRequirementRecord record);
+        public abstract bool CreateRequirementRecord(int questRecordID, int playerID, out QuestRequirementRecord record);
     }
 }

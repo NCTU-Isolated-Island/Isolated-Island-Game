@@ -19,12 +19,30 @@ namespace IsolatedIslandGame.Library.UnitTest
 
         public override bool FindVessel(int vesselID, out Vessel vessel)
         {
-            throw new NotImplementedException();
+            if (ContainsVessel(vesselID))
+            {
+                vessel = vesselDictionary[vesselID];
+                return true;
+            }
+            else
+            {
+                vessel = null;
+                return false;
+            }
         }
 
         public override bool FindVesselByOwnerPlayerID(int ownerPlayerID, out Vessel vessel)
         {
-            throw new NotImplementedException();
+            if (ContainsVesselWithOwnerPlayerID(ownerPlayerID))
+            {
+                vessel = vesselDictionaryByOwnerPlayerID[ownerPlayerID];
+                return true;
+            }
+            else
+            {
+                vessel = null;
+                return false;
+            }
         }
 
         public override bool RemoveVessel(int vesselID)

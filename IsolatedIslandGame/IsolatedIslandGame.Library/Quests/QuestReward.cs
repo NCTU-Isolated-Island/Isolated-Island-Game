@@ -4,6 +4,7 @@ namespace IsolatedIslandGame.Library.Quests
 {
     public abstract class QuestReward
     {
+        [MessagePackMember(0)]
         public int QuestRewardID { get; private set; }
         public abstract string Description { get; }
 

@@ -73,8 +73,8 @@ namespace IsolatedIslandGame.Library
         private event Action<Transaction> onTransactionStart;
         public event Action<Transaction> OnTransactionStart { add { onTransactionStart += value; } remove { onTransactionStart -= value; } }
 
-        private event Action<QuestRecord> onQuestRecordChange;
-        public event Action<QuestRecord> OnQuestRecordChange { add { onQuestRecordChange += value; } remove { onQuestRecordChange -= value; } }
+        private event Action<QuestRecord> onQuestRecordUpdated;
+        public event Action<QuestRecord> OnQuestRecordUpdated { add { onQuestRecordUpdated += value; } remove { onQuestRecordUpdated -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -247,12 +247,12 @@ namespace IsolatedIslandGame.Library
             if (ContainsTransaction(questRecord.QuestRecordID))
             {
                 questRecordDictionary[questRecord.QuestRecordID] = questRecord;
-                onQuestRecordChange?.Invoke(questRecord);
+                onQuestRecordUpdated?.Invoke(questRecord);
             }
             else
             {
                 questRecordDictionary.Add(questRecord.QuestRecordID, questRecord);
-                onQuestRecordChange?.Invoke(questRecord);
+                onQuestRecordUpdated?.Invoke(questRecord);
             }
         }
     }

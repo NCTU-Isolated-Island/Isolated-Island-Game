@@ -216,11 +216,13 @@ namespace IsolatedIslandGame.Server
             player.OnTransactionRequest += player.EventManager.TransactionRequest;
             player.OnTransactionStart += player.EventManager.StartTransaction;
 
-            foreach(var questRecord in DatabaseService.RepositoryList.QuestRecordRepository.ListOfPlayer(player))
+            foreach(var questRecord in DatabaseService.RepositoryList.QuestRecordRepository.ListOfPlayer(player.PlayerID))
             {
-                questRecord.RegisterObserverEvents();
+                questRecord.RegisterObserverEvents(player);
                 player.AddQuestRecord(questRecord);
+                questRecord.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
             }
+            player.OnQuestRecordUpdated += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
         }
         private void DisassemblyPlayer(Player player)
         {
@@ -255,6 +257,12 @@ namespace IsolatedIslandGame.Server
 
             player.OnTransactionRequest -= player.EventManager.TransactionRequest;
             player.OnTransactionStart -= player.EventManager.StartTransaction;
+
+            foreach (var questRecord in DatabaseService.RepositoryList.QuestRecordRepository.ListOfPlayer(player.PlayerID))
+            {
+                questRecord.OnQuestRecordStatusChange -= player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+            }
+            player.OnQuestRecordUpdated -= player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
         }
         private void CreateVessel(Player player)
         {

@@ -6,9 +6,14 @@ namespace IsolatedIslandGame.Library.Quests
 {
     public class QuestRecord
     {
+        [MessagePackMember(0)]
         public int QuestRecordID { get; private set; }
+        [MessagePackMember(1)]
         public int PlayerID { get; private set; }
+        [MessagePackMember(2)]
         public Quest Quest { get; private set; }
+        [MessagePackMember(3)]
+        [MessagePackRuntimeCollectionItemType]
         private List<QuestRequirementRecord> requirementRecords = new List<QuestRequirementRecord>();
         public IEnumerable<QuestRequirementRecord> RequirementRecords { get { return requirementRecords.ToArray(); } }
 
@@ -33,9 +38,9 @@ namespace IsolatedIslandGame.Library.Quests
                 };
             }
         }
-        public void RegisterObserverEvents()
+        public void RegisterObserverEvents(Player player)
         {
-            requirementRecords.ForEach(x => x.RegisterObserverEvents());
+            requirementRecords.ForEach(x => x.RegisterObserverEvents(player));
         }
     }
 }

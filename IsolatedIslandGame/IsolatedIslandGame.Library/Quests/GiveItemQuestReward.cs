@@ -4,7 +4,9 @@ namespace IsolatedIslandGame.Library.Quests
 {
     public class GiveItemQuestReward : QuestReward
     {
+        [MessagePackMember(1)]
         public int ItemID { get; private set; }
+        [MessagePackMember(2)]
         public int ItemCount { get; private set; }
         public override string Description
         {

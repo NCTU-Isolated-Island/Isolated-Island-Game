@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library
 {
-    public abstract class QuestManager
+    public class QuestManager
     {
         public static QuestManager Instance { get; private set; }
         public static void Initial(QuestManager manager)
@@ -14,7 +14,7 @@ namespace IsolatedIslandGame.Library
         protected Dictionary<int, Quest> questDictionary = new Dictionary<int, Quest>();
         protected Dictionary<int, QuestRequirement> questRequirementDictionary = new Dictionary<int, QuestRequirement>();
 
-        protected QuestManager() { }
+        public QuestManager() { }
         public bool ContainsQuest(int questID)
         {
             return questDictionary.ContainsKey(questID);

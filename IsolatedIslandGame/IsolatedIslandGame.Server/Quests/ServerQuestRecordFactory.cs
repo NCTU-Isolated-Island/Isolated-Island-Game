@@ -7,14 +7,14 @@ namespace IsolatedIslandGame.Server.Quests
 {
     public class ServerQuestRecordFactory : QuestRecordFactory
     {
-        public override bool CreateQuestRecord(Player player, Quest quest, out QuestRecord record)
+        public override bool CreateQuestRecord(int playerID, Quest quest, out QuestRecord record)
         {
-            return DatabaseService.RepositoryList.QuestRecordRepository.CreateQuestRecord(player, quest, out record);
+            return DatabaseService.RepositoryList.QuestRecordRepository.CreateQuestRecord(playerID, quest, out record);
         }
 
-        public override bool CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(int questRecordID, Player player, QuestRequirement requirement, out QuestRequirementRecord record)
+        public override bool CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(int questRecordID, int playerID, QuestRequirement requirement, out QuestRequirementRecord record)
         {
-            return DatabaseService.RepositoryList.QuestRecordRepository.CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(questRecordID, player, requirement, out record);
+            return DatabaseService.RepositoryList.QuestRecordRepository.CreateSendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(questRecordID, requirement, out record);
         }
 
         public override bool AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(int requirementRecordID, int onlineFriendPlayerID)
