@@ -18,9 +18,9 @@ namespace IsolatedIslandGame.Library
         public IEnumerable<TransactionItemInfo> RequesterTransactionItemInfos { get { return requesterTransactionItemInfos.ToArray(); } }
         public IEnumerable<TransactionItemInfo> AccepterTransactionItemInfos { get { return accepterTransactionItemInfos.ToArray(); } }
 
-        public delegate void TransactionConfirmedEventHandler(int transactionID, int playerID, bool isConfirmed);
-        private event TransactionConfirmedEventHandler onTransactionConfirmed;
-        public event TransactionConfirmedEventHandler OnTransactionConfirmed { add { onTransactionConfirmed += value; } remove { onTransactionConfirmed -= value; } }
+        public delegate void TransactionConfirmStatusChangeEventHandler(int transactionID, int playerID, bool isConfirmed);
+        private event TransactionConfirmStatusChangeEventHandler onTransactionConfirmStatusChange;
+        public event TransactionConfirmStatusChangeEventHandler OnTransactionConfirmStatusChange { add { onTransactionConfirmStatusChange += value; } remove { onTransactionConfirmStatusChange -= value; } }
 
         public delegate void TransactionItemChangeEventHandler(int transactionID, int playerID, DataChangeType changeType, TransactionItemInfo info);
         private event TransactionItemChangeEventHandler onTransactionItemChange;
@@ -41,13 +41,13 @@ namespace IsolatedIslandGame.Library
             if(RequesterPlayerID == playerID)
             {
                 IsRequesterConfirmed = isConfirmed;
-                onTransactionConfirmed?.Invoke(TransactionID, playerID, IsRequesterConfirmed);
+                onTransactionConfirmStatusChange?.Invoke(TransactionID, playerID, IsRequesterConfirmed);
                 return true;
             }
             else if(AccepterPlayerID == playerID)
             {
                 IsAccepterConfirmed = isConfirmed;
-                onTransactionConfirmed?.Invoke(TransactionID, playerID, IsAccepterConfirmed);
+                onTransactionConfirmStatusChange?.Invoke(TransactionID, playerID, IsAccepterConfirmed);
                 return true;
             }
             else
