@@ -8,6 +8,6 @@
         GetPlayerConversation,
         TransactionRequest,
         StartTransaction,
-        EndTransaction
+        EndTransaction,
     }
 }

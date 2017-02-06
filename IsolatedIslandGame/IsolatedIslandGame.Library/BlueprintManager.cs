@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library
 {
-    public abstract class BlueprintManager
+    public class BlueprintManager
     {
         public static BlueprintManager Instance { get; private set; }
         public static void Initial(BlueprintManager manager)
@@ -16,17 +16,58 @@ namespace IsolatedIslandGame.Library
         public int BlueprintCount { get { return blueprintDictionary.Count; } }
 
         public delegate void BlueprintChangeEventHandler(Blueprint blueprint, DataChangeType changeType);
-        public abstract event BlueprintChangeEventHandler OnBlueprintChange;
+        private event BlueprintChangeEventHandler onBlueprintChange;
+        public event BlueprintChangeEventHandler OnBlueprintChange { add { onBlueprintChange += value; } remove { onBlueprintChange -= value; } }
 
-        protected BlueprintManager()
+        public BlueprintManager()
         {
         }
         public bool ContainsBlueprint(int blueprintID)
         {
             return blueprintDictionary.ContainsKey(blueprintID);
         }
-        public abstract bool FindBlueprint(int blueprintID, out Blueprint blueprint);
-        public abstract void AddBlueprint(Blueprint blueprint);
-        public abstract bool RemoveBlueprint(int blueprintID);
+        public void AddBlueprint(Blueprint blueprint)
+        {
+            if (!ContainsBlueprint(blueprint.BlueprintID))
+            {
+                blueprintDictionary.Add(blueprint.BlueprintID, blueprint);
+                if (onBlueprintChange != null)
+                {
+                    onBlueprintChange.Invoke(blueprint, DataChangeType.Add);
+                }
+            }
+        }
+
+        public bool FindBlueprint(int blueprintID, out Blueprint blueprint)
+        {
+            if (ContainsBlueprint(blueprintID))
+            {
+                blueprint = blueprintDictionary[blueprintID];
+                return true;
+            }
+            else
+            {
+                blueprint = null;
+                return false;
+            }
+        }
+
+        public bool RemoveBlueprint(int blueprintID)
+        {
+            if (ContainsBlueprint(blueprintID))
+            {
+                Blueprint blueprint = blueprintDictionary[blueprintID];
+                blueprintDictionary.Remove(blueprintID);
+                if (onBlueprintChange != null)
+                {
+                    onBlueprintChange.Invoke(blueprint, DataChangeType.Remove);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

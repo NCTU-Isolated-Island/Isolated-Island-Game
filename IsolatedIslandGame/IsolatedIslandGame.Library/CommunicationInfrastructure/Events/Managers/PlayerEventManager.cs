@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers;
+using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.EventParameters.Player;

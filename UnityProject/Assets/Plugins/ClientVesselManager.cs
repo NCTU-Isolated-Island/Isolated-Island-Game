@@ -14,6 +14,11 @@ public class ClientVesselManager : VesselManager
     private event Vessel.DecorationChangeEventHandler onVesselDecorationChange;
     public override event Vessel.DecorationChangeEventHandler OnVesselDecorationChange { add { onVesselDecorationChange += value; } remove { onVesselDecorationChange -= value; } }
 
+    public ClientVesselManager()
+    {
+        SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
+    }
+
     public override void AddVessel(Vessel vessel)
     {
         if(ContainsVessel(vessel.VesselID) && ContainsVesselWithOwnerPlayerID(vessel.OwnerPlayerID))

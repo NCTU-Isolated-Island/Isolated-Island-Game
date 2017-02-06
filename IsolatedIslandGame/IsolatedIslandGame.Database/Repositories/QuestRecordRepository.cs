@@ -1,17 +1,30 @@
 ﻿using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Database.Repositories
 {
     public abstract class QuestRecordRepository
     {
-        public abstract bool CreateQuestRecord(Player player, Quest quest, out QuestRecord questRecord);
-        public abstract List<QuestRecord> ListOfPlayer(Player player);
+        protected struct QuestRecordInfo
+        {
+            public int questRecordID;
+            public int questID;
+        }
+        protected struct QuestRequirementRecordInfo
+        {
+            public int questRequirementRecordID;
+            public int questRequirementID;
+            public QuestRequirementType questRequirementType;
+        }
+        public abstract bool CreateQuestRecord(int playerID, Quest quest, out QuestRecord questRecord);
+        public abstract List<QuestRecord> ListOfPlayer(int playerID);
 
-        protected abstract List<QuestRequirementRecord> ListRequirementRecordsOfQuestRecord(QuestRecord questRecord, Player player);
+        protected abstract List<QuestRequirementRecord> ListRequirementRecordsOfQuestRecord(int questRecordID, int playerID);
 
-        public abstract bool CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(QuestRequirement requirement, Player player, out QuestRequirementRecord requirementRecord);
-        protected abstract bool SpecializeRequirementRecordToSendMessageToDifferentOnlineFriendRequirementRecord(int requirementRecordID, QuestRequirement requirement, Player player, out QuestRequirementRecord requirementRecord);
+        public abstract bool CreateSendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(int questRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        public abstract bool AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(int requirementRecordID, int onlineFriendPlayerID);
+        protected abstract bool SpecializeRequirementRecordToSendMessageToDifferentOnlineFriendTheSameOceanRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
     }
 }

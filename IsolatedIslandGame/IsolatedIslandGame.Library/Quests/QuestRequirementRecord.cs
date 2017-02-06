@@ -1,21 +1,26 @@
 ﻿using System;
+using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests
 {
     public abstract class QuestRequirementRecord
     {
+        [MessagePackMember(0)]
         public int QuestRequirementRecordID { get; private set; }
-        protected Player player;
+        [MessagePackMember(1)]
+        [MessagePackRuntimeType]
         public QuestRequirement Requirement { get; private set; }
         public abstract string ProgressStatus { get; }
         public abstract bool IsSufficient { get; }
         public abstract event Action<QuestRequirementRecord> OnRequirementStatusChange;
 
-        protected QuestRequirementRecord(int questRequirementRecordID, Player player, QuestRequirement requirement)
+        [MessagePackDeserializationConstructor]
+        public QuestRequirementRecord() { }
+        protected QuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement)
         {
             QuestRequirementRecordID = questRequirementRecordID;
-            this.player = player;
             Requirement = requirement;
         }
+        internal abstract void RegisterObserverEvents(Player player);
     }
 }

@@ -64,7 +64,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             foreach(int questRequirementID in requirementIDs)
             {
                 QuestRequirement requirement;
-                if (SpecializeRequirementToSendMessageToDifferentOnlineFriendRequirement(questRequirementID, out requirement))
+                if (SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameOceanRequirement(questRequirementID, out requirement))
                 {
                     requirements.Add(requirement);
                 }
@@ -102,10 +102,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         }
 
         #region Specialize QuestRequirement
-        protected override bool SpecializeRequirementToSendMessageToDifferentOnlineFriendRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameOceanRequirement(int requirementID, out QuestRequirement requirement)
         {
-            string sqlString = @"SELECT RequiredOnlinedFriendNumber
-                from SendMessageToDifferentOnlineFriendQuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            string sqlString = @"SELECT RequiredFriendNumber
+                from SMTDOFITSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -113,8 +113,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        int requiredOnlinedFriendNumber = reader.GetInt32(0);
-                        requirement = new SendMessageToDifferentOnlineFriendQuestRequirement(requirementID, requiredOnlinedFriendNumber);
+                        int requiredFriendNumber = reader.GetInt32(0);
+                        requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(requirementID, requiredFriendNumber);
                         return true;
                     }
                     else
@@ -141,17 +141,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         int itemID = reader.GetInt32(0);
                         int itemCount = reader.GetInt32(1);
-                        Item item;
-                        if(ItemManager.Instance.FindItem(itemID, out item))
-                        {
-                            reward = new GiveItemQuestReward(rewardID, item, itemCount);
-                            return true;
-                        }
-                        else
-                        {
-                            reward = null;
-                            return false;
-                        }
+
+                        reward = new GiveItemQuestReward(rewardID, itemID, itemCount);
+                        return true;
                     }
                     else
                     {

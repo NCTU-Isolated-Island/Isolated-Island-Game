@@ -1,15 +1,14 @@
-﻿using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
-using IsolatedIslandGame.Protocol.Communication.FetchDataParameters.System;
+﻿using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
 using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System;
-using IsolatedIslandGame.Library.Items;
 using System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.SystemOperationHandlers.FetchDataHandlers
 {
-    class FetchItemHandler : SystemFetchDataHandler
+    class FetchAllItemsHandler : SystemFetchDataHandler
     {
-        public FetchItemHandler(SystemManager subject) : base(subject, 1)
+        public FetchAllItemsHandler(SystemManager subject) : base(subject, 0)
         {
         }
 
@@ -19,9 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 try
                 {
-                    int itemID = (int)parameter[(byte)FetchItemParameterCode.ItemID];
-                    Item item;
-                    if(ItemManager.Instance.FindItem(itemID, out item))
+                    foreach (Item item in ItemManager.Instance.Items)
                     {
                         if (item is Material)
                         {
@@ -34,7 +31,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)FetchMaterialResponseParameterCode.MaterialID, material.MaterialID },
                                 { (byte)FetchMaterialResponseParameterCode.Score, material.Score }
                             };
-                            SendResponse(communicationInterface, fetchCode, result);
+                            SendResponse(communicationInterface, SystemFetchDataCode.Item, result);
                         }
                         else
                         {
@@ -44,18 +41,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)FetchItemResponseParameterCode.ItemName, item.ItemName },
                                 { (byte)FetchItemResponseParameterCode.Description, item.Description },
                             };
-                            SendResponse(communicationInterface, fetchCode, result);
+                            SendResponse(communicationInterface, SystemFetchDataCode.Item, result);
                         }
-                        return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return true;
                 }
                 catch (InvalidCastException ex)
                 {
-                    LogService.ErrorFormat("FetchItem Invalid Cast!");
+                    LogService.ErrorFormat("FetchAllItems Invalid Cast!");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;

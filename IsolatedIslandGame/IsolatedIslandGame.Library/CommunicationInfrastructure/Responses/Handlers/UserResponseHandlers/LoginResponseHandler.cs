@@ -69,6 +69,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     subject.Player.OperationManager.FetchDataResolver.FetchAllKnownBlueprints();
                     subject.Player.OperationManager.FetchDataResolver.FetchFriendInformations();
                     subject.Player.OperationManager.FetchDataResolver.FetchAllPlayerConversations();
+                    subject.Player.OperationManager.FetchDataResolver.FetchAllQuestRecords();
 
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTotalScore();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTodayMaterialRanking();

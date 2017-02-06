@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers.SyncDataHandlers;
 using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
@@ -17,6 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             syncTable.Add(PlayerSyncDataCode.PlayerInformation, new SyncPlayerInformationHandler(subject));
             syncTable.Add(PlayerSyncDataCode.TransactionItemChange, new SyncTransactionItemChangeHandler(subject));
             syncTable.Add(PlayerSyncDataCode.TransactionConfirmStatusChange, new SyncTransactionConfirmStatusChangeHandler(subject));
+            syncTable.Add(PlayerSyncDataCode.QuestRecordUpdated, new SyncQuestRecordUpdatedHandler(subject));
         }
 
         internal override void SendSyncData(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -84,6 +86,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncTransactionConfirmStatusChangeParameterCode.IsConfirmed, isConfirmed }
             };
             SendSyncData(PlayerSyncDataCode.TransactionConfirmStatusChange, parameters);
+        }
+        public void SyncQuestRecordUpdated(QuestRecord questRecord)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordDataByteArray, SerializationHelper.TypeSerialize(questRecord) },
+            };
+            SendSyncData(PlayerSyncDataCode.QuestRecordUpdated, parameters);
         }
     }
 }

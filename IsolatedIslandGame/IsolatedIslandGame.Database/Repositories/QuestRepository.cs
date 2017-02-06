@@ -22,7 +22,7 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract List<QuestReward> ListRewardsOfQuest(int questID);
 
         #region Specialize QuestRequirement
-        protected abstract bool SpecializeRequirementToSendMessageToDifferentOnlineFriendRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameOceanRequirement(int requirementID, out QuestRequirement requirement);
         #endregion
 
         #region Specialize QuestReward
