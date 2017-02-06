@@ -18,7 +18,8 @@
         TransactionRequest,
         AcceptTransaction,
         ChangeTransactionItem,
-        ConfirmTransaction,
+        ChangeTransactionConfirmStatus,
+        CancelTransaction,
         SetFavoriteItem,
         ReadPlayerMessage,
         SendMaterialToIsland

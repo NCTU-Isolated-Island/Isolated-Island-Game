@@ -117,9 +117,15 @@ namespace IsolatedIslandGame.Client.Communication
             return false;
         }
 
-        public override bool ConfirmTransaction(int playerID, int transactionID)
+        public override bool ChangeTransactionConfirmStatus(int playerID, int transactionID, bool isConfirmed)
         {
-            LogService.FatalFormat("ClienPlayer ConfirmTransaction ");
+            LogService.FatalFormat("ClienPlayer ChangeTransactionConfirmStatus ");
+            return false;
+        }
+
+        public override bool CancelTransaction(int playerID, int transactionID)
+        {
+            LogService.FatalFormat("ClienPlayer CancelTransaction ");
             return false;
         }
 

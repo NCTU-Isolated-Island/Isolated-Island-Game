@@ -12,14 +12,15 @@ namespace IsolatedIslandGame.Library
         public int AccepterPlayerID { get; private set; }
         public bool IsRequesterConfirmed { get; private set; } = false;
         public bool IsAccepterConfirmed { get; private set; } = false;
+        public bool IsLocked { get { return IsRequesterConfirmed || IsAccepterConfirmed; } }
         private TransactionItemInfo[] requesterTransactionItemInfos = new TransactionItemInfo[6];
         private TransactionItemInfo[] accepterTransactionItemInfos = new TransactionItemInfo[6];
         public IEnumerable<TransactionItemInfo> RequesterTransactionItemInfos { get { return requesterTransactionItemInfos.ToArray(); } }
         public IEnumerable<TransactionItemInfo> AccepterTransactionItemInfos { get { return accepterTransactionItemInfos.ToArray(); } }
 
-        public delegate void TransactionConfirmedEventHandler(int transactionID, int playerID);
-        private event TransactionConfirmedEventHandler onTransactionConfirmed;
-        public event TransactionConfirmedEventHandler OnTransactionConfirmed { add { onTransactionConfirmed += value; } remove { onTransactionConfirmed -= value; } }
+        public delegate void TransactionConfirmStatusChangeEventHandler(int transactionID, int playerID, bool isConfirmed);
+        private event TransactionConfirmStatusChangeEventHandler onTransactionConfirmStatusChange;
+        public event TransactionConfirmStatusChangeEventHandler OnTransactionConfirmStatusChange { add { onTransactionConfirmStatusChange += value; } remove { onTransactionConfirmStatusChange -= value; } }
 
         public delegate void TransactionItemChangeEventHandler(int transactionID, int playerID, DataChangeType changeType, TransactionItemInfo info);
         private event TransactionItemChangeEventHandler onTransactionItemChange;
@@ -35,18 +36,18 @@ namespace IsolatedIslandGame.Library
             RequesterPlayerID = requesterPlayerID;
             AccepterPlayerID = accepterPlayerID;
         }
-        public bool Confirm(int playerID)
+        public bool ChangeConfirmStatus(int playerID, bool isConfirmed)
         {
             if(RequesterPlayerID == playerID)
             {
-                IsRequesterConfirmed = true;
-                onTransactionConfirmed?.Invoke(TransactionID, playerID);
+                IsRequesterConfirmed = isConfirmed;
+                onTransactionConfirmStatusChange?.Invoke(TransactionID, playerID, IsRequesterConfirmed);
                 return true;
             }
             else if(AccepterPlayerID == playerID)
             {
-                IsAccepterConfirmed = true;
-                onTransactionConfirmed?.Invoke(TransactionID, playerID);
+                IsAccepterConfirmed = isConfirmed;
+                onTransactionConfirmStatusChange?.Invoke(TransactionID, playerID, IsAccepterConfirmed);
                 return true;
             }
             else
@@ -58,7 +59,7 @@ namespace IsolatedIslandGame.Library
         {
             if (info.PositionIndex < 0 || info.PositionIndex > 5)
                 return false;
-            if (RequesterPlayerID == playerID && !IsRequesterConfirmed)
+            if (RequesterPlayerID == playerID && !IsLocked)
             {
                 switch(changeType)
                 {
@@ -73,7 +74,7 @@ namespace IsolatedIslandGame.Library
                 onTransactionItemChange?.Invoke(TransactionID, playerID, changeType, info);
                 return true;
             }
-            else if (AccepterPlayerID == playerID && !IsAccepterConfirmed)
+            else if (AccepterPlayerID == playerID && !IsLocked)
             {
                 switch (changeType)
                 {

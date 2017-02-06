@@ -138,12 +138,12 @@ namespace IsolatedIslandGame.Server
             }
         }
 
-        public override bool ConfirmTransaction(int playerID, int transactionID)
+        public override bool ChangeTransactionConfirmStatus(int playerID, int transactionID, bool isConfirmed)
         {
             Transaction transaction; ;
             if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
             {
-                return transaction.Confirm(playerID);
+                return transaction.ChangeConfirmStatus(playerID, isConfirmed);
             }
             else
             {
@@ -157,6 +157,20 @@ namespace IsolatedIslandGame.Server
             if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
             {
                 return transaction.ChangeTransactionItem(playerID, changeType, info);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool CancelTransaction(int playerID, int transactionID)
+        {
+            Transaction transaction; ;
+            if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
+            {
+                transaction.EndTransaction(false);
+                return true;
             }
             else
             {

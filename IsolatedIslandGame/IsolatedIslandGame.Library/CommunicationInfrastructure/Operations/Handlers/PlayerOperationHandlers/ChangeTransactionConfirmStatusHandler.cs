@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.PlayerOperationHandlers
 {
-    class ConfirmTransactionHandler : PlayerOperationHandler
+    class ChangeTransactionConfirmStatusHandler : PlayerOperationHandler
     {
-        public ConfirmTransactionHandler(Player subject) : base(subject, 1)
+        public ChangeTransactionConfirmStatusHandler(Player subject) : base(subject, 2)
         {
         }
 
@@ -17,11 +17,13 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 string debugMessage;
                 ErrorCode errorCode;
-                int transactionID = (int)parameters[(byte)ConfirmTransactionParameterCode.TransactionID];
-                if (subject.User.CommunicationInterface.ConfirmTransaction(subject.PlayerID, transactionID))
+                int transactionID = (int)parameters[(byte)ChangeTransactionConfirmStatusParameterCode.TransactionID];
+                bool isConfirmed = (bool)parameters[(byte)ChangeTransactionConfirmStatusParameterCode.IsConfirmed];
+
+                if (subject.User.CommunicationInterface.ChangeTransactionConfirmStatus(subject.PlayerID, transactionID, isConfirmed))
                 {
                     SendResponse(operationCode, new Dictionary<byte, object>());
-                    LogService.InfoFormat($"Player: {subject.IdentityInformation}, ConfirmTransaction, TransactionID: {transactionID}");
+                    LogService.InfoFormat($"Player: {subject.IdentityInformation}, ChangeTransactionConfirmStatus, TransactionID: {transactionID}, IsConfirmed: {isConfirmed}");
                     return true;
                 }
                 else
@@ -29,7 +31,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     errorCode = ErrorCode.Fail;
                     debugMessage = "ConfirmTransaction Fail";
                     SendError(operationCode, errorCode, debugMessage);
-                    LogService.ErrorFormat($"Player: {subject.IdentityInformation}, ConfirmTransaction Fail, TransactionID: {transactionID}");
+                    LogService.ErrorFormat($"Player: {subject.IdentityInformation}, ChangeTransactionConfirmStatus Fail, TransactionID: {transactionID}, IsConfirmed: {isConfirmed}");
                     return false;
                 }
             }

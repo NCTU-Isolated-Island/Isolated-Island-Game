@@ -31,8 +31,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
 
         public abstract bool TransactionRequest(int requesterPlayerID, int accepterPlayerID);
         public abstract bool AcceptTransaction(int requesterPlayerID, int accepterPlayerID);
-        public abstract bool ConfirmTransaction(int playerID, int transactionID);
+        public abstract bool ChangeTransactionConfirmStatus(int playerID, int transactionID, bool isConfirmed);
         public abstract bool ChangeTransactionItem(int playerID, int transactionID, DataChangeType changeType, TransactionItemInfo info);
+        public abstract bool CancelTransaction(int playerID, int transactionID);
         public abstract bool ReadPlayerMessage(int playerID, int playerMessageID);
     }
 }

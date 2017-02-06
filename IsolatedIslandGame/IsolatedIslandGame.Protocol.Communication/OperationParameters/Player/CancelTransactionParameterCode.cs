@@ -1,6 +1,6 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.OperationParameters.Player
 {
-    public enum ConfirmTransactionParameterCode : byte
+    public enum CancelTransactionParameterCode : byte
     {
         TransactionID
     }
