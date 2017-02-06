@@ -9,8 +9,8 @@ public class MessageSetScript : MonoBehaviour, IPointerClickHandler
 
     public bool StopForTest;
     public GameObject UIControl;
-
     public GameObject ChatPanel;
+   public int PlayerID;
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class MessageSetScript : MonoBehaviour, IPointerClickHandler
         {
 
         }
-        ChatPanel.GetComponent<Chat_Control>().SetMessage();
+        ChatPanel.GetComponent<Chat_Control>().ResetDetail(PlayerID);
         ChatPanel.GetComponent<Chat_Control>().MoveChaDetail = true;
     }
     void SetGameObject()
