@@ -4,31 +4,37 @@ using UnityEngine;
 
 public class FirstPersonCameraController : MonoBehaviour {
 
-	private float initialYAngle = 0f;
-	private float appliedGyroYAngle = 0f;
-	private float calibrationYAngle = 0f;
+    private float initialYAngle = 0f;
+    private float appliedGyroYAngle = 0f;
+    private float calibrationYAngle = 0f;
 
-	public static FirstPersonCameraController Instance;
+    public static FirstPersonCameraController Instance;
 
-	void Awake()
-	{
-		if(Instance == null)
-			Instance = this;
-	}
+    private bool IOSorAND;
 
-	void Start () {
-		Input.gyro.enabled = true;
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
 
-	}
-	
-	void Update()
-	{
-		ApplyGyroRotation();
+    void Start() {
+        Input.gyro.enabled = true;
 
-		//AndroidVersion();
-	}
+    }
 
+    void Update()
+    {
+        if (IOSorAND)
+            ApplyGyroRotation();
+        else
+            AndroidVersion();
+    }
 
+    public void Switch()
+    {
+        IOSorAND = !IOSorAND;
+    }
 
 
 	void ApplyGyroRotation()
@@ -41,6 +47,8 @@ public class FirstPersonCameraController : MonoBehaviour {
 
 	void AndroidVersion()
 	{
-		transform.rotation = Input.gyro.attitude * new Quaternion(0,0,1,0);
-	}
+        transform.rotation = Input.gyro.attitude;
+        transform.Rotate(0f, 0f, 180f, Space.Self); // Swap "handedness" of quaternion from gyro.
+        transform.Rotate(270f, 180f, 0f, Space.World); // Rotate to make sense as a camera pointing out the 
+    }
 }

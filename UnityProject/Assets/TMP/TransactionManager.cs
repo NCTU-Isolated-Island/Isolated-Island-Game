@@ -13,8 +13,7 @@ public class TransactionManager : MonoBehaviour
 
     // Basic Usage Variable
     public static TransactionManager Instance { get; private set; }
-    public GameObject ConformPanel, CancelPanel;
-    public bool ButtonActive = true;
+
     [System.Serializable]
     public class TransactionItemSlot
     {
@@ -26,7 +25,9 @@ public class TransactionManager : MonoBehaviour
         {
             get
             {
-                return Amount;
+                int result;
+                int.TryParse(amount.text, out result);
+                return result;
             }
             set
             {
@@ -51,7 +52,8 @@ public class TransactionManager : MonoBehaviour
     // Custom needed variable
     private Dictionary<int, Sprite> ID2ImageDict;
 
-    float width;
+    private Transaction thisTransaction;
+    public int WhereIfrom;
 
     #region Setup
 
@@ -65,15 +67,13 @@ public class TransactionManager : MonoBehaviour
 
     void Start()
     {
-        //UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
+        UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
 
         // Get GameObject
-
         MyTransactionItem = new TransactionItemSlot[4];
         OpponentTransactionItem = new TransactionItemSlot[4];
 
-        for (int i=0;i<4;i++)
-
+        for (int i = 0; i < 4; i++)
         {
             MyTransactionItem[i] = new TransactionItemSlot();
             MyTransactionItem[i].itemImage = GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).GetComponent<Image>();
@@ -82,28 +82,13 @@ public class TransactionManager : MonoBehaviour
             OpponentTransactionItem[i] = new TransactionItemSlot();
             OpponentTransactionItem[i].itemImage = GameObject.Find("OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).GetComponent<Image>();
             OpponentTransactionItem[i].amount = GameObject.Find("OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).transform.FindChild("Amount").GetComponent<Text>();
-
-
         }
-
-        if (!ConformPanel)
-            ConformPanel = this.transform.GetChild(8).gameObject;
-        if (!CancelPanel)
-            CancelPanel = this.transform.GetChild(6).gameObject;
-        this.transform.GetChild(5).GetComponent<Button>().onClick.AddListener(TradeCancel);
-        this.transform.GetChild(7).GetComponent<Button>().onClick.AddListener(TradeConfirm);
-        ConformPanel.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(TradeConfirmYes);
-        ConformPanel.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(TradeConfirmNo);
-        CancelPanel.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(TradeCancelYes);
-        CancelPanel.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(TradeCancelNo);
-        width = (UImanager.Instance.Canvas.GetComponent<RectTransform>().rect.width) * 2;
 
         // testing , should be removed
         ID2ImageDict = new Dictionary<int, Sprite>();
     }
 
-    void OnPlayerOnline(Player player)//<-學起來
-
+    void OnPlayerOnline(Player player)
     {
         // Event Register
         UserManager.Instance.User.Player.OnTransactionRequest += OnReceiveTransactionRequest;
@@ -111,24 +96,31 @@ public class TransactionManager : MonoBehaviour
 
         // UI Listener Register
     }
+
     void OnDestroy()
     {
+        UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
         UserManager.Instance.User.Player.OnTransactionRequest -= OnReceiveTransactionRequest;
         UserManager.Instance.User.Player.OnTransactionStart -= OnTransactionStart;
     }
+
     #endregion
+
     // Server Service API
+
     public void SendTransactionRequest(int accepterPlayerID)
     {
         UserManager.Instance.User.Player.OperationManager.TransactionRequest(accepterPlayerID);
         //TODO
     }
+
     public void OnReceiveTransactionRequest(int requesterPlayerID)
     {
         //TODO
         // Pop Receive Transaction UI , ask user to accept or not
         StartCoroutine(OnReceiveTransactionRequest_PopUI(true)); // Pop the UI
     }
+
     IEnumerator OnReceiveTransactionRequest_PopUI(bool OnOff) // true to pop , false to move back
     {
         float pass_time = 0;
@@ -146,123 +138,175 @@ public class TransactionManager : MonoBehaviour
             yield return null;
         }
     }
+
     public void AcceptTransaction(int requesterPlayerID)
     {
-        //UserManager.Instance.User.Player.OperationManager.AcceptTransaction(requesterPlayerID);
+        UserManager.Instance.User.Player.OperationManager.AcceptTransaction(requesterPlayerID);
         //TODO
         StartCoroutine(OnReceiveTransactionRequest_PopUI(false));
     }
+
     public void OnTransactionStart(Transaction transaction)
     {
+        // Ui Init Setting
+        InitUISetting();
+
         // Event Register
-        transaction.OnTransactionItemChange += OnTransactionItemChange;
-     //   transactions.OnTransactionConfirmed += OnTransactionConfirmed;
-        transaction.OnTransactionEnd += OnTransactionEnd;
+        thisTransaction = transaction;
+        thisTransaction.OnTransactionItemChange += OnTransactionItemChange;
+        thisTransaction.OnTransactionConfirmStatusChange += OnTransactionConfirmStatusChange;
+        thisTransaction.OnTransactionEnd += OnTransactionEnd;
 
         //TODO
+        WhereIfrom = (int)UImanager.Instance.GameUI;
+        UImanager.Instance.ChangeUI(9);
     }
+
     public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
     {
         UserManager.Instance.User.Player.OperationManager.ChangeTransactionItem(transactionID, changeType, info);
         //TODO
     }
+
     public void OnTransactionItemChange(int transactionID, int playerID, DataChangeType changeType, TransactionItemInfo info)
     {
         //TODO
         // Change the info of the OpponentItem
-        int index = info.PositionIndex;
-        OpponentTransactionItem[index].item = info.Item;
-        OpponentTransactionItem[index].itemImage.sprite = ID2ImageDict[info.Item.ItemID];
-        OpponentTransactionItem[index].Amount = info.Count;
+        if (UserManager.Instance.User.Player.PlayerID != playerID)
+        {
+            int index = info.PositionIndex;
+            OpponentTransactionItem[index].item = info.Item;
+            OpponentTransactionItem[index].itemImage.sprite = ID2ImageDict[info.Item.ItemID];
+            OpponentTransactionItem[index].Amount = info.Count;
+        }
+        else
+        {
+            int index = info.PositionIndex;
+            MyTransactionItem[index].item = info.Item;
+            MyTransactionItem[index].itemImage.sprite = ID2ImageDict[info.Item.ItemID];
+            MyTransactionItem[index].Amount = info.Count;
+        }
     }
-    public void ConfirmTransaction(int transactionID)
+
+    public void ConfirmTransaction()
     {
-       // UserManager.Instance.User.Player.OperationManager.ConfirmTransaction(transactionID);
+        UserManager.Instance.User.Player.OperationManager.ChangeTransactionConfirmStatus(thisTransaction.TransactionID , true);
         //TODO
     }
-    public void OnTransactionConfirmed(int transactionID, int playerID)
+
+    public void UnLockTransaction()
+    {
+        UserManager.Instance.User.Player.OperationManager.ChangeTransactionConfirmStatus(thisTransaction.TransactionID, false);
+    }
+
+    public void CancelTransaction()
+    {
+        UserManager.Instance.User.Player.OperationManager.CancelTransaction(thisTransaction.TransactionID);
+    }
+
+    public void OnTransactionConfirmStatusChange(int transactionID, int playerID , bool isConfirmed)
     {
         //TODO
-        // Pop a UI indicating Transaction done
+        // Lock down put item in function
+        print("IN");
+
+        if(isConfirmed == true)
+        {
+            foreach (TransactionItemSlot slot in MyTransactionItem)
+                LockTransactionItemSlot(slot);
+            foreach (TransactionItemSlot slot in OpponentTransactionItem)
+                LockTransactionItemSlot(slot);
+        }
+        else
+        {
+            foreach (TransactionItemSlot slot in MyTransactionItem)
+                UnLockTransactionItemSlot(slot);
+            foreach (TransactionItemSlot slot in OpponentTransactionItem)
+                UnLockTransactionItemSlot(slot);
+        }
     }
+
+    private void LockTransactionItemSlot(TransactionItemSlot slot)
+    {
+        Color tmp = slot.itemImage.color;
+        tmp.a = 0.5f;
+        slot.itemImage.color = tmp;
+    }
+
+    private void UnLockTransactionItemSlot(TransactionItemSlot slot)
+    {
+        Color tmp = slot.itemImage.color;
+        tmp.a = 1;
+        slot.itemImage.color = tmp;
+    }
+
     public void OnTransactionEnd(int transactionID, bool isSuccessful)
     {
         //TODO 
         // If confirmed , Pop a UI indicating transaction complete
         // If not , Pop a UI indicating transaction cancelled
+
+        thisTransaction.OnTransactionItemChange -= OnTransactionItemChange;
+        thisTransaction.OnTransactionConfirmStatusChange -= OnTransactionConfirmStatusChange;
+        thisTransaction.OnTransactionEnd -= OnTransactionEnd;
+
         if (isSuccessful)
             MessagePanel.transform.FindChild("TransactionMessage").GetComponent<Text>().text = "交易成功";
         else
             MessagePanel.transform.FindChild("TransactionMessage").GetComponent<Text>().text = "交易取消";
         MessagePanel.SetActive(true);
+        // move back to previous UI page
+        UImanager.Instance.ChangeUI(WhereIfrom);
     }
+
     // UI API
-    public void OnPutInItem(TransactionItemInfo info, TransactionItemSlot itemSlot)
+
+    public void OnPutInItem(TransactionItemInfo info)
     {
-        itemSlot.itemImage.sprite = ID2ImageDict[info.Item.ItemID];
-        itemSlot.item = info.Item;
-        itemSlot.Amount = info.Count;
+        if (thisTransaction.IsLocked) return;
+
+        if (MyTransactionItem[info.PositionIndex] == null)
+            ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Add, info);
+        else
+            ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Update, info);
     }
-    public void OnRemoveItemFromSlot(TransactionItemSlot itemSlot)
+
+    public void OnRemoveItemFromSlot(TransactionItemInfo info)
     {
-        itemSlot.item = null;
-        itemSlot.itemImage.sprite = null;
-        itemSlot.Amount = 0;
+        if (thisTransaction.IsLocked) return;
+
+        ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Remove, info);
     }
+
     public void PopConfirmedPanel()
     {
         TransactionConfirmedPanel.SetActive(true);
     }
-    void TradeConfirm()
+
+    // Setting
+
+    private void InitUISetting()
     {
-        if (ButtonActive)
+        foreach(TransactionItemSlot slot in MyTransactionItem)
         {
-            ConformPanel.SetActive(true);
-            ButtonActive = false;
+            slot.Amount = 0;
+            slot.item = null;
+            slot.itemImage = null;
         }
-
-    }
-    void TradeConfirmYes()  //輸出組合
-    {
-        CancelPanel.SetActive(false);
-        ButtonActive = true;
-    }
-    void TradeConfirmNo()
-    {
-        ConformPanel.SetActive(false);
-        ButtonActive = true;
-    }
-    void TradeCancel()
-    {
-        if (ButtonActive)
+        foreach (TransactionItemSlot slot in OpponentTransactionItem)
         {
-            CancelPanel.SetActive(true);
-            ButtonActive = false;
+            slot.Amount = 0;
+            slot.item = null;
+            slot.itemImage = null;
         }
+        thisTransaction = null;
     }
-    void TradeCancelYes() //取消交易
+
+    // TESTING
+
+    public void test()
     {
-        CancelPanel.SetActive(false);
-        ButtonActive = true;
-        for(int i =0;i<4;i++)
-        {
-            MyTransactionItem[i].itemImage = null;
-            MyTransactionItem[i].amount = null;
-
-            OpponentTransactionItem[i].itemImage = null;
-            OpponentTransactionItem[i].amount = null;
-
-            GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).GetComponent<Trade_Block>().ItemInHere = 0;
-            GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).GetComponent<Trade_Block>().AmountInHere = 0;
-        }
-        UImanager.Instance.ChangeUI(1);
-        this.gameObject.transform.localPosition = new Vector3(width, 0, 0);
+        OnTransactionConfirmStatusChange(0, 0, true);
     }
-    void TradeCancelNo()
-    {
 
-        CancelPanel.SetActive(false);
-        ButtonActive = true;
-    }
 }
-
