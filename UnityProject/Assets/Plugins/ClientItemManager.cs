@@ -11,7 +11,13 @@ namespace IsolatedIslandGame.Client
 
         public ClientItemManager()
         {
-            SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllItems();
+            Communication.PhotonService.Instance.OnConnectChange += (status) =>
+            {
+                if(status)
+                {
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllItems();
+                }
+            };
         }
 
         public override void AddItem(Item item)

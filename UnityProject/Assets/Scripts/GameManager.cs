@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
 		UserManager.Instance.User.Player.OnGetPlayerConversation += OnGetPlayerConversation;
 		if (UserManager.Instance.User.Player.GroupType == GroupType.No)
 		{
-			//SceneManager.LoadScene("RegisterScene");
+			SceneManager.LoadScene("RegisterScene");
 			UImanager.Instance.LoadResult(1);
 
 			//Create Charater by Uimanager ? (probably
@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			UImanager.Instance.LoadResult(0);
-			//SceneManager.LoadScene("MainScene");
+			SceneManager.LoadScene("MainScene");
 		}
 	}
 

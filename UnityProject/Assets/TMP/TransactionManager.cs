@@ -19,18 +19,25 @@ public class TransactionManager : MonoBehaviour
     {
         public Image itemImage;
         public Item item;
-        public Text amount;
+        public Text amountText;
 
         public int Amount
         {
             get
             {
-                return Amount;
+                int result;
+                if(int.TryParse(amountText.text, out result))
+                {
+                    return result;
+                }
+                else
+                {
+                    return 0;
+                }
             }
             set
             {
-                amount.text = Amount.ToString();
-                Amount = value;
+                amountText.text = value.ToString();
             }
         }
     }
@@ -71,16 +78,16 @@ public class TransactionManager : MonoBehaviour
         MyTransactionItem = new TransactionItemSlot[4];
         OpponentTransactionItem = new TransactionItemSlot[4];
 
-        for (int i = 0; i < 4; i++)
-        {
-            MyTransactionItem[i] = new TransactionItemSlot();
-            MyTransactionItem[i].itemImage = GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).GetComponent<Image>();
-            MyTransactionItem[i].amount = GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).transform.FindChild("Amount").GetComponent<Text>();
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    MyTransactionItem[i] = new TransactionItemSlot();
+        //    MyTransactionItem[i].itemImage = GameObject.Find("UI/Transaction/MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).GetComponent<Image>();
+        //    MyTransactionItem[i].amountText = GameObject.Find("UI/Transaction/MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).transform.FindChild("Amount").GetComponent<Text>();
 
-            OpponentTransactionItem[i] = new TransactionItemSlot();
-            OpponentTransactionItem[i].itemImage = GameObject.Find("OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).GetComponent<Image>();
-            OpponentTransactionItem[i].amount = GameObject.Find("OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).transform.FindChild("Amount").GetComponent<Text>();
-        }
+        //    OpponentTransactionItem[i] = new TransactionItemSlot();
+        //    OpponentTransactionItem[i].itemImage = GameObject.Find("UI/Transaction/OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).GetComponent<Image>();
+        //    OpponentTransactionItem[i].amountText = GameObject.Find("UI/Transaction/OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).transform.FindChild("Amount").GetComponent<Text>();
+        //}
 
         // testing , should be removed
         ID2ImageDict = new Dictionary<int, Sprite>();
