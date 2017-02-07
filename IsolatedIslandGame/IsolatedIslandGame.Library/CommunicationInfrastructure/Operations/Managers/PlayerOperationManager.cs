@@ -43,6 +43,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.SetFavoriteItem, new SetFavoriteItemHandler(player) },
                 { PlayerOperationCode.ReadPlayerMessage, new ReadPlayerMessageHandler(player) },
                 { PlayerOperationCode.SendMaterialToIsland, new SendMaterialToIslandHandler(player) },
+                { PlayerOperationCode.ScanQR_Code, new ScanQR_CodeHandler(player) },
             };
         }
 
@@ -254,6 +255,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)CancelTransactionParameterCode.TransactionID, transactionID }
             };
             SendOperation(PlayerOperationCode.CancelTransaction, parameters);
+        }
+        public void ScanQR_Code(string qrCodeString)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)ScanQR_CodeParameterCode.QR_CodeString, qrCodeString }
+            };
+            SendOperation(PlayerOperationCode.ScanQR_Code, parameters);
         }
     }
 }
