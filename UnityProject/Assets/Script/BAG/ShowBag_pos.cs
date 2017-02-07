@@ -6,7 +6,7 @@ using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
 public class ShowBag_pos : MonoBehaviour
 {
-
+    public static ShowBag_pos Instance;
     public bool StopForTest;
 
     public GameObject UIControl;
@@ -18,11 +18,12 @@ public class ShowBag_pos : MonoBehaviour
     public Button BackButton;
     public GameObject MainBoat;
     public GameObject CombineArea;
-
+    public GameObject TradeArea;
     //public GameObject ItemPic;
 
     public GameObject Content;
     public GameObject ItemSet;
+    public GameObject NullItemSet;
     public float A_pos;
     float B_pos;
     int ChangeViewControl;
@@ -127,8 +128,9 @@ public class ShowBag_pos : MonoBehaviour
             {
                 if (ResetOnce)
                 {
+                    ChangeViewControl = 0;
                     if (!StopForTest)
-                    { ChangeViewControl = 0; Reset_Bag(); }
+                    {  Reset_Bag(); }
                     ResetOnce = false;
                 }
                 if (BagOut)
@@ -150,6 +152,10 @@ public class ShowBag_pos : MonoBehaviour
         {
             Destroy(Content.transform.GetChild(t).gameObject);
         }
+        if(UImanager.Instance.GameUI != UImanager.UI.Show_Bag)
+        {
+            GameObject Create = Instantiate(NullItemSet, Content.transform);
+        }
         foreach (InventoryItemInfo item in UserManager.Instance.User.Player.Inventory.ItemInfos)
         {
             GameObject Create = Instantiate(ItemSet, Content.transform);
@@ -157,7 +163,7 @@ public class ShowBag_pos : MonoBehaviour
            
                if(Resources.Load("2D/" + item.Item.ItemID) != null)
                 {
-                    Debug.Log(1230);               
+                                 
                     Create.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + item.Item.ItemID);
             }
             
@@ -166,6 +172,7 @@ public class ShowBag_pos : MonoBehaviour
             Create.GetComponent<ShowBag_ItemSelect>().FavoriteBool = item.IsFavorite;
             Create.GetComponent<ShowBag_ItemSelect>().ItemName = item.Item.ItemName;
             Create.GetComponent<ShowBag_ItemSelect>().ItemDescribe = item.Item.Description;
+            Create.GetComponent<ShowBag_ItemSelect>().Amount = item.Count;
             Create.transform.GetChild(0).GetComponent<Text>().text = item.Item.ItemName;
         }
         ChangeView();
@@ -210,9 +217,15 @@ public class ShowBag_pos : MonoBehaviour
         }
         else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Combine)
             UpAndDown();
+        else if (UIControl.GetComponent<UImanager>().GameUI == UImanager.UI.Trade)
+        {
+            UpAndDown();
+            ShowBag_pos.Instance.TradeArea = null;
+        }
     }
     void SetGameObject()
-    {
+    {if (!Instance)
+            Instance = this;
         if (!UIControl)
             UIControl = GameObject.FindWithTag("UImanager");
         UImanager UI = UIControl.GetComponent<UImanager>();
@@ -221,8 +234,6 @@ public class ShowBag_pos : MonoBehaviour
             canvas = UI.Canvas;
         if (!ShowBagPanel)
             ShowBagPanel = UI.UIObject[4];
-        // if (!BagContent)
-        //  BagContent = this.gameObject.transform.GetChild(3).gameObject;
         if (!BackButton)
             BackButton = this.gameObject.transform.GetChild(4).GetComponent<Button>();
         BackButton.onClick.AddListener(BACK);
@@ -235,9 +246,7 @@ public class ShowBag_pos : MonoBehaviour
         if (!Content)
             Content = this.gameObject.transform.GetChild(3).GetChild(0).GetChild(0).gameObject;
         ResetOnce = true;
-        /*if (!ItemPic)
-            ItemPic = UI.ItemPic;*/
-
+     
         /*UserManager.Instance.User.Player.Inventory.OnItemInfoChange += (changeType, info) =>
         {
             switch (changeType)
@@ -259,6 +268,8 @@ public class ShowBag_pos : MonoBehaviour
         ListButton.onClick.AddListener(ShowList);
         if (!FunctionList)
             FunctionList = UIControl.GetComponent<UImanager>().FunctionList;
+        float CanvasWidth = canvas.GetComponent<RectTransform>().rect.width;
+        Content.GetComponent<GridLayoutGroup>().cellSize = new Vector2(CanvasWidth*80/391 , CanvasWidth * 80 / 391);
     }
     void ShowList()
     {

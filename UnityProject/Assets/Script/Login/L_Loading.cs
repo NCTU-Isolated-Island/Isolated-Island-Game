@@ -63,7 +63,7 @@ public class L_Loading : MonoBehaviour {
             Loading.SetActive(false);
             DragUp.SetActive(false);
 
-            BG_A.SetActive(false); 
+            BG_A.SetActive(true); 
             BG_B.SetActive(true);
 
             CreateChar.SetActive(true);
