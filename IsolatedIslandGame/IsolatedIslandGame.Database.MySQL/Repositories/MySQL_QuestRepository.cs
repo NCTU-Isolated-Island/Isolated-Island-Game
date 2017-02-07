@@ -150,6 +150,29 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
+        protected override bool SpecializeRequirementToScanQR_CodeRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT QR_CodeString
+                from ScanQR_CodeQuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        string qrCodeString = reader.GetString(0);
+                        requirement = new ScanQR_CodeQuestRequirement(requirementID, qrCodeString);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Specialize QuestReward

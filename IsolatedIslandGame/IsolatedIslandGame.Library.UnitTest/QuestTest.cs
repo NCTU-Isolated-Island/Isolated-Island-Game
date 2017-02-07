@@ -194,5 +194,39 @@ namespace IsolatedIslandGame.Library.UnitTest
                 Assert.AreEqual(originRequirementRecords[i].ProgressStatus, deserializedRequirementRecords[i].ProgressStatus);
             }
         }
+
+        [TestMethod]
+        public void ScanQR_CodeQuestTest1()
+        {
+            ItemManager.Initial(new TestItemManager());
+            ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
+
+            QuestRequirement requirement = new ScanQR_CodeQuestRequirement(1, "asdfghjkl");
+            Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
+            {
+                requirement
+            },
+            new List<QuestReward>
+            {
+                new GiveItemQuestReward(1, 1, 1)
+            },
+            "TestScanQR_CodeQuest");
+
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            player1.BindInventory(new Inventory(1, 40));
+
+            QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
+            {
+                new ScanQR_CodeQuestRequirementRecord(1, requirement, false)
+            }, false);
+            record.RegisterObserverEvents(player1);
+
+            Assert.IsFalse(record.IsFinished);
+            player1.ScanQR_Code("xxx");
+            Assert.IsFalse(record.IsFinished);
+            player1.ScanQR_Code("asdfghjkl");
+            Assert.IsTrue(record.IsFinished);
+            Assert.AreEqual(1, player1.Inventory.ItemCount(1));
+        }
     }
 }

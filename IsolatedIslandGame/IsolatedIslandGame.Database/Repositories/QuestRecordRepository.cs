@@ -30,5 +30,8 @@ namespace IsolatedIslandGame.Database.Repositories
 
         public abstract bool AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID);
         protected abstract bool SpecializeRequirementRecordToCloseDealWithDifferentFriendInTheSameOceanRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
+
+        public abstract bool MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(int requirementRecordID);
+        protected abstract bool SpecializeRequirementRecordToScanQR_CodeRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
     }
 }

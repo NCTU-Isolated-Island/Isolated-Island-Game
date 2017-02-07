@@ -126,6 +126,18 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 requirementRecords.Add(requirementRecord);
                             }
                             break;
+                        case QuestRequirementType.CloseDealWithDifferentFriendInTheSameOcean:
+                            if (SpecializeRequirementRecordToCloseDealWithDifferentFriendInTheSameOceanRequirementRecord(info.questRequirementRecordID, requirement, playerID, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.ScanQR_Code:
+                            if (SpecializeRequirementRecordToScanQR_CodeRequirementRecord(info.questRequirementRecordID, requirement, playerID, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
                     }
                 }
             }
@@ -165,6 +177,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 case QuestRequirementType.CloseDealWithDifferentFriendInTheSameOcean:
                     {
                         requirementRecord = new CloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(questRequirementRecordID, requirement, new HashSet<int>());
+                    }
+                    return true;
+                case QuestRequirementType.ScanQR_Code:
+                    {
+                        requirementRecord = new ScanQR_CodeQuestRequirementRecord(questRequirementRecordID, requirement, false);
                     }
                     return true;
                 default:
@@ -275,6 +292,49 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             }
             requirementRecord = new CloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(requirementRecordID, requirement, friendPlayerIDs);
             return true;
+        }
+
+        public override bool MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(int requirementRecordID)
+        {
+            string sqlString = @"INSERT INTO HasCcannedCorrectQR_CodeQuestRequirementRecordCollection 
+                (QuestRequirementRecordID) VALUES (@requirementRecordID) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository SpecializeRequirementRecordToScanQR_CodeRequirementRecord Error RequirementRecordID: {requirementRecordID}");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+        protected override bool SpecializeRequirementRecordToScanQR_CodeRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT QuestRequirementRecordID
+                from HasCcannedCorrectQR_CodeQuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        requirementRecord = new ScanQR_CodeQuestRequirementRecord(requirementRecordID, requirement, true);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = new ScanQR_CodeQuestRequirementRecord(requirementRecordID, requirement, false);
+                        return true;
+                    }
+                }
+            }
+            
         }
     }
 }

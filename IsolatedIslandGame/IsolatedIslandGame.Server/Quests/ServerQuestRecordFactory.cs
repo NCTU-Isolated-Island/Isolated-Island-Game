@@ -14,7 +14,7 @@ namespace IsolatedIslandGame.Server.Quests
         {
             return DatabaseService.RepositoryList.QuestRecordRepository.CreateQuestRequirementRecord(questRecordID, requirement, out record);
         }
-        public override bool MarkMarkQuestRecordHasGottenReward(int questRecordID)
+        public override bool MarkQuestRecordHasGottenReward(int questRecordID)
         {
             return DatabaseService.RepositoryList.QuestRecordRepository.MarkQuestRecordHasGottenReward(questRecordID);
         }
@@ -26,6 +26,10 @@ namespace IsolatedIslandGame.Server.Quests
         public override bool AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
         {
             return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(requirementRecordID, friendPlayerID);
+        }
+        public override bool MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(int requirementRecordID)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(requirementRecordID);
         }
     }
 }
