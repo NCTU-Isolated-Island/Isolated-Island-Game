@@ -22,11 +22,13 @@ public class FunctionList_Control : MonoBehaviour
     public Button FunctionButton4;
     public Button FunctionButton5;
     float A, B;
-   public  bool ShowListBool = false;
-   public bool GoRightOrLeft = false;
+    public  bool ShowListBool = false;
+    public bool GoRightOrLeft = false;
     float passtime = 0;
     int times = 0;
 
+    [SerializeField]
+    private InventoryPanel inventoryPanel;
 
     void Awake()
     {
@@ -100,6 +102,7 @@ public class FunctionList_Control : MonoBehaviour
     {
         ShowList();
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Show_Bag);
+        inventoryPanel.ShowPanel();
     }
     void Button1()
     { }
