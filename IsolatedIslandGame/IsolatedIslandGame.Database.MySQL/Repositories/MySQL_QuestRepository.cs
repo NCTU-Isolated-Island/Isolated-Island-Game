@@ -1,6 +1,8 @@
 ﻿using IsolatedIslandGame.Database.Repositories;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
+using IsolatedIslandGame.Library.Quests.Requirements;
+using IsolatedIslandGame.Library.Quests.Rewards;
 using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
@@ -115,6 +117,29 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         int requiredFriendNumber = reader.GetInt32(0);
                         requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(requirementID, requiredFriendNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeRequirementToCloseDealWithDifferentFriendInTheSameOceanRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT RequiredFriendNumber
+                from CDWDFITSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int requiredFriendNumber = reader.GetInt32(0);
+                        requirement = new CloseDealWithDifferentFriendInTheSameOceanQuestRequirement(requirementID, requiredFriendNumber);
                         return true;
                     }
                     else

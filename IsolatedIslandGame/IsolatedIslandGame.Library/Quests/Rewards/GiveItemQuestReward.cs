@@ -1,6 +1,6 @@
 ﻿using MsgPack.Serialization;
 
-namespace IsolatedIslandGame.Library.Quests
+namespace IsolatedIslandGame.Library.Quests.Rewards
 {
     public class GiveItemQuestReward : QuestReward
     {

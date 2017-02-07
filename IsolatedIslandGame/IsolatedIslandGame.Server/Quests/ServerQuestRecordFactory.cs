@@ -1,5 +1,4 @@
-﻿using System;
-using IsolatedIslandGame.Database;
+﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
 
@@ -11,15 +10,22 @@ namespace IsolatedIslandGame.Server.Quests
         {
             return DatabaseService.RepositoryList.QuestRecordRepository.CreateQuestRecord(playerID, quest, out record);
         }
-
-        public override bool CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(int questRecordID, int playerID, QuestRequirement requirement, out QuestRequirementRecord record)
+        public override bool CreateQuestRequirementRecord(int questRecordID, int playerID, QuestRequirement requirement, out QuestRequirementRecord record)
         {
-            return DatabaseService.RepositoryList.QuestRecordRepository.CreateSendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(questRecordID, requirement, out record);
+            return DatabaseService.RepositoryList.QuestRecordRepository.CreateQuestRequirementRecord(questRecordID, requirement, out record);
+        }
+        public override bool MarkMarkQuestRecordHasGottenReward(int questRecordID)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.MarkQuestRecordHasGottenReward(questRecordID);
         }
 
-        public override bool AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(int requirementRecordID, int onlineFriendPlayerID)
+        public override bool AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
         {
-            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(requirementRecordID, onlineFriendPlayerID);
+            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirementRecord(requirementRecordID, friendPlayerID);
+        }
+        public override bool AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(requirementRecordID, friendPlayerID);
         }
     }
 }

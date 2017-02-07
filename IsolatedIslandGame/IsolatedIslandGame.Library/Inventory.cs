@@ -124,6 +124,14 @@ namespace IsolatedIslandGame.Library
                         itemInfos[info.PositionIndex] = info;
                         onItemInfoChange?.Invoke(DataChangeType.Add, info);
                     }
+                    else if(InventoryItemInfoFactory.Instance == null)
+                    {
+                        info = new InventoryItemInfo(1, item, count, positionIndex, false);
+                        itemInfoDictionary.Add(info.InventoryItemInfoID, info);
+                        info.OnInventoryItemInfoUpdate += UpdateItemInfo;
+                        itemInfos[info.PositionIndex] = info;
+                        onItemInfoChange?.Invoke(DataChangeType.Add, info);
+                    }
                 }
             }
         }

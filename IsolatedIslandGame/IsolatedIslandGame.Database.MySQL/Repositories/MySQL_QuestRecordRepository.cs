@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Database.Repositories;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
+using IsolatedIslandGame.Library.Quests.RequirementRecords;
 using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
@@ -41,41 +42,13 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     requirementRecords.Add(requirementRecord);
                 }
             }
-            questRecord = new QuestRecord(questRecordID, playerID, quest, requirementRecords);
+            questRecord = new QuestRecord(questRecordID, playerID, quest, requirementRecords, false);
             return true;
         }
-
-        public override bool CreateSendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(int questRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
-        {
-            string sqlString = @"INSERT INTO QuestRequirementRecordCollection 
-                (QuestRecordID,QuestRequirementID,QuestRequirementType) VALUES (@questRecordID,@questRequirementID,@questRequirementType) ;
-                SELECT LAST_INSERT_ID();";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
-            {
-                command.Parameters.AddWithValue("questRecordID", questRecordID);
-                command.Parameters.AddWithValue("questRequirementID", requirement.QuestRequirementID);
-                command.Parameters.AddWithValue("questRequirementType", (byte)requirement.QuestRequirementType);
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        int questRequirementRecordID = reader.GetInt32(0);
-                        requirementRecord = new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(questRequirementRecordID, requirement, new HashSet<int>());
-                        return true;
-                    }
-                    else
-                    {
-                        requirementRecord = null;
-                        return false;
-                    }
-                }
-            }
-        }
-
         public override List<QuestRecord> ListOfPlayer(int playerID)
         {
             List<QuestRecordInfo> infos = new List<QuestRecordInfo>();
-            string sqlString = @"SELECT QuestRecordID, QuestID
+            string sqlString = @"SELECT QuestRecordID, QuestID, HasGottenReward
                 from QuestRecordCollection 
                 WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
@@ -87,11 +60,13 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         int questRecordID = reader.GetInt32(0);
                         int questID = reader.GetInt32(1);
+                        bool hasGottenReward = reader.GetBoolean(2);
 
                         infos.Add(new QuestRecordInfo
                         {
                             questRecordID = questRecordID,
-                            questID = questID
+                            questID = questID,
+                            hasGottenReward = hasGottenReward
                         });
                     }
                 }
@@ -103,13 +78,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 Quest quest;
                 if (QuestManager.Instance.FindQuest(info.questID, out quest))
                 {
-                    QuestRecord record = new QuestRecord(info.questRecordID, playerID, quest, ListRequirementRecordsOfQuestRecord(info.questRecordID, playerID));
+                    QuestRecord record = new QuestRecord(info.questRecordID, playerID, quest, ListRequirementRecordsOfQuestRecord(info.questRecordID, playerID), info.hasGottenReward);
                     records.Add(record);
                 }
             }
             return records;
         }
-
         protected override List<QuestRequirementRecord> ListRequirementRecordsOfQuestRecord(int questRecordID, int playerID)
         {
             List<QuestRequirementRecordInfo> infos = new List<QuestRequirementRecordInfo>();
@@ -138,10 +112,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             }
             List<QuestRequirementRecord> requirementRecords = new List<QuestRequirementRecord>();
 
-            foreach(var info in infos)
+            foreach (var info in infos)
             {
                 QuestRequirement requirement;
-                if(QuestManager.Instance.FindQuestRequirement(info.questRequirementID, out requirement))
+                if (QuestManager.Instance.FindQuestRequirement(info.questRequirementID, out requirement))
                 {
                     QuestRequirementRecord requirementRecord;
                     switch (info.questRequirementType)
@@ -157,7 +131,69 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             }
             return requirementRecords;
         }
-        public override bool AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
+        public override bool CreateQuestRequirementRecord(int questRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            int questRequirementRecordID;
+            string sqlString = @"INSERT INTO QuestRequirementRecordCollection 
+                (QuestRecordID,QuestRequirementID,QuestRequirementType) VALUES (@questRecordID,@questRequirementID,@questRequirementType) ;
+                SELECT LAST_INSERT_ID();";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("questRecordID", questRecordID);
+                command.Parameters.AddWithValue("questRequirementID", requirement.QuestRequirementID);
+                command.Parameters.AddWithValue("questRequirementType", (byte)requirement.QuestRequirementType);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        questRequirementRecordID = reader.GetInt32(0);
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+            switch (requirement.QuestRequirementType)
+            {
+                case QuestRequirementType.SendMessageToDifferentOnlineFriendInTheSameOcean:
+                    {
+                        requirementRecord = new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(questRequirementRecordID, requirement, new HashSet<int>());
+                    }
+                    return true;
+                case QuestRequirementType.CloseDealWithDifferentFriendInTheSameOcean:
+                    {
+                        requirementRecord = new CloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(questRequirementRecordID, requirement, new HashSet<int>());
+                    }
+                    return true;
+                default:
+                    requirementRecord = null;
+                    return false;
+            }
+        }
+        public override bool MarkQuestRecordHasGottenReward(int questRecordID)
+        {
+            string sqlString = @"UPDATE QuestRecordCollection SET 
+                HasGottenReward = true
+                WHERE QuestRecordID = @questRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("questRecordID", questRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository MarkQuestRecordHasGottenReward Error QuestRecordID: {questRecordID}");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        public override bool AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
         {
             string sqlString = @"INSERT INTO SMTDOFITSO_QuestRequirementRecordPlayerIDCollection 
                 (QuestRequirementRecordID,FriendPlayerID) VALUES (@requirementRecordID,@friendPlayerID) ;";
@@ -196,6 +232,48 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
             requirementRecord = new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(requirementRecordID, requirement, friendPlayerIDs);
+            return true;
+        }
+
+        public override bool AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
+        {
+            string sqlString = @"INSERT INTO CDWDFITSO_QuestRequirementRecordPlayerIDCollection 
+                (QuestRequirementRecordID,FriendPlayerID) VALUES (@requirementRecordID,@friendPlayerID) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                command.Parameters.AddWithValue("friendPlayerID", friendPlayerID);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord Error RequirementRecordID: {requirementRecordID}, FriendPlayerID: {friendPlayerID}");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+        protected override bool SpecializeRequirementRecordToCloseDealWithDifferentFriendInTheSameOceanRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord)
+        {
+            HashSet<int> friendPlayerIDs = new HashSet<int>();
+            string sqlString = @"SELECT FriendPlayerID
+                from CDWDFITSO_QuestRequirementRecordPlayerIDCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int friendPlayerID = reader.GetInt32(0);
+
+                        friendPlayerIDs.Add(friendPlayerID);
+                    }
+                }
+            }
+            requirementRecord = new CloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(requirementRecordID, requirement, friendPlayerIDs);
             return true;
         }
     }

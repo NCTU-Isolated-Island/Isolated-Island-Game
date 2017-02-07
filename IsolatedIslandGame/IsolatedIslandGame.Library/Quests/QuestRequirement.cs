@@ -17,6 +17,9 @@ namespace IsolatedIslandGame.Library.Quests
             QuestRequirementID = questRequirementID;
         }
 
-        public abstract bool CreateRequirementRecord(int questRecordID, int playerID, out QuestRequirementRecord record);
+        public bool CreateRequirementRecord(int questRecordID, int playerID, out QuestRequirementRecord record)
+        {
+            return QuestRecordFactory.Instance.CreateQuestRequirementRecord(questRecordID, playerID, this, out record);
+        }
     }
 }
