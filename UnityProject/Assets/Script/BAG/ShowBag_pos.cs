@@ -17,6 +17,7 @@ public class ShowBag_pos : MonoBehaviour
     public GameObject ShowWay_Button;
     public Button BackButton;
     public GameObject MainBoat;
+    public GameObject[] AllCombineArea;
     public GameObject CombineArea;
     public GameObject TradeArea;
     //public GameObject ItemPic;
@@ -129,8 +130,7 @@ public class ShowBag_pos : MonoBehaviour
                 if (ResetOnce)
                 {
                     ChangeViewControl = 0;
-                    if (!StopForTest)
-                    {  Reset_Bag(); }
+                    Reset_Bag();
                     ResetOnce = false;
                 }
                 if (BagOut)
@@ -148,6 +148,7 @@ public class ShowBag_pos : MonoBehaviour
     }
     public void Reset_Bag()
     {
+        Debug.Log("reset");
         for (int i = 0, t = Content.transform.childCount - 1; t >= 0 && i < 30; i++, t--)
         {
             Destroy(Content.transform.GetChild(t).gameObject);
@@ -188,24 +189,18 @@ public class ShowBag_pos : MonoBehaviour
     public void UpAndDown()
     {
         MoveBag = true;
-        /* if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - A_pos) < 1)
-         {
-             this.GetComponent<RectTransform>().localPosition = new Vector3(0, B_pos, 0);
-             { Reset_Bag(); }
-             ResetOnce = false;
-         }
-         else if (Mathf.Abs(this.GetComponent<RectTransform>().localPosition.y - B_pos) < 1)
-         {this.GetComponent<RectTransform>().localPosition = new Vector3(0, A_pos, 0);}*/
+       
     }
 
-    public void SetPicture(GameObject ItemSelect)
+    /*public void SetPicture(GameObject ItemSelect)
     {
+        //重寫
         if (CombineArea.GetComponent<Combine_block>().ItemInHere != null)
         { CombineArea.GetComponent<Combine_block>().ItemInHere.GetComponent<ShowBag_ItemSelect>().CombineAreaILocate = null; }
 
         CombineArea.GetComponent<Combine_block>().ItemInHere = ItemSelect;
         CombineArea.transform.GetChild(0).GetComponent<Image>().sprite = ItemSelect.GetComponent<Image>().sprite as Sprite;
-    }
+    }*/
 
     void BACK()
     {
@@ -241,8 +236,8 @@ public class ShowBag_pos : MonoBehaviour
             ShowWay_Button = this.gameObject.transform.GetChild(3).gameObject;
         if (!MainBoat)
             MainBoat = UI.UIObject[1];
-        if (!CombineArea)
-            CombineArea = UI.UIObject[5];
+       /* if (!CombineArea)
+            CombineArea = UI.UIObject[5];*/
         if (!Content)
             Content = this.gameObject.transform.GetChild(3).GetChild(0).GetChild(0).gameObject;
         ResetOnce = true;

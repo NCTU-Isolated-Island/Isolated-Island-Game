@@ -66,7 +66,7 @@ public class UImanager : MonoBehaviour
     {
         GameUI = (UI)a;
         NowAt = a;
-
+      
         if (a == 1)
         {
           if(GameManager.Instance.PlayerGameObject)
@@ -193,9 +193,14 @@ public class UImanager : MonoBehaviour
                         if (NowAt == 4)
                         {
                             UIObject[1].SetActive(true);
-                            Bag.gameObject.transform.localPosition = new Vector3(0, 0, 0); Bag.GetComponent<ShowBag_pos>().BagOut = true; }
+                            Bag.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+                            Bag.GetComponent<ShowBag_pos>().BagOut = true;
+                        }
                         else
-                        { Bag.gameObject.transform.localPosition = new Vector3(0, -CanvasHeight, 0); Bag.GetComponent<ShowBag_pos>().BagOut = false; }
+                        {
+                            Bag.gameObject.transform.localPosition = new Vector3(0, -CanvasHeight, 0);
+                            Bag.GetComponent<ShowBag_pos>().BagOut = false;
+                        }
 
                     }
                 }

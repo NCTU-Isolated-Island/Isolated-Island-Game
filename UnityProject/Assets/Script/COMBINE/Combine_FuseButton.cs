@@ -24,18 +24,13 @@ public class Combine_FuseButton : MonoBehaviour {
 
              int ThingInA=0, ThingInB = 0, ThingInC = 0; //0沒東西 1,2,3物品
 
-            if (!CombineArea1.GetComponent<Combine_block>().ItemInHere)
-            {
-                ThingInA = CombineArea1.GetComponent<Combine_block>().ItemInHere.GetComponent<ShowBag_ItemSelect>().ItemNo;
-            }
-            if (!CombineArea2.GetComponent<Combine_block>().ItemInHere)
-            {
-                ThingInB = CombineArea2.GetComponent<Combine_block>().ItemInHere.GetComponent<ShowBag_ItemSelect>().ItemNo;
-            }
-            if (!CombineArea3.GetComponent<Combine_block>().ItemInHere)
-            {
-                ThingInC = CombineArea3.GetComponent<Combine_block>().ItemInHere.GetComponent<ShowBag_ItemSelect>().ItemNo;
-            }
+            
+                ThingInA = CombineArea1.GetComponent<Combine_block>().ItemInHere;
+           
+                ThingInB = CombineArea2.GetComponent<Combine_block>().ItemInHere;
+            
+                ThingInC = CombineArea3.GetComponent<Combine_block>().ItemInHere;
+            
 
             UserManager.Instance.User.Player.OperationManager.SynthesizeMaterial(
                 new Blueprint.ElementInfo[]{
@@ -65,20 +60,19 @@ public class Combine_FuseButton : MonoBehaviour {
                         break;
                 }
             };
+            Debug.Log("Hehe");
         }
 
-       else if (StopForTest &&
-           CombineArea1.GetComponent<Combine_block>().ItemInHere == null
-        && CombineArea2.GetComponent<Combine_block>().ItemInHere != null
-        && CombineArea3.GetComponent<Combine_block>().ItemInHere != null
-        && CombineArea2.GetComponent<Combine_block>().ItemInHere.GetComponent<ShowBag_ItemSelect>().ItemNo == 1
-        && CombineArea3.GetComponent<Combine_block>().ItemInHere.GetComponent<ShowBag_ItemSelect>().ItemNo == 3
+      /* else if (StopForTest &&
+           CombineArea1.GetComponent<Combine_block>().ItemInHere == 0 
+        && CombineArea2.GetComponent<Combine_block>().ItemInHere == 1
+        && CombineArea3.GetComponent<Combine_block>().ItemInHere == 3
             )
         {
             CombineAreaOUT.SetActive(true);
             CombineAreaOUT.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load("Metalmon", typeof(Sprite)) as Sprite;
         }
-
+        */
     }
     void SetGameObject()
     {

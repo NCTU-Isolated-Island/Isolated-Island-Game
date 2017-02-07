@@ -18,7 +18,7 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
     public GameObject UIControl;
     public GameObject DetailPanel;
     public GameObject Bag;
-    public GameObject CombineAreaILocate;
+    public GameObject UsedAtWhere;
     public int ItemNo;
     public int PositionIndex;
     public int inventoryItemInfoID;
@@ -76,35 +76,66 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
     }
     void Combine_Choose()
     {
-        if (this.gameObject.GetComponent<Image>().sprite != null)
+        //重寫
+        if (Null)
+        {
+            ShowBag_pos.Instance.CombineArea.GetComponent<Combine_block>().ItemInHere = 0;
+            ShowBag_pos.Instance.CombineArea.transform.GetChild(0).GetComponent<Image>().sprite = null;
+            ShowBag_pos.Instance.CombineArea = null;
+            ShowBag_pos.Instance.UpAndDown();
+            
+        }
+        else
+        {
+            
+            for (int i = 0 ; i < 3; i++)
+            {
+                if (ShowBag_pos.Instance.AllCombineArea[i].GetComponent<Combine_block>().ItemInHere == ItemNo)
+                {
+                    ShowBag_pos.Instance.AllCombineArea[i].GetComponent<Combine_block>().ItemInHere = 0;
+                    ShowBag_pos.Instance.AllCombineArea[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
+                }
+            }
+            ShowBag_pos.Instance.CombineArea.GetComponent<Combine_block>().ItemInHere = ItemNo;
+            ShowBag_pos.Instance.CombineArea.transform.GetChild(0).GetComponent<Image>().sprite = this.gameObject.GetComponent<Image>().sprite as Sprite; ;  
+
+        }
+        Bag.GetComponent<ShowBag_pos>().UpAndDown();
+
+        /*if (this.gameObject.GetComponent<Image>().sprite != null)
         {
             if (CombineAreaILocate != null)
             {
+                Debug.Log(132);
                 CombineAreaILocate.transform.GetChild(0).GetComponent<Image>().sprite = null;
                 CombineAreaILocate.GetComponent<Combine_block>().ItemInHere = null;
             }
             CombineAreaILocate = Bag.GetComponent<ShowBag_pos>().CombineArea;
-            Bag.GetComponent<ShowBag_pos>().SetPicture(this.gameObject);
-            Bag.GetComponent<ShowBag_pos>().UpAndDown();
-        }
+            CombineAreaILocate.GetComponent<Combine_block>().ItemInHere = this.gameObject;
+             Bag.GetComponent<ShowBag_pos>().SetPicture(this.gameObject);
+              Bag.GetComponent<ShowBag_pos>().UpAndDown();
+
+        }*/
+
     }
 
     //以下Trade相關
     void Trade_Choose()
-    {if (!Null)
+    {
+        if (!Null)
         {
             AmountChosePanel.SetActive(true);
             AmountChosePanel.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = (AmountOnPanel.ToString());
             AmountChanging = true;
         }
-    else
+        else
         {
             ShowBag_pos.Instance.TradeArea.GetComponent<Trade_Block>().ItemInHere = 0;
             ShowBag_pos.Instance.TradeArea.GetComponent<Trade_Block>().AmountInHere = 0;
             ShowBag_pos.Instance.TradeArea.transform.GetChild(0).GetComponent<Text>().text = ("");
             ShowBag_pos.Instance.TradeArea.GetComponent<Image>().sprite = null;
             ShowBag_pos.Instance.TradeArea = null;
-            ShowBag_pos.Instance.UpAndDown();
+            ShowBag_pos.Instance.UpAndDown();      
         }
     }
     void Update()
@@ -143,9 +174,12 @@ public class ShowBag_ItemSelect : MonoBehaviour, IPointerClickHandler
         {
             ShowBag_pos.Instance.TradeArea.GetComponent<Trade_Block>().ItemInHere = ItemNo;
             ShowBag_pos.Instance.TradeArea.GetComponent<Trade_Block>().AmountInHere = AmountOnPanel;
+
             ShowBag_pos.Instance.TradeArea.transform.GetChild(0).GetComponent<Text>().text = (AmountOnPanel.ToString());
             ShowBag_pos.Instance.TradeArea.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + ItemNo);
             LocateArea = ShowBag_pos.Instance.TradeArea.GetComponent<Trade_Block>().Position;
+
+           
         }
        
         

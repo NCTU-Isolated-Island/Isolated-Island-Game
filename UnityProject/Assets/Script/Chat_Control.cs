@@ -12,7 +12,7 @@ public class Chat_Control : MonoBehaviour
 
     float time = 0;
     public bool StopForTest;
-
+    public int test;
     public GameObject UIControl;
     public GameObject ChatSet;
     public GameObject ChatContent;
@@ -59,8 +59,8 @@ public class Chat_Control : MonoBehaviour
             {
                 if (ResetOnce)
                 {
-                    if (!StopForTest)
-                    { Reset(); }
+                    /*if (!StopForTest)
+                    { Reset(); }*/
                     ResetOnce = false;
                 }
                 if (ChaOut)
@@ -102,10 +102,9 @@ public class Chat_Control : MonoBehaviour
         Conversations.Clear();
         Conversations = MessageManager.GetComponent<MessageManager>().Conversations;
         int MessageAmount = Conversations.Count;
+        
         if (People != null)
             People.Clear();
-        Debug.Log(UserManager.Instance.User.Player.PlayerID);
-        if(UserManager.Instance.User.Player.PlayerID == 28)
         People.Add(UserManager.Instance.User.Player.PlayerID);
 
         for (int i = 0, t = ChatContent.transform.childCount - 1; t >= 0 && i < 30; i++, t--)
@@ -114,6 +113,7 @@ public class Chat_Control : MonoBehaviour
         }
         for (int i = MessageAmount - 1; i >= 0; i--)
         {
+           
             if (!People.Contains(Conversations[i].receiverPlayerID))
             {
                 PlayerInformation Owner;
@@ -158,42 +158,50 @@ public class Chat_Control : MonoBehaviour
     //點選對話對象後，執行以下式子
     public void ResetDetail(int target = 22)
     {
-        if (Conversations != null)
+        /*if (Conversations != null)
             Conversations.Clear();
-        Conversations = MessageManager.GetComponent<MessageManager>().Conversations;
+        Conversations = MessageManager.GetComponent<MessageManager>().Conversations;*/
         int MessageAmount = Conversations.Count;
-
-        float Y = -50;
+        test = MessageAmount;
+        float Y = 240;
         int Person = target;
 
         for (int i = 0, t = ChatBContent.transform.childCount - 1; t >= 0 && i < 30; i++, t--)
         {
             Destroy(ChatBContent.transform.GetChild(t).gameObject);
         }
+
+     /*   GameObject InstanceE = new GameObject();
+            Instantiate(InstanceE, ChatBContent.transform.GetChild(0));*/
+
         for (int l = 0; l < MessageAmount; l++)
         {
+            Debug.Log(Conversations[l].receiverPlayerID);
+            Debug.Log(Conversations[l].message.senderPlayerID);
+            Debug.Log(Conversations[l].message.content);
             if (Conversations[l].receiverPlayerID == Person)
             {  //在該人物的對話紀錄下面生成文字氣泡
                 GameObject Instance = Instantiate(ChatBubbleA, ChatBContent.transform);
                 Instance.GetComponent<BubbleSet>().AorB = 0;
-                Instance.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = (Conversations[l].message.content);
-                //根據對話長度調整對話框大小  
-                int TextLong = Conversations[l].message.content.Length;
+                Instance.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = (Conversations[l].message.content);
+                //根據對話長度調整對話框大小   
+                int TextLong = System.Text.Encoding.Default.GetBytes(Conversations[l].message.content).Length;
+                Debug.Log(TextLong);
                 Instance.GetComponent<BubbleSet>().SetSize(TextLong);
-                Instance.transform.position = new Vector3(0, Y, 0);
-                Y = Instance.GetComponent<RectTransform>().rect.height / 2 + 27;
+                Instance.transform.localPosition = new Vector3(ChatBContent.GetComponent<RectTransform>().rect.width/2, ChatBContent.GetComponent<RectTransform>().rect.height / 2 + Y, 0);
+                Y = Y - Instance.GetComponent<RectTransform>().rect.height -30  ;
             }
-            else if (Conversations[l].message.senderPlayerID == Person)
+            if (Conversations[l].message.senderPlayerID == Person)
             {
+               
                 GameObject Instance = Instantiate(ChatBubbleB, ChatBContent.transform);
                 Instance.GetComponent<BubbleSet>().AorB = 1;
-                Instance.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = (Conversations[l].message.content);
+                Instance.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = (Conversations[l].message.content);
                 //根據對話長度調整對話框大小  
-                int TextLong = Conversations[l].message.content.Length;
+                int TextLong = System.Text.Encoding.Default.GetBytes(Conversations[l].message.content).Length;
                 Instance.GetComponent<BubbleSet>().SetSize(TextLong);
-                Instance.transform.position = new Vector3(0, Y, 0);
-                Y = Instance.GetComponent<RectTransform>().rect.height / 2 + 27;
-
+                Instance.transform.localPosition = new Vector3(ChatBContent.GetComponent<RectTransform>().rect.width / 2, ChatBContent.GetComponent<RectTransform>().rect.height / 2 + Y, 0);
+                Y = Y - Instance.GetComponent<RectTransform>().rect.height / 2 - 30;
             }
 
         }

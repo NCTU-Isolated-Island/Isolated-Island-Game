@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 		if(status == true)
 		{
 			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(28,"TestServer");
+			UserManager.Instance.User.OperationManager.PlayerIDLogin(22,"TestServer");
 		}
        // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
 	}
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 			UImanager.Instance.LoadResult(1);
 
 			//Create Charater by Uimanager ? (probably
-			UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.Businessman);
+			//UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.Businessman);
 		}
 		else
 		{

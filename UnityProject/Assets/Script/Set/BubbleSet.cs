@@ -22,7 +22,7 @@ public class BubbleSet : MonoBehaviour
         BubbleMid = BubbleUp.transform.GetChild(0).gameObject;
         BubbleDown = BubbleMid.transform.GetChild(0).gameObject;
 
-        BubbleMid.GetComponent<RectTransform>().sizeDelta = new Vector2(206f, 1.2f);
+        BubbleMid.GetComponent<RectTransform>().sizeDelta = new Vector2(205f, 1.2f);
         BubbleDown.GetComponent<RectTransform>().sizeDelta = new Vector2(205f, 24f);
        
             
@@ -34,13 +34,13 @@ public class BubbleSet : MonoBehaviour
         }
         else if (AorB == 1)
         {
-            BubbleMid.GetComponent<RectTransform>().localPosition = new Vector3(0.8f, -15.1f, 0);
-            BubbleDown.GetComponent<RectTransform>().localPosition = new Vector3(-0.3f, -12.6f, 0);
+            BubbleMid.GetComponent<RectTransform>().localPosition = new Vector3(0.5f, -15.1f, 0);
+            BubbleDown.GetComponent<RectTransform>().localPosition = new Vector3(0f, -12.8f, 0);
 
         }
 
         int TextLengh = Lengh;
-        int TextHeight = TextLengh / 16;
+        int TextHeight = TextLengh / 32;
         BubbleMid.GetComponent<RectTransform>().sizeDelta = BubbleMid.GetComponent<RectTransform>().sizeDelta + new Vector2(0f, 15f * TextHeight);
         BubbleMid.GetComponent<RectTransform>().localPosition = BubbleMid.GetComponent<RectTransform>().localPosition + new Vector3(0, -7.5f * TextHeight, 0);
         BubbleDown.GetComponent<RectTransform>().localPosition = BubbleDown.GetComponent<RectTransform>().localPosition + new Vector3(0, -7.5f * TextHeight, 0);
