@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 		if(status == true)
 		{
 			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(22,"TestServer");
+			UserManager.Instance.User.OperationManager.PlayerIDLogin(24,"TestServer");
 		}
        // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
 	}
@@ -264,7 +264,7 @@ public class GameManager : MonoBehaviour
 					{
 						GameObject decorationGameObject = Instantiate(
 							elementModels[decoration.Material.ItemID],
-							userVesselGameObject.transform
+							userVesselGameObject.transform.Find("Decorations")
 						) as GameObject;
 
 						decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
@@ -363,7 +363,7 @@ public class GameManager : MonoBehaviour
 						{
 							GameObject decorationGameObject = Instantiate(
 								elementModels[decoration.Material.ItemID],
-								userVesselGameObject.transform
+								userVesselGameObject.transform.Find("Decorations")
 							) as GameObject;
 
 							decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);

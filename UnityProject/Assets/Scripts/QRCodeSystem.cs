@@ -7,6 +7,8 @@ using ZXing;
 public class QRCodeSystem : MonoBehaviour {
 
 	public static QRCodeSystem Instance;
+	public RawImage CameraView;
+	public GameObject CameraCanvas;
 
 	private WebCamTexture qrCamera;
 	private Result scanResult;
@@ -24,7 +26,7 @@ public class QRCodeSystem : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
-
+		StartReading();
 	}
 
 	void Update()
@@ -43,6 +45,7 @@ public class QRCodeSystem : MonoBehaviour {
 		StopCoroutine(Scan());
 		stopReading = true;
 		qrCamera.Stop();
+		CameraCanvas.SetActive(false);
 	}
 
 	IEnumerator ReadQrCode()
@@ -51,6 +54,8 @@ public class QRCodeSystem : MonoBehaviour {
 		stopReading = false;
 
 		yield return TurnOnCamera();
+
+		CameraCanvas.SetActive(true);
 
 		if(scanResult == null && !stopReading)
 		{
@@ -71,7 +76,7 @@ public class QRCodeSystem : MonoBehaviour {
 		{
 			//設置攝影機要攝影的區域
 			qrCamera = new WebCamTexture(WebCamTexture.devices[0].name, Screen.width, Screen.height, 30);/* (攝影機名稱, 攝影機要拍到的寬度, 攝影機要拍到的高度, 攝影機的FPS) */
-			transform.Find("Canvas/RawImage").GetComponent<RawImage> ().texture= qrCamera;
+			CameraView.texture= qrCamera;
 			qrCamera.Play();//開啟攝影機
 		}
 	}

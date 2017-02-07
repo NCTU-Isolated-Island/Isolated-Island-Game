@@ -3,36 +3,65 @@ using System.Collections;
 
 public class Test : MonoBehaviour {
 
-	public GameObject test;
 
-	void Start()
+
+
+	public enum ViewMode
 	{
-		Input.gyro.enabled = true;
+		FirstPerson, BirdView, NormalView
+	}
 
-		AuxCameraSystem.Instance.RotationSpeed = 15;
-		AuxCameraSystem.Instance.Show3DObject(test,new Vector3(0,-2,3),Quaternion.Euler(30,0,0));
+	public ViewMode CurrenViewMode = ViewMode.NormalView;
 
+	public void ChangeViewMode(ViewMode mode)
+	{
+		
+		switch (mode) {
+		case ViewMode.FirstPerson:
+			// move camera to first person anchor
+
+			if(SystemInfo.supportsGyroscope)
+			{
+				Input.gyro.enabled = true;
+			}
+			else
+			{
+				//TODO Show No Gyro Support Warning
+			}
+
+			CurrenViewMode = ViewMode.FirstPerson;
+			break;
+		
+		case ViewMode.NormalView:
+			//
+			break;
+		
+		case ViewMode.BirdView:
+
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+	void Update()
+	{
+		if(CurrenViewMode == ViewMode.FirstPerson)
+		{
+			//Camera.main.transform.rotation = Input.gyro.attitude;
+
+			//TODO maybe add horizontal Y Rotate capability
+		}
+
+		if(Input.anyKeyDown)
+		{
+			bool a = Handheld.PlayFullScreenMovie ("IMG_7512.mov", Color.white, FullScreenMovieControlMode.Hidden);
+			print(a);
+		}
 	}
 
 
-
-//	void Update()
-//	{
-//		transform.rotation = Quaternion.Euler(90,0,0) * Quaternion.Euler
-//			(
-//				Input.gyro.attitude.eulerAngles.x * -1,
-//				Input.gyro.attitude.eulerAngles.y * -1,
-//				Input.gyro.attitude.eulerAngles.z
-//			) * Quaternion.Euler
-//			(
-//				Input.gyro.attitude.eulerAngles.x * -1,
-//				Input.gyro.attitude.eulerAngles.y * -1,
-//				Input.gyro.attitude.eulerAngles.z
-//			);
-//
-//
-//
-//	}
 
 
 }

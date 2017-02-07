@@ -13,8 +13,26 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
                 return serializer.Unpack(ms);
             }
         }
+        public static T TypeDeserialize<T>(byte[] serializedData)
+        {
+            var serializer = MessagePackSerializer.Get<T>();
+            using (MemoryStream ms = new MemoryStream(serializedData))
+            {
+                return serializer.Unpack(ms);
+            }
+        }
 
         public static byte[] Serialize<T>(object data)
+        {
+            T serializationTarget = (T)data;
+            var serializer = MessagePackSerializer.Get<T>();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                serializer.Pack(memoryStream, serializationTarget);
+                return memoryStream.ToArray();
+            }
+        }
+        public static byte[] TypeSerialize<T>(T data)
         {
             T serializationTarget = (T)data;
             var serializer = MessagePackSerializer.Get<T>();

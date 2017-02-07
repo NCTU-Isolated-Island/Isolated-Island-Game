@@ -6,6 +6,7 @@
         FriendInformationChange,
         PlayerInformation,
         TransactionItemChange,
-        TransactionConfirm
+        TransactionConfirmStatusChange,
+        QuestRecordUpdated
     }
 }

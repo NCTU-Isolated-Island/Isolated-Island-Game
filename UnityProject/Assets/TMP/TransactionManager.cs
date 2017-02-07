@@ -156,7 +156,7 @@ public class TransactionManager : MonoBehaviour
     {
         // Event Register
         transaction.OnTransactionItemChange += OnTransactionItemChange;
-        transaction.OnTransactionConfirmed += OnTransactionConfirmed;
+     //   transactions.OnTransactionConfirmed += OnTransactionConfirmed;
         transaction.OnTransactionEnd += OnTransactionEnd;
 
         //TODO
@@ -177,7 +177,7 @@ public class TransactionManager : MonoBehaviour
     }
     public void ConfirmTransaction(int transactionID)
     {
-        UserManager.Instance.User.Player.OperationManager.ConfirmTransaction(transactionID);
+       // UserManager.Instance.User.Player.OperationManager.ConfirmTransaction(transactionID);
         //TODO
     }
     public void OnTransactionConfirmed(int transactionID, int playerID)
@@ -265,3 +265,4 @@ public class TransactionManager : MonoBehaviour
         ButtonActive = true;
     }
 }
+

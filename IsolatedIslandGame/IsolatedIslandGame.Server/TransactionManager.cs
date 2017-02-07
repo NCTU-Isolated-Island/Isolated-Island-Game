@@ -135,7 +135,7 @@ namespace IsolatedIslandGame.Server
                 transactionDictionary.Remove(transactionID);
             }
         }
-        private void CheckTransactionEnd(int transactionID, int playerID)
+        private void CheckTransactionEnd(int transactionID, int playerID, bool isConfirmed)
         {
             Transaction transaction;
             if (FindTransaction(transactionID, out transaction))
@@ -148,8 +148,8 @@ namespace IsolatedIslandGame.Server
         }
         private void AssemblyTransaction(Transaction transaction, Player requester, Player accepter)
         {
-            transaction.OnTransactionConfirmed += requester.EventManager.SyncDataResolver.SyncTransactionConfirm;
-            transaction.OnTransactionConfirmed += accepter.EventManager.SyncDataResolver.SyncTransactionConfirm;
+            transaction.OnTransactionConfirmStatusChange += requester.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
+            transaction.OnTransactionConfirmStatusChange += accepter.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
 
             transaction.OnTransactionItemChange += requester.EventManager.SyncDataResolver.SyncTransactionItemChange;
             transaction.OnTransactionItemChange += accepter.EventManager.SyncDataResolver.SyncTransactionItemChange;
@@ -157,15 +157,15 @@ namespace IsolatedIslandGame.Server
             transaction.OnTransactionEnd += requester.EventManager.EndTransaction;
             transaction.OnTransactionEnd += accepter.EventManager.EndTransaction;
 
-            transaction.OnTransactionConfirmed += CheckTransactionEnd;
+            transaction.OnTransactionConfirmStatusChange += CheckTransactionEnd;
 
             requester.AddTransaction(transaction);
             accepter.AddTransaction(transaction);
         }
         private void DisassemblyTransaction(Transaction transaction, Player requester, Player accepter)
         {
-            transaction.OnTransactionConfirmed -= requester.EventManager.SyncDataResolver.SyncTransactionConfirm;
-            transaction.OnTransactionConfirmed -= accepter.EventManager.SyncDataResolver.SyncTransactionConfirm;
+            transaction.OnTransactionConfirmStatusChange -= requester.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
+            transaction.OnTransactionConfirmStatusChange -= accepter.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
 
             transaction.OnTransactionItemChange -= requester.EventManager.SyncDataResolver.SyncTransactionItemChange;
             transaction.OnTransactionItemChange -= accepter.EventManager.SyncDataResolver.SyncTransactionItemChange;
@@ -173,7 +173,7 @@ namespace IsolatedIslandGame.Server
             transaction.OnTransactionEnd -= requester.EventManager.EndTransaction;
             transaction.OnTransactionEnd -= accepter.EventManager.EndTransaction;
 
-            transaction.OnTransactionConfirmed -= CheckTransactionEnd;
+            transaction.OnTransactionConfirmStatusChange -= CheckTransactionEnd;
 
             requester.RemoveTransaction(transaction.TransactionID);
             accepter.RemoveTransaction(transaction.TransactionID);

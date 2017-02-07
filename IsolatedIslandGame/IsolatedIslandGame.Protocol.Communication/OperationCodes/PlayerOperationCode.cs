@@ -18,9 +18,11 @@
         TransactionRequest,
         AcceptTransaction,
         ChangeTransactionItem,
-        ConfirmTransaction,
+        ChangeTransactionConfirmStatus,
+        CancelTransaction,
         SetFavoriteItem,
         ReadPlayerMessage,
-        SendMaterialToIsland
+        SendMaterialToIsland,
+        ScanQR_Code
     }
 }

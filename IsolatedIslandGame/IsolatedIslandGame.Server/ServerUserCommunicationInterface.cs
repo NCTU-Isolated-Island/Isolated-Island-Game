@@ -108,7 +108,7 @@ namespace IsolatedIslandGame.Server
 
         public override List<PlayerConversation> GetPlayerConversations(int playerID)
         {
-            return DatabaseService.RepositoryList.PlayerConversationRepository.ListOfReceiver(playerID);
+            return DatabaseService.RepositoryList.PlayerConversationRepository.ListOfPlayer(playerID);
         }
 
         public override bool TransactionRequest(int requesterPlayerID, int accepterPlayerID)
@@ -138,12 +138,19 @@ namespace IsolatedIslandGame.Server
             }
         }
 
-        public override bool ConfirmTransaction(int playerID, int transactionID)
+        public override bool ChangeTransactionConfirmStatus(int playerID, int transactionID, bool isConfirmed)
         {
             Transaction transaction; ;
             if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
             {
-                return transaction.Confirm(playerID);
+                if(isConfirmed)
+                {
+                    return transaction.ChangeConfirmStatus(playerID, isConfirmed);
+                }
+                else
+                {
+                    return transaction.ChangeConfirmStatus(transaction.RequesterPlayerID, isConfirmed) && transaction.ChangeConfirmStatus(transaction.AccepterPlayerID, isConfirmed);
+                }
             }
             else
             {
@@ -157,6 +164,20 @@ namespace IsolatedIslandGame.Server
             if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
             {
                 return transaction.ChangeTransactionItem(playerID, changeType, info);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool CancelTransaction(int playerID, int transactionID)
+        {
+            Transaction transaction; ;
+            if (TransactionManager.Instance.FindTransaction(transactionID, out transaction))
+            {
+                transaction.EndTransaction(false);
+                return true;
             }
             else
             {

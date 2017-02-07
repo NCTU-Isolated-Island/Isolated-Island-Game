@@ -8,6 +8,7 @@
         VesselDecorations,
         AllKnownBlueprints,
         FriendInformations,
-        AllPlayerConversations
+        AllPlayerConversations,
+        AllQuestRecords
     }
 }

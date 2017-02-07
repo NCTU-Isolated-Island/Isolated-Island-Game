@@ -7,6 +7,8 @@ public class LocationSystem : MonoBehaviour {
 
 	public static LocationSystem Instance;
 
+	public Text LocationInfo;
+
 	private System.DateTime updateTime;
 	private Vector3 previousLocation;
 
@@ -52,17 +54,17 @@ public class LocationSystem : MonoBehaviour {
 		Input.location.Stop();
 	}
 
-//	private void UpdateLocationInfo()
-//	{
-//		locationInfo.text =
-//			"Altitude: " + Input.location.lastData.altitude +
-//			" Vertical Accuracy: " + Input.location.lastData.verticalAccuracy +
-//			"\nLatitude: " + Input.location.lastData.latitude +
-//			" Longitude: " + Input.location.lastData.longitude +
-//			" HorizontalAccuracy: " + Input.location.lastData.horizontalAccuracy + 
-//			"\nTimeStamp: " + ConvertFromUnixTimestamp(Input.location.lastData.timestamp).ToLongTimeString();
-//		;
-//	}
+	private void UpdateLocationInfo()
+	{
+		LocationInfo.text =
+			"Altitude: " + Input.location.lastData.altitude +
+			" Vertical Accuracy: " + Input.location.lastData.verticalAccuracy +
+			"\nLatitude: " + Input.location.lastData.latitude +
+			" Longitude: " + Input.location.lastData.longitude +
+			" HorizontalAccuracy: " + Input.location.lastData.horizontalAccuracy + 
+			"\nTimeStamp: " + ConvertFromUnixTimestamp(Input.location.lastData.timestamp).ToLongTimeString();
+		;
+	}
 
 	//Longitude 經度 1 = 110KM
 	//Latitude 緯度 1 = 100KM

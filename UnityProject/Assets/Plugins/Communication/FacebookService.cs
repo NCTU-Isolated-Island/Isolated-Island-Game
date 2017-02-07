@@ -1,6 +1,7 @@
 ﻿using Facebook.Unity;
 using IsolatedIslandGame.Library;
 using System.Collections.Generic;
+using Facebook.MiniJSON;
 
 namespace IsolatedIslandGame.Client.Communication
 {
@@ -20,12 +21,22 @@ namespace IsolatedIslandGame.Client.Communication
                         if (FB.IsLoggedIn)
                         {
                             LogService.Info("facebook login successiful");
-                            LogService.InfoFormat("FacebookID: {0}, FacebookAccessToken: {1}", result.AccessToken.UserId, result.AccessToken);
+                            LogService.InfoFormat("FacebookID: {0}, FacebookAccessToken: {1}", result.AccessToken.UserId, result.AccessToken.TokenString);
                             UserManager.Instance.User.OperationManager.Login(ulong.Parse(result.AccessToken.UserId), result.AccessToken.TokenString);
                         }
                     };
                     LogService.Info("waiting for facebook login response");
-                    FB.LogInWithReadPermissions(new List<string>() { "public_profile", "user_friends" }, loginCallBack);
+                    if (!FB.IsLoggedIn)
+                    {
+                        FB.LogInWithReadPermissions(new List<string>() { "public_profile", "user_friends" }, loginCallBack);
+                    }
+                    else
+                    {
+                        FB.Mobile.RefreshCurrentAccessToken((result) =>
+                        {
+                            UserManager.Instance.User.OperationManager.Login(ulong.Parse(result.AccessToken.UserId), result.AccessToken.TokenString);
+                        });
+                    }
                 }
                 else
                 {
