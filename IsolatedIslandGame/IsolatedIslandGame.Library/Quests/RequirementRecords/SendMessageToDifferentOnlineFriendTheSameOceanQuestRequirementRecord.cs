@@ -1,20 +1,21 @@
-﻿using System;
+﻿using IsolatedIslandGame.Library.Quests.Requirements;
+using MsgPack.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using MsgPack.Serialization;
 
-namespace IsolatedIslandGame.Library.Quests
+namespace IsolatedIslandGame.Library.Quests.RequirementRecords
 {
     public class SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord : QuestRequirementRecord
     {
         [MessagePackMember(3)]
-        private HashSet<int> onlineFriendPlayerID_Set = new HashSet<int>();
-        public IEnumerable<int> OnlineFriendPlayerIDs { get { return onlineFriendPlayerID_Set.ToArray(); } }
+        private HashSet<int> friendPlayerID_Set = new HashSet<int>();
+        public IEnumerable<int> FriendPlayerIDs { get { return friendPlayerID_Set.ToArray(); } }
         public override bool IsSufficient
         {
             get
             {
-                return onlineFriendPlayerID_Set.Count >= (Requirement as SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement).RequiredFriendNumber;
+                return friendPlayerID_Set.Count >= (Requirement as SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement).RequiredFriendNumber;
             }
         }
 
@@ -22,7 +23,7 @@ namespace IsolatedIslandGame.Library.Quests
         {
             get
             {
-                return $"人數： {onlineFriendPlayerID_Set.Count}/{(Requirement as SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement).RequiredFriendNumber}";
+                return $"人數： {friendPlayerID_Set.Count}/{(Requirement as SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement).RequiredFriendNumber}";
             }
         }
 
@@ -31,9 +32,9 @@ namespace IsolatedIslandGame.Library.Quests
 
         [MessagePackDeserializationConstructor]
         public SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord() { }
-        public SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, HashSet<int> onlineFriendPlayerID_Set) : base(questRequirementRecordID, requirement)
+        public SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, HashSet<int> friendPlayerID_Set) : base(questRequirementRecordID, requirement)
         {
-            this.onlineFriendPlayerID_Set = onlineFriendPlayerID_Set;
+            this.friendPlayerID_Set = friendPlayerID_Set;
         }
         internal override void RegisterObserverEvents(Player player)
         {
@@ -48,11 +49,11 @@ namespace IsolatedIslandGame.Library.Quests
                     VesselManager.Instance.FindVesselByOwnerPlayerID(conversation.receiverPlayerID, out friendVessel) && 
                     player.Vessel.LocatedOceanType == friendVessel.LocatedOceanType)
                 {
-                    lock (onlineFriendPlayerID_Set)
+                    lock (friendPlayerID_Set)
                     {
-                        if (!onlineFriendPlayerID_Set.Contains(conversation.receiverPlayerID))
+                        if (!friendPlayerID_Set.Contains(conversation.receiverPlayerID))
                         {
-                            if (onlineFriendPlayerID_Set.Add(conversation.receiverPlayerID) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddPlayerIDToSendMessageToDifferentOnlineFriendQuestRequirementRecord(QuestRequirementRecordID, conversation.receiverPlayerID)))
+                            if (friendPlayerID_Set.Add(conversation.receiverPlayerID) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirementRecord(QuestRequirementRecordID, conversation.receiverPlayerID)))
                             {
                                 onRequirementStatusChange?.Invoke(this);
                             }

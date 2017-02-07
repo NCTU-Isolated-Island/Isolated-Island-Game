@@ -1,7 +1,7 @@
 ﻿using IsolatedIslandGame.Protocol;
 using MsgPack.Serialization;
 
-namespace IsolatedIslandGame.Library.Quests
+namespace IsolatedIslandGame.Library.Quests.Requirements
 {
     public class SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement : QuestRequirement
     {
@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.Quests
         {
             get
             {
-                return $"發送訊息給 {RequiredFriendNumber}位 位在海域的好友";
+                return $"發送訊息給同海域的 {RequiredFriendNumber}位 在線好友";
             }
         }
 
@@ -27,11 +27,6 @@ namespace IsolatedIslandGame.Library.Quests
         public SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(int questRequirementID, int requiredFriendNumber) : base(questRequirementID)
         {
             RequiredFriendNumber = requiredFriendNumber;
-        }
-
-        public override bool CreateRequirementRecord(int questRecordID, int playerID, out QuestRequirementRecord record)
-        {
-            return QuestRecordFactory.Instance.CreateSendMessageToDifferentOnlineFriendQuestRequirementRecord(questRecordID, playerID, this, out record);
         }
     }
 }

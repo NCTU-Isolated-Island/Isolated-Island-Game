@@ -75,6 +75,9 @@ namespace IsolatedIslandGame.Library
 
         private event Action<QuestRecord> onQuestRecordUpdated;
         public event Action<QuestRecord> OnQuestRecordUpdated { add { onQuestRecordUpdated += value; } remove { onQuestRecordUpdated -= value; } }
+
+        private event Action<string> onScanQR_Code;
+        public event Action<string> OnScanQR_Code { add { onScanQR_Code += value; } remove { onScanQR_Code -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
@@ -254,6 +257,10 @@ namespace IsolatedIslandGame.Library
                 questRecordDictionary.Add(questRecord.QuestRecordID, questRecord);
                 onQuestRecordUpdated?.Invoke(questRecord);
             }
+        }
+        public void ScanQR_Code(string qrCodeString)
+        {
+            onScanQR_Code?.Invoke(qrCodeString);
         }
     }
 }

@@ -2,6 +2,9 @@
 {
     public enum QuestRequirementType : byte
     {
-        SendMessageToDifferentOnlineFriendInTheSameOcean
+        SendMessageToDifferentOnlineFriendInTheSameOcean,
+        CloseDealWithDifferentFriendInTheSameOcean,
+        ScanQR_Code,
+        TimeLimit,
     }
 }
