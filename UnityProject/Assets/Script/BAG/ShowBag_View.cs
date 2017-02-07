@@ -73,6 +73,7 @@ public class ShowBag_View : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
         }
         else
         { Debug.Log("Up In None:" + clicking_time); }
+
         clicking = false;
         clicking_time = 0;
         SubButton1.SetActive(false);

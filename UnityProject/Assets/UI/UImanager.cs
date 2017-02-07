@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using IsolatedIslandGame.Library;
+
 public class UImanager : MonoBehaviour
 {
 
-    public enum UI { Login, Main_Boat, Other_Boat, Map, Show_Bag, Combine, Mission, Friend, Chat };
+    public enum UI { Login, Main_Boat, Other_Boat, Map, Show_Bag, Combine, Mission, Friend, Chat, Trade };
 
     public bool StopForTest;
 
@@ -65,16 +66,21 @@ public class UImanager : MonoBehaviour
     {
         GameUI = (UI)a;
         NowAt = a;
-
+      
         if (a == 1)
         {
           if(GameManager.Instance.PlayerGameObject)
                 CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
-            
+          UIObject[1].SetActive(true);
         }
-        else if (a == 2 || a == 3 || a == 5)//需要黑幕特效->等下Update換
+        else if (a == 2 || a == 3 || a == 5 || a == 9)//需要黑幕特效->等下Update換
         {
             BlackFade = true;
+
+            if(a==9)
+            {
+                UIObject[9].transform.localPosition = new Vector3(0, 0, 0);
+            }
         }
         else if (!BlackFade)  //無須黑幕特效->直接換
         {
@@ -174,6 +180,10 @@ public class UImanager : MonoBehaviour
                             {
                                 UIObject[i].SetActive(true);
                             }
+                            else if(i==9)
+                            {
+
+                            }
                             else
                             {
                                 UIObject[i].SetActive(false);
@@ -183,9 +193,14 @@ public class UImanager : MonoBehaviour
                         if (NowAt == 4)
                         {
                             UIObject[1].SetActive(true);
-                            Bag.gameObject.transform.localPosition = new Vector3(0, 0, 0); Bag.GetComponent<ShowBag_pos>().BagOut = true; }
+                            Bag.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+                            Bag.GetComponent<ShowBag_pos>().BagOut = true;
+                        }
                         else
-                        { Bag.gameObject.transform.localPosition = new Vector3(0, -CanvasHeight, 0); Bag.GetComponent<ShowBag_pos>().BagOut = false; }
+                        {
+                            Bag.gameObject.transform.localPosition = new Vector3(0, -CanvasHeight, 0);
+                            Bag.GetComponent<ShowBag_pos>().BagOut = false;
+                        }
 
                     }
                 }

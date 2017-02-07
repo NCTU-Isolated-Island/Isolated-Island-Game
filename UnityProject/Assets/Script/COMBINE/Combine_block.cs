@@ -7,7 +7,7 @@ public class Combine_block : MonoBehaviour,IPointerClickHandler {
 
     public GameObject UIControl;
     public GameObject Bag;
-    public GameObject ItemInHere;
+    public int ItemInHere;
     // Use this for initialization
     void Start () {
         if (!UIControl)
@@ -20,19 +20,9 @@ public class Combine_block : MonoBehaviour,IPointerClickHandler {
         }
     }
 	public void OnPointerClick(PointerEventData eventData)
-    {
-        
+    {       
         Bag.GetComponent<ShowBag_pos>().CombineArea = this.gameObject;
         Bag.GetComponent<ShowBag_pos>().UpAndDown();
     }
-    // Update is called once per frame
-    void Update () {
-	
-	}
 
-    void set_picture()
-    {
-
-
-    }
 }

@@ -6,25 +6,28 @@ using IsolatedIslandGame.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MessageManager : MonoBehaviour {
 
 	public static MessageManager Instance;
-
 	public List<PlayerConversation> Conversations = new List<PlayerConversation>();
+
 
 	void Awake()
 	{
 		if(Instance == null)
 			Instance = this;
+ 
 	}
 
 	void Start()
 	{
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
 
-	}
+      
+    }
 
 	void OnDestroy()
 	{
@@ -40,6 +43,9 @@ public class MessageManager : MonoBehaviour {
 	void OnGetPlayerConversation(PlayerConversation conversation)
 	{
 		Conversations.Add(conversation);
+        Chat_Control.Instance.ResetDetail();
 	}
+ 
+
 
 }

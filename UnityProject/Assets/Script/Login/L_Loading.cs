@@ -21,6 +21,7 @@ public class L_Loading : MonoBehaviour {
         MainBoat = UIControl.GetComponent<UImanager>().UIObject[1];
         Loading.SetActive(true);
         DragUp.SetActive(false);
+        CreateChar.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(FBconfirm);
     }
 	
     public void ShowLoadingIcon()
@@ -31,7 +32,15 @@ public class L_Loading : MonoBehaviour {
     {
         Loading.SetActive(false);
     }
+    public void FBconfirm()
+    {
+        BG_A.SetActive(true);
+        BG_B.SetActive(true);
+        GameTitle.SetActive(false);
+        CreateChar.SetActive(false);
+        this.gameObject.transform.GetChild(3).gameObject.SetActive(true);
 
+    }
     // Update is called once per frame
     void Update () {
 
@@ -59,12 +68,12 @@ public class L_Loading : MonoBehaviour {
         }
         else if(LoadingCase == 1)
         {
-            GameTitle.SetActive(false);
+            GameTitle.SetActive(true);
             Loading.SetActive(false);
             DragUp.SetActive(false);
 
-            BG_A.SetActive(false); 
-            BG_B.SetActive(true);
+            BG_A.SetActive(true); 
+            BG_B.SetActive(false);
 
             CreateChar.SetActive(true);
             LoadingCase = -1;
