@@ -66,7 +66,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             foreach(int questRequirementID in requirementIDs)
             {
                 QuestRequirement requirement;
-                if (SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameOceanRequirement(questRequirementID, out requirement))
+                if (SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirement(questRequirementID, out requirement))
                 {
                     requirements.Add(requirement);
                 }
@@ -104,10 +104,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         }
 
         #region Specialize QuestRequirement
-        protected override bool SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameOceanRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirement(int requirementID, out QuestRequirement requirement)
         {
-            string sqlString = @"SELECT RequiredFriendNumber
-                from SMTDOFITSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            string sqlString = @"SELECT SpecificOceanType, RequiredFriendNumber
+                from SMTDOFITSSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -115,8 +115,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        int requiredFriendNumber = reader.GetInt32(0);
-                        requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(requirementID, requiredFriendNumber);
+                        OceanType specificOceanType = (OceanType)reader.GetByte(0);
+                        int requiredFriendNumber = reader.GetInt32(1);
+                        requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(requirementID, specificOceanType, requiredFriendNumber);
                         return true;
                     }
                     else
@@ -127,10 +128,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool SpecializeRequirementToCloseDealWithDifferentFriendInTheSameOceanRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeRequirementToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirement(int requirementID, out QuestRequirement requirement)
         {
-            string sqlString = @"SELECT RequiredFriendNumber
-                from CDWDFITSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            string sqlString = @"SELECT SpecificOceanType, RequiredFriendNumber
+                from CDWDFITSSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -138,8 +139,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        int requiredFriendNumber = reader.GetInt32(0);
-                        requirement = new CloseDealWithDifferentFriendInTheSameOceanQuestRequirement(requirementID, requiredFriendNumber);
+                        OceanType specificOceanType = (OceanType)reader.GetByte(0);
+                        int requiredFriendNumber = reader.GetInt32(1);
+                        requirement = new CloseDealWithDifferentFriendInTheSameSpecificOceanQuestRequirement(requirementID, specificOceanType, requiredFriendNumber);
                         return true;
                     }
                     else

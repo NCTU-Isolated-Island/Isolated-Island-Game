@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(1, OceanType.Unknown, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -70,7 +70,7 @@ namespace IsolatedIslandGame.Library.UnitTest
 
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
             {
-                new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(1, requirement, new HashSet<int>())
+                new SendMessageToDifferentOnlineFriendTheSameSpecificOceanQuestRequirementRecord(1, requirement, new HashSet<int>())
             }, false);
             record.RegisterObserverEvents(player1);
 
@@ -128,7 +128,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(1, OceanType.Unknown, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -164,7 +164,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(1, OceanType.Unknown, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -178,7 +178,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             player1.BindInventory(new Inventory(1, 40));
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
             {
-                new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(1, requirement, new HashSet<int> { 2, 3 })
+                new SendMessageToDifferentOnlineFriendTheSameSpecificOceanQuestRequirementRecord(1, requirement, new HashSet<int> { 2, 3 })
             }, false);
             record.RegisterObserverEvents(player1);
 

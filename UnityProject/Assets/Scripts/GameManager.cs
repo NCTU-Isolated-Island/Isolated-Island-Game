@@ -67,8 +67,9 @@ public class GameManager : MonoBehaviour
 		if(status == true)
 		{
 			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(23,"TestServer");
+			UserManager.Instance.User.OperationManager.PlayerIDLogin(24,"TestServer");
 		}
+       // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
 	}
 
 
@@ -96,7 +97,7 @@ public class GameManager : MonoBehaviour
 	#endregion
 	void OnGetPlayerConversation(IsolatedIslandGame.Library.TextData.PlayerConversation conversation)
 	{
-		print(conversation.message.senderPlayerID + " : " +conversation.message.content );
+		//print(conversation.message.senderPlayerID + " : " +conversation.message.content );
 	}
 
 	void OnPlayerOnline(Player player)
@@ -109,7 +110,7 @@ public class GameManager : MonoBehaviour
 			UImanager.Instance.LoadResult(1);
 
 			//Create Charater by Uimanager ? (probably
-			UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.Businessman);
+			//UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.Businessman);
 		}
 		else
 		{
@@ -142,6 +143,9 @@ public class GameManager : MonoBehaviour
 
 			PlayerController.Instance.gameObject.SetActive(true);
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
+
+			print("ON");
+			//UserManager.Instance.User.Player.OperationManager.SendMessage(23,"FirstMessageTest");
 
 
 		}
@@ -260,7 +264,7 @@ public class GameManager : MonoBehaviour
 					{
 						GameObject decorationGameObject = Instantiate(
 							elementModels[decoration.Material.ItemID],
-							userVesselGameObject.transform
+							userVesselGameObject.transform.Find("Decorations")
 						) as GameObject;
 
 						decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
@@ -359,7 +363,7 @@ public class GameManager : MonoBehaviour
 						{
 							GameObject decorationGameObject = Instantiate(
 								elementModels[decoration.Material.ItemID],
-								userVesselGameObject.transform
+								userVesselGameObject.transform.Find("Decorations")
 							) as GameObject;
 
 							decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
