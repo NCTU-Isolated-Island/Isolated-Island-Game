@@ -4,64 +4,93 @@ using System.Collections;
 public class Test : MonoBehaviour {
 
 
-
-
-	public enum ViewMode
-	{
-		FirstPerson, BirdView, NormalView
-	}
-
-	public ViewMode CurrenViewMode = ViewMode.NormalView;
-
-	public void ChangeViewMode(ViewMode mode)
-	{
-		
-		switch (mode) {
-		case ViewMode.FirstPerson:
-			// move camera to first person anchor
-
-			if(SystemInfo.supportsGyroscope)
-			{
-				Input.gyro.enabled = true;
-			}
-			else
-			{
-				//TODO Show No Gyro Support Warning
-			}
-
-			CurrenViewMode = ViewMode.FirstPerson;
-			break;
-		
-		case ViewMode.NormalView:
-			//
-			break;
-		
-		case ViewMode.BirdView:
-
-			break;
-		default:
-			break;
-		}
-		
-	}
+	public GameObject CurrentSelectDecoration;
 
 	void Update()
 	{
-		if(CurrenViewMode == ViewMode.FirstPerson)
+		if(Input.touchCount == 1)
 		{
-			//Camera.main.transform.rotation = Input.gyro.attitude;
-
-			//TODO maybe add horizontal Y Rotate capability
+			//do below
 		}
 
-		if(Input.anyKeyDown)
+		#region HitRaycaster
+		bool entireHit;
+		RaycastHit entireHitInfo = new RaycastHit();
+
+		entireHit = Physics.Raycast
+			(
+				Camera.main.ScreenPointToRay(Input.mousePosition),
+				out entireHitInfo,
+				99999f
+			);
+
+		bool vesselHit;
+		RaycastHit vesselHitInfo = new RaycastHit();
+		vesselHit = Physics.Raycast
+			(
+				Camera.main.ScreenPointToRay(Input.mousePosition),
+				out vesselHitInfo,
+				99999f,
+				LayerMask.GetMask("PlayerModel")
+			);
+		#endregion
+
+		//目前這部分只有拖拉功能 (先只做這些)
+		if(Input.touches[0].phase == TouchPhase.Began)
 		{
-			bool a = Handheld.PlayFullScreenMovie ("IMG_7512.mov", Color.white, FullScreenMovieControlMode.Hidden);
-			print(a);
+			
+			if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
+			{
+				CurrentSelectDecoration = entireHitInfo.transform.gameObject;
+			}
+
 		}
+
+		if(Input.touches[0].phase == TouchPhase.Stationary || Input.touches[0].phase == TouchPhase.Moved)
+		{
+	
+		}
+
+		if(Input.touches[0].phase == TouchPhase.Ended)
+		{
+			if(!vesselHit)
+			{
+//				if(!RemovedDecorations.Contains(CurrentSelectDecoration))
+//					RemovedDecorations.Add(CurrentSelectDecoration);
+				
+				CurrentSelectDecoration.SetActive(false);
+
+				CurrentSelectDecoration = null;
+			}
+
+		}
+
+		if(CurrentSelectDecoration != null)
+		{
+			if(vesselHit)
+			{
+				CurrentSelectDecoration.transform.position = vesselHitInfo.point;
+			}
+			else
+			{
+				CurrentSelectDecoration.transform.position = 
+					Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 5;
+			}
+		}
+
+
 	}
 
+	void BeginDec()
+	{
+		// for dev
+		int itemID = 1;
 
+		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
+
+//		if(!AddedDecorations.Contains(CurrentSelectDecoration))
+//			AddedDecorations.Add(CurrentSelectDecoration);
+	}
 
 
 }

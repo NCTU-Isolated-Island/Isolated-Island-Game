@@ -18,9 +18,11 @@ public class PlayerController : MonoBehaviour {
 	public List<GameObject> InArea;
 	public GameObject CurrentSelectDecoration;
 
-	public enum State {Default, Move, Rotate}
+	public enum State { Default, Move, Rotate }
 	public State CurrentState = State.Default;
 	public int ModelOrientMode = 0;
+	public enum ViewMode{ FirstPerson, BirdView, NormalView }
+	public ViewMode CurrenViewMode = ViewMode.NormalView;
 
 	public delegate void PlayerAction();
 	public static event PlayerAction OnGetArea;
@@ -46,40 +48,19 @@ public class PlayerController : MonoBehaviour {
 	void Update()
 	{
 		
-		if(Input.GetKeyDown(KeyCode.P))
-		{
-			StartPlaceDecoration();
 
-		}
-
-		if(Input.GetKeyDown(KeyCode.D))
-		{
-			FinishPlaceDecoration();
-		}
-
-		if(Input.GetMouseButtonDown(0))
-		{
-			SelectDecoration();
-		}
-
-		if(Input.GetKeyDown(KeyCode.Alpha7))
-		{
-			OnlyShowFriendsVessel();
-		}
-
-//		if(Input.GetKeyDown(KeyCode.E))
-//		{
-//			StartCoroutine(Decorate());
-//		}
-
+	
 		if(Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			CurrentState = State.Move;
+			ChangeViewMode(ViewMode.BirdView);
 		}
-
 		if(Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			CurrentState = State.Rotate;
+			ChangeViewMode(ViewMode.FirstPerson);
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha3))
+		{
+			ChangeViewMode(ViewMode.NormalView);
 		}
 			
 
@@ -444,6 +425,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
+
 	public void OnlyShowFriendsVessel()
 	{
 		List<int> friendsID = new List<int>();
@@ -469,6 +451,32 @@ public class PlayerController : MonoBehaviour {
 		foreach(GameObject entry in GameManager.Instance.UserGameObject.Values)
 		{
 			ShowVessel(entry);	
+		}
+
+	}
+
+	public void ChangeViewMode(ViewMode mode)
+	{
+		  
+		switch (mode) {
+		case ViewMode.FirstPerson:
+			//Maybe need CameraManager.to first person anchor
+			Camera.main.transform.position = GameManager.Instance.PlayerGameObject.transform.Find("FirstPersonAnchor").position;
+			FirstPersonCameraController.Instance.enabled = true;
+			CurrenViewMode = ViewMode.FirstPerson;
+			break;
+
+		case ViewMode.NormalView:
+			CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+			CurrenViewMode = ViewMode.NormalView;
+			break;
+
+		case ViewMode.BirdView:
+			CameraManager.Instance.ToFarAnchor(GameManager.Instance.PlayerGameObject);
+			CurrenViewMode = ViewMode.BirdView;
+			break;
+		default:
+			break;
 		}
 
 	}
@@ -504,7 +512,8 @@ public class PlayerController : MonoBehaviour {
 				// not keycode.a is touch up
 				if(Input.GetKeyUp(KeyCode.A))
 				{
-					Destroy(dec);
+					//Destory Decoration;
+					dec.SetActive(false);
 					//TODO end this function and call inventory show up 
 				}
 				else
@@ -536,6 +545,57 @@ public class PlayerController : MonoBehaviour {
 		}
 
 	}
+
+	public List<GameObject> ModifiedDecorations = new List<GameObject>();
+	public List<GameObject> AddedDecorations = new List<GameObject>();
+	public List<GameObject> RemovedDecorations = new List<GameObject>();
+
+	// Code templete , cant use directorly 
+	void AddModifiedDecorations(GameObject entry)
+	{
+		if(!ModifiedDecorations.Contains(entry))
+			ModifiedDecorations.Add(entry);
+		if(!RemovedDecorations.Contains(entry))
+			RemovedDecorations.Add(entry);
+		if(!AddedDecorations.Contains(entry))
+			AddedDecorations.Add(entry);
+	}
+
+	//Final Stage After Clicking Done Button
+	void UpdateModifiedDecorationsToServer()
+	{
+		foreach(GameObject entry in ModifiedDecorations)
+		{
+			UserManager.Instance.User.Player.OperationManager.UpdateDecorationOnVessel
+			(
+				System.Int32.Parse(entry.name),
+				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
+				entry.transform.rotation.eulerAngles.x, entry.transform.rotation.eulerAngles.y, entry.transform.rotation.eulerAngles.z
+			);
+		}
+
+		foreach(GameObject entry in AddedDecorations)
+		{
+			UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
+			(
+				System.Int32.Parse(entry.name),
+				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
+				entry.transform.rotation.eulerAngles.x, entry.transform.rotation.eulerAngles.y, entry.transform.rotation.eulerAngles.z
+			);
+		}
+
+		foreach(GameObject entry in RemovedDecorations)
+		{
+			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(entry.name));
+		}
+	}
+
+	public void DecorationFinished()
+	{
+		
+	}
+
+
 
 }
 
