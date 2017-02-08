@@ -49,7 +49,7 @@ public class MainBoatUIManager : MonoBehaviour {
                     button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Friend); });
                     break;
                 case "ToChatButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Chat); });
+                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Record); });
                     break;
                 case "ToEverydayButton":
                     // TODO : Add listener to this button

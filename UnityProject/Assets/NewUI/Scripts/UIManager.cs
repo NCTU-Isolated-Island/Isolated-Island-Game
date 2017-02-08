@@ -11,8 +11,7 @@ public class UIManager : MonoBehaviour
     // enum all UI pages
     public enum UIPageType
     {
-        Login, Main_Boat, Other_Boat, Show_Bag, Combine, Mission, Friend, Chat, Transaction
-            , BluePrint , PutItem
+        Login, Main_Boat, Other_Boat, Show_Bag, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem
     }
 
     //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();

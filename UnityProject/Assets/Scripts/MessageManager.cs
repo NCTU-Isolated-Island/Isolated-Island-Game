@@ -43,9 +43,8 @@ public class MessageManager : MonoBehaviour {
 	void OnGetPlayerConversation(PlayerConversation conversation)
 	{
 		Conversations.Add(conversation);
+        
         Chat_Control.Instance.ResetDetail();
 	}
- 
-
 
 }

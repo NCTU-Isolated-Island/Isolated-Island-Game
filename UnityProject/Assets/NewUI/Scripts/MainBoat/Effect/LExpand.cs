@@ -12,6 +12,8 @@ public class LExpand : MonoBehaviour
     private float hori_ori;
     private float ver_ori;
 
+    private float intervalTime;
+
     private IEnumerator coroutine;
 
     // Use this for initialization
@@ -23,9 +25,8 @@ public class LExpand : MonoBehaviour
         ver_ori = verTmp.y;
 
         ExpandOrWithdraw = false;
+        intervalTime = 0.5f;
         // TESTING
-        //Invoke("ExpandBtn", 1f);
-        //Invoke("WithDrawBtn", 2f);
     }
 
     public void OnClick()
@@ -61,20 +62,20 @@ public class LExpand : MonoBehaviour
         float hori_st = horiTmp.x;
         float ver_st = verTmp.y;
 
-        while (passTime < 1.5f)
+        while (passTime < intervalTime)
         {
             if (OnOff == true)
             {
-                horiTmp.x = Mathf.Lerp(hori_st, 0, passTime / 1.5f);
+                horiTmp.x = Mathf.Lerp(hori_st, 0, passTime / intervalTime);
                 viewportHorizontal.GetComponent<RectTransform>().offsetMin = horiTmp;
-                verTmp.y = Mathf.Lerp(ver_st, 0, passTime / 1.5f);
+                verTmp.y = Mathf.Lerp(ver_st, 0, passTime / intervalTime);
                 viewportVertical.GetComponent<RectTransform>().offsetMax = verTmp;
             }
             else
             {
-                horiTmp.x = Mathf.Lerp(hori_st, hori_ori, passTime / 1.5f);
+                horiTmp.x = Mathf.Lerp(hori_st, hori_ori, passTime / intervalTime);
                 viewportHorizontal.GetComponent<RectTransform>().offsetMin = horiTmp;
-                verTmp.y = Mathf.Lerp(ver_st, ver_ori, passTime / 1.5f);
+                verTmp.y = Mathf.Lerp(ver_st, ver_ori, passTime / intervalTime);
                 viewportVertical.GetComponent<RectTransform>().offsetMax = verTmp;
             }
 
