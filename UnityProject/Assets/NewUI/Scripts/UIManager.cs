@@ -21,18 +21,19 @@ public class UIManager : MonoBehaviour
 
     // Variables for creating character
     private int CampNum;
-    private string player_name, speech;
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else if (Instance != this) Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
     {
         // Initial Variable Setting
-        currentUIPage = UIPageType.Main_Boat;
+        currentUIPage = UIPageType.Login;
 
         // Get GameObjects for the Dictionary
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
@@ -107,21 +108,11 @@ public class UIManager : MonoBehaviour
 
     // Update Legacy API from old UImanager
 
-    public void LoadResult(int Result)
-    {
-        UIPageList[(int)UIPageType.Login].GetComponent<L_Loading>().LoadResult(Result);
-        //UIPageDictionary[UIPageType.Login].GetComponent<L_Loading>().LoadResult(Result);
-    }
-
-    public void Create_Charter()
-    {
-        switch (CampNum)
-        {
-            case 0: UserManager.Instance.User.Player.OperationManager.CreateCharacter(player_name, speech, IsolatedIslandGame.Protocol.GroupType.Farmer); break;
-            case 1: UserManager.Instance.User.Player.OperationManager.CreateCharacter(player_name, speech, IsolatedIslandGame.Protocol.GroupType.Businessman); break;
-            case 2: UserManager.Instance.User.Player.OperationManager.CreateCharacter(player_name, speech, IsolatedIslandGame.Protocol.GroupType.Animal); break;
-        }
-    }
+    //public void LoadResult(int Result)
+    //{
+    //    UIPageList[(int)UIPageType.Login].GetComponent<L_Loading>().LoadResult(Result);
+    //    //UIPageDictionary[UIPageType.Login].GetComponent<L_Loading>().LoadResult(Result);
+    //}
 
     public void ToMainPage()
     {
