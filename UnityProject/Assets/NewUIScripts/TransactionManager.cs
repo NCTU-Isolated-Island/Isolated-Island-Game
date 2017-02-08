@@ -50,7 +50,6 @@ public class TransactionManager : MonoBehaviour
     private GameObject TransactionConfirmedPanel;
 
     // Custom needed variable
-    private Dictionary<int, Sprite> ID2ImageDict;
 
     private Transaction thisTransaction;
     public int WhereIfrom;
@@ -85,7 +84,6 @@ public class TransactionManager : MonoBehaviour
         }
 
         // testing , should be removed
-        ID2ImageDict = new Dictionary<int, Sprite>();
     }
 
     void OnPlayerOnline(Player player)
@@ -176,14 +174,14 @@ public class TransactionManager : MonoBehaviour
         {
             int index = info.PositionIndex;
             OpponentTransactionItem[index].item = info.Item;
-            OpponentTransactionItem[index].itemImage.sprite = ID2ImageDict[info.Item.ItemID];
+            OpponentTransactionItem[index].itemImage.sprite = Resources.Load<Sprite>("2D/" + info.Item.ItemID);
             OpponentTransactionItem[index].Amount = info.Count;
         }
         else
         {
             int index = info.PositionIndex;
             MyTransactionItem[index].item = info.Item;
-            MyTransactionItem[index].itemImage.sprite = ID2ImageDict[info.Item.ItemID];
+            MyTransactionItem[index].itemImage.sprite = Resources.Load<Sprite>("2D/" + info.Item.ItemID);
             MyTransactionItem[index].Amount = info.Count;
         }
     }

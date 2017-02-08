@@ -11,12 +11,12 @@ public class UIManager : MonoBehaviour
     // enum all UI pages
     public enum UIPageType
     {
-        Login, Main_Boat, Other_Boat, Map, Show_Bag, Combine, Mission, Friend, Chat, Transaction
-            , NULL
+        Login, Main_Boat, Other_Boat, Show_Bag, Combine, Mission, Friend, Chat, Transaction
+            , BluePrint , PutItem
     }
 
     //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();
-    public GameObject[] UIPageList;
+    public GameObject[] UIPageList = new GameObject [10];
 
     public UIPageType currentUIPage;
 
@@ -33,35 +33,35 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // Initial Variable Setting
-        currentUIPage = UIPageType.NULL;
+        currentUIPage = UIPageType.Main_Boat;
 
         // Get GameObjects for the Dictionary
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
 
         // TESTING
-        if (UIPageList[(int)UIPageType.Login] == null) print("LogIn is NULL");
-        Invoke("Test", 3f);
+        //if (UIPageList[(int)UIPageType.Login] == null) print("LogIn is NULL");
+        //Invoke("Test", 3f);
     }
 
     public void SwapPage(UIPageType nextPage)
     {
+        if (nextPage == currentUIPage) return;
+
         StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
-        if (currentUIPage != UIPageType.NULL)
-            StartCoroutine(RemovingPage(UIPageList[(int)currentUIPage]));
+        UIPageType tmp = currentUIPage;
+        StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
 
         currentUIPage = nextPage;
     }
 
     public void RemoveCurrentPage()
     {
-        if (currentUIPage != UIPageType.NULL)
-            StartCoroutine(RemovingPage(UIPageList[(int)currentUIPage]));
-
-        currentUIPage = UIPageType.NULL;
+        StartCoroutine(RemovingPage(UIPageList[(int)currentUIPage]));
     }
 
     IEnumerator MovingPageToCenter(GameObject page)
     {
+        print(page.name);
         page.SetActive(true);
 
         // Move page to the center
@@ -69,19 +69,20 @@ public class UIManager : MonoBehaviour
 
         float passTime = 0;
         RectTransform rectTransform = page.GetComponent<RectTransform>();
-        // base on "right" property
-        while (rectTransform.offsetMax.y < 1)
-        {
-            Vector2 nextPosition = rectTransform.offsetMax;
-            nextPosition.y = Mathf.Lerp(0 , 1 , passTime / 1f );
-            rectTransform.offsetMax = nextPosition;
+        //// base on "right" property
+        //while (rectTransform.offsetMax.y < 1)
+        //{
+        //    Vector2 nextPosition = rectTransform.offsetMax;
+        //    nextPosition.y = Mathf.Lerp(0 , 1 , passTime / 1f );
+        //    rectTransform.offsetMax = nextPosition;
 
-            passTime += Time.deltaTime;
-            yield return null;
-        }
+        //    passTime += Time.deltaTime;
+        //    yield return null;
+        //}
 
         #endregion
         //rectTransform.offsetMax = new Vector2(1, rectTransform.offsetMax.y);
+        yield return null;
     }
     IEnumerator RemovingPage(GameObject page)
     {
@@ -90,18 +91,19 @@ public class UIManager : MonoBehaviour
         // base on "right" property
         // Remove page from the center
         #region need Implement
-        while (rectTransform.offsetMax.y > 0)
-        {
-            Vector2 nextPosition = rectTransform.offsetMax;
-            nextPosition.y = Mathf.Lerp(1, 0, passTime / 1f);
-            rectTransform.offsetMax = nextPosition;
+        //while (rectTransform.offsetMax.y > 0)
+        //{
+        //    Vector2 nextPosition = rectTransform.offsetMax;
+        //    nextPosition.y = Mathf.Lerp(1, 0, passTime / 1f);
+        //    rectTransform.offsetMax = nextPosition;
 
-            passTime += Time.deltaTime;
-            yield return null;
-        }
+        //    passTime += Time.deltaTime;
+        //    yield return null;
+        //}
         #endregion
         page.SetActive(false);
         //rectTransform.offsetMax = new Vector2(0, rectTransform.offsetMax.y);
+        yield return null;
     }
 
     // Update Legacy API from old UImanager
@@ -122,12 +124,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // TESTING
+    public void ToMainPage()
+    {
+        SwapPage(UIPageType.Main_Boat);
+    }
 
+    // TESTING
+    /*
     public void Test()
     {
         print("inTest");
         SwapPage(UIPageType.Login);
     }
-
+    */
 }
