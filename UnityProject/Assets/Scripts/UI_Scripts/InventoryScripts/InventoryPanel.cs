@@ -31,10 +31,12 @@ public class InventoryPanel : MonoBehaviour
     public void ShowPanel()
     {
         gameObject.SetActive(true);
+        // Add Effects
     }
     public void ClosePanel()
     {
         gameObject.SetActive(false);
+        // Add Effects
     }
     public void ShowItemInfoDetail(InventoryItemInfo info)
     {

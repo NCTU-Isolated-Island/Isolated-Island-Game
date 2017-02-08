@@ -9,7 +9,7 @@ public class MainBoatUIManager : MonoBehaviour {
 
     // Variables
     [SerializeField]
-    private GameObject mask; private bool maskStatus;
+    private GameObject mask; public bool maskStatus;
 
     [SerializeField]
     private Button[] verticalButtonList;
@@ -18,18 +18,23 @@ public class MainBoatUIManager : MonoBehaviour {
 
     //
 
-    // Use this for initialization
-    void InitSetting()
+    //
+    void Awake()
     {
-        maskStatus = true;
-    }
-
-	void Start () {
         if (Instance == null)
             Instance = this;
         else if (Instance != this)
             Destroy(gameObject);
+    }
 
+    void InitSetting()
+    {
+        maskStatus = true;
+        ReverseMaskStatus();
+        LExpand.Instance.WithDrawBtn();
+    }
+
+	void Start () {
         InitSetting();
 
         foreach(Button button in verticalButtonList)
@@ -37,7 +42,7 @@ public class MainBoatUIManager : MonoBehaviour {
             switch(button.name)
             {
                 case "ToIngredientsButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Show_Bag); });
+                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory); });
                     break;
                 case "ToBluePrintButton":
                     button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.BluePrint); });

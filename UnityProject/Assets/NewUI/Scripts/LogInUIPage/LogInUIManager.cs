@@ -33,6 +33,9 @@ public class LogInUIManager : MonoBehaviour
     [SerializeField]
     private GameObject chooseGroupPage;
 
+    [SerializeField]
+    private GameObject nameLengthExceedWarning;
+
     void InitSetting()
     {
         NextGroup();
@@ -77,7 +80,7 @@ public class LogInUIManager : MonoBehaviour
         }
         SceneManager.LoadScene("MainScene");
         background.transform.parent.gameObject.SetActive(false);
-        UIManager.Instance.SwapPage(UIManager.UIPageType.Main_Boat);
+        UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
     }
 
     public void LoginRedirection()
@@ -97,8 +100,14 @@ public class LogInUIManager : MonoBehaviour
 
     public void DetermineNameAndSpeech()
     {
+        if (playerNameText.text.Length > 6)
+        {
+            nameLengthExceedWarning.SetActive(true);
+            return;
+        }
         playerName = playerNameText.text;
         speech = playerSpeechText.text;
+        ToChooseGroupPage();
     }
 
     public void CreateCharacter()

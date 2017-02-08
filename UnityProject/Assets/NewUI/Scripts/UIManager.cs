@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     // enum all UI pages
     public enum UIPageType
     {
-        Login, Main_Boat, Other_Boat, Show_Bag, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem
+        Login, Main, OtherBoat, Inventory, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem
     }
 
     //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();
@@ -37,30 +37,38 @@ public class UIManager : MonoBehaviour
 
         // Get GameObjects for the Dictionary
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
-
-        // TESTING
-        //if (UIPageList[(int)UIPageType.Login] == null) print("LogIn is NULL");
-        //Invoke("Test", 3f);
     }
 
     public void SwapPage(UIPageType nextPage)
     {
         if (nextPage == currentUIPage) return;
 
-        StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
-        UIPageType tmp = currentUIPage;
-        StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
+        // Show Inventory -> use InventoryPanel.ShowPanel()
+        if (nextPage == UIPageType.Inventory)
+            InventoryPanel.Instance.ShowPanel();
+        else
+            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+
+        RemoveCurrentPage();
 
         currentUIPage = nextPage;
     }
 
     public void RemoveCurrentPage()
     {
-        StartCoroutine(RemovingPage(UIPageList[(int)currentUIPage]));
+        // Remove Inventory -> use InventoryPanel.ClosePanel()
+        if (currentUIPage == UIPageType.Inventory) InventoryPanel.Instance.ClosePanel();
+        else
+        {
+            UIPageType tmp = currentUIPage;
+            StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
+        }
     }
 
     IEnumerator MovingPageToCenter(GameObject page)
     {
+        if (page == null) yield break;
+
         print(page.name);
         page.SetActive(true);
 
@@ -86,8 +94,11 @@ public class UIManager : MonoBehaviour
     }
     IEnumerator RemovingPage(GameObject page)
     {
-        float passTime = 0;
-        RectTransform rectTransform = page.GetComponent<RectTransform>();
+        if (page == null) yield break;
+        print("Removing " + page.name);
+        page.SetActive(false);
+        //float passTime = 0;
+        //RectTransform rectTransform = page.GetComponent<RectTransform>();
         // base on "right" property
         // Remove page from the center
         #region need Implement
@@ -101,22 +112,13 @@ public class UIManager : MonoBehaviour
         //    yield return null;
         //}
         #endregion
-        page.SetActive(false);
         //rectTransform.offsetMax = new Vector2(0, rectTransform.offsetMax.y);
         yield return null;
     }
 
-    // Update Legacy API from old UImanager
-
-    //public void LoadResult(int Result)
-    //{
-    //    UIPageList[(int)UIPageType.Login].GetComponent<L_Loading>().LoadResult(Result);
-    //    //UIPageDictionary[UIPageType.Login].GetComponent<L_Loading>().LoadResult(Result);
-    //}
-
     public void ToMainPage()
     {
-        SwapPage(UIPageType.Main_Boat);
+        SwapPage(UIPageType.Main);
     }
 
     // TESTING

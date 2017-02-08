@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class LExpand : MonoBehaviour
 {
-    private bool ExpandOrWithdraw;
+    public static LExpand Instance { get; private set; }
+    // false for Buttons are in , true for Buttons are expanded
+    private bool LButtonStatus;
 
-    public GameObject viewportHorizontal;
-    public GameObject viewportVertical;
+    [SerializeField]
+    private GameObject settingButton;
+    [SerializeField]
+    private GameObject aboutButton;
+
+    [SerializeField]
+    private GameObject viewportHorizontal;
+    [SerializeField]
+    private GameObject viewportVertical;
 
     private float hori_ori;
     private float ver_ori;
@@ -15,26 +24,39 @@ public class LExpand : MonoBehaviour
     private float intervalTime;
 
     private IEnumerator coroutine;
+    //
+    private void SetNotLExpandButtonStatus(bool OnOff)
+    {
+        settingButton.SetActive(OnOff);
+        aboutButton.SetActive(OnOff);
+    }
+    //
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
 
-    // Use this for initialization
     void Start()
     {
         Vector3 horiTmp = viewportHorizontal.GetComponent<RectTransform>().offsetMin;
         Vector3 verTmp = viewportVertical.GetComponent<RectTransform>().offsetMax;
         hori_ori = horiTmp.x;
         ver_ori = verTmp.y;
+        // Initial Setting
+        LButtonStatus = true;
+        SetNotLExpandButtonStatus(false);
 
-        ExpandOrWithdraw = false;
         intervalTime = 0.5f;
         // TESTING
     }
 
     public void OnClick()
     {
-        if (ExpandOrWithdraw) ExpandBtn();
+        if (LButtonStatus) ExpandBtn();
         else WithDrawBtn();
 
-        ExpandOrWithdraw = !ExpandOrWithdraw;
+        LButtonStatus = !LButtonStatus;
     }
 
     public void ExpandBtn()
@@ -42,6 +64,8 @@ public class LExpand : MonoBehaviour
         if (coroutine != null) StopCoroutine(coroutine);
         coroutine = ExpandBtnCoroutine(false);
         StartCoroutine(coroutine);
+
+        SetNotLExpandButtonStatus(true);
     }
 
     public void WithDrawBtn()
@@ -49,12 +73,12 @@ public class LExpand : MonoBehaviour
         if (coroutine != null) StopCoroutine(coroutine);
         coroutine = ExpandBtnCoroutine(true);
         StartCoroutine(coroutine);
+
+        SetNotLExpandButtonStatus(false);
     }
 
     IEnumerator ExpandBtnCoroutine(bool OnOff)
     {
-        print("OnOff = " + OnOff);
-
         float passTime = 0f;
         Vector3 horiTmp = viewportHorizontal.GetComponent<RectTransform>().offsetMin;
         Vector3 verTmp = viewportVertical.GetComponent<RectTransform>().offsetMax;
@@ -83,5 +107,4 @@ public class LExpand : MonoBehaviour
             yield return null;
         }
     }
-
 }
