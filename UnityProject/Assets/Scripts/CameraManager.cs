@@ -41,6 +41,29 @@ public class CameraManager : MonoBehaviour {
 		using_cor = false;
 	}
 
+	IEnumerator MoveObjectToFPV(Transform source, Transform target, float overTime)
+	{
+		float startTime = Time.time;
+		Vector3 start_pos = source.position;
+		while (Time.time < startTime + overTime)
+		{
+			source.position = Vector3.Lerp(start_pos, target.position, (Time.time - startTime) / overTime);
+			//source.LookAt(target.parent); // look at the vessel , not the anchor
+			yield return null;
+		}
+		source.position = target.position;
+		using_cor = false;
+	}
+
+	public void ToFirstPerson(GameObject user)
+	{
+		if(using_cor) return;
+
+		Camera.transform.parent = Camera.transform.parent.parent;
+		using_cor = true;
+		StartCoroutine(MoveObjectToFPV(Camera.transform, user.transform.Find("FirstPersonAnchor"),MoveCameraDelay));
+	}
+
 	public void ToNearAnchor (GameObject user)
 	{
 		if (using_cor) return;
