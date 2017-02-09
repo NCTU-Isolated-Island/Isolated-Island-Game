@@ -68,6 +68,7 @@ public class CameraManager : MonoBehaviour {
 	{
 		if (using_cor) return;
 
+		user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
 		Camera.transform.parent = user.transform.Find("CameraAnchor");
 		using_cor = true;
 		StartCoroutine(MoveObject(Camera.transform, user.transform.Find("NearAnchor"), MoveCameraDelay));
@@ -77,6 +78,7 @@ public class CameraManager : MonoBehaviour {
 	{
 		if (using_cor) return;
 
+		user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
 		Camera.transform.parent = user.transform.Find("CameraAnchor");
 		using_cor = true;
 		StartCoroutine(MoveObject(Camera.transform, user.transform.Find("FarAnchor"), MoveCameraDelay));

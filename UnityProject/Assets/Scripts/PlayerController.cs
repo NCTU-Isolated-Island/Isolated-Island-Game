@@ -21,8 +21,8 @@ public class PlayerController : MonoBehaviour {
 	public enum ViewMode{ FirstPerson, BirdView, NormalView }
 	public ViewMode CurrenViewMode = ViewMode.NormalView;
 
-	public enum ControlMode{ Normal, Decorate}
-	[HideInInspector] public ControlMode CurrentControlMode = ControlMode.Normal;
+	public enum ControlMode{ Normal, Decorate, Rotate}
+	public ControlMode CurrentControlMode = ControlMode.Normal;
 	float clickTime = -99f;
 
 	public List<GameObject> ModifiedDecorations = new List<GameObject>();
@@ -67,17 +67,44 @@ public class PlayerController : MonoBehaviour {
 		{
 			ChangeViewMode(ViewMode.NormalView);
 		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha4))
+		{
+			CurrentControlMode = ControlMode.Normal;
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha5))
+		{
+			CurrentControlMode = ControlMode.Decorate;
+		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha6))
+		{
+			UpdateModifiedDecorationsToServer();
+		}
 			
-		if(CurrentControlMode == ControlMode.Decorate)
+		if(CurrentControlMode == ControlMode.Decorate || CurrentControlMode == ControlMode.Rotate)
 		{
 			DecorateProcess();
+		}
+
+		if(CurrentControlMode == ControlMode.Rotate)
+		{
+			if(Input.touchCount == 1)
+			{
+				RotateArountY(Input.touches[0].deltaPosition.x * 0.1f);
+
+			}
 		}
 
 		CheckDoubleClick();
 
 		if(CurrentControlMode == ControlMode.Normal)
 		{
-			AdjustViewAngle();
+			if(CurrenViewMode != ViewMode.FirstPerson)
+			{
+				AdjustViewAngle();
+
+			}
 		}
 
 		PinchToZoom();
@@ -316,75 +343,12 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	//
-	//	//Still Have Bugs
-	//	void TwoFingersRotate()
-	//	{
-	//		if(Input.touchCount == 2)
-	//		{
-	//			Touch touchZero = Input.GetTouch(0);
-	//			Touch touchOne = Input.GetTouch(1);
-	//
-	//			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-	//			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-	//
-	//			Vector2 previousVector = (touchZeroPrevPos - touchOnePrevPos);
-	//			Vector2 currentVector = (touchZero.position - touchOne.position);
-	//
-	//			float rotationAngle = Mathf.Acos(Vector2.Dot(previousVector,currentVector) / (previousVector.magnitude * currentVector.magnitude));
-	//			print(rotationAngle);
-	//			islandGameObject.transform.Rotate(0f,0f,rotationAngle * 10f,Space.World);
-	//		}
-	//	}
 
-//	IEnumerator Decorate()
-//	{
-//		CurrentState = State.Decorating;
-//
-//		GameObject temp = Instantiate(GameManager.Instance.elementModels[1],Vector3.zero,Quaternion.identity) as GameObject;
-//		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
-//
-//		RaycastHit hitInfo = new RaycastHit();
-//
-//		while(!doneDecorating)
-//		{
-//			if(CurrentState == State.Decorating)
-//			{
-//				Physics.Raycast
-//				(
-//					Camera.main.ScreenPointToRay(Input.mousePosition),
-//					out hitInfo,
-//					99999f,
-//					LayerMask.GetMask("PlayerModel")
-//				);
-//				temp.transform.position = hitInfo.point;
-//			}
-//			if(CurrentState == State.Rotating)
-//			{
-//				temp.transform.rotation = Quaternion.Euler(90,0,0) * Quaternion.Euler
-//					(
-//						Input.gyro.attitude.eulerAngles.x * -1,
-//						Input.gyro.attitude.eulerAngles.y * -1,
-//						Input.gyro.attitude.eulerAngles.z
-//					) * Quaternion.Euler
-//					(
-//						Input.gyro.attitude.eulerAngles.x * -1,
-//						Input.gyro.attitude.eulerAngles.y * -1,
-//						Input.gyro.attitude.eulerAngles.z
-//					);
-//			}
-//
-//			yield return null;
-//
-//		}
-//
-//		print("DONE");
-//		CurrentState = State.Default;
-//		//finalize
-//	}
-//
 	public void ChangeModelOrientation()
 	{
+		if(CurrentSelectDecoration == null)
+			return;
+		
 		switch (ModelOrientMode) {
 		case 1:
 			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(0,0,0);
@@ -491,11 +455,11 @@ public class PlayerController : MonoBehaviour {
 	}
 		
 	//Final Stage After Clicking Done Button
-	void UpdateModifiedDecorationsToServer()
+	public void UpdateModifiedDecorationsToServer()
 	{
-		foreach(GameObject entry in ModifiedDecorations)
+		foreach(GameObject entry in AddedDecorations)
 		{
-			UserManager.Instance.User.Player.OperationManager.UpdateDecorationOnVessel
+			UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
 			(
 				System.Int32.Parse(entry.name),
 				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
@@ -503,9 +467,9 @@ public class PlayerController : MonoBehaviour {
 			);
 		}
 
-		foreach(GameObject entry in AddedDecorations)
+		foreach(GameObject entry in ModifiedDecorations)
 		{
-			UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
+			UserManager.Instance.User.Player.OperationManager.UpdateDecorationOnVessel
 			(
 				System.Int32.Parse(entry.name),
 				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
@@ -517,9 +481,14 @@ public class PlayerController : MonoBehaviour {
 		{
 			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(entry.name));
 		}
+
+		//Clear All 
+		ModifiedDecorations.Clear();
+		AddedDecorations.Clear();
+		RemovedDecorations.Clear();
 	}
 
-	void BeginDec()
+	public void BeginDec()
 	{
 		// for dev
 		int itemID = 1;
@@ -532,7 +501,6 @@ public class PlayerController : MonoBehaviour {
 		CurrentControlMode = ControlMode.Decorate;
 
 	}
-
 
 	void DecorateProcess()
 	{
@@ -560,7 +528,6 @@ public class PlayerController : MonoBehaviour {
 				);
 			#endregion
 
-			//目前這部分只有拖拉功能 (先只做這些)
 			if(Input.touches[0].phase == TouchPhase.Began)
 			{
 				clickTime = Time.time;
@@ -568,6 +535,9 @@ public class PlayerController : MonoBehaviour {
 				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
 				{
 					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
+					CurrentControlMode = ControlMode.Decorate;
+					if(!ModifiedDecorations.Contains(CurrentSelectDecoration))
+						ModifiedDecorations.Add(CurrentSelectDecoration);
 				}
 
 			}
@@ -585,31 +555,35 @@ public class PlayerController : MonoBehaviour {
 
 				if(deltaTime < 0.5f) // 短按
 				{
-
+					print("short");
+					CurrentControlMode = ControlMode.Rotate;
 				}
 				else // 長按
 				{
-					if(vesselHit)
+					if(CurrentControlMode == ControlMode.Decorate)
 					{
-						CurrentSelectDecoration = null;
-					}
-					else
-					{
-						if(!RemovedDecorations.Contains(CurrentSelectDecoration))
-							RemovedDecorations.Add(CurrentSelectDecoration);
+						if(vesselHit)
+						{
+							CurrentSelectDecoration = null;
+						}
+						else
+						{
+							if(!RemovedDecorations.Contains(CurrentSelectDecoration))
+								RemovedDecorations.Add(CurrentSelectDecoration);
 
-						CurrentSelectDecoration.SetActive(false);
+							CurrentSelectDecoration.SetActive(false);
 
-						CurrentSelectDecoration = null;
+							CurrentSelectDecoration = null;
+						}
 					}
+
 				}
-
 
 
 
 			}
 
-			if(CurrentSelectDecoration != null)
+			if(CurrentSelectDecoration != null && CurrentControlMode != ControlMode.Rotate)
 			{
 				if(vesselHit)
 				{
