@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using IsolatedIslandGame.Library;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ public class MainBoatUIManager : MonoBehaviour {
     [SerializeField]
     private Button[] horizontalButtonList;
 
+    [SerializeField]
+    private Button drawMaterialButton;
     //
 
     //
@@ -31,7 +34,6 @@ public class MainBoatUIManager : MonoBehaviour {
     {
         maskStatus = true;
         ReverseMaskStatus();
-        LExpand.Instance.WithDrawBtn();
     }
 
 	void Start () {
@@ -61,6 +63,12 @@ public class MainBoatUIManager : MonoBehaviour {
                     break;
                 case "ToPutItemButton":
                     button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.PutItem); });
+                    break;
+                case "DrawMaterialButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        UserManager.Instance.User.Player.OperationManager.DrawMaterial();
+                    });
                     break;
             }
         }

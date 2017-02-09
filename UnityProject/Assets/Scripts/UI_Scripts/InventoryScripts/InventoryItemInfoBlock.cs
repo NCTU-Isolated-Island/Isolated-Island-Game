@@ -16,12 +16,14 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler
         itemNameText = transform.Find("ItemNameText").GetComponent<Text>();
         itemCountText = transform.Find("ItemCountText").GetComponent<Text>();
     }
-    public void Initial(InventoryItemInfo itemInfo)
+    public void Initial(InventoryItemInfo itemInfo , InventoryPanel.InventoryUsageType usageType)
     {
         ItemInfo = itemInfo;
         itemImage.sprite = Resources.Load<Sprite>("2D/" + ItemInfo.Item.ItemID);
         itemNameText.text = ItemInfo.Item.ItemName;
         itemCountText.text = ItemInfo.Count.ToString();
+
+        // TODO : things base on usagetype
     }
 
     public void OnPointerClick(PointerEventData eventData)

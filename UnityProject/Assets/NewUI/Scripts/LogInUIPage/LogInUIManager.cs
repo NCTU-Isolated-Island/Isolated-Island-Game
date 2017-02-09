@@ -57,7 +57,6 @@ public class LogInUIManager : MonoBehaviour
         loginPage.SetActive(false);
         createCharacterPage.SetActive(true);
         chooseGroupPage.SetActive(false);
-        //background.transform.parent.gameObject.SetActive(false);
     }
 
     public void ToMainScenePrepare()
@@ -68,6 +67,7 @@ public class LogInUIManager : MonoBehaviour
 
     public IEnumerator FadeBackground()
     {
+        SceneManager.LoadScene("MainScene");
         float passTime = 0f;
         while(passTime < 1f)
         {
@@ -78,8 +78,7 @@ public class LogInUIManager : MonoBehaviour
             passTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        SceneManager.LoadScene("MainScene");
-        background.transform.parent.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
     }
 
@@ -113,6 +112,8 @@ public class LogInUIManager : MonoBehaviour
     public void CreateCharacter()
     {
         UserManager.Instance.User.Player.OperationManager.CreateCharacter(playerName, speech, groupType);
+        gameObject.SetActive(false);
+        UIManager.Instance.ToMainPage();
     }
     public void NextGroup()
     {

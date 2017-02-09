@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 		if(status == true)
 		{
 			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(31,"TestServer");
+			UserManager.Instance.User.OperationManager.PlayerIDLogin(22,"TestServer");
             //FacebookService.LoginWithFacbook();
         }
        // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
@@ -399,9 +399,10 @@ public class GameManager : MonoBehaviour
 				}
 				break;
 			case DataChangeType.Update:
-				{
-					Debug.LogError("OnVesselChange ChangeType = Update");
-				}
+                    {
+                        OnVesselChange(DataChangeType.Remove, vessel);
+                        OnVesselChange(DataChangeType.Add, vessel);
+                    }
 				break;
 			}
 		}

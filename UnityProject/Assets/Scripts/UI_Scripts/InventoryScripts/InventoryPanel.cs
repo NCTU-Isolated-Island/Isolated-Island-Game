@@ -17,6 +17,13 @@ public class InventoryPanel : MonoBehaviour
     [SerializeField]
     private ItemInfoDetailPanel itemInfoDetailPanelPrefab;
 
+    public enum InventoryUsageType
+    {
+        CheckInventoryItemDetail , PutInCombineSlot , PutInTransactionSlot , PutItemOnVessel
+    }
+
+    private InventoryUsageType currentUsageType = InventoryUsageType.CheckInventoryItemDetail;
+
     private void Awake()
     {
         inventoryScrollViewContent = transform.Find("InventoryScrollView/Viewport/Content").GetComponent<RectTransform>();
@@ -28,15 +35,16 @@ public class InventoryPanel : MonoBehaviour
         transform.gameObject.SetActive(false);
     }
 
-    public void ShowPanel()
+    public void ShowPanel(InventoryUsageType usageType)
     {
-        gameObject.SetActive(true);
+        currentUsageType = usageType;
+        RenderInventory(inventory);
         // Add Effects
     }
+
     public void ClosePanel()
     {
-        gameObject.SetActive(false);
-        // Add Effects
+        UIManager.Instance.SwapPage(UIManager.Instance.previosUIPage);
     }
     public void ShowItemInfoDetail(InventoryItemInfo info)
     {
@@ -78,7 +86,10 @@ public class InventoryPanel : MonoBehaviour
         {
             InventoryItemInfoBlock infoBlock = Instantiate(inventoryItemInfoBlockPrefab);
             infoBlock.transform.SetParent(inventoryScrollViewContent);
-            infoBlock.Initial(info);
+            // Add Usage Parameter
+            //infoBlock.Initial(info);
+            infoBlock.Initial(info, currentUsageType);
+            //
             inventoryItemInfoBlockDictionary.Add(info.InventoryItemInfoID, infoBlock);
         }
     }
@@ -97,7 +108,7 @@ public class InventoryPanel : MonoBehaviour
                     InventoryItemInfoBlock infoBlock;
                     if (inventoryItemInfoBlockDictionary.TryGetValue(info.InventoryItemInfoID, out infoBlock))
                     {
-                        infoBlock.Initial(info);
+                        infoBlock.Initial(info, currentUsageType);
                     }
                     else
                     {

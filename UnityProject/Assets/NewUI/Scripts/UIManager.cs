@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();
     public GameObject[] UIPageList = new GameObject [10];
 
+    public UIPageType previosUIPage;
     public UIPageType currentUIPage;
 
     // Variables for creating character
@@ -33,36 +34,41 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // Initial Variable Setting
+        previosUIPage = UIPageType.Login;
         currentUIPage = UIPageType.Login;
 
         // Get GameObjects for the Dictionary
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
     }
 
-    public void SwapPage(UIPageType nextPage)
+    public void SwapPage(UIPageType nextPage
+        , InventoryPanel.InventoryUsageType usageType = InventoryPanel.InventoryUsageType.CheckInventoryItemDetail)
     {
         if (nextPage == currentUIPage) return;
 
-        // Show Inventory -> use InventoryPanel.ShowPanel()
+        StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+
         if (nextPage == UIPageType.Inventory)
-            InventoryPanel.Instance.ShowPanel();
-        else
-            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+            InventoryPanel.Instance.ShowPanel(usageType);
 
         RemoveCurrentPage();
 
+        // IMPORTANT - assign current page and previous page
+        previosUIPage = currentUIPage;
         currentUIPage = nextPage;
+        //
     }
 
     public void RemoveCurrentPage()
     {
         // Remove Inventory -> use InventoryPanel.ClosePanel()
-        if (currentUIPage == UIPageType.Inventory) InventoryPanel.Instance.ClosePanel();
-        else
-        {
-            UIPageType tmp = currentUIPage;
-            StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
-        }
+        UIPageType tmp = currentUIPage;
+        StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
+    }
+
+    public void ToPreviousPage()
+    {
+        SwapPage(previosUIPage);
     }
 
     IEnumerator MovingPageToCenter(GameObject page)
