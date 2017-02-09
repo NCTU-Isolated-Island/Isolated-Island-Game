@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
     }
 
     //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();
-    public GameObject[] UIPageList = new GameObject [10];
+    public GameObject[] UIPageList = new GameObject[10];
 
     public UIPageType previosUIPage;
     public UIPageType currentUIPage;
@@ -41,15 +41,32 @@ public class UIManager : MonoBehaviour
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
     }
 
-    public void SwapPage(UIPageType nextPage
-        , InventoryPanel.InventoryUsageType usageType = InventoryPanel.InventoryUsageType.CheckInventoryItemDetail)
+    public void SwapPage(UIPageType nextPage)
     {
-        if (nextPage == currentUIPage) return;
+        if (nextPage == currentUIPage)
+            return;
 
-        StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+        if (currentUIPage != UIPageType.Login)
+            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
 
         if (nextPage == UIPageType.Inventory)
-            InventoryPanel.Instance.ShowPanel(usageType);
+        {
+            switch (currentUIPage)
+            {
+                case UIPageType.Combine:
+                    InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.PutInCombineSlot);
+                    break;
+                case UIPageType.Transaction:
+                    InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.PutInTransactionSlot);
+                    break;
+                case UIPageType.PutItem:
+                    InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.PutItemOnVessel);
+                    break;
+                default:
+                    InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.CheckInventoryItemDetail);
+                    break;
+            }
+        }
 
         RemoveCurrentPage();
 
@@ -73,52 +90,49 @@ public class UIManager : MonoBehaviour
 
     IEnumerator MovingPageToCenter(GameObject page)
     {
-        if (page == null) yield break;
-
-        print(page.name);
+        if (page == null)
+            yield break;
+        //print("Swapping " + page.name);
         page.SetActive(true);
-
-        // Move page to the center
-        #region need Implement
 
         float passTime = 0;
         RectTransform rectTransform = page.GetComponent<RectTransform>();
-        //// base on "right" property
-        //while (rectTransform.offsetMax.y < 1)
-        //{
-        //    Vector2 nextPosition = rectTransform.offsetMax;
-        //    nextPosition.y = Mathf.Lerp(0 , 1 , passTime / 1f );
-        //    rectTransform.offsetMax = nextPosition;
 
-        //    passTime += Time.deltaTime;
-        //    yield return null;
-        //}
+        rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -transform.root.GetComponent<RectTransform>().rect.height);
 
-        #endregion
-        //rectTransform.offsetMax = new Vector2(1, rectTransform.offsetMax.y);
+        while (passTime < 0.5f)
+        {
+            Vector2 nextPosition = rectTransform.anchoredPosition;
+            nextPosition.y = Mathf.Lerp(-transform.root.GetComponent<RectTransform>().rect.height, 0, passTime / 0.5f);
+            rectTransform.anchoredPosition = nextPosition;
+
+            passTime += Time.deltaTime;
+            yield return null;
+        }
+        rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, 0);
         yield return null;
     }
     IEnumerator RemovingPage(GameObject page)
     {
-        if (page == null) yield break;
-        print("Removing " + page.name);
-        page.SetActive(false);
-        //float passTime = 0;
-        //RectTransform rectTransform = page.GetComponent<RectTransform>();
-        // base on "right" property
-        // Remove page from the center
-        #region need Implement
-        //while (rectTransform.offsetMax.y > 0)
-        //{
-        //    Vector2 nextPosition = rectTransform.offsetMax;
-        //    nextPosition.y = Mathf.Lerp(1, 0, passTime / 1f);
-        //    rectTransform.offsetMax = nextPosition;
+        if (page == null)
+            yield break;
+        //print("Removing " + page.name);
+        float passTime = 0;
+        RectTransform rectTransform = page.GetComponent<RectTransform>();
+        float targetY = rectTransform.anchoredPosition.y;
 
-        //    passTime += Time.deltaTime;
-        //    yield return null;
-        //}
-        #endregion
-        //rectTransform.offsetMax = new Vector2(0, rectTransform.offsetMax.y);
+        while (passTime < 0.5f)
+        {
+            Vector2 nextPosition = rectTransform.anchoredPosition;
+            nextPosition.y = Mathf.Lerp(targetY, -transform.root.GetComponent<RectTransform>().rect.height, passTime / 0.5f);
+            rectTransform.anchoredPosition = nextPosition;
+
+            passTime += Time.deltaTime;
+            yield return null;
+        }
+        rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -transform.root.GetComponent<RectTransform>().rect.height);
+
+        //page.SetActive(false);
         yield return null;
     }
 
@@ -128,11 +142,4 @@ public class UIManager : MonoBehaviour
     }
 
     // TESTING
-    /*
-    public void Test()
-    {
-        print("inTest");
-        SwapPage(UIPageType.Login);
-    }
-    */
 }

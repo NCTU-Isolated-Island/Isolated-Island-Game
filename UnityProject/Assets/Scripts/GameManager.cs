@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 		if(status == true)
 		{
 			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(22,"TestServer");
+			UserManager.Instance.User.OperationManager.PlayerIDLogin(23,"TestServer");
             //FacebookService.LoginWithFacbook();
         }
        // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");

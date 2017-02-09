@@ -67,8 +67,12 @@ public class MainBoatUIManager : MonoBehaviour {
                 case "DrawMaterialButton":
                     button.onClick.AddListener(delegate
                     {
+                        Debug.Log("Draw Material");
                         UserManager.Instance.User.Player.OperationManager.DrawMaterial();
                     });
+                    break;
+                case "ToCombineButton":
+                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Combine); });
                     break;
             }
         }

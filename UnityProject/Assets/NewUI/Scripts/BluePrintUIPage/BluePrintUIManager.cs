@@ -28,6 +28,24 @@ public class BluePrintUIManager : MonoBehaviour {
 
     void Start()
     {
+        if (UserManager.Instance.User.IsOnline)
+        {
+            RegisterPlayerEvents(UserManager.Instance.User.Player);
+        }
+        else
+        {
+            UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
+        }
+    }
+
+    void RegisterPlayerEvents(Player player)
+    {
+        player.OnGetBlueprint += OnGetBluePrint;
+        LoadBluePrint();
+    }
+
+    void OnGetBluePrint(Blueprint blueprint)
+    {
         LoadBluePrint();
     }
 
@@ -38,6 +56,17 @@ public class BluePrintUIManager : MonoBehaviour {
             // Show BluePrint in UI
             GameObject tmp = Instantiate(bluePrintSet);
             tmp.transform.parent = bluePrintSetContent.transform;
+
+            Image[] material = new Image[3];
+            for (int i = 0; i < 3; i++)
+                material[i] = tmp.transform.FindChild("Material" + i).GetComponent<Image>();
+
+            Image result = tmp.transform.FindChild("Result").GetComponent<Image>();
+
+            foreach(var elementInfo in bluePrint.Requirements)
+            {
+                // Put Sprite to material.sprite
+            }
         }
     }
 

@@ -81,15 +81,11 @@ public class InventoryPanel : MonoBehaviour
             Destroy(child.gameObject);
         }
         inventoryItemInfoBlockDictionary.Clear();
-        inventoryScrollViewContent.sizeDelta = new Vector2(364, 15 + 115 * (Mathf.CeilToInt(inventory.DifferentItemCount / 3f)));
         foreach(var info in inventory.ItemInfos)
         {
             InventoryItemInfoBlock infoBlock = Instantiate(inventoryItemInfoBlockPrefab);
             infoBlock.transform.SetParent(inventoryScrollViewContent);
-            // Add Usage Parameter
-            //infoBlock.Initial(info);
             infoBlock.Initial(info, currentUsageType);
-            //
             inventoryItemInfoBlockDictionary.Add(info.InventoryItemInfoID, infoBlock);
         }
     }
