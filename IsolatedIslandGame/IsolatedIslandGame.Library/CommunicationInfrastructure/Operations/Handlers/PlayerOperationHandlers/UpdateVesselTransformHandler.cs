@@ -28,6 +28,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 else
                 {
                     LogService.ErrorFormat("UpdateVesselTransform error Player: {0}, doesn't have a vessel", subject.IdentityInformation);
+                    subject.User.EventManager.UserInform("錯誤", "更新船的位置錯誤，你並沒有船。");
                     return false;
                 }               
             }

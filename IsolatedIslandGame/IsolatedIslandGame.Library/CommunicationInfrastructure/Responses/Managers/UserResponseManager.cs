@@ -12,6 +12,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
         protected readonly Dictionary<UserOperationCode, ResponseHandler<User, UserOperationCode>> operationTable;
         protected readonly User user;
 
+        public delegate void LoginResponseEventHandler(ErrorCode returnCode, Player player);
+        private event LoginResponseEventHandler onLoginResponse;
+        public event LoginResponseEventHandler OnLoginResponse { add { onLoginResponse += value; } remove { onLoginResponse -= value; } }
+
         public UserResponseManager(User user)
         {
             this.user = user;
@@ -38,12 +42,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
                 LogService.ErrorFormat("Unknow User Response:{0} from Identity: {1}", operationCode, user.IdentityInformation);
             }
         }
-
         public void SendResponse(UserOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
             user.CommunicationInterface.SendResponse(operationCode, errorCode, debugMessage, parameters);
         }
-
         public void SendPlayerResponse(Player player, PlayerOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
             Dictionary<byte, object> responseData = new Dictionary<byte, object>
@@ -55,6 +57,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
                 { (byte)PlayerResponseParameterCode.Parameters, parameters }
             };
             SendResponse(UserOperationCode.PlayerOperation, ErrorCode.NoError, null, responseData);
+        }
+        internal void LoginResponse(ErrorCode returnCode, Player player)
+        {
+            onLoginResponse?.Invoke(returnCode, player);
         }
     }
 }

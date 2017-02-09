@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 default:
                     {
                         LogService.ErrorFormat("DrawMaterialResponse Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
+                        subject.ResponseManager.DrawMaterialResponse(returnCode, 0, 0);
                         return false;
                     }
             }

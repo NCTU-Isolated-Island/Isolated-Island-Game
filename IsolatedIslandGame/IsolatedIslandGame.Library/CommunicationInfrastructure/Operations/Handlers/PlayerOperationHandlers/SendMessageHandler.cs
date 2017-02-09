@@ -17,7 +17,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 int receiverPlayerID = (int)parameters[(byte)SendMessageParameterCode.ReceiverPlayerID];
                 string content = (string)parameters[(byte)SendMessageParameterCode.Content];
 
-                return subject.User.CommunicationInterface.SendMessage(subject.PlayerID, receiverPlayerID, content);
+                if (subject.User.CommunicationInterface.SendMessage(subject.PlayerID, receiverPlayerID, content))
+                {
+                    return true;
+                }
+                else
+                {
+                    subject.User.EventManager.UserInform("失敗", "發送訊息的對象並不存在。");
+                    return false;
+                }
             }
             else
             {

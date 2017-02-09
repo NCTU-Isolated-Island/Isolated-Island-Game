@@ -15,21 +15,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                string debugMessage;
-                ErrorCode errorCode;
                 int targetPlayerID = (int)parameters[(byte)DeleteFriendParameterCode.TargetPlayerID];
                 if (subject.User.CommunicationInterface.DeleteFriend(subject.PlayerID, targetPlayerID))
                 {
-                    SendResponse(operationCode, new Dictionary<byte, object>());
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, DeleteFriend, TargetPlayerID: {targetPlayerID}");
                     return true;
                 }
                 else
                 {
-                    errorCode = ErrorCode.Fail;
-                    debugMessage = "delete friend fail";
-                    SendError(operationCode, errorCode, debugMessage);
                     LogService.ErrorFormat($"Player: {subject.IdentityInformation}, DeleteFriend Fail, TargetPlayerID: {targetPlayerID}");
+                    subject.User.EventManager.UserInform("失敗", "刪除好友失敗。");
                     return false;
                 }
             }

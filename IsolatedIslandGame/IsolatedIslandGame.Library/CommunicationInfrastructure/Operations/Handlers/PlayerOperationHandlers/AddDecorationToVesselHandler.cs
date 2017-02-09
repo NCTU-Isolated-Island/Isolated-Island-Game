@@ -42,24 +42,28 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 }
                                 else
                                 {
-                                    LogService.ErrorFormat("AddDecorationToVessel Error Player: {0}, item not existed MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
+                                    LogService.ErrorFormat("AddDecorationToVessel Fail Player: {0}, MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
+                                    subject.User.EventManager.UserInform("失敗", "擺放素材到船上失敗。");
                                     return false;
                                 }
                             }
                             else
                             {
                                 LogService.ErrorFormat("AddDecorationToVessel Error Player: {0}, the item is not a material MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
+                                subject.User.EventManager.UserInform("錯誤", "該物品並不是素材。");
                                 return false;
                             }
                         }
                         else
                         {
+                            subject.User.EventManager.UserInform("錯誤", "物品欄中的素材不存在。");
                             return false;
                         }
                     }
                     else
                     {
                         LogService.ErrorFormat("AddDecorationToVessel error Player: {0}, don't have the material MaterialItemID: {1}", subject.IdentityInformation, materialItemID);
+                        subject.User.EventManager.UserInform("錯誤", "物品欄中的素材不足。");
                         return false;
                     }
                 }

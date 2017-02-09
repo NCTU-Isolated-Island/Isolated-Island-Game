@@ -15,21 +15,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                string debugMessage;
-                ErrorCode errorCode;
                 int accepterPlayerID = (int)parameters[(byte)InviteFriendParameterCode.AccepterPlayerID];
                 if (subject.User.CommunicationInterface.InviteFriend(subject.PlayerID, accepterPlayerID))
                 {
-                    SendResponse(operationCode, new Dictionary<byte, object>());
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, InviteFriend, AccepterPlayerID: {accepterPlayerID}");
                     return true;
                 }
                 else
                 {
-                    errorCode = ErrorCode.Fail;
-                    debugMessage = "invite friend fail";
-                    SendError(operationCode, errorCode, debugMessage);
                     LogService.ErrorFormat($"Player: {subject.IdentityInformation}, InviteFriend Fail, AccepterPlayerID: {accepterPlayerID}");
+                    subject.User.EventManager.UserInform("失敗", "邀請好友失敗。");
                     return false;
                 }
             }

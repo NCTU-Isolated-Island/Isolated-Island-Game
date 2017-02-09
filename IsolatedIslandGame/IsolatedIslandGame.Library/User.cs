@@ -44,12 +44,17 @@ namespace IsolatedIslandGame.Library
             add { onPlayerOnline += value; }
             remove { onPlayerOnline -= value; }
         }
+
         private event Action<Player> onPlayerOffline;
         public event Action<Player> OnPlayerOffline
         {
             add { onPlayerOffline += value; }
             remove { onPlayerOffline -= value; }
         }
+
+        public delegate void UserInformEventHandler(string title, string content);
+        private event UserInformEventHandler onUserInform;
+        public event UserInformEventHandler OnUserInform { add { onUserInform += value; } remove { onUserInform -= value; } }
         #endregion
 
         #region methods
@@ -74,6 +79,10 @@ namespace IsolatedIslandGame.Library
         {
             onPlayerOffline?.Invoke(Player);
             Player = null;
+        }
+        public void UserInform(string title, string content)
+        {
+            onUserInform?.Invoke(title, content);
         }
         #endregion
     }

@@ -15,21 +15,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                string debugMessage;
-                ErrorCode errorCode;
                 int accepterPlayerID = (int)parameters[(byte)TransactionRequestParameterCode.AccepterPlayerID];
                 if (subject.User.CommunicationInterface.TransactionRequest(subject.PlayerID, accepterPlayerID))
                 {
-                    SendResponse(operationCode, new Dictionary<byte, object>());
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, TransactionRequest, AccepterPlayerID: {accepterPlayerID}");
                     return true;
                 }
                 else
                 {
-                    errorCode = ErrorCode.Fail;
-                    debugMessage = "transaction request fail";
-                    SendError(operationCode, errorCode, debugMessage);
                     LogService.ErrorFormat($"Player: {subject.IdentityInformation}, TransactionRequest Fail, AccepterPlayerID: {accepterPlayerID}");
+                    subject.User.EventManager.UserInform("失敗", "發送交易邀請失敗，請確認該玩家是否在線。");
                     return false;
                 }
             }

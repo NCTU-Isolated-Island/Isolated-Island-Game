@@ -22,11 +22,6 @@ namespace IsolatedIslandGame.Server
             serverUser = user as ServerUser;
         }
 
-        public override void ErrorInform(string title, string message)
-        {
-            LogService.ErrorFormat("User Identity:{0} ErrorInform Title: {1}, Message: {2}", User.IdentityInformation, title, message);
-        }
-
         public override void SendEvent(UserEventCode eventCode, Dictionary<byte, object> parameters)
         {
             serverUser.SendEvent(eventCode, parameters);

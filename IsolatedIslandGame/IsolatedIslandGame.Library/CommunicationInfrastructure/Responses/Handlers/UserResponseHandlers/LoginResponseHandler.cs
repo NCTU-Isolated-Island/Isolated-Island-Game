@@ -29,22 +29,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
-                case ErrorCode.Fail:
-                    {
-                        LogService.ErrorFormat("Login Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "登入失敗");
-                        return false;
-                    }
-                case ErrorCode.AlreadyExisted:
-                    {
-                        LogService.ErrorFormat("Login Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "此帳號已經登入");
-                        return false;
-                    }
                 default:
                     {
                         LogService.ErrorFormat("Login Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
+                        subject.ResponseManager.LoginResponse(returnCode, null);
                         return false;
                     }
             }
@@ -74,6 +62,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTotalScore();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTodayMaterialRanking();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandPlayerScoreRanking();
+
+                    subject.ResponseManager.LoginResponse(returnCode, player);
 
                     Vessel vessel;
                     if(VesselManager.Instance.FindVesselByOwnerPlayerID(playerID, out vessel))

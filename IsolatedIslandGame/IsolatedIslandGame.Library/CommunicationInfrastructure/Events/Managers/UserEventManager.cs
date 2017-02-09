@@ -23,6 +23,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { UserEventCode.SyncData, SyncDataResolver },
                 { UserEventCode.PlayerEvent, new PlayerEventResolver(user) },
                 { UserEventCode.SystemEvent, new SystemEventResolver(user) },
+                { UserEventCode.UserInform, new UserInformHandler(user) },
             };
         }
 
@@ -56,11 +57,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             SendEvent(UserEventCode.PlayerEvent, eventData);
         }
 
-        public void ErrorInform(string title, string message)
-        {
-            user.CommunicationInterface.ErrorInform(title, message);
-        }
-
         internal void SendSyncDataEvent(UserSyncDataCode syncCode, Dictionary<byte, object> parameters)
         {
             Dictionary<byte, object> syncDataParameters = new Dictionary<byte, object>
@@ -69,6 +65,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
             SendEvent(UserEventCode.SyncData, syncDataParameters);
+        }
+        public void UserInform(string title, string content)
+        {
+            Dictionary<byte, object> eventParameters = new Dictionary<byte, object>
+            {
+                { (byte)UserInformParameterCode.Title, title },
+                { (byte)UserInformParameterCode.Content, content }
+            };
+            SendEvent(UserEventCode.UserInform, eventParameters);
         }
     }
 }

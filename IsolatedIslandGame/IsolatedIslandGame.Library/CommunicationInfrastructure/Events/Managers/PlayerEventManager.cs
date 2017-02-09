@@ -1,6 +1,5 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers;
-using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.EventParameters.Player;
@@ -50,11 +49,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
         internal void SendEvent(PlayerEventCode eventCode, Dictionary<byte, object> parameters)
         {
             player.User.EventManager.SendPlayerEvent(player, eventCode, parameters);
-        }
-
-        public void ErrorInform(string title, string message)
-        {
-            player.User.EventManager.ErrorInform(title, message);
         }
 
         internal void SendSyncDataEvent(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)

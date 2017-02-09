@@ -16,7 +16,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 int playerMessageID = (int)parameters[(byte)ReadPlayerMessageParameterCode.PlayerMessageID];
 
-                return subject.User.CommunicationInterface.ReadPlayerMessage(subject.PlayerID, playerMessageID); ;
+                if(subject.User.CommunicationInterface.ReadPlayerMessage(subject.PlayerID, playerMessageID))
+                {
+                    return true;
+                }
+                else
+                {
+                    subject.User.EventManager.UserInform("失敗", "標記已讀玩家訊息失敗。");
+                    return false;
+                }
             }
             else
             {
