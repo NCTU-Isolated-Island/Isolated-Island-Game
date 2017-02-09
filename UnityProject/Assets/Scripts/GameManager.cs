@@ -49,8 +49,6 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
-		StartCoroutine(SlowUpdate());
-
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
 		SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -64,10 +62,9 @@ public class GameManager : MonoBehaviour
 		if(status == true)
 		{
 			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(31,"TestServer");
+			UserManager.Instance.User.OperationManager.PlayerIDLogin(24,"TestServer");
             //FacebookService.LoginWithFacbook();
         }
-       // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
 	}
 
 
@@ -84,14 +81,6 @@ public class GameManager : MonoBehaviour
 		VesselManager.Instance.OnVesselChange -= OnVesselChange;
 	}
 
-	IEnumerator SlowUpdate()
-	{
-		while(true)
-		{
-			yield return new WaitForSeconds(5f);
-		}
-	}
-
 	#endregion
 	void OnGetPlayerConversation(IsolatedIslandGame.Library.TextData.PlayerConversation conversation)
 	{
@@ -105,7 +94,6 @@ public class GameManager : MonoBehaviour
 		if (UserManager.Instance.User.Player.GroupType == GroupType.No)
 		{
             LogInUIManager.Instance.ToCreateCharacterPage();
-            //SceneManager.LoadScene("RegisterScene");
             //LogInUIManager.Instance.ToCreateCharacterPage();
 
 			//Create Charater by Uimanager ? (probably
@@ -145,8 +133,6 @@ public class GameManager : MonoBehaviour
 			PlayerController.Instance.gameObject.SetActive(true);
 			CameraManager.Instance.ToNearAnchor(PlayerGameObject);
 
-			print("ON");
-			//UserManager.Instance.User.Player.OperationManager.SendMessage(23,"FirstMessageTest");
 
 
 		}

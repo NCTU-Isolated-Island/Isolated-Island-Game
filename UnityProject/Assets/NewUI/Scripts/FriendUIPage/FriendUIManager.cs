@@ -25,4 +25,9 @@ public class FriendUIManager : MonoBehaviour {
     {
 
     }
+
+	void LoadFriendList()
+	{
+		
+	}
 }

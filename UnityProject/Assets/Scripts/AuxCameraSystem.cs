@@ -40,7 +40,10 @@ public class AuxCameraSystem : MonoBehaviour {
 
 	public void Show3DObject(GameObject model, Vector3 modelPosition, Quaternion cameraRotation)
 	{
+		
 		this.model = Instantiate(model,this.transform) as GameObject;
+		this.model.GetComponent<PlayerBehavior>().enabled = false;
+		Destroy(this.model.transform.Find("CameraAnchor").gameObject); 
 		this.model.transform.localPosition = modelPosition;
 		this.model.layer = LayerMask.NameToLayer("SecondCamera");
 		AuxCamera.transform.localRotation = cameraRotation;

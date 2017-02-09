@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using IsolatedIslandGame.Library;
 
 public class Test : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class Test : MonoBehaviour {
 
 	void Start()
 	{
-	
+		
 	}
 
 
@@ -20,7 +21,19 @@ public class Test : MonoBehaviour {
 
 
 
+	}
 
+
+
+	public bool HaveEnoughElement(Blueprint blueprint)
+	{
+		bool result = true;
+		foreach(Blueprint.ElementInfo elementInfo in blueprint.Requirements)
+		{
+			if(elementInfo.itemCount > UserManager.Instance.User.Player.Inventory.ItemCount(elementInfo.itemID))
+				result = false;
+		}
+		return result;
 	}
 
 

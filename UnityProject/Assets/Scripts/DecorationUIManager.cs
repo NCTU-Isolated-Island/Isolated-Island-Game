@@ -14,12 +14,23 @@ public class DecorationUIManager : MonoBehaviour {
 		}
 	}
 
-	//after press two sec on item
-	public void Decorate()
+	void Update()
 	{
-		//something
+		if(PlayerController.Instance.CurrentControlMode == PlayerController.ControlMode.Rotate)
+		{
+			//Show Rotate Button
+		}
+		else
+		{
+			//UnShow RotateButton
+		}
 
+	}
 
+	//after press two sec on item
+	public void Decorate(int itemID)
+	{
+		PlayerController.Instance.BeginDec(itemID);
 	}
 
 	public void PressRotateButton()
@@ -30,6 +41,7 @@ public class DecorationUIManager : MonoBehaviour {
 	public void PressDone()
 	{
 		PlayerController.Instance.UpdateModifiedDecorationsToServer();
+		//Show Inventory or something
 	}
 
 }

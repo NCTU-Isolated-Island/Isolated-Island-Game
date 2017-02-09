@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour {
 		}else if(Instance != this){
 			Destroy(gameObject);
 		}
-		DontDestroyOnLoad(gameObject);
 
 		Input.gyro.enabled = true;
 
@@ -91,7 +90,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			if(Input.touchCount == 1)
 			{
-				RotateArountY(Input.touches[0].deltaPosition.x * 0.1f);
+				RotateArountY(Input.touches[0].deltaPosition.x * -0.2f);
 
 			}
 		}
@@ -105,6 +104,14 @@ public class PlayerController : MonoBehaviour {
 				AdjustViewAngle();
 
 			}
+		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha0))
+		{
+			int userID = 24;
+
+			AuxCameraSystem.Instance.Show3DObject(GameManager.Instance.UserGameObject[userID],
+				new Vector3(0,-10.3f,40.8f),Quaternion.Euler(12.8f,0,0));
 		}
 
 		PinchToZoom();
@@ -214,7 +221,11 @@ public class PlayerController : MonoBehaviour {
 			print("Select " + hitInfo.collider.transform.root.name + " Vessel");
 
 			CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
-			UImanager.Instance.GameUI = UImanager.UI.Other_Boat;
+
+
+			string[] a =  hitInfo.transform.name.Split(' ');
+			int id = System.Int32.Parse(a[1]);
+
 		}
 
 	}
@@ -488,10 +499,9 @@ public class PlayerController : MonoBehaviour {
 		RemovedDecorations.Clear();
 	}
 
-	public void BeginDec()
+	public void BeginDec(int itemID)
 	{
-		// for dev
-		int itemID = 1;
+		
 
 		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
 
@@ -592,7 +602,7 @@ public class PlayerController : MonoBehaviour {
 				else
 				{
 					CurrentSelectDecoration.transform.position = 
-						Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 5;
+						Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 9;
 				}
 			}
 		}
