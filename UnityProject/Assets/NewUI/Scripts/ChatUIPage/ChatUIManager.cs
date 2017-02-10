@@ -9,7 +9,7 @@ public class ChatUIManager : MonoBehaviour {
 
     public static ChatUIManager Instance { get; private set; }
 
-    // UI Variable
+    // UI Variable for Record page
     [SerializeField]
     private GameObject messageSet;
     [SerializeField]
@@ -26,6 +26,12 @@ public class ChatUIManager : MonoBehaviour {
     private Text titleText;
 
     private Dictionary<int, List<PlayerConversation>> playerConversationTable = new Dictionary<int, List<PlayerConversation>>();
+
+    // Variable for Message page
+
+    private PlayerInformation chattingPlayer;
+    [SerializeField]
+    private InputField messageInputField;
     //
 
     void InitSetting()
@@ -110,10 +116,14 @@ public class ChatUIManager : MonoBehaviour {
                     chatFriendGroup.text = "農夫";
                     break;
             }
+
+            tmp.GetComponent<Button>().onClick.AddListener(delegate{
+                ToMessagePageByChatRecord(opponentPlayer);
+            });
         }
     }
 
-    public void ToMessagePageByChatRecord(Player chatPlayer)
+    public void ToMessagePageByChatRecord(PlayerInformation chatPlayer)
     {
         // Swap to Message Page
         UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Message);
@@ -121,13 +131,15 @@ public class ChatUIManager : MonoBehaviour {
         LoadMessagePage(chatPlayer);
     }
 
-    public void LoadMessagePage(Player chatPlayer)
+    public void LoadMessagePage(PlayerInformation chatPlayer)
     {
+        // Set chattingPlayer to the chatPlayer
+        chattingPlayer = chatPlayer;
         // Set title to the chatting player's name
-        titleText.text = chatPlayer.Nickname;
+        titleText.text = chatPlayer.nickname;
         // Instantiate Message Bubble and put under content
         List<int> renderedMessage = new List<int>();
-        foreach (var entry in MessageManager.Instance.Conversations)
+        foreach (var entry in playerConversationTable[chatPlayer.playerID])
         {
             // Make sure not rendered same message
             if (renderedMessage.Contains(entry.message.playerMessageID)) return;
@@ -138,13 +150,22 @@ public class ChatUIManager : MonoBehaviour {
                 GameObject bubble = Instantiate(receiveMessageBubble);
                 Text textObj = bubble.transform.FindChild("Bubble").FindChild("Text").GetComponent<Text>();
                 textObj.text = entry.message.content;
+
+                bubble.transform.SetParent(messageBubbleContent.transform);
             }
-            else if(entry.message.senderPlayerID == chatPlayer.PlayerID)
+            else if(entry.receiverPlayerID == chatPlayer.playerID)
             {
                 GameObject bubble = Instantiate(sendMessageBubble);
                 Text textObj = bubble.transform.FindChild("Bubble").FindChild("Text").GetComponent<Text>();
                 textObj.text = entry.message.content;
+
+                bubble.transform.SetParent(messageBubbleContent.transform);
             }
         }
+    }
+
+    public void SendMessageToChattingPlayer()
+    {
+        UserManager.Instance.User.Player.OperationManager.SendMessage(chattingPlayer.playerID , messageInputField.text);
     }
 }

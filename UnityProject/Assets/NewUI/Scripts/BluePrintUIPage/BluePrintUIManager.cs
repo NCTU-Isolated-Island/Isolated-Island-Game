@@ -36,6 +36,7 @@ public class BluePrintUIManager : MonoBehaviour {
         {
             UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
         }
+        LoadBluePrint();
     }
 
     void RegisterPlayerEvents(Player player)
@@ -66,6 +67,7 @@ public class BluePrintUIManager : MonoBehaviour {
             foreach(var elementInfo in bluePrint.Requirements)
             {
                 // Put Sprite to material.sprite
+                material[elementInfo.positionIndex].sprite = Resources.Load<Sprite>("2D/" +  elementInfo.itemID);
             }
         }
     }

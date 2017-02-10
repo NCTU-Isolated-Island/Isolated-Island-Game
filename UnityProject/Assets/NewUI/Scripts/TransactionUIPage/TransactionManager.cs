@@ -13,48 +13,34 @@ public class TransactionManager : MonoBehaviour
 
     // Basic Usage Variable
     public static TransactionManager Instance { get; private set; }
-
-    [System.Serializable]
-    public class TransactionItemSlot
-    {
-        public Image itemImage;
-        public Item item;
-        public Text amount;
-
-        public int Amount
-        {
-            get
-            {
-                int result;
-                int.TryParse(amount.text, out result);
-                return result;
-            }
-            set
-            {
-                amount.text = Amount.ToString();
-                Amount = value;
-            }
-        }
-    }
-
+   
     // UI Variable
     [SerializeField]
-    private TransactionItemSlot[] MyTransactionItem;
+    private TransactionSlotBehavior[] MyTransactionItem;
     [SerializeField]
-    private TransactionItemSlot[] OpponentTransactionItem;
+    private TransactionSlotBehavior[] OpponentTransactionItem;
     [SerializeField]
     private GameObject ReceiveTransactionRequestPanel;
     [SerializeField]
     private GameObject MessagePanel;
     [SerializeField]
     private GameObject TransactionConfirmedPanel;
+    [SerializeField]
+    private GameObject ChooseAmountPanel;
 
-    // Custom needed variable
+    public Transaction thisTransaction;
 
-    private Transaction thisTransaction;
-    public int WhereIfrom;
+    public int puttingIndex;
 
-    #region Setup
+    private int opponentPlayerID;
+
+    //TEST
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+            UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
+    }
+    //
 
     void Awake()
     {
@@ -66,27 +52,35 @@ public class TransactionManager : MonoBehaviour
 
     void Start()
     {
-        UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
-
-        // Get GameObject
-        MyTransactionItem = new TransactionItemSlot[4];
-        OpponentTransactionItem = new TransactionItemSlot[4];
-
-        for (int i = 0; i < 4; i++)
+        if (UserManager.Instance.User.IsOnline)
         {
-            MyTransactionItem[i] = new TransactionItemSlot();
-            MyTransactionItem[i].itemImage = GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).GetComponent<Image>();
-            MyTransactionItem[i].amount = GameObject.Find("MyTransactionItem/Viewport/Content/MyItem" + i.ToString()).transform.FindChild("Amount").GetComponent<Text>();
-
-            OpponentTransactionItem[i] = new TransactionItemSlot();
-            OpponentTransactionItem[i].itemImage = GameObject.Find("OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).GetComponent<Image>();
-            OpponentTransactionItem[i].amount = GameObject.Find("OpponentTransactionItem/Viewport/Content/Item" + i.ToString()).transform.FindChild("Amount").GetComponent<Text>();
+            RegisterPlayerEvents(UserManager.Instance.User.Player);
         }
-
-        // testing , should be removed
+        else
+        {
+            UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
+        }
     }
 
-    void OnPlayerOnline(Player player)
+    //
+
+    public void PutInItemFromInventory(Item puttingItem)
+    {
+        ChooseAmountPanel.SetActive(true);
+        
+        MyTransactionItem[puttingIndex].SetSlotItem(puttingItem);
+    }
+
+    public void ConfirmItemAmount()
+    {
+        Dropdown dropdown = ChooseAmountPanel.transform.Find("Dropdown").GetComponent<Dropdown>();
+        MyTransactionItem[puttingIndex].SetSlotAmount(dropdown.value + 1);
+        ChooseAmountPanel.SetActive(false);
+    }
+
+    //
+
+    void RegisterPlayerEvents(Player player)
     {
         // Event Register
         UserManager.Instance.User.Player.OnTransactionRequest += OnReceiveTransactionRequest;
@@ -97,12 +91,9 @@ public class TransactionManager : MonoBehaviour
 
     void OnDestroy()
     {
-        UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
         UserManager.Instance.User.Player.OnTransactionRequest -= OnReceiveTransactionRequest;
         UserManager.Instance.User.Player.OnTransactionStart -= OnTransactionStart;
     }
-
-    #endregion
 
     // Server Service API
 
@@ -116,7 +107,14 @@ public class TransactionManager : MonoBehaviour
     {
         //TODO
         // Pop Receive Transaction UI , ask user to accept or not
-        StartCoroutine(OnReceiveTransactionRequest_PopUI(true)); // Pop the UI
+        opponentPlayerID = requesterPlayerID;
+        PlayerInformation opponentPlayer;
+        PlayerInformationManager.Instance.FindPlayerInformation(requesterPlayerID, out opponentPlayer);
+        ReceiveTransactionRequestPanel.transform.Find("Message").GetComponent<Text>().text
+             = opponentPlayer.nickname + "發出交易請求";
+
+        //StartCoroutine(OnReceiveTransactionRequest_PopUI(true)); // Pop the UI
+        ReceiveTransactionRequestPanel.SetActive(true);
     }
 
     IEnumerator OnReceiveTransactionRequest_PopUI(bool OnOff) // true to pop , false to move back
@@ -137,11 +135,12 @@ public class TransactionManager : MonoBehaviour
         }
     }
 
-    public void AcceptTransaction(int requesterPlayerID)
+    public void AcceptTransaction()
     {
-        UserManager.Instance.User.Player.OperationManager.AcceptTransaction(requesterPlayerID);
+        UserManager.Instance.User.Player.OperationManager.AcceptTransaction(opponentPlayerID);
         //TODO
-        StartCoroutine(OnReceiveTransactionRequest_PopUI(false));
+        //StartCoroutine(OnReceiveTransactionRequest_PopUI(false));
+        ReceiveTransactionRequestPanel.SetActive(false);
     }
 
     public void OnTransactionStart(Transaction transaction)
@@ -155,9 +154,8 @@ public class TransactionManager : MonoBehaviour
         thisTransaction.OnTransactionConfirmStatusChange += OnTransactionConfirmStatusChange;
         thisTransaction.OnTransactionEnd += OnTransactionEnd;
 
-        //TODO
-        WhereIfrom = (int)UImanager.Instance.GameUI;
-        UImanager.Instance.ChangeUI(9);
+        // Swap to Transaction Page
+        UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
     }
 
     public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
@@ -175,14 +173,14 @@ public class TransactionManager : MonoBehaviour
             int index = info.PositionIndex;
             OpponentTransactionItem[index].item = info.Item;
             OpponentTransactionItem[index].itemImage.sprite = Resources.Load<Sprite>("2D/" + info.Item.ItemID);
-            OpponentTransactionItem[index].Amount = info.Count;
+            OpponentTransactionItem[index].amount = info.Count;
         }
         else
         {
             int index = info.PositionIndex;
             MyTransactionItem[index].item = info.Item;
             MyTransactionItem[index].itemImage.sprite = Resources.Load<Sprite>("2D/" + info.Item.ItemID);
-            MyTransactionItem[index].Amount = info.Count;
+            MyTransactionItem[index].amount = info.Count;
         }
     }
 
@@ -210,28 +208,28 @@ public class TransactionManager : MonoBehaviour
 
         if(isConfirmed == true)
         {
-            foreach (TransactionItemSlot slot in MyTransactionItem)
+            foreach (TransactionSlotBehavior slot in MyTransactionItem)
                 LockTransactionItemSlot(slot);
-            foreach (TransactionItemSlot slot in OpponentTransactionItem)
+            foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
                 LockTransactionItemSlot(slot);
         }
         else
         {
-            foreach (TransactionItemSlot slot in MyTransactionItem)
+            foreach (TransactionSlotBehavior slot in MyTransactionItem)
                 UnLockTransactionItemSlot(slot);
-            foreach (TransactionItemSlot slot in OpponentTransactionItem)
+            foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
                 UnLockTransactionItemSlot(slot);
         }
     }
 
-    private void LockTransactionItemSlot(TransactionItemSlot slot)
+    private void LockTransactionItemSlot(TransactionSlotBehavior slot)
     {
         Color tmp = slot.itemImage.color;
         tmp.a = 0.5f;
         slot.itemImage.color = tmp;
     }
 
-    private void UnLockTransactionItemSlot(TransactionItemSlot slot)
+    private void UnLockTransactionItemSlot(TransactionSlotBehavior slot)
     {
         Color tmp = slot.itemImage.color;
         tmp.a = 1;
@@ -253,28 +251,29 @@ public class TransactionManager : MonoBehaviour
         else
             MessagePanel.transform.FindChild("TransactionMessage").GetComponent<Text>().text = "交易取消";
         MessagePanel.SetActive(true);
+
         // move back to previous UI page
-        UImanager.Instance.ChangeUI(WhereIfrom);
+        UIManager.Instance.ToPreviousPage();
     }
 
     // UI API
 
-    public void OnPutInItem(TransactionItemInfo info)
+    public void UploadPutInItem(TransactionItemInfo info)
     {
-        if (thisTransaction.IsLocked) return;
+        //if (thisTransaction.IsLocked) return;
 
-        if (MyTransactionItem[info.PositionIndex] == null)
+        if (MyTransactionItem[info.PositionIndex].item == null)
             ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Add, info);
         else
             ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Update, info);
     }
 
-    public void OnRemoveItemFromSlot(TransactionItemInfo info)
-    {
-        if (thisTransaction.IsLocked) return;
+    //public void UpLoadRemoveItem(TransactionItemInfo info)
+    //{
+    //    if (thisTransaction.IsLocked) return;
 
-        ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Remove, info);
-    }
+    //    ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Remove, info);
+    //}
 
     public void PopConfirmedPanel()
     {
@@ -285,15 +284,15 @@ public class TransactionManager : MonoBehaviour
 
     private void InitUISetting()
     {
-        foreach(TransactionItemSlot slot in MyTransactionItem)
+        foreach(TransactionSlotBehavior slot in MyTransactionItem)
         {
-            slot.Amount = 0;
+            slot.amount = 0;
             slot.item = null;
             slot.itemImage = null;
         }
-        foreach (TransactionItemSlot slot in OpponentTransactionItem)
+        foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
         {
-            slot.Amount = 0;
+            slot.amount = 0;
             slot.item = null;
             slot.itemImage = null;
         }
@@ -301,10 +300,5 @@ public class TransactionManager : MonoBehaviour
     }
 
     // TESTING
-
-    public void test()
-    {
-        OnTransactionConfirmStatusChange(0, 0, true);
-    }
 
 }

@@ -38,7 +38,7 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler
                 UIManager.Instance.ToPreviousPage();
                 break;
             case InventoryPanel.InventoryUsageType.PutInTransactionSlot:
-                throw new System.NotImplementedException("InventoryPanel.InventoryUsageType.PutInTransactionSlot");
+                TransactionManager.Instance.PutInItemFromInventory(ItemInfo.Item);
                 UIManager.Instance.ToPreviousPage();
                 break;
             case InventoryPanel.InventoryUsageType.PutItemOnVessel:
