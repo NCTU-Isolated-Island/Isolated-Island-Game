@@ -12,8 +12,6 @@ namespace IsolatedIslandGame.Client.Communication
 {
     class ClientUserCommunicationInterface : CommunicationInterface
     {
-       
-
         public override void SendEvent(UserEventCode eventCode, Dictionary<byte, object> parameters)
         {
             LogService.FatalFormat("ClientUser SendEvent UserEventCode: {0}", eventCode);

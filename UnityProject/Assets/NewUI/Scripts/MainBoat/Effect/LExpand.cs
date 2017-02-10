@@ -6,6 +6,7 @@ public class LExpand : MonoBehaviour
 {
     public static LExpand Instance { get; private set; }
     // false for Buttons are in , true for Buttons are expanded
+    [SerializeField]
     private bool LButtonStatus;
 
     [SerializeField]
@@ -42,9 +43,8 @@ public class LExpand : MonoBehaviour
         Vector3 horiTmp = viewportHorizontal.GetComponent<RectTransform>().offsetMin;
         Vector3 verTmp = viewportVertical.GetComponent<RectTransform>().offsetMax;
         hori_ori = horiTmp.x;
-        ver_ori = verTmp.y;
+        ver_ori =  verTmp.y;
         // Initial Setting
-        LButtonStatus = true;
         SetNotLExpandButtonStatus(false);
 
         intervalTime = 0.5f;
@@ -53,31 +53,31 @@ public class LExpand : MonoBehaviour
 
     public void OnClick()
     {
-        if (LButtonStatus) ExpandBtn();
+        if (!LButtonStatus) ExpandBtn();
         else WithDrawBtn();
-
-        LButtonStatus = !LButtonStatus;
     }
 
     public void ExpandBtn()
     {
         if (coroutine != null) StopCoroutine(coroutine);
-        coroutine = ExpandBtnCoroutine(false);
+        coroutine = ExpandBtnCoroutine(true);
         StartCoroutine(coroutine);
 
         SetNotLExpandButtonStatus(true);
+        LButtonStatus = true;
     }
 
     public void WithDrawBtn()
     {
         if (coroutine != null) StopCoroutine(coroutine);
-        coroutine = ExpandBtnCoroutine(true);
+        coroutine = ExpandBtnCoroutine(false);
         StartCoroutine(coroutine);
 
         SetNotLExpandButtonStatus(false);
+        LButtonStatus = false;
     }
 
-    IEnumerator ExpandBtnCoroutine(bool OnOff)
+    IEnumerator ExpandBtnCoroutine(bool isOn)
     {
         float passTime = 0f;
         Vector3 horiTmp = viewportHorizontal.GetComponent<RectTransform>().offsetMin;
@@ -88,7 +88,7 @@ public class LExpand : MonoBehaviour
 
         while (passTime < intervalTime)
         {
-            if (OnOff == true)
+            if (isOn)
             {
                 horiTmp.x = Mathf.Lerp(hori_st, 0, passTime / intervalTime);
                 viewportHorizontal.GetComponent<RectTransform>().offsetMin = horiTmp;

@@ -19,14 +19,11 @@ public class MessageManager : MonoBehaviour {
 	{
 		if(Instance == null)
 			Instance = this;
- 
 	}
 
 	void Start()
 	{
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
-
-      
     }
 
 	void OnDestroy()
@@ -43,7 +40,8 @@ public class MessageManager : MonoBehaviour {
 	void OnGetPlayerConversation(PlayerConversation conversation)
 	{
 		Conversations.Add(conversation);
-        
+        ChatUIManager.Instance.LoadChatRecord();
+        //print(conversation.message.content);
 	}
 
 }

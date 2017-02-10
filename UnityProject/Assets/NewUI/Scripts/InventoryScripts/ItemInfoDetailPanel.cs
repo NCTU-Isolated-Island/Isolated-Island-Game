@@ -37,7 +37,11 @@ public class ItemInfoDetailPanel : MonoBehaviour
         ItemInfo = itemInfo;
         itemImage.sprite = Resources.Load<Sprite>("2D/" + ItemInfo.Item.ItemID);
         itemNameText.text = ItemInfo.Item.ItemName;
-        itemCountText.text = ItemInfo.Count.ToString();
+        itemCountText.text = string.Format("x{0}", ItemInfo.Count);
         itemDescriptionText.text = ItemInfo.Item.Description;
+        if(ItemInfo.Item is IsolatedIslandGame.Library.Items.Material)
+        {
+            itemDescriptionText.text += string.Format("\n素材分數： {0}", (ItemInfo.Item as IsolatedIslandGame.Library.Items.Material).Score);
+        }
     }
 }

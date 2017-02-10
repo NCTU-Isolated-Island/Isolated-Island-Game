@@ -27,6 +27,8 @@ public class LogInUIManager : MonoBehaviour
     [SerializeField]
     private GameObject background;
     [SerializeField]
+    private GameObject deepBlue;
+    [SerializeField]
     private GameObject loginPage;
     [SerializeField]
     private GameObject createCharacterPage;
@@ -57,7 +59,6 @@ public class LogInUIManager : MonoBehaviour
         loginPage.SetActive(false);
         createCharacterPage.SetActive(true);
         chooseGroupPage.SetActive(false);
-        //background.transform.parent.gameObject.SetActive(false);
     }
 
     public void ToMainScenePrepare()
@@ -68,6 +69,7 @@ public class LogInUIManager : MonoBehaviour
 
     public IEnumerator FadeBackground()
     {
+        SceneManager.LoadScene("MainScene");
         float passTime = 0f;
         while(passTime < 1f)
         {
@@ -75,11 +77,14 @@ public class LogInUIManager : MonoBehaviour
             color.a = Mathf.Lerp(1, 0, passTime / 1f);
             background.GetComponent<Image>().color = color;
 
+            Color color2 = deepBlue.GetComponent<Image>().color;
+            color2.a = Mathf.Lerp(1, 0, passTime / 1f);
+            deepBlue.GetComponent<Image>().color = color2;
+
             passTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        SceneManager.LoadScene("MainScene");
-        background.transform.parent.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
     }
 
@@ -113,6 +118,8 @@ public class LogInUIManager : MonoBehaviour
     public void CreateCharacter()
     {
         UserManager.Instance.User.Player.OperationManager.CreateCharacter(playerName, speech, groupType);
+        gameObject.SetActive(false);
+        UIManager.Instance.ToMainPage();
     }
     public void NextGroup()
     {
