@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour {
 
 		if(CurrentControlMode == ControlMode.Normal)
 		{
-			if(CurrenViewMode != ViewMode.FirstPerson)
+			if(CurrenViewMode != ViewMode.FirstPerson && !CameraManager.Instance.using_cor)
 			{
 				AdjustViewAngle();
 
@@ -226,7 +226,7 @@ public class PlayerController : MonoBehaviour {
 			CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
 
 
-			string[] a =  hitInfo.transform.name.Split(' ');
+			string[] a =  hitInfo.transform.root.name.Split(' ');
 			int id = System.Int32.Parse(a[1]);
 
 			CurrentFocusPlayerGameObject = GameManager.Instance.UserGameObject[id];

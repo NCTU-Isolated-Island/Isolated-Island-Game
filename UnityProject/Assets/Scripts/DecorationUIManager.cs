@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DecorationUIManager : MonoBehaviour {
 
 	public static DecorationUIManager Instance { get; private set; }
+
+	public GameObject RotateButton;
 
 	void Awake()
 	{
@@ -18,11 +21,11 @@ public class DecorationUIManager : MonoBehaviour {
 	{
 		if(PlayerController.Instance.CurrentControlMode == PlayerController.ControlMode.Rotate)
 		{
-			//Show Rotate Button
+			RotateButton.SetActive(true);
 		}
 		else
 		{
-			//UnShow RotateButton
+			RotateButton.SetActive(false);
 		}
 
 	}

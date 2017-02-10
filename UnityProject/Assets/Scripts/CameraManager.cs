@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour {
 	private float MoveCameraDelay = 1.5f;
 
 	private GameObject Camera;
-	private bool using_cor;
+	public bool using_cor;
 
 	void Awake()
 	{
@@ -38,7 +38,11 @@ public class CameraManager : MonoBehaviour {
 			yield return null;
 		}
 		source.position = target.position;
+		source.rotation = target.rotation;
 		using_cor = false;
+		print("NOW!");
+		target.root.Find("CameraAnchor").localRotation = Quaternion.identity;
+		Camera.transform.parent = target.root.Find("CameraAnchor");
 	}
 
 	IEnumerator MoveObjectToFPV(Transform source, Transform target, float overTime)
@@ -53,13 +57,14 @@ public class CameraManager : MonoBehaviour {
 		}
 		source.position = target.position;
 		using_cor = false;
+		target.root.Find("CameraAnchor").rotation = Quaternion.identity;
 	}
 
 	public void ToFirstPerson(GameObject user)
 	{
 		if(using_cor) return;
 
-		Camera.transform.parent = Camera.transform.parent.parent;
+		//Camera.transform.parent = Camera.transform.parent.parent;
 		using_cor = true;
 		StartCoroutine(MoveObjectToFPV(Camera.transform, user.transform.Find("FirstPersonAnchor"),MoveCameraDelay));
 	}
@@ -68,9 +73,10 @@ public class CameraManager : MonoBehaviour {
 	{
 		if (using_cor) return;
 
-		user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
-		Camera.transform.parent = user.transform.Find("CameraAnchor");
+//		user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
+		//Camera.transform.parent = user.transform.Find("CameraAnchor");
 		using_cor = true;
+		Camera.transform.parent = user.transform;
 		StartCoroutine(MoveObject(Camera.transform, user.transform.Find("NearAnchor"), MoveCameraDelay));
 	}
 
@@ -78,9 +84,10 @@ public class CameraManager : MonoBehaviour {
 	{
 		if (using_cor) return;
 
-		user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
-		Camera.transform.parent = user.transform.Find("CameraAnchor");
+		//user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
+		//Camera.transform.parent = user.transform.Find("CameraAnchor");
 		using_cor = true;
+		Camera.transform.parent = user.transform;
 		StartCoroutine(MoveObject(Camera.transform, user.transform.Find("FarAnchor"), MoveCameraDelay));
 	}
 

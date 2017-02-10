@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
 
     //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();
     public GameObject[] UIPageList = new GameObject[10];
-
+	public Stack<UIPageType> PageStack = new Stack<UIPageType>();
     public UIPageType previosUIPage;
     public UIPageType currentUIPage;
 
@@ -43,12 +43,14 @@ public class UIManager : MonoBehaviour
 
     public void SwapPage(UIPageType nextPage)
     {
+		PageStack.Push(nextPage);
+
         if (nextPage == currentUIPage)
             return;
 
         if (currentUIPage != UIPageType.Login)
-            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
-
+			StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+		
         if (nextPage == UIPageType.Inventory)
         {
             switch (currentUIPage)
@@ -78,19 +80,20 @@ public class UIManager : MonoBehaviour
 
     public void RemoveCurrentPage()
     {
+		
         // Remove Inventory -> use InventoryPanel.ClosePanel()
         UIPageType tmp = currentUIPage;
         if (tmp == UIPageType.Inventory) InventoryPanel.Instance.ClosePanel();
 
-        StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
-
+        //StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
+		StartCoroutine(RemovingPage(UIPageList[(int)PageStack.Pop()]));
         currentUIPage = previosUIPage;
     }
 
     public void ToPreviousPage()
     {
-        SwapPage(previosUIPage);
-        //RemoveCurrentPage();
+        //SwapPage(previosUIPage);
+        RemoveCurrentPage();
     }
 
     IEnumerator MovingPageToCenter(GameObject page)
