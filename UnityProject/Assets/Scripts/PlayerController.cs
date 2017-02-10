@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
 	public static PlayerController Instance;
 	public List<GameObject> InArea;
 	public GameObject CurrentSelectDecoration;
+	public GameObject CurrentFocusPlayerGameObject;
 
 	public int ModelOrientMode = 0;
 	public enum ViewMode{ FirstPerson, BirdView, NormalView }
@@ -226,6 +227,8 @@ public class PlayerController : MonoBehaviour {
 			string[] a =  hitInfo.transform.name.Split(' ');
 			int id = System.Int32.Parse(a[1]);
 
+			CurrentFocusPlayerGameObject = GameManager.Instance.UserGameObject[id];
+
 		}
 
 	}
@@ -253,13 +256,14 @@ public class PlayerController : MonoBehaviour {
 	public void ToPlayerFarAnchor()
 	{
 		CameraManager.Instance.ToFarAnchor(GameManager.Instance.PlayerGameObject);
-		UImanager.Instance.GameUI = UImanager.UI.Map;
+		CurrentFocusPlayerGameObject = GameManager.Instance.PlayerGameObject;
 	}
 
 	public void ToPlayerNearAnchor()
 	{
 		CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
-		UImanager.Instance.GameUI = UImanager.UI.Main_Boat;
+		CurrentFocusPlayerGameObject = GameManager.Instance.PlayerGameObject;
+
 	}
 
 	void SelectDecoration()
@@ -542,6 +546,13 @@ public class PlayerController : MonoBehaviour {
 			{
 				clickTime = Time.time;
 
+				if(CurrentControlMode == ControlMode.Rotate && 
+					entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration") &&
+					entireHitInfo.transform.gameObject != CurrentSelectDecoration)
+				{
+					CurrentSelectDecoration.transform.localScale *= 0.5f;
+				}
+
 				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
 				{
 					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
@@ -567,6 +578,11 @@ public class PlayerController : MonoBehaviour {
 				{
 					print("short");
 					CurrentControlMode = ControlMode.Rotate;
+					if(entireHitInfo.transform.gameObject != CurrentSelectDecoration)
+					{
+						CurrentSelectDecoration.transform.localScale *= 2f;
+
+					}
 				}
 				else // 長按
 				{

@@ -375,12 +375,19 @@ public class GameManager : MonoBehaviour
 					GameObject userVesselGameObject;
 					if (VesselIDGameObject.TryGetValue(vessel.VesselID, out userVesselGameObject))
 					{
+						if(UserGameObject[vessel.OwnerPlayerID] == PlayerController.Instance.CurrentFocusPlayerGameObject)
+						{
+							PlayerController.Instance.ToPlayerFarAnchor();
+						}
+
+						Destroy(userVesselGameObject);
+
 						UserGameObject.Remove(vessel.OwnerPlayerID);
 						VesselIDGameObject.Remove(vessel.VesselID);
 						UserDecoration.Remove(vessel.OwnerPlayerID);
 						VesselDecoration.Remove(vessel.VesselID);
 
-						Destroy(userVesselGameObject);
+
 					}
 				}
 				break;
