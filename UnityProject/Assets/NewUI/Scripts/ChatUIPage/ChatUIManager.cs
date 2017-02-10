@@ -133,13 +133,22 @@ public class ChatUIManager : MonoBehaviour {
 
     public void LoadMessagePage(PlayerInformation chatPlayer)
     {
+        foreach(Transform bubble in messageBubbleContent.transform)
+        {
+            Destroy(bubble.gameObject);
+        }
+
         // Set chattingPlayer to the chatPlayer
         chattingPlayer = chatPlayer;
         // Set title to the chatting player's name
         titleText.text = chatPlayer.nickname;
         // Instantiate Message Bubble and put under content
         List<int> renderedMessage = new List<int>();
-        foreach (var entry in playerConversationTable[chatPlayer.playerID])
+        List<PlayerConversation> conversation = playerConversationTable[chatPlayer.playerID];
+
+        // TODO : Sort conversation by date
+
+        foreach (var entry in conversation)
         {
             // Make sure not rendered same message
             if (renderedMessage.Contains(entry.message.playerMessageID)) return;
@@ -167,5 +176,8 @@ public class ChatUIManager : MonoBehaviour {
     public void SendMessageToChattingPlayer()
     {
         UserManager.Instance.User.Player.OperationManager.SendMessage(chattingPlayer.playerID , messageInputField.text);
+
+        messageInputField.text = null;
+        LoadMessagePage(chattingPlayer);
     }
 }

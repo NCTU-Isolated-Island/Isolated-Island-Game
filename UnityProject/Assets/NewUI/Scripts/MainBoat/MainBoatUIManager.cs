@@ -36,12 +36,13 @@ public class MainBoatUIManager : MonoBehaviour {
         ReverseMaskStatus();
     }
 
-	void Start () {
+    void Start()
+    {
         InitSetting();
 
-        foreach(Button button in verticalButtonList)
+        foreach (Button button in verticalButtonList)
         {
-            switch(button.name)
+            switch (button.name)
             {
                 case "ToIngredientsButton":
                     button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory); });

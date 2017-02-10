@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        RemoveCurrentPage();
+        //RemoveCurrentPage();
 
         // IMPORTANT - assign current page and previous page
         previosUIPage = currentUIPage;
@@ -80,12 +80,17 @@ public class UIManager : MonoBehaviour
     {
         // Remove Inventory -> use InventoryPanel.ClosePanel()
         UIPageType tmp = currentUIPage;
+        if (tmp == UIPageType.Inventory) InventoryPanel.Instance.ClosePanel();
+
         StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
+
+        currentUIPage = previosUIPage;
     }
 
     public void ToPreviousPage()
     {
         SwapPage(previosUIPage);
+        //RemoveCurrentPage();
     }
 
     IEnumerator MovingPageToCenter(GameObject page)
