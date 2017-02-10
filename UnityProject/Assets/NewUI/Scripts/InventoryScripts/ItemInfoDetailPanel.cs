@@ -21,9 +21,9 @@ public class ItemInfoDetailPanel : MonoBehaviour
         itemCountText = transform.Find("ItemCountText").GetComponent<Text>();
         itemDescriptionText = transform.Find("ItemDescriptionText").GetComponent<Text>();
 
-        synthesizeButton = transform.Find("SynthesizeButton").GetComponent<Button>();
-        decorateVesselButton = transform.Find("DecorateVesselButton").GetComponent<Button>();
-        dropButton = transform.Find("DropButton").GetComponent<Button>();
+        //synthesizeButton = transform.Find("SynthesizeButton").GetComponent<Button>();
+        //decorateVesselButton = transform.Find("DecorateVesselButton").GetComponent<Button>();
+        //dropButton = transform.Find("DropButton").GetComponent<Button>();
         closeButton = transform.Find("CloseButton").GetComponent<Button>();
 
         closeButton.onClick.AddListener(ClosePanel);

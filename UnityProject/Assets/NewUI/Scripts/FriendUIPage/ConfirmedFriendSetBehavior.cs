@@ -22,6 +22,14 @@ public class ConfirmedFriendSetBehavior : MonoBehaviour {
     void Start()
     {
         friendSetButton = gameObject.GetComponent<Button>();
+        friendSetButton.onClick.AddListener(
+            delegate
+            {
+                UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
+                CameraManager.Instance.ToNearAnchor(GameManager.Instance.UserGameObject[information.playerID]);
+                FriendUIManager.Instance.gameObject.SetActive(false);
+            });
+        
         UpdateButtonStatus();
     }
 
