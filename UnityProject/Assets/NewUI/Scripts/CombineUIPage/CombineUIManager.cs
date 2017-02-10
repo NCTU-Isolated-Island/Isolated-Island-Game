@@ -10,7 +10,7 @@ public class CombineUIManager : MonoBehaviour {
     public static CombineUIManager Instance { get; private set; }
 
     [SerializeField]
-    private CombineSlotBehavior[] materialSlots = new CombineSlotBehavior[3];
+    public CombineSlotBehavior[] materialSlots = new CombineSlotBehavior[3];
     [SerializeField]
     private GameObject combineResultImage;
     [SerializeField]

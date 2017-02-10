@@ -13,6 +13,8 @@ public class BluePrintUIManager : MonoBehaviour {
     private GameObject bluePrintSet;
     [SerializeField]
     private GameObject bluePrintSetContent;
+
+    private Button blueprintButton;
     //
 
     void InitSetting()
@@ -52,7 +54,7 @@ public class BluePrintUIManager : MonoBehaviour {
 
     public void LoadBluePrint()
     {
-        foreach(var bluePrint in UserManager.Instance.User.Player.KnownBlueprints)
+        foreach(Blueprint bluePrint in UserManager.Instance.User.Player.KnownBlueprints)
         {
             // Show BluePrint in UI
             GameObject tmp = Instantiate(bluePrintSet);
@@ -69,11 +71,22 @@ public class BluePrintUIManager : MonoBehaviour {
                 // Put Sprite to material.sprite
                 material[elementInfo.positionIndex].sprite = Resources.Load<Sprite>("2D/" +  elementInfo.itemID);
             }
+
+            blueprintButton = tmp.GetComponent<Button>();
+            blueprintButton.onClick.AddListener(delegate { ToCombineByBluePrint(bluePrint); });
         }
     }
 
     public void ToCombineByBluePrint(Blueprint bluePrint)
     {
+        foreach (var elementInfo in bluePrint.Requirements)
+        {
+            // Put Sprite to material.sprite
+            Item item;
+            ItemManager.Instance.FindItem(elementInfo.itemID, out item);
+            CombineUIManager.Instance.materialSlots[elementInfo.positionIndex].SetSlotInfo(item);
+        }
+
         // Swap to Combine Page
         UIManager.Instance.SwapPage(UIManager.UIPageType.Combine);
         // Put ingredients base on bluePrint formula

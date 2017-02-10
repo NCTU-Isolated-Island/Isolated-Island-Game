@@ -44,7 +44,8 @@ public class InventoryPanel : MonoBehaviour
 
     public void ClosePanel()
     {
-        UIManager.Instance.SwapPage(UIManager.Instance.previosUIPage);
+        //UIManager.Instance.SwapPage(UIManager.Instance.previosUIPage);
+        UIManager.Instance.ToPreviousPage();
     }
     public void ShowItemInfoDetail(InventoryItemInfo info)
     {

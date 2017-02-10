@@ -16,9 +16,15 @@ public class UIManager : MonoBehaviour
 
     //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();
     public GameObject[] UIPageList = new GameObject[10];
-	public Stack<UIPageType> PageStack = new Stack<UIPageType>();
-    public UIPageType previosUIPage;
-    public UIPageType currentUIPage;
+    public Stack<UIPageType> PageStack = new Stack<UIPageType>();
+
+    // DEBUG
+    //public UIPageType[] ttt;
+    //void Update()
+    //{
+    //    ttt = PageStack.ToArray();
+    //}
+    //
 
     // Variables for creating character
     private int CampNum;
@@ -34,26 +40,19 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // Initial Variable Setting
-        previosUIPage = UIPageType.Login;
-        currentUIPage = UIPageType.Login;
-
+        PageStack.Push(UIPageType.Login);
         // Get GameObjects for the Dictionary
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
     }
 
     public void SwapPage(UIPageType nextPage)
-    {
-		PageStack.Push(nextPage);
+    {      
+        if (PageStack.Peek() != UIPageType.Login)
+            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
 
-        if (nextPage == currentUIPage)
-            return;
-
-        if (currentUIPage != UIPageType.Login)
-			StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
-		
         if (nextPage == UIPageType.Inventory)
         {
-            switch (currentUIPage)
+            switch (PageStack.Peek())
             {
                 case UIPageType.Combine:
                     InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.PutInCombineSlot);
@@ -69,25 +68,16 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
-
+        PageStack.Push(nextPage);
         //RemoveCurrentPage();
-
-        // IMPORTANT - assign current page and previous page
-        previosUIPage = currentUIPage;
-        currentUIPage = nextPage;
-        //
     }
 
     public void RemoveCurrentPage()
     {
-		
         // Remove Inventory -> use InventoryPanel.ClosePanel()
-        UIPageType tmp = currentUIPage;
-        if (tmp == UIPageType.Inventory) InventoryPanel.Instance.ClosePanel();
+        UIPageType tmp = PageStack.Pop();
 
-        //StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
-		StartCoroutine(RemovingPage(UIPageList[(int)PageStack.Pop()]));
-        currentUIPage = previosUIPage;
+        StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
     }
 
     public void ToPreviousPage()
@@ -140,13 +130,14 @@ public class UIManager : MonoBehaviour
         }
         rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -transform.root.GetComponent<RectTransform>().rect.height);
 
-        //page.SetActive(false);
+        page.SetActive(false);
         yield return null;
     }
 
     public void ToMainPage()
     {
-        SwapPage(UIPageType.Main);
+        while (PageStack.Count > 2)
+            RemoveCurrentPage();
     }
 
     // TESTING

@@ -22,6 +22,7 @@ public class MainBoatUIManager : MonoBehaviour {
     //
 
     //
+
     void Awake()
     {
         if (Instance == null)
@@ -39,6 +40,33 @@ public class MainBoatUIManager : MonoBehaviour {
     void Start()
     {
         InitSetting();
+
+        foreach (Button button in horizontalButtonList)
+        {
+            switch (button.name)
+            {
+                case "ToFPVButton":
+                    button.onClick.AddListener((delegate {
+                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.FirstPerson);
+                    }));
+                    break;
+                case "ToBirdViewButton":
+                    button.onClick.AddListener(delegate {
+                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.BirdView);
+                    });
+                    break;
+                case "ToNormalViewButton":
+                    button.onClick.AddListener(delegate {
+                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.NormalView);
+                    });
+                    break;
+            }
+            button.onClick.AddListener(delegate
+            {
+                if (MainBoatUIManager.Instance.maskStatus)
+                    MainBoatUIManager.Instance.ReverseMaskStatus();
+            });
+        }
 
         foreach (Button button in verticalButtonList)
         {
@@ -76,6 +104,11 @@ public class MainBoatUIManager : MonoBehaviour {
                     button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Combine); });
                     break;
             }
+            button.onClick.AddListener(delegate
+            {
+                if (MainBoatUIManager.Instance.maskStatus)
+                    MainBoatUIManager.Instance.ReverseMaskStatus();
+            });
         }
     }
 	
@@ -83,6 +116,8 @@ public class MainBoatUIManager : MonoBehaviour {
     {
         mask.SetActive(!maskStatus);
         maskStatus = !maskStatus;
+
+        LExpand.Instance.OnClick();
     }
 
 }
