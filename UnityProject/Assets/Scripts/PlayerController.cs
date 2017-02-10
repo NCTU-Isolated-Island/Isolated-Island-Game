@@ -15,8 +15,10 @@ public class PlayerController : MonoBehaviour {
 
 	public static PlayerController Instance;
 	public List<GameObject> InArea;
+	public GameObject LastSelectDecoration;
 	public GameObject CurrentSelectDecoration;
 	public GameObject CurrentFocusPlayerGameObject;
+
 
 	public int ModelOrientMode = 0;
 	public enum ViewMode{ FirstPerson, BirdView, NormalView }
@@ -111,7 +113,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			int userID = 24;
 
-			AuxCameraSystem.Instance.Show3DObject(GameManager.Instance.UserGameObject[userID],
+			AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[userID],
 				new Vector3(0,-10.3f,40.8f),Quaternion.Euler(12.8f,0,0));
 		}
 
@@ -546,15 +548,17 @@ public class PlayerController : MonoBehaviour {
 			{
 				clickTime = Time.time;
 
-				if(CurrentControlMode == ControlMode.Rotate && 
-					entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration") &&
-					entireHitInfo.transform.gameObject != CurrentSelectDecoration)
-				{
-					CurrentSelectDecoration.transform.localScale *= 0.5f;
-				}
+//				if(CurrentControlMode == ControlMode.Rotate && 
+//					entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration") &&
+//					entireHitInfo.transform.gameObject != CurrentSelectDecoration)
+//				{
+//					CurrentSelectDecoration.transform.localScale *= 0.5f;
+//				}
 
 				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
-				{
+				{	print("23");
+					print(entireHitInfo.transform.name);
+					LastSelectDecoration = CurrentSelectDecoration;
 					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
 					CurrentControlMode = ControlMode.Decorate;
 					if(!ModifiedDecorations.Contains(CurrentSelectDecoration))
@@ -576,13 +580,18 @@ public class PlayerController : MonoBehaviour {
 
 				if(deltaTime < 0.5f) // 短按
 				{
+					if(LastSelectDecoration != null)
+					{
+						LastSelectDecoration.transform.localScale *= 0.5f;
+					}
 					print("short");
 					CurrentControlMode = ControlMode.Rotate;
-					if(entireHitInfo.transform.gameObject != CurrentSelectDecoration)
-					{
+					print(entireHitInfo.transform.name);
+//					if(entireHitInfo.transform.gameObject != LastSelectDecoration)
+//					{
 						CurrentSelectDecoration.transform.localScale *= 2f;
 
-					}
+//					}
 				}
 				else // 長按
 				{

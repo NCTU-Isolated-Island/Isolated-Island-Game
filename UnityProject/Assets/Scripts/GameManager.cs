@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
 
             //UImanager.Instance.LoadResult(0);
             //UIManager.Instance.LoadResult(0);
-            LogInUIManager.Instance.ToMainScenePrepare();
+			LogInUIManager.Instance.ToMainScenePrepare();
 		}
 	}
 

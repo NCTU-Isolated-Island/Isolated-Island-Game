@@ -12,11 +12,7 @@ namespace IsolatedIslandGame.Client.Communication
 {
     class ClientUserCommunicationInterface : CommunicationInterface
     {
-        public override void ErrorInform(string title, string message)
-        {
-            //will be implement in alert window
-            LogService.ErrorFormat("ClientUser ErrorInform Title: {0}, Message: {1}", title, message);
-        }
+       
 
         public override void SendEvent(UserEventCode eventCode, Dictionary<byte, object> parameters)
         {
