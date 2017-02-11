@@ -198,7 +198,11 @@ namespace IsolatedIslandGame.Server
                 VesselManager.Instance.AddVessel(vessel);
                 player.BindVessel(vessel);
             }
-
+            
+            foreach(var blueprint in DatabaseService.RepositoryList.PlayerKnownBlueprintRepository.ListOfPlayer(player.PlayerID))
+            {
+                player.GetBlueprint(blueprint);
+            }
             Action<Blueprint> playerGetBlueprintFunction = (blueprint) =>
             {
                 DatabaseService.RepositoryList.PlayerKnownBlueprintRepository.AddRelation(player.PlayerID, blueprint.BlueprintID);
