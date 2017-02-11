@@ -14,8 +14,8 @@
                         ServerName = "IsolatedIsland.TestServer",
                         ServerAddress = "140.113.123.134",
                         ServerPort = 4531,
-                        ServerVersion = "Release0.1",
-                        ClientVersion = "Release0.1"
+                        ServerVersion = "Development 0",
+                        ClientVersion = "Development 0"
                     };
                 }
                 return instance;

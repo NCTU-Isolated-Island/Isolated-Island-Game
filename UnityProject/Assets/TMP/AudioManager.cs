@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
     public float MasterVolume;
 
     private int UsingPlayer; // 0 means using player1 , 1 means using player2
-    private bool Fading;
+    private bool isFading;
 
     private IEnumerator FadeCoroutine;
 
@@ -25,7 +25,7 @@ public class AudioManager : MonoBehaviour
         }
         Instance = this;
         UsingPlayer = 0;
-        Fading = false;
+        isFading = false;
         MasterVolume = 0.3f;
     }
 
@@ -60,7 +60,7 @@ public class AudioManager : MonoBehaviour
 
     IEnumerator FadeMusic(float OverTime)
     {
-        Fading = true;
+        isFading = true;
 
         float pass_time = 0;
         float OriVol0 = AudioPlayer[UsingPlayer].volume;
@@ -76,10 +76,8 @@ public class AudioManager : MonoBehaviour
         AudioPlayer[UsingPlayer].volume = MasterVolume;
         AudioPlayer[1 - UsingPlayer].volume = 0;
 
-        Fading = false;
+        isFading = false;
     }
-
-    //
     
     void Start()
     {
@@ -87,6 +85,4 @@ public class AudioManager : MonoBehaviour
         GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<Rigidbody>();
         GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
-    
-    //
 }

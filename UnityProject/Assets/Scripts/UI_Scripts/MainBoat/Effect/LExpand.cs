@@ -88,18 +88,19 @@ public class LExpand : MonoBehaviour
 
         while (passTime < intervalTime)
         {
+            float lerpAlpha = 0.1f * passTime / intervalTime + 0.9f * Mathf.Sqrt(1 - Mathf.Pow(passTime / intervalTime - 1, 2));
             if (isOn)
             {
-                horiTmp.x = Mathf.Lerp(hori_st, 0, passTime / intervalTime);
+                horiTmp.x = Mathf.Lerp(hori_st, 0, lerpAlpha);
                 viewportHorizontal.GetComponent<RectTransform>().offsetMin = horiTmp;
-                verTmp.y = Mathf.Lerp(ver_st, 0, passTime / intervalTime);
+                verTmp.y = Mathf.Lerp(ver_st, 0, lerpAlpha);
                 viewportVertical.GetComponent<RectTransform>().offsetMax = verTmp;
             }
             else
             {
-                horiTmp.x = Mathf.Lerp(hori_st, hori_ori, passTime / intervalTime);
+                horiTmp.x = Mathf.Lerp(hori_st, hori_ori, lerpAlpha);
                 viewportHorizontal.GetComponent<RectTransform>().offsetMin = horiTmp;
-                verTmp.y = Mathf.Lerp(ver_st, ver_ori, passTime / intervalTime);
+                verTmp.y = Mathf.Lerp(ver_st, ver_ori, lerpAlpha);
                 viewportVertical.GetComponent<RectTransform>().offsetMax = verTmp;
             }
 
