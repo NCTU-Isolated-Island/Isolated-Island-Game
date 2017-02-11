@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour
 
     // Variables for creating character
     private int CampNum;
+    [SerializeField]
+    private UserInformPanel userInformPanelPrefab;
 
     void Awake()
     {
@@ -43,6 +45,8 @@ public class UIManager : MonoBehaviour
         PageStack.Push(UIPageType.Login);
         // Get GameObjects for the Dictionary
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
+
+        UserManager.Instance.User.OnUserInform += RenderUserInform;
     }
 
     public void SwapPage(UIPageType nextPage)
@@ -140,5 +144,12 @@ public class UIManager : MonoBehaviour
             RemoveCurrentPage();
     }
 
-    // TESTING
+    private void RenderUserInform(string title, string content)
+    {
+        UserInformPanel panel = Instantiate(userInformPanelPrefab);
+        panel.RenderUserInform(title, content);
+        panel.transform.SetParent(transform);
+        panel.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        panel.GetComponent<RectTransform>().localScale = Vector2.one;
+    }
 }

@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: d55c2b41bcbaae941ae81e2df8004af6
-timeCreated: 1486479626
+timeCreated: 1486793400
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - userInformPanelPrefab: {fileID: 114384883092483090, guid: c821d1d0dbb6ef84ba92613103c73544,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
