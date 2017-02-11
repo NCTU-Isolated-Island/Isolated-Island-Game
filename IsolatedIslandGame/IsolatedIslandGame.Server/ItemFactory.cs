@@ -17,6 +17,7 @@ namespace IsolatedIslandGame.Server
             {
                 AddItem(item);
             }
+            ResetDrawMaterialTime();
         }
 
         public override void AddItem(Item item)
@@ -64,6 +65,22 @@ namespace IsolatedIslandGame.Server
                 material = null;
                 return false;
             }
+        }
+
+        private void ResetDrawMaterialTime()
+        {
+            DateTime nextDrawMaterialTime = DateTime.Today;
+            while (nextDrawMaterialTime < DateTime.Now)
+            {
+                nextDrawMaterialTime += TimeSpan.FromHours(6);
+            }
+            DatabaseService.RepositoryList.PlayerRepository.GlobalUpdateNextDrawMaterialTime(nextDrawMaterialTime);
+            foreach (Player player in PlayerFactory.Instance.Players)
+            {
+                player.NextDrawMaterialTime = nextDrawMaterialTime;
+            }
+            
+            Scheduler.Instance.AddTask(nextDrawMaterialTime, ResetDrawMaterialTime);
         }
     }
 }

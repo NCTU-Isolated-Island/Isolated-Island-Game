@@ -12,11 +12,13 @@ namespace IsolatedIslandGame.Database
         {
             DatabaseService.instance = instance;
         }
+        public static string DatabaseName { get; private set; }
         protected abstract ConnectionList InternalConnectionList { get; }
         protected abstract RepositoryList InternalRepositoryList { get; }
 
         public static bool Connect(string hostName, string userName, string password, string database)
         {
+            DatabaseName = database;
             ConnectionList.Connect(hostName, userName, password, database);
             return ConnectionList.Connected;
         }

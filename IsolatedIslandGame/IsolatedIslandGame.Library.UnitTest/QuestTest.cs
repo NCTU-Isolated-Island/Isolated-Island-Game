@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             },
             "TestSendMessageToDifferentOnlineFriendQuest");
 
-            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null, DateTime.Now);
             player1.BindInventory(new Inventory(1, 40));
             player1.AddFriend(new FriendInformation { friendPlayerID = 2, isConfirmed = true, isInviter = true });
             player1.AddFriend(new FriendInformation { friendPlayerID = 3, isConfirmed = true, isInviter = true });
@@ -174,7 +174,7 @@ namespace IsolatedIslandGame.Library.UnitTest
                 new GiveItemQuestReward(1, 1, 1)
             },
             "TestSendMessageToDifferentOnlineFriendQuest");
-            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null, DateTime.Now);
             player1.BindInventory(new Inventory(1, 40));
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
             {
@@ -212,7 +212,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             },
             "TestScanQR_CodeQuest");
 
-            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null, DateTime.Now);
             player1.BindInventory(new Inventory(1, 40));
 
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()

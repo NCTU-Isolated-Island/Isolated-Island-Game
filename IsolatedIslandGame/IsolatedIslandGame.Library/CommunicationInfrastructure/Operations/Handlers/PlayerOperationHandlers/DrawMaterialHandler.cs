@@ -18,12 +18,13 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             if (base.Handle(operationCode, parameters))
             {
                 Random randomGenerator = new Random(DateTime.Now.GetHashCode());
-                Item randomItem = ItemManager.Instance.Items.ElementAt(randomGenerator.Next(0, ItemManager.Instance.ItemCount));
+                IEnumerable<Item> basicMaterials = ItemManager.Instance.Items.Where(x => x.ItemID < 2000);
+                Item randomItem = basicMaterials.ElementAt(randomGenerator.Next(0, basicMaterials.Count()));
                 int randomNumber = randomGenerator.Next(1, 10);
 
                 lock(subject.Inventory)
                 {
-                    if(subject.Inventory.AddItemCheck(randomItem.ItemID, randomNumber))
+                    if(DateTime.Now > subject.NextDrawMaterialTime && subject.Inventory.AddItemCheck(randomItem.ItemID, randomNumber))
                     {
                         subject.Inventory.AddItem(randomItem, randomNumber);
                         Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
@@ -33,6 +34,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         };
                         SendResponse(operationCode, responseParameters);
                         LogService.InfoFormat("Player: {0}, DrawMaterial, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, randomNumber);
+                        DateTime nextDrawMaterialTime = DateTime.Today;
+                        while(nextDrawMaterialTime < DateTime.Now)
+                        {
+                            nextDrawMaterialTime += TimeSpan.FromHours(6);
+                        }
+                        subject.NextDrawMaterialTime = nextDrawMaterialTime;
                         return true;
                     }
                     else

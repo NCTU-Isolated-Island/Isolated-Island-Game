@@ -18,9 +18,9 @@ namespace IsolatedIslandGame.Client
 
         public ClientVesselManager()
         {
-            Communication.PhotonService.Instance.OnConnectChange += (connected) =>
+            UserManager.Instance.User.OnPlayerOnline += (player) => 
             {
-                if (connected)
+                if(player != null)
                 {
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
                 }

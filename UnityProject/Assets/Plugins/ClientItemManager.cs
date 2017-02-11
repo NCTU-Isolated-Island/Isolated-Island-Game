@@ -11,9 +11,9 @@ namespace IsolatedIslandGame.Client
 
         public ClientItemManager()
         {
-            Communication.PhotonService.Instance.OnConnectChange += (connected) =>
+            UserManager.Instance.User.OnPlayerOnline += (player) =>
             {
-                if(connected)
+                if (player != null)
                 {
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllItems();
                 }

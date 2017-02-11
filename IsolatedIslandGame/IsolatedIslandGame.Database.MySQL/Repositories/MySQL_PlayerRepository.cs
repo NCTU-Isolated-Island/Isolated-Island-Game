@@ -67,7 +67,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override bool Read(int playerID, out Player player)
         {
             string sqlString = @"SELECT  
-                FacebookID, Nickname, Signature, GroupType, LastConnectedIPAddress
+                FacebookID, Nickname, Signature, GroupType, LastConnectedIPAddress, NextDrawMaterialTime
                 from PlayerCollection WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -81,7 +81,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         string signature = reader.IsDBNull(2) ? "" : reader.GetString(2);
                         GroupType groupType = (GroupType)reader.GetByte(3);
                         IPAddress lastConnectedIPAddress = reader.IsDBNull(4) ? IPAddress.None : IPAddress.Parse(reader.GetString(4));
-                        player = new Player(playerID, facebookID, nickname, signature, groupType, lastConnectedIPAddress);
+                        DateTime nextDrawMaterialTime = reader.GetDateTime(5);
+
+                        player = new Player(playerID, facebookID, nickname, signature, groupType, lastConnectedIPAddress, nextDrawMaterialTime);
                         return true;
                     }
                     else
@@ -99,7 +101,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 Nickname = @nickname,
                 Signature = @signature,
                 GroupType = @groupType,
-                LastConnectedIPAddress = @lastConnectedIPAddress
+                LastConnectedIPAddress = @lastConnectedIPAddress,
+                NextDrawMaterialTime = @nextDrawMaterialTime
                 WHERE PlayerID = @playerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -107,7 +110,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 command.Parameters.AddWithValue("signature", player.Signature ?? "");
                 command.Parameters.AddWithValue("groupType", (byte)player.GroupType);
                 command.Parameters.AddWithValue("lastConnectedIPAddress", player.LastConnectedIPAddress.ToString());
+                command.Parameters.AddWithValue("nextDrawMaterialTime", player.NextDrawMaterialTime);
                 command.Parameters.AddWithValue("playerID", player.PlayerID);
+                
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.ErrorFormat("MySQLPlayerRepository Save Player no affected row from PlayerID:{0}, IPAddress:{1}", player.PlayerID, player.LastConnectedIPAddress);
@@ -161,6 +166,18 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         return false;
                     }
                 }
+            }
+        }
+
+        public override void GlobalUpdateNextDrawMaterialTime(DateTime nextDrawMaterialTime)
+        {
+            string sqlString = @"UPDATE PlayerCollection 
+                SET NextDrawMaterialTime = @nextDrawMaterialTime
+                WHERE true;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("nextDrawMaterialTime", nextDrawMaterialTime);
+                LogService.Info($"GlobalUpdateNextDrawMaterialTime to {command.ExecuteNonQuery()} players");
             }
         }
     }

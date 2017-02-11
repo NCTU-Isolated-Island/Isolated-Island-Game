@@ -40,9 +40,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         }
         public override bool Read(int receiverPlayerID, int playerMessageID, out PlayerConversation conversation)
         {
-            string sqlString = @"SELECT  
+            string sqlString = $@"SELECT  
                 MessageID, HasRead, SenderPlayerID, SendTime, Content
-                from IsolatedIsland_PlayerData.PlayerConversationCollection, IsolatedIsland_TextData.PlayerMessageCollection 
+                from {DatabaseService.DatabaseName}_PlayerData.PlayerConversationCollection, {DatabaseService.DatabaseName}_TextData.PlayerMessageCollection 
                 WHERE ReceiverPlayerID = @receiverPlayerID AND MessageID = @playerMessageID AND MessageID = PlayerMessageID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -83,9 +83,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override List<PlayerConversation> ListOfPlayer(int playerID)
         {
             List<PlayerConversation> conversations = new List<PlayerConversation>();
-            string sqlString = @"SELECT  
-                MessageID, HasRead, SenderPlayerID, SendTime, Content
-                from IsolatedIsland_PlayerData.PlayerConversationCollection, IsolatedIsland_TextData.PlayerMessageCollection 
+            string sqlString = $@"SELECT  
+                MessageID, HasRead, SenderPlayerID, SendTime, Content, ReceiverPlayerID
+                from {DatabaseService.DatabaseName}_PlayerData.PlayerConversationCollection, {DatabaseService.DatabaseName}_TextData.PlayerMessageCollection 
                 WHERE (ReceiverPlayerID = @playerID OR SenderPlayerID = @playerID) AND MessageID = PlayerMessageID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -99,6 +99,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         int senderPlayerID = reader.GetInt32(2);
                         DateTime sendTime = reader.GetDateTime(3);
                         string content = reader.GetString(4);
+                        int receiverPlayerID = reader.GetInt32(5);
 
                         conversations.Add(new PlayerConversation
                         {
@@ -109,7 +110,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 sendTime = sendTime,
                                 content = content
                             },
-                            receiverPlayerID = playerID,
+                            receiverPlayerID = receiverPlayerID,
                             hasRead = hasRead
                         });
                     }

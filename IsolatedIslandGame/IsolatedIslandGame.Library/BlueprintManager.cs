@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IsolatedIslandGame.Library
 {
@@ -12,7 +13,7 @@ namespace IsolatedIslandGame.Library
         }
 
         protected Dictionary<int, Blueprint> blueprintDictionary = new Dictionary<int, Blueprint>();
-        public IEnumerable<Blueprint> Blueprints { get { return blueprintDictionary.Values; } }
+        public IEnumerable<Blueprint> Blueprints { get { return blueprintDictionary.Values.ToArray(); } }
         public int BlueprintCount { get { return blueprintDictionary.Count; } }
 
         public delegate void BlueprintChangeEventHandler(Blueprint blueprint, DataChangeType changeType);

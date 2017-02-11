@@ -5,6 +5,7 @@ using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataParameters.Player;
+using System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.PlayerEventHandlers
@@ -19,6 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             syncTable.Add(PlayerSyncDataCode.TransactionItemChange, new SyncTransactionItemChangeHandler(subject));
             syncTable.Add(PlayerSyncDataCode.TransactionConfirmStatusChange, new SyncTransactionConfirmStatusChangeHandler(subject));
             syncTable.Add(PlayerSyncDataCode.QuestRecordUpdated, new SyncQuestRecordUpdatedHandler(subject));
+            syncTable.Add(PlayerSyncDataCode.NextDrawMaterialTimeUpdated, new SyncNextDrawMaterialTimeUpdatedHandler(subject));
         }
 
         internal override void SendSyncData(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -94,6 +96,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordDataByteArray, SerializationHelper.TypeSerialize(questRecord) },
             };
             SendSyncData(PlayerSyncDataCode.QuestRecordUpdated, parameters);
+        }
+        public void SyncNextDrawMaterialTimeUpdated(DateTime nextDrawMaterialTime)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncNextDrawMaterialTimeUpdatedParameterCode.NextDrawMaterialTime, nextDrawMaterialTime.ToBinary() },
+            };
+            SendSyncData(PlayerSyncDataCode.NextDrawMaterialTimeUpdated, parameters);
         }
     }
 }
