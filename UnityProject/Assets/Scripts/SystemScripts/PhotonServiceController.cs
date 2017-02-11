@@ -7,12 +7,16 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
 {
     public class PhotonServiceController : MonoBehaviour
     {
-        private float reconnectInterval = 10;
-        private float reconnectCountdownTimer = 0;
+        private bool isFirstConnected = true;
 
         void Start()
         {
             RegisterEvents();
+            PhotonService.Instance.Connect(
+                serverName: SystemConfiguration.Instance.ServerName,
+                serverAddress: SystemConfiguration.Instance.ServerAddress,
+                port: SystemConfiguration.Instance.ServerPort
+            );
         }
         void OnGUI()
         {
@@ -33,19 +37,6 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
         void Update()
         {
             PhotonService.Instance.Service();
-            if (!PhotonService.Instance.ServerConnected)
-            {
-                reconnectCountdownTimer -= Time.deltaTime;
-                if (reconnectCountdownTimer <= 0)
-                {
-                    reconnectCountdownTimer = reconnectInterval;
-                    PhotonService.Instance.Connect(
-                        serverName: SystemConfiguration.Instance.ServerName,
-                        serverAddress: SystemConfiguration.Instance.ServerAddress,
-                        port: SystemConfiguration.Instance.ServerPort
-                    );
-                }
-            }
         }
 
         void OnApplicationQuit()
@@ -69,12 +60,23 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             {
                 LogService.Info("Connected");
                 UserManager.Instance.User.OperationManager.FetchDataResolver.FetchSystemVersion();
+                if(isFirstConnected)
+                {
+                    isFirstConnected = false;
+                }
+                else
+                {
+                    FacebookService.LoginWithFacbook();
+                }
             }
             else
             {
                 LogService.Info("Disconnected");
-                reconnectCountdownTimer = reconnectInterval;
-                SceneManager.LoadScene("LoginScene");
+                PhotonService.Instance.Connect(
+                    serverName: SystemConfiguration.Instance.ServerName,
+                    serverAddress: SystemConfiguration.Instance.ServerAddress,
+                    port: SystemConfiguration.Instance.ServerPort
+                );
             }
         }
     }

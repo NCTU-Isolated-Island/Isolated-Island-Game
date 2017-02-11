@@ -23,6 +23,7 @@
         SetFavoriteItem,
         ReadPlayerMessage,
         SendMaterialToIsland,
-        ScanQR_Code
+        ScanQR_Code,
+        DiscardItem
     }
 }
