@@ -42,6 +42,7 @@ public class OtherBoatUIManager : MonoBehaviour {
 
     void Awake()
     {
+		print("awake");
         if (Instance == null)
             Instance = this;
     }

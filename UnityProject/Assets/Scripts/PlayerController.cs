@@ -231,6 +231,8 @@ public class PlayerController : MonoBehaviour {
 
 			CurrentFocusPlayerGameObject = GameManager.Instance.UserGameObject[id];
 
+			OtherBoatUIManager.Instance.SetOtherPlayerInfo(id);
+			UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
 		}
 
 	}

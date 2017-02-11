@@ -30,11 +30,8 @@ public class FirstPersonCameraController : MonoBehaviour
 		transform.rotation = Input.gyro.attitude;
 
         transform.Rotate(0f, 0f, 180f, Space.Self);
-        #if UNITY_ANDROID
-            transform.Rotate( 270f, 180f, 180f, Space.World );
-        #else
-		    transform.Rotate( 90f, 180f, 0f, Space.World );
-        #endif
+		transform.Rotate( 90f, 180f, 0f, Space.World );
+
 	}
 
 }
