@@ -19,6 +19,7 @@ public class PutItemUIPage : MonoBehaviour {
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()
