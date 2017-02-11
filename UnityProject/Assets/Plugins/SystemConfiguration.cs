@@ -11,9 +11,9 @@
                 {
                     instance = new SystemConfiguration
                     {
-                        ServerName = "IsolatedIsland.ReleaseServer",
+                        ServerName = "IsolatedIsland.TestServer",
                         ServerAddress = "140.113.123.134",
-                        ServerPort = 4532,
+                        ServerPort = 4531,
                         ServerVersion = "Development 0",
                         ClientVersion = "Development 0"
                     };
