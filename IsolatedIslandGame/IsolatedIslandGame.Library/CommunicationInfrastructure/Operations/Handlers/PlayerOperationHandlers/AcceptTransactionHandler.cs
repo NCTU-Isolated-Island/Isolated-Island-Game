@@ -15,21 +15,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                string debugMessage;
-                ErrorCode errorCode;
                 int requesterPlayerID = (int)parameters[(byte)AcceptTransactionParameterCode.RequesterPlayerID];
                 if (subject.User.CommunicationInterface.AcceptTransaction(requesterPlayerID, subject.PlayerID))
                 {
-                    SendResponse(operationCode, new Dictionary<byte, object>());
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, AcceptTransaction, RequesterPlayerID: {requesterPlayerID}");
                     return true;
                 }
                 else
                 {
-                    errorCode = ErrorCode.Fail;
-                    debugMessage = "AcceptTransaction Fail";
-                    SendError(operationCode, errorCode, debugMessage);
                     LogService.ErrorFormat($"Player: {subject.IdentityInformation}, AcceptTransaction Fail, RequesterPlayerID: {requesterPlayerID}");
+                    subject.User.EventManager.UserInform("失敗", "接受交易失敗。");
                     return false;
                 }
             }

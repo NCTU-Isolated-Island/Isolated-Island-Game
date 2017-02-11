@@ -15,23 +15,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                string debugMessage;
-                ErrorCode errorCode;
                 int transactionID = (int)parameters[(byte)ChangeTransactionConfirmStatusParameterCode.TransactionID];
                 bool isConfirmed = (bool)parameters[(byte)ChangeTransactionConfirmStatusParameterCode.IsConfirmed];
 
                 if (subject.User.CommunicationInterface.ChangeTransactionConfirmStatus(subject.PlayerID, transactionID, isConfirmed))
                 {
-                    SendResponse(operationCode, new Dictionary<byte, object>());
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, ChangeTransactionConfirmStatus, TransactionID: {transactionID}, IsConfirmed: {isConfirmed}");
                     return true;
                 }
                 else
                 {
-                    errorCode = ErrorCode.Fail;
-                    debugMessage = "ConfirmTransaction Fail";
-                    SendError(operationCode, errorCode, debugMessage);
                     LogService.ErrorFormat($"Player: {subject.IdentityInformation}, ChangeTransactionConfirmStatus Fail, TransactionID: {transactionID}, IsConfirmed: {isConfirmed}");
+                    subject.User.EventManager.UserInform("失敗", "確認交易失敗。");
                     return false;
                 }
             }

@@ -7,6 +7,7 @@
         Nickname,
         Signature,
         GroupType,
-        LastConnectedIPAddress
+        LastConnectedIPAddress,
+        NextDrawMaterialTime
     }
 }

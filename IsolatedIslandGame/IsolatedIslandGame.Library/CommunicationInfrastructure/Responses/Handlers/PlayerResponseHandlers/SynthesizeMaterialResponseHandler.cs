@@ -27,22 +27,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
-                case ErrorCode.InvalidOperation:
-                    {
-                        LogService.ErrorFormat("SynthesizeMaterial Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "沒有這種藍圖");
-                        return false;
-                    }
-                case ErrorCode.PermissionDeny:
-                    {
-                        LogService.ErrorFormat("SynthesizeMaterial Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "素材不足");
-                        return false;
-                    }
                 default:
                     {
                         LogService.ErrorFormat("SynthesizeMaterial Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
+                        subject.ResponseManager.SynthesizeMaterialResponse(returnCode, null, null);
                         return false;
                     }
             }

@@ -28,22 +28,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
-                case ErrorCode.AlreadyExisted:
-                    {
-                        LogService.ErrorFormat("CreateCharacter Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "已完成角色創建");
-                        return false;
-                    }
-                case ErrorCode.ParameterError:
-                    {
-                        LogService.ErrorFormat("CreateCharacter Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "未知的陣營");
-                        return false;
-                    }
                 default:
                     {
                         LogService.ErrorFormat("CreateCharacter Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
+                        subject.ResponseManager.CreateCharacterResponse(returnCode, subject);
                         return false;
                     }
             }
@@ -59,6 +47,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     GroupType groupType = (GroupType)parameters[(byte)CreateCharacterResponseParameterCode.GroupType];
                     subject.CreateCharacter(nickname, signature, groupType);
                     subject.OperationManager.FetchDataResolver.FetchVessel();
+                    subject.ResponseManager.CreateCharacterResponse(returnCode, subject);
                     return true;
                 }
                 catch (InvalidCastException ex)

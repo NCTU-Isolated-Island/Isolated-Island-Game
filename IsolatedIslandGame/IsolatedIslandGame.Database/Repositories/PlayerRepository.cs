@@ -1,4 +1,5 @@
 ﻿using IsolatedIslandGame.Library;
+using System;
 
 namespace IsolatedIslandGame.Database.Repositories
 {
@@ -9,5 +10,6 @@ namespace IsolatedIslandGame.Database.Repositories
         public abstract bool Read(int playerID, out Player player);
         public abstract void Update(Player player);
         public abstract bool ReadPlayerInformation(int playerID, out PlayerInformation playerInformation);
+        public abstract void GlobalUpdateNextDrawMaterialTime(DateTime nextDrawMaterialTime);
     }
 }

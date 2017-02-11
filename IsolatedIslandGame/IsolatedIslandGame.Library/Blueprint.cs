@@ -32,7 +32,8 @@ namespace IsolatedIslandGame.Library
 
         public bool IsSufficientRequirements(List<ElementInfo> infos)
         {
-            if(IsOrderless)
+            infos = new List<ElementInfo>(infos);
+            if (IsOrderless)
             {
                 foreach (ElementInfo require in requirements)
                 {

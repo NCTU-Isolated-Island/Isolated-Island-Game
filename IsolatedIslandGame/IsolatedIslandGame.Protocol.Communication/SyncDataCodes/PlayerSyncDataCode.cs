@@ -7,6 +7,7 @@
         PlayerInformation,
         TransactionItemChange,
         TransactionConfirmStatusChange,
-        QuestRecordUpdated
+        QuestRecordUpdated,
+        NextDrawMaterialTimeUpdated
     }
 }

@@ -63,25 +63,11 @@ public class GameManager : MonoBehaviour
 	{
 		if(status == true)
 		{
-			//TODO need to REMOVE before beta!!!
-			UserManager.Instance.User.OperationManager.PlayerIDLogin(22,"TestServer");
-            //FacebookService.LoginWithFacbook();
+            //TODO need to REMOVE before beta!!!
+            FacebookService.LoginWithFacbook();
+            //UserManager.Instance.User.OperationManager.PlayerIDLogin(24,"TestServer");
         }
        // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
-	}
-
-
-	void OnDestroy()
-	{
-		PhotonService.Instance.OnConnectChange -= DebugLogin;
-
-		UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
-		UserManager.Instance.User.Player.OnCreateCharacter -= OnCreateCharacter;
-		UserManager.Instance.User.Player.OnGetPlayerConversation -= OnGetPlayerConversation;
-		SceneManager.sceneLoaded -= OnSceneLoaded;
-		VesselManager.Instance.OnVesselTransformUpdated -= OnVesselTransformUpdated;
-		VesselManager.Instance.OnVesselDecorationChange -= OnVesselDecorationChange;
-		VesselManager.Instance.OnVesselChange -= OnVesselChange;
 	}
 
 	IEnumerator SlowUpdate()

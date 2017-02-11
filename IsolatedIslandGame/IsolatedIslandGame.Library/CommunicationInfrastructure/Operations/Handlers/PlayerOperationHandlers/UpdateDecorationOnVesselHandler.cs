@@ -25,24 +25,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 lock(subject.Vessel)
                 {
-                    if (subject.Vessel.ContainsDecoration(decorationID))
+                    Decoration decoration;
+                    if (subject.Vessel.FindDecoration(decorationID, out decoration))
                     {
-                        Decoration decoration;
-                        if(subject.Vessel.FindDecoration(decorationID, out decoration))
-                        {
-                            decoration.UpdateDecoration(positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
-                            LogService.InfoFormat("Player: {0}, UpdateDecorationOnVessel, DecorationID: {1}", subject.IdentityInformation, decorationID);
-                            return true;
-                        }
-                        else
-                        {
-                            LogService.ErrorFormat("UpdateDecorationOnVessel error Player: {0}, decoration not on the vessel, Decoration: {1}", subject.IdentityInformation, decorationID);
-                            return false;
-                        }
+                        decoration.UpdateDecoration(positionX, positionY, positionZ, eulerAngleX, eulerAngleY, eulerAngleZ);
+                        LogService.InfoFormat("Player: {0}, UpdateDecorationOnVessel, DecorationID: {1}", subject.IdentityInformation, decorationID);
+                        return true;
                     }
                     else
                     {
                         LogService.ErrorFormat("UpdateDecorationOnVessel error Player: {0}, don't have the decoration Decoration: {1}", subject.IdentityInformation, decorationID);
+                        subject.User.EventManager.UserInform("錯誤", "更新船的裝飾錯誤，這艘船上並沒有此裝飾。");
                         return false;
                     }
                 }

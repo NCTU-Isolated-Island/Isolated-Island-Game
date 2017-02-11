@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 6)
+                        if (parameters.Count != 7)
                         {
                             LogService.ErrorFormat(string.Format("LoginResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -29,22 +29,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
-                case ErrorCode.Fail:
-                    {
-                        LogService.ErrorFormat("Login Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "登入失敗");
-                        return false;
-                    }
-                case ErrorCode.AlreadyExisted:
-                    {
-                        LogService.ErrorFormat("Login Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "此帳號已經登入");
-                        return false;
-                    }
                 default:
                     {
                         LogService.ErrorFormat("Login Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
+                        subject.ResponseManager.LoginResponse(returnCode, null);
                         return false;
                     }
             }
@@ -62,7 +50,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     string signature = (string)parameters[(byte)LoginResponseParameterCode.Signature];
                     GroupType groupType = (GroupType)parameters[(byte)LoginResponseParameterCode.GroupType];
                     string lastConnectedIPAddress = (string)parameters[(byte)LoginResponseParameterCode.LastConnectedIPAddress];
-                    Player player = new Player(playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress));
+                    DateTime nextDrawMaterialTime = DateTime.FromBinary((long)parameters[(byte)LoginResponseParameterCode.NextDrawMaterialTime]);
+
+                    Player player = new Player(playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress), nextDrawMaterialTime);
                     player.BindUser(subject);
                     subject.PlayerOnline(player);
                     subject.Player.OperationManager.FetchDataResolver.FetchInventory();
@@ -74,6 +64,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTotalScore();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTodayMaterialRanking();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandPlayerScoreRanking();
+
+                    subject.ResponseManager.LoginResponse(returnCode, player);
 
                     Vessel vessel;
                     if(VesselManager.Instance.FindVesselByOwnerPlayerID(playerID, out vessel))

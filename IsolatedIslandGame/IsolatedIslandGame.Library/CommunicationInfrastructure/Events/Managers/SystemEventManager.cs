@@ -50,11 +50,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             systemManager.SendAllUserEvent(UserEventCode.SystemEvent, eventData);
         }
 
-        public void ErrorInform(string title, string message)
-        {
-            systemManager.EventManager.ErrorInform(title, message);
-        }
-
         internal void SendSyncDataEvent(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
         {
             Dictionary<byte, object> syncDataParameters = new Dictionary<byte, object>

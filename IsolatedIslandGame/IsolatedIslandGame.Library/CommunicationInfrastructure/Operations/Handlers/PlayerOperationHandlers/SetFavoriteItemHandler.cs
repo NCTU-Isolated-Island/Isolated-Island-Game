@@ -33,12 +33,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         else
                         {
                             LogService.Error($"SetFavoriteItem error Player: {subject.IdentityInformation}, the ItemInfo is not existed InventoryItemInfoID: {inventoryItemInfoID}");
+                            subject.User.EventManager.UserInform("錯誤", "操作的物品並不在物品欄中。");
                             return false;
                         }
                     }
                 }
                 else
                 {
+                    subject.User.EventManager.UserInform("錯誤", "操作的物品欄並非你所有。");
                     return false;
                 }
             }

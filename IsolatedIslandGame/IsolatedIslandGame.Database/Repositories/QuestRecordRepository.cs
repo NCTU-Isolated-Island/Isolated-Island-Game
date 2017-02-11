@@ -25,11 +25,11 @@ namespace IsolatedIslandGame.Database.Repositories
         public abstract bool CreateQuestRequirementRecord(int questRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         public abstract bool MarkQuestRecordHasGottenReward(int questRecordID);
 
-        public abstract bool AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID);
-        protected abstract bool SpecializeRequirementRecordToSendMessageToDifferentOnlineFriendTheSameOceanRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
+        public abstract bool AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID);
+        protected abstract bool SpecializeRequirementRecordToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
 
-        public abstract bool AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID);
-        protected abstract bool SpecializeRequirementRecordToCloseDealWithDifferentFriendInTheSameOceanRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
+        public abstract bool AddPlayerIDToCloseDealWithDifferentFriendInTheSameSpecificOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID);
+        protected abstract bool SpecializeRequirementRecordToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
 
         public abstract bool MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(int requirementRecordID);
         protected abstract bool SpecializeRequirementRecordToScanQR_CodeRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);

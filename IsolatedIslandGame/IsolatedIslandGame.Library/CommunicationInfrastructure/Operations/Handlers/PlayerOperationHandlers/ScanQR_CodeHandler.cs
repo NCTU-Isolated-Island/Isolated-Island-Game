@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 string qrCodeString = (string)parameters[(byte)ScanQR_CodeParameterCode.QR_CodeString];
 
                 subject.ScanQR_Code(qrCodeString);
-                SendResponse(operationCode, new Dictionary<byte, object>());
+                subject.User.EventManager.UserInform("成功", "QR Code掃描成功。");
                 return true;
             }
             else

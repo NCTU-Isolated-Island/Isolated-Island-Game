@@ -15,22 +15,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                string debugMessage;
-                ErrorCode errorCode;
                 int transactionID = (int)parameters[(byte)CancelTransactionParameterCode.TransactionID];
 
                 if (subject.User.CommunicationInterface.CancelTransaction(subject.PlayerID, transactionID))
                 {
-                    SendResponse(operationCode, new Dictionary<byte, object>());
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, CancelTransaction, TransactionID: {transactionID}");
                     return true;
                 }
                 else
                 {
-                    errorCode = ErrorCode.Fail;
-                    debugMessage = "CancelTransaction Fail";
-                    SendError(operationCode, errorCode, debugMessage);
                     LogService.ErrorFormat($"Player: {subject.IdentityInformation}, CancelTransaction Fail, TransactionID: {transactionID}");
+                    subject.User.EventManager.UserInform("失敗", "取消交易失敗。");
                     return false;
                 }
             }

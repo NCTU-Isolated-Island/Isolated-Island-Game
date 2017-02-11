@@ -2,7 +2,6 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.PlayerResponseHandlers;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
-using System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers
@@ -11,6 +10,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
     {
         protected readonly Dictionary<PlayerOperationCode, ResponseHandler<Player, PlayerOperationCode>> operationTable;
         protected readonly Player player;
+
+        public delegate void CreateCharacterResponseEventHandler(ErrorCode returnCode, Player player);
+        private event CreateCharacterResponseEventHandler onCreateCharacterResponse;
+        public event CreateCharacterResponseEventHandler OnCreateCharacterResponse { add { onCreateCharacterResponse += value; } remove { onCreateCharacterResponse -= value; } }
 
         public delegate void DrawMaterialResponseEventHandler(ErrorCode returnCode, Item material, int count);
         private event DrawMaterialResponseEventHandler onDrawMaterialResponse;
@@ -72,6 +75,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
         internal void UseBlueprintResponse(ErrorCode returnCode, Blueprint blueprint)
         {
             onUseBlueprintResponse?.Invoke(returnCode, blueprint);
+        }
+        internal void CreateCharacterResponse(ErrorCode returnCode, Player player)
+        {
+            onCreateCharacterResponse?.Invoke(returnCode, player);
         }
     }
 }

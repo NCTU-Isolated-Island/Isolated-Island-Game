@@ -24,6 +24,19 @@ namespace IsolatedIslandGame.Library
         public string IdentityInformation { get { return string.Format("Player ID: {0}", PlayerID); } }
         public Inventory Inventory { get; private set; }
         public Vessel Vessel { get; private set; }
+        private DateTime nextDrawMaterialTime;
+        public DateTime NextDrawMaterialTime
+        {
+            get
+            {
+                return nextDrawMaterialTime;
+            }
+            set
+            {
+                nextDrawMaterialTime = value;
+                onNextDrawMaterialTimeUpdated?.Invoke(nextDrawMaterialTime);
+            }
+        }
 
         private Dictionary<int, Blueprint> knownBlueprintDictionary = new Dictionary<int, Blueprint>();
         public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values.ToArray(); } }
@@ -78,9 +91,12 @@ namespace IsolatedIslandGame.Library
 
         private event Action<string> onScanQR_Code;
         public event Action<string> OnScanQR_Code { add { onScanQR_Code += value; } remove { onScanQR_Code -= value; } }
+
+        private event Action<DateTime> onNextDrawMaterialTimeUpdated;
+        public event Action<DateTime> OnNextDrawMaterialTimeUpdated { add { onNextDrawMaterialTimeUpdated += value; } remove { onNextDrawMaterialTimeUpdated -= value; } }
         #endregion
 
-        public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress)
+        public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress, DateTime nextDrawMaterialTime)
         {
             PlayerID = playerID;
             FacebookID = facebookID;
@@ -88,6 +104,7 @@ namespace IsolatedIslandGame.Library
             Signature = signature;
             GroupType = groupType;
             LastConnectedIPAddress = lastConnectedIPAddress;
+            NextDrawMaterialTime = nextDrawMaterialTime;
 
             EventManager = new PlayerEventManager(this);
             OperationManager = new PlayerOperationManager(this);

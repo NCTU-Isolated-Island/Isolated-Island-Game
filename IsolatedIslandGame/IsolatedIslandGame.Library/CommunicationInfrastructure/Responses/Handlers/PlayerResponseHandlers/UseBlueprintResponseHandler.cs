@@ -28,22 +28,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                             return true;
                         }
                     }
-                case ErrorCode.ParameterError:
-                    {
-                        LogService.ErrorFormat("UseBlueprint Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "藍圖不存在");
-                        return false;
-                    }
-                case ErrorCode.Fail:
-                    {
-                        LogService.ErrorFormat("UseBlueprint Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "素材不足");
-                        return false;
-                    }
                 default:
                     {
                         LogService.ErrorFormat("UseBlueprint Error DebugMessage: {0}", debugMessage);
-                        subject.EventManager.ErrorInform("錯誤", "未知的錯誤種類");
+                        subject.ResponseManager.UseBlueprintResponse(returnCode, null);
                         return false;
                     }
             }

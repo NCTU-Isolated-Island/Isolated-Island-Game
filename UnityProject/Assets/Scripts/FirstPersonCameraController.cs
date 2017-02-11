@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirstPersonCameraController : MonoBehaviour {
-
-	private float initialYAngle = 0f;
+public class FirstPersonCameraController : MonoBehaviour
+{
 	private float appliedGyroYAngle = 0f;
 	private float calibrationYAngle = 0f;
 
@@ -16,32 +15,26 @@ public class FirstPersonCameraController : MonoBehaviour {
 			Instance = this;
 	}
 
-	void Start () {
+	void Start ()
+    {
 		Input.gyro.enabled = true;
-
 	}
 	
 	void Update()
 	{
 		ApplyGyroRotation();
-
 	}
 
 	void ApplyGyroRotation()
 	{
 		transform.rotation = Input.gyro.attitude;
 
-		#if UNITY_ANDROID
-		transform.Rotate( 0f, 0f, 180f, Space.Self ); //Swap "handedness" ofquaternionfromgyro.
-		transform.Rotate( 270f, 180f, 180f, Space.World ); //Rotatetomakesenseasacamerapointingoutthebackofyourdevice.
-
-		#else
-		transform.Rotate( 0f, 0f, 180f, Space.Self ); //Swap "handedness" ofquaternionfromgyro.
-		transform.Rotate( 90f, 180f, 0f, Space.World ); //Rotatetomakesenseasacamerapointingoutthebackofyourdevice.
-
-		#endif
-
-
+        transform.Rotate(0f, 0f, 180f, Space.Self);
+        #if UNITY_ANDROID
+            transform.Rotate( 270f, 180f, 180f, Space.World );
+        #else
+		    transform.Rotate( 90f, 180f, 0f, Space.World );
+        #endif
 	}
 
 }

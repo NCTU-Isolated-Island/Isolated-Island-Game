@@ -5,5 +5,6 @@
         SyncData,
         PlayerEvent,
         SystemEvent,
+        UserInform,
     }
 }

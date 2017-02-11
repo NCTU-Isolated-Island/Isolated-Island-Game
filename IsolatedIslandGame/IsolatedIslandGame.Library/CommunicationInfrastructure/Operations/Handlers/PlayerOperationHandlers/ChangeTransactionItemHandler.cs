@@ -33,35 +33,28 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         {
                             if (subject.User.CommunicationInterface.ChangeTransactionItem(subject.PlayerID, transactionID, changeType, new TransactionItemInfo(item, itemCount, positionIndex)))
                             {
-                                SendResponse(operationCode, new Dictionary<byte, object>());
                                 LogService.InfoFormat($"Player: {subject.IdentityInformation}, ChangeTransactionItem, TransactionID: {transactionID}, DataChangeType: {changeType}, ItemID: {itemID}, ItemCount: {itemCount}, PositionIndex: {positionIndex}");
                                 return true;
                             }
                             else
                             {
-                                errorCode = ErrorCode.Fail;
-                                debugMessage = "ChangeTransactionItem Fail";
-                                SendError(operationCode, errorCode, debugMessage);
                                 LogService.ErrorFormat($"Player: {subject.IdentityInformation}, ChangeTransactionItem Fail, TransactionID: {transactionID}, ChangeTransactionItem, TransactionID: {transactionID}, DataChangeType: {changeType}, ItemID: {itemID}, ItemCount: {itemCount}, PositionIndex: {positionIndex}");
+                                subject.User.EventManager.UserInform("失敗", "更改交易的物品失敗。");
                                 return false;
                             }
                         }
                         else
                         {
-                            errorCode = ErrorCode.NotEnough;
-                            debugMessage = "ChangeTransactionItem ItemCount NotEnough";
-                            SendError(operationCode, errorCode, debugMessage);
                             LogService.ErrorFormat($"Player: {subject.IdentityInformation}, ChangeTransactionItem ItemCount NotEnough, TransactionID: {transactionID}, ChangeTransactionItem, TransactionID: {transactionID}, DataChangeType: {changeType}, ItemID: {itemID}, ItemCount: {itemCount}, PositionIndex: {positionIndex}");
+                            subject.User.EventManager.UserInform("錯誤", "此交易的物品的數量不足。");
                             return false;
                         }
                     }
                 }
                 else
                 {
-                    errorCode = ErrorCode.NotExist;
-                    debugMessage = "ChangeTransactionItem Item NotExist";
-                    SendError(operationCode, errorCode, debugMessage);
                     LogService.ErrorFormat($"Player: {subject.IdentityInformation}, ChangeTransactionItem Item NotExist, TransactionID: {transactionID}, ChangeTransactionItem, TransactionID: {transactionID}, DataChangeType: {changeType}, ItemID: {itemID}, ItemCount: {itemCount}, PositionIndex: {positionIndex}");
+                    subject.User.EventManager.UserInform("錯誤", "此交易的物品並不存在。");
                     return false;
                 }
             }

@@ -25,8 +25,19 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         subject.Inventory.RemoveItem(materialItemID, 1);
                         return Island.Instance.SendMaterial(subject, item as Material);
                     }
+                    else if(!ItemManager.Instance.FindItem(materialItemID, out item))
+                    {
+                        subject.User.EventManager.UserInform("錯誤", "投送到島上的物品未被定義。");
+                        return false;
+                    }
+                    else if (!(item is Material))
+                    {
+                        subject.User.EventManager.UserInform("錯誤", "投送到島上的物品並非素材。");
+                        return false;
+                    }
                     else
                     {
+                        subject.User.EventManager.UserInform("錯誤", "你並沒有這個素材。");
                         return false;
                     }
                 }

@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(1, OceanType.Unknown, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             },
             "TestSendMessageToDifferentOnlineFriendQuest");
 
-            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null, DateTime.Now);
             player1.BindInventory(new Inventory(1, 40));
             player1.AddFriend(new FriendInformation { friendPlayerID = 2, isConfirmed = true, isInviter = true });
             player1.AddFriend(new FriendInformation { friendPlayerID = 3, isConfirmed = true, isInviter = true });
@@ -70,7 +70,7 @@ namespace IsolatedIslandGame.Library.UnitTest
 
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
             {
-                new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(1, requirement, new HashSet<int>())
+                new SendMessageToDifferentOnlineFriendTheSameSpecificOceanQuestRequirementRecord(1, requirement, new HashSet<int>())
             }, false);
             record.RegisterObserverEvents(player1);
 
@@ -128,7 +128,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(1, OceanType.Unknown, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -164,7 +164,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             ItemManager.Initial(new TestItemManager());
             ItemManager.Instance.AddItem(new Item(1, "TestItem 1", "xxx"));
 
-            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirement(1, 2);
+            QuestRequirement requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(1, OceanType.Unknown, 2);
             Quest quest = new Quest(1, QuestType.SendMessage, "Test", new List<QuestRequirement>
             {
                 requirement
@@ -174,11 +174,11 @@ namespace IsolatedIslandGame.Library.UnitTest
                 new GiveItemQuestReward(1, 1, 1)
             },
             "TestSendMessageToDifferentOnlineFriendQuest");
-            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null, DateTime.Now);
             player1.BindInventory(new Inventory(1, 40));
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()
             {
-                new SendMessageToDifferentOnlineFriendTheSameOceanQuestRequirementRecord(1, requirement, new HashSet<int> { 2, 3 })
+                new SendMessageToDifferentOnlineFriendTheSameSpecificOceanQuestRequirementRecord(1, requirement, new HashSet<int> { 2, 3 })
             }, false);
             record.RegisterObserverEvents(player1);
 
@@ -212,7 +212,7 @@ namespace IsolatedIslandGame.Library.UnitTest
             },
             "TestScanQR_CodeQuest");
 
-            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null);
+            Player player1 = new Player(1, 0, "TestPlayer 1", "xx", GroupType.No, null, DateTime.Now);
             player1.BindInventory(new Inventory(1, 40));
 
             QuestRecord record = new QuestRecord(1, player1.PlayerID, quest, new List<QuestRequirementRecord>()

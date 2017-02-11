@@ -10,8 +10,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
     {
         public override int ReadTotalScore(GroupType groupType)
         {
-            string sqlString = @"SELECT SUM(Score) FROM
-                (SELECT Score, GroupType FROM IsolatedIsland_ArchiveData.IslandMaterialCollection, IsolatedIsland_SettingData.MaterialCollection, IsolatedIsland_PlayerData.PlayerCollection 
+            string sqlString = $@"SELECT SUM(Score) FROM
+                (SELECT Score, GroupType FROM {DatabaseService.DatabaseName}_ArchiveData.IslandMaterialCollection, {DatabaseService.DatabaseName}_SettingData.MaterialCollection, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection 
                 WHERE SenderPlayerID = PlayerID AND MaterialItemID = ItemID) as ScoreTable
                 WHERE GroupType = @groupType GROUP BY GroupType;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
@@ -55,8 +55,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override List<Island.PlayerScoreInfo> ListPlayerScoreRanking()
         {
             List<Island.PlayerScoreInfo> infos = new List<Island.PlayerScoreInfo>();
-            string sqlString = @"SELECT SenderPlayerID, SUM(Score) 
-                FROM IsolatedIsland_ArchiveData.IslandMaterialCollection, IsolatedIsland_SettingData.MaterialCollection, IsolatedIsland_PlayerData.PlayerCollection 
+            string sqlString = $@"SELECT SenderPlayerID, SUM(Score) 
+                FROM {DatabaseService.DatabaseName}_ArchiveData.IslandMaterialCollection, {DatabaseService.DatabaseName}_SettingData.MaterialCollection, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection 
                 WHERE SenderPlayerID = PlayerID AND MaterialItemID = ItemID GROUP BY SenderPlayerID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
