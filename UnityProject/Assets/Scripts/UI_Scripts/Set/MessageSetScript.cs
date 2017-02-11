@@ -6,11 +6,10 @@ using UnityEngine.EventSystems;
 
 public class MessageSetScript : MonoBehaviour, IPointerClickHandler
 {
-
     public bool StopForTest;
     public GameObject UIControl;
     public GameObject ChatPanel;
-   public int PlayerID;
+    public int PlayerID;
 
     void Start()
     {
@@ -34,7 +33,5 @@ public class MessageSetScript : MonoBehaviour, IPointerClickHandler
         StopForTest = UIControl.GetComponent<UImanager>().StopForTest;
         if (!ChatPanel)
             ChatPanel = UIControl.GetComponent<UImanager>().UIObject[8];
-       
-
     }
 }

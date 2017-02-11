@@ -1,0 +1,6 @@
+This scene requires version 2.0 of the Buoyancy Toolkit. Make sure you have this version or later imported into your project before opening the BTIntegration package.
+
+If you are an early adopter of the Ocean Toolkit, the latest version of the Buoyancy Toolkit might not yet have been published to the Asset Store. In this case, please be patient while I finish up the last bits and pieces and get it through the submission pipeline.
+
+Best regards,
+Gustav

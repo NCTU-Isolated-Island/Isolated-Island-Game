@@ -30,7 +30,7 @@ public class PlayerIslandController : MonoBehaviour {
 	{
 		//TODO load island model and match current influence
 		AuxCameraSystem.Instance.RotationSpeed = 15;
-		AuxCameraSystem.Instance.Show3DObject(IslandModel,new Vector3(0,-2,3),Quaternion.Euler(30,0,0));
+		AuxCameraSystem.Instance.ShowPlayerGameObject(IslandModel,new Vector3(0,-2,3),Quaternion.Euler(30,0,0));
 		//
 	}
 

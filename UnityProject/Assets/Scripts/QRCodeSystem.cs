@@ -26,7 +26,6 @@ public class QRCodeSystem : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
-		//StartReading();
 	}
 
 	void Update()

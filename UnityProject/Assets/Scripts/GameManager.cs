@@ -51,9 +51,6 @@ public class GameManager : MonoBehaviour
 	{
 		StartCoroutine(SlowUpdate());
 
-		PhotonService.Instance.OnConnectChange += DebugLogin;
-		//FacebookService.LoginWithFacbook();
-
 		UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
 		SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -62,7 +59,7 @@ public class GameManager : MonoBehaviour
 		VesselManager.Instance.OnVesselChange += OnVesselChange;
 	}
 
-	void DebugLogin(bool status)
+	public void DebugLogin(bool status)
 	{
 		if(status == true)
 		{
@@ -107,16 +104,19 @@ public class GameManager : MonoBehaviour
 		UserManager.Instance.User.Player.OnGetPlayerConversation += OnGetPlayerConversation;
 		if (UserManager.Instance.User.Player.GroupType == GroupType.No)
 		{
-			//SceneManager.LoadScene("RegisterScene");
-			UImanager.Instance.LoadResult(1);
+            LogInUIManager.Instance.ToCreateCharacterPage();
+            //SceneManager.LoadScene("RegisterScene");
+            //LogInUIManager.Instance.ToCreateCharacterPage();
 
 			//Create Charater by Uimanager ? (probably
 			//UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.Businessman);
 		}
 		else
 		{
-			UImanager.Instance.LoadResult(0);
-			//SceneManager.LoadScene("MainScene");
+
+            //UImanager.Instance.LoadResult(0);
+            //UIManager.Instance.LoadResult(0);
+            LogInUIManager.Instance.ToMainScenePrepare();
 		}
 	}
 
@@ -399,9 +399,10 @@ public class GameManager : MonoBehaviour
 				}
 				break;
 			case DataChangeType.Update:
-				{
-					Debug.LogError("OnVesselChange ChangeType = Update");
-				}
+                    {
+                        OnVesselChange(DataChangeType.Remove, vessel);
+                        OnVesselChange(DataChangeType.Add, vessel);
+                    }
 				break;
 			}
 		}

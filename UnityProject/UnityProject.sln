@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityProject", "UnityProjec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityProject.Editor.Plugins", "UnityProject.Editor.Plugins.csproj", "{C6871956-F0A8-6020-6F93-E44F98BDBB16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityProject.Editor", "UnityProject.Editor.csproj", "{DCEF5D7E-307E-A219-AF0B-EED34B158316}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{C6871956-F0A8-6020-6F93-E44F98BDBB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6871956-F0A8-6020-6F93-E44F98BDBB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6871956-F0A8-6020-6F93-E44F98BDBB16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCEF5D7E-307E-A219-AF0B-EED34B158316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCEF5D7E-307E-A219-AF0B-EED34B158316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCEF5D7E-307E-A219-AF0B-EED34B158316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCEF5D7E-307E-A219-AF0B-EED34B158316}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

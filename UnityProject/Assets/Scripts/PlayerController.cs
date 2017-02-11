@@ -12,15 +12,25 @@ public class PlayerController : MonoBehaviour {
 	private bool finishPlacing = false; // 完成放置素材
 	private bool placingMaterial = false; //正在放置素材
 	private float lastTimeClick = -99f ;
-	private bool doneDecorating = false;
 
 	public static PlayerController Instance;
 	public List<GameObject> InArea;
+	public GameObject LastSelectDecoration;
 	public GameObject CurrentSelectDecoration;
+	public GameObject CurrentFocusPlayerGameObject;
 
-	public enum State {Default, Move, Rotate}
-	public State CurrentState = State.Default;
+
 	public int ModelOrientMode = 0;
+	public enum ViewMode{ FirstPerson, BirdView, NormalView }
+	public ViewMode CurrenViewMode = ViewMode.NormalView;
+
+	public enum ControlMode{ Normal, Decorate, Rotate}
+	public ControlMode CurrentControlMode = ControlMode.Normal;
+	float clickTime = -99f;
+
+	public List<GameObject> ModifiedDecorations = new List<GameObject>();
+	public List<GameObject> AddedDecorations = new List<GameObject>();
+	public List<GameObject> RemovedDecorations = new List<GameObject>();
 
 	public delegate void PlayerAction();
 	public static event PlayerAction OnGetArea;
@@ -32,7 +42,6 @@ public class PlayerController : MonoBehaviour {
 		}else if(Instance != this){
 			Destroy(gameObject);
 		}
-		DontDestroyOnLoad(gameObject);
 
 		Input.gyro.enabled = true;
 
@@ -46,52 +55,69 @@ public class PlayerController : MonoBehaviour {
 	void Update()
 	{
 		
-		if(Input.GetKeyDown(KeyCode.P))
-		{
-			StartPlaceDecoration();
 
-		}
-
-		if(Input.GetKeyDown(KeyCode.D))
-		{
-			FinishPlaceDecoration();
-		}
-
-		if(Input.GetMouseButtonDown(0))
-		{
-			SelectDecoration();
-		}
-
-		if(Input.GetKeyDown(KeyCode.Alpha7))
-		{
-			OnlyShowFriendsVessel();
-		}
-
-//		if(Input.GetKeyDown(KeyCode.E))
-//		{
-//			StartCoroutine(Decorate());
-//		}
-
+	
 		if(Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			CurrentState = State.Move;
+			ChangeViewMode(ViewMode.BirdView);
 		}
-
 		if(Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			CurrentState = State.Rotate;
+			ChangeViewMode(ViewMode.FirstPerson);
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha3))
+		{
+			ChangeViewMode(ViewMode.NormalView);
+		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha4))
+		{
+			CurrentControlMode = ControlMode.Normal;
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha5))
+		{
+			CurrentControlMode = ControlMode.Decorate;
+		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha6))
+		{
+			UpdateModifiedDecorationsToServer();
 		}
 			
+		if(CurrentControlMode == ControlMode.Decorate || CurrentControlMode == ControlMode.Rotate)
+		{
+			DecorateProcess();
+		}
 
+		if(CurrentControlMode == ControlMode.Rotate)
+		{
+			if(Input.touchCount == 1)
+			{
+				RotateArountY(Input.touches[0].deltaPosition.x * -0.2f);
+
+			}
+		}
 
 		CheckDoubleClick();
 
-		if(CurrentState == State.Default)
+		if(CurrentControlMode == ControlMode.Normal)
 		{
-			AdjustViewAngle();
-			PinchToZoom();
+			if(CurrenViewMode != ViewMode.FirstPerson && !CameraManager.Instance.using_cor)
+			{
+				AdjustViewAngle();
+
+			}
 		}
 
+		if(Input.GetKeyDown(KeyCode.Alpha0))
+		{
+			int userID = 24;
+
+			AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[userID],
+				new Vector3(0,-10.3f,40.8f),Quaternion.Euler(12.8f,0,0));
+		}
+
+		PinchToZoom();
 	}
 
 	public IEnumerator GetCurrentArea()
@@ -198,7 +224,13 @@ public class PlayerController : MonoBehaviour {
 			print("Select " + hitInfo.collider.transform.root.name + " Vessel");
 
 			CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
-			UImanager.Instance.GameUI = UImanager.UI.Other_Boat;
+
+
+			string[] a =  hitInfo.transform.root.name.Split(' ');
+			int id = System.Int32.Parse(a[1]);
+
+			CurrentFocusPlayerGameObject = GameManager.Instance.UserGameObject[id];
+
 		}
 
 	}
@@ -211,7 +243,7 @@ public class PlayerController : MonoBehaviour {
 	void AdjustViewAngle()
 	{
 
-		if(Input.touchCount == 1 && !placingMaterial)
+		if(Input.touchCount == 1)
 		{
 			Touch touch = Input.GetTouch(0);
 			float x = touch.deltaPosition.x * 0.15f;
@@ -226,13 +258,14 @@ public class PlayerController : MonoBehaviour {
 	public void ToPlayerFarAnchor()
 	{
 		CameraManager.Instance.ToFarAnchor(GameManager.Instance.PlayerGameObject);
-		UImanager.Instance.GameUI = UImanager.UI.Map;
+		CurrentFocusPlayerGameObject = GameManager.Instance.PlayerGameObject;
 	}
 
 	public void ToPlayerNearAnchor()
 	{
 		CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
-		UImanager.Instance.GameUI = UImanager.UI.Main_Boat;
+		CurrentFocusPlayerGameObject = GameManager.Instance.PlayerGameObject;
+
 	}
 
 	void SelectDecoration()
@@ -327,75 +360,12 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	//
-	//	//Still Have Bugs
-	//	void TwoFingersRotate()
-	//	{
-	//		if(Input.touchCount == 2)
-	//		{
-	//			Touch touchZero = Input.GetTouch(0);
-	//			Touch touchOne = Input.GetTouch(1);
-	//
-	//			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-	//			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-	//
-	//			Vector2 previousVector = (touchZeroPrevPos - touchOnePrevPos);
-	//			Vector2 currentVector = (touchZero.position - touchOne.position);
-	//
-	//			float rotationAngle = Mathf.Acos(Vector2.Dot(previousVector,currentVector) / (previousVector.magnitude * currentVector.magnitude));
-	//			print(rotationAngle);
-	//			islandGameObject.transform.Rotate(0f,0f,rotationAngle * 10f,Space.World);
-	//		}
-	//	}
 
-//	IEnumerator Decorate()
-//	{
-//		CurrentState = State.Decorating;
-//
-//		GameObject temp = Instantiate(GameManager.Instance.elementModels[1],Vector3.zero,Quaternion.identity) as GameObject;
-//		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
-//
-//		RaycastHit hitInfo = new RaycastHit();
-//
-//		while(!doneDecorating)
-//		{
-//			if(CurrentState == State.Decorating)
-//			{
-//				Physics.Raycast
-//				(
-//					Camera.main.ScreenPointToRay(Input.mousePosition),
-//					out hitInfo,
-//					99999f,
-//					LayerMask.GetMask("PlayerModel")
-//				);
-//				temp.transform.position = hitInfo.point;
-//			}
-//			if(CurrentState == State.Rotating)
-//			{
-//				temp.transform.rotation = Quaternion.Euler(90,0,0) * Quaternion.Euler
-//					(
-//						Input.gyro.attitude.eulerAngles.x * -1,
-//						Input.gyro.attitude.eulerAngles.y * -1,
-//						Input.gyro.attitude.eulerAngles.z
-//					) * Quaternion.Euler
-//					(
-//						Input.gyro.attitude.eulerAngles.x * -1,
-//						Input.gyro.attitude.eulerAngles.y * -1,
-//						Input.gyro.attitude.eulerAngles.z
-//					);
-//			}
-//
-//			yield return null;
-//
-//		}
-//
-//		print("DONE");
-//		CurrentState = State.Default;
-//		//finalize
-//	}
-//
 	public void ChangeModelOrientation()
 	{
+		if(CurrentSelectDecoration == null)
+			return;
+		
 		switch (ModelOrientMode) {
 		case 1:
 			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(0,0,0);
@@ -443,7 +413,6 @@ public class PlayerController : MonoBehaviour {
 		vessel.transform.Find("Decorations").gameObject.SetActive(false);
 	}
 
-
 	public void OnlyShowFriendsVessel()
 	{
 		List<int> friendsID = new List<int>();
@@ -473,69 +442,210 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-	IEnumerator something(int itemID)
+	public void ChangeViewMode(ViewMode mode)
 	{
+		  
+		switch (mode) {
+		case ViewMode.FirstPerson:
+			//Maybe need CameraManager.to first person anchor
+			CameraManager.Instance.ToFirstPerson(GameManager.Instance.PlayerGameObject);
+			//Camera.main.transform.position = GameManager.Instance.PlayerGameObject.transform.Find("FirstPersonAnchor").position;
+			FirstPersonCameraController.Instance.enabled = true;
+			CurrenViewMode = ViewMode.FirstPerson;
+			break;
 
-		bool hit;
-		RaycastHit hitInfo = new RaycastHit();
+		case ViewMode.NormalView:
+			CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+			FirstPersonCameraController.Instance.enabled = false;
+			CurrenViewMode = ViewMode.NormalView;
+			break;
 
-		GameObject dec = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
-
-
-		// moving mode
-		while(true)
-		{
-			//if change to rotate mode
-
-			hit = Physics.Raycast
-				(
-					Camera.main.ScreenPointToRay(Input.mousePosition),
-					out hitInfo,
-					99999f,
-					LayerMask.GetMask("PlayerModel")
-				);
-
-			if(hit)
-			{
-				dec.transform.position = hitInfo.point;
-			}
-			else
-			{
-				// not keycode.a is touch up
-				if(Input.GetKeyUp(KeyCode.A))
-				{
-					Destroy(dec);
-					//TODO end this function and call inventory show up 
-				}
-				else
-				{
-					dec.transform.position = Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 5;
-				}
-
-			}
-
-
-
-			yield return null;
-		}
-
-
-		// rotate mode
-
-		while(true)
-		{
-			//if click change rotation
-			ChangeModelOrientation();
-
-			if(Input.touchCount == 2)
-			{
-				// adjust view
-			}
-
-			yield return null;
+		case ViewMode.BirdView:
+			CameraManager.Instance.ToFarAnchor(GameManager.Instance.PlayerGameObject);
+			FirstPersonCameraController.Instance.enabled = false;
+			CurrenViewMode = ViewMode.BirdView;
+			break;
+		default:
+			break;
 		}
 
 	}
+		
+	//Final Stage After Clicking Done Button
+	public void UpdateModifiedDecorationsToServer()
+	{
+		foreach(GameObject entry in AddedDecorations)
+		{
+			UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
+			(
+				System.Int32.Parse(entry.name),
+				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
+				entry.transform.rotation.eulerAngles.x, entry.transform.rotation.eulerAngles.y, entry.transform.rotation.eulerAngles.z
+			);
+		}
+
+		foreach(GameObject entry in ModifiedDecorations)
+		{
+			UserManager.Instance.User.Player.OperationManager.UpdateDecorationOnVessel
+			(
+				System.Int32.Parse(entry.name),
+				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
+				entry.transform.rotation.eulerAngles.x, entry.transform.rotation.eulerAngles.y, entry.transform.rotation.eulerAngles.z
+			);
+		}
+
+		foreach(GameObject entry in RemovedDecorations)
+		{
+			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(entry.name));
+		}
+
+		//Clear All 
+		ModifiedDecorations.Clear();
+		AddedDecorations.Clear();
+		RemovedDecorations.Clear();
+	}
+
+	public void BeginDec(int itemID)
+	{
+		
+
+		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
+
+		if(!AddedDecorations.Contains(CurrentSelectDecoration))
+			AddedDecorations.Add(CurrentSelectDecoration);
+
+		CurrentControlMode = ControlMode.Decorate;
+
+	}
+
+	void DecorateProcess()
+	{
+		if(Input.touchCount == 1)
+		{
+			#region HitRaycaster
+			bool entireHit;
+			RaycastHit entireHitInfo = new RaycastHit();
+
+			entireHit = Physics.Raycast
+				(
+					Camera.main.ScreenPointToRay(Input.mousePosition),
+					out entireHitInfo,
+					99999f
+				);
+
+			bool vesselHit;
+			RaycastHit vesselHitInfo = new RaycastHit();
+			vesselHit = Physics.Raycast
+				(
+					Camera.main.ScreenPointToRay(Input.mousePosition),
+					out vesselHitInfo,
+					99999f,
+					LayerMask.GetMask("PlayerModel")
+				);
+			#endregion
+
+			if(Input.touches[0].phase == TouchPhase.Began)
+			{
+				clickTime = Time.time;
+
+//				if(CurrentControlMode == ControlMode.Rotate && 
+//					entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration") &&
+//					entireHitInfo.transform.gameObject != CurrentSelectDecoration)
+//				{
+//					CurrentSelectDecoration.transform.localScale *= 0.5f;
+//				}
+
+				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
+				{	print("23");
+					print(entireHitInfo.transform.name);
+					LastSelectDecoration = CurrentSelectDecoration;
+					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
+					CurrentControlMode = ControlMode.Decorate;
+					if(!ModifiedDecorations.Contains(CurrentSelectDecoration))
+						ModifiedDecorations.Add(CurrentSelectDecoration);
+				}
+
+			}
+
+			if(Input.touches[0].phase == TouchPhase.Stationary || Input.touches[0].phase == TouchPhase.Moved)
+			{
+
+			}
+
+			if(Input.touches[0].phase == TouchPhase.Ended)
+			{
+				float deltaTime = Time.time - clickTime;
+				clickTime = -99f;
+
+
+				if(deltaTime < 0.5f) // 短按
+				{
+					if(LastSelectDecoration != null)
+					{
+						LastSelectDecoration.transform.localScale *= 0.5f;
+					}
+					print("short");
+					CurrentControlMode = ControlMode.Rotate;
+					print(entireHitInfo.transform.name);
+//					if(entireHitInfo.transform.gameObject != LastSelectDecoration)
+//					{
+						CurrentSelectDecoration.transform.localScale *= 2f;
+
+//					}
+				}
+				else // 長按
+				{
+					if(CurrentControlMode == ControlMode.Decorate)
+					{
+						if(vesselHit)
+						{
+							CurrentSelectDecoration = null;
+						}
+						else
+						{
+							if(!RemovedDecorations.Contains(CurrentSelectDecoration))
+								RemovedDecorations.Add(CurrentSelectDecoration);
+
+							CurrentSelectDecoration.SetActive(false);
+
+							CurrentSelectDecoration = null;
+						}
+					}
+
+				}
+
+
+
+			}
+
+			if(CurrentSelectDecoration != null && CurrentControlMode != ControlMode.Rotate)
+			{
+				if(vesselHit)
+				{
+					CurrentSelectDecoration.transform.position = vesselHitInfo.point;
+				}
+				else
+				{
+					CurrentSelectDecoration.transform.position = 
+						Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 9;
+				}
+			}
+		}
+
+		if(Input.touchCount == 2)
+		{
+			Touch touchZero = Input.GetTouch(0);
+			Touch touchOne = Input.GetTouch(1);
+
+			float x = (touchZero.deltaPosition.x + touchOne.deltaPosition.x) * 0.075f;
+			float y = (touchZero.deltaPosition.x + touchOne.deltaPosition.x) * -0.05f;
+
+			CameraManager.Instance.CameraRotate(x);
+			CameraManager.Instance.CameraRotateHorizontal(y);
+
+		}
+	}
+
 
 }
 

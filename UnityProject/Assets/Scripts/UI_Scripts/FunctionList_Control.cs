@@ -102,7 +102,7 @@ public class FunctionList_Control : MonoBehaviour
     {
         ShowList();
         UIControl.GetComponent<UImanager>().ChangeUI((int)UImanager.UI.Show_Bag);
-        inventoryPanel.ShowPanel();
+        inventoryPanel.ShowPanel(InventoryPanel.InventoryUsageType.CheckInventoryItemDetail);
     }
     void Button1()
     { }
