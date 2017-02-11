@@ -54,8 +54,10 @@ public class BluePrintUIManager : MonoBehaviour {
 
     public void LoadBluePrint()
     {
-        foreach(Blueprint bluePrint in UserManager.Instance.User.Player.KnownBlueprints)
+        print("Loading BluePrint");
+        foreach (Blueprint bluePrint in UserManager.Instance.User.Player.KnownBlueprints)
         {
+            print("Loading BluePrint foreach");
             // Show BluePrint in UI
             GameObject tmp = Instantiate(bluePrintSet);
             tmp.transform.parent = bluePrintSetContent.transform;

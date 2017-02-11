@@ -88,7 +88,6 @@ public class OtherBoatUIManager : MonoBehaviour
     {
         UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Message);
         ChatUIManager.Instance.LoadMessagePage(otherPlayerInfo);
-        ChatUIManager.Instance.chattingPlayer = otherPlayerInfo;
     }
 
     public void OnClickExpandButton()
