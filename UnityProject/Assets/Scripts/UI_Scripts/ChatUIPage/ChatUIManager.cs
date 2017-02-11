@@ -157,7 +157,9 @@ public class ChatUIManager : MonoBehaviour {
         titleText.text = chatPlayer.nickname;
         // Instantiate Message Bubble and put under content
         List<int> renderedMessage = new List<int>();
-        List<PlayerConversation> conversation = playerConversationTable[chatPlayer.playerID];
+        List<PlayerConversation> conversation = new List<PlayerConversation>();
+        if (playerConversationTable.ContainsKey(chatPlayer.playerID))
+            conversation = playerConversationTable[chatPlayer.playerID];
 
         // TODO : Sort conversation by date
         //
@@ -194,5 +196,6 @@ public class ChatUIManager : MonoBehaviour {
         UserManager.Instance.User.Player.OperationManager.SendMessage(chattingPlayer.playerID , messageInputField.text);
 
         messageInputField.text = null;
+        LoadMessagePage(chattingPlayer);
     }
 }

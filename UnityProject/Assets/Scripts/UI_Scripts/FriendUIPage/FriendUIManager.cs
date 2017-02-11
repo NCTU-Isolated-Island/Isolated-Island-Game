@@ -85,7 +85,7 @@ public class FriendUIManager : MonoBehaviour {
             PlayerInformation friendInformation;
             if (PlayerInformationManager.Instance.FindPlayerInformation(friend.friendPlayerID, out friendInformation))
             {
-                if (friend.isConfirmed == false && friend.isInviter == false)
+                if (friend.isConfirmed == false && friend.isInviter == true)
                 {
                     tmp = Instantiate(invitingFriendSetPrefab);
                     tmp.transform.parent = friendSetContent.transform;
