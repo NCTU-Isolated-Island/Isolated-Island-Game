@@ -16,9 +16,6 @@ public class MainBoatUIManager : MonoBehaviour {
     private Button[] verticalButtonList;
     [SerializeField]
     private Button[] horizontalButtonList;
-
-    [SerializeField]
-    private Button drawMaterialButton;
     //
 
     //
