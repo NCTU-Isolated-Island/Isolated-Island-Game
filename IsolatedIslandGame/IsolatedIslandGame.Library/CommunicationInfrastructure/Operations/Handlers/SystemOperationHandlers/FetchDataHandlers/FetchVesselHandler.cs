@@ -22,7 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     Vessel vessel;
                     if (VesselManager.Instance.FindVessel(vesselID, out vessel))
                     {
-                        communicationInterface.User.Player.SyncPlayerInformation(vessel.OwnerPlayerID);
+                        communicationInterface.User.Player?.SyncPlayerInformation(vessel.OwnerPlayerID);
                         var result = new Dictionary<byte, object>
                         {
                             { (byte)FetchVesselResponseParameterCode.VesselID, vessel.VesselID },

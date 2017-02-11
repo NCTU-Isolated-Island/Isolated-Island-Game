@@ -50,6 +50,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
 
                     Blueprint blueprint = new Blueprint(blueprintID, isOrderless, isBlueprintRequired, requirements, products);
                     BlueprintManager.Instance.AddBlueprint(blueprint);
+                    subject.GetBlueprint(blueprint);
                     return true;
                 }
                 catch (InvalidCastException ex)
