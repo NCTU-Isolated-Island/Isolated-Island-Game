@@ -41,7 +41,7 @@ public class ChatUIManager : MonoBehaviour {
 
     // Variable for Message page
 
-    private PlayerInformation chattingPlayer;
+    public PlayerInformation chattingPlayer;
     [SerializeField]
     private InputField messageInputField;
     //

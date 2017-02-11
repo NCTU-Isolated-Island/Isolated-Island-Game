@@ -218,22 +218,23 @@ public class PlayerController : MonoBehaviour {
 			LayerMask.GetMask("PlayerModel")
 		);
 
-		//Select Vessel
-		if(hit && !GameObject.Equals(hitInfo.transform.root.gameObject,GameManager.Instance.PlayerGameObject))
-		{
-			print("Select " + hitInfo.collider.transform.root.name + " Vessel");
+        //Select Vessel
+        if (hit && !GameObject.Equals(hitInfo.transform.root.gameObject, GameManager.Instance.PlayerGameObject))
+        {
+            print("Select " + hitInfo.collider.transform.root.name + " Vessel");
 
-			CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
+            CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
 
 
-			string[] a =  hitInfo.transform.root.name.Split(' ');
-			int id = System.Int32.Parse(a[1]);
+            string[] a = hitInfo.transform.root.name.Split(' ');
+            int id = System.Int32.Parse(a[1]);
 
-			CurrentFocusPlayerGameObject = GameManager.Instance.UserGameObject[id];
-
-			OtherBoatUIManager.Instance.SetOtherPlayerInfo(id);
-			UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
-		}
+            CurrentFocusPlayerGameObject = GameManager.Instance.UserGameObject[id];
+            //
+            UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
+            OtherBoatUIManager.Instance.SetOtherPlayerInfo(id);
+            //
+        }
 
 	}
 

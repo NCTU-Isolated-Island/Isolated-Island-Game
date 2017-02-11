@@ -2,7 +2,6 @@
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,10 +20,17 @@ public class GameManager : MonoBehaviour
 	public Dictionary<int,Dictionary<int,GameObject>> UserDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // PlayerID to decorationID-decorationGO
 	public Dictionary<int,Dictionary<int,GameObject>> VesselDecoration = new Dictionary<int, Dictionary<int,GameObject>>(); // VesselID to decorationID-decorationGO
 	public GameObject PlayerGameObject { get; private set; }
-	public DateTime NextDrawTime;
 	public int PlayerID;
 
 	private bool isInMainScene;
+
+
+	public enum CameraStat
+	{
+		Near,
+		Far
+	}
+	private CameraStat cameraStat;
 
 	#region Setup
 
@@ -59,7 +65,7 @@ public class GameManager : MonoBehaviour
 		{
             //TODO need to REMOVE before beta!!!
             //FacebookService.LoginWithFacbook();
-            UserManager.Instance.User.OperationManager.PlayerIDLogin(22,"TestServer");
+            UserManager.Instance.User.OperationManager.PlayerIDLogin(23, "TestServer");
         }
        // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
 	}
@@ -79,12 +85,9 @@ public class GameManager : MonoBehaviour
 	}
 
 	void OnPlayerOnline(Player player)
-	{ print("123");
+	{
 		UserManager.Instance.User.Player.OnCreateCharacter += OnCreateCharacter;
 		UserManager.Instance.User.Player.OnGetPlayerConversation += OnGetPlayerConversation;
-		UserManager.Instance.User.Player.OnNextDrawMaterialTimeUpdated += OnNextDrawMaterialTimeUpdated;
-
-		NextDrawTime = UserManager.Instance.User.Player.NextDrawMaterialTime;
 		if (UserManager.Instance.User.Player.GroupType == GroupType.No)
 		{
             LogInUIManager.Instance.ToCreateCharacterPage();
@@ -99,13 +102,8 @@ public class GameManager : MonoBehaviour
 
             //UImanager.Instance.LoadResult(0);
             //UIManager.Instance.LoadResult(0);
-			LogInUIManager.Instance.ToMainScenePrepare();
+            LogInUIManager.Instance.ToMainScenePrepare();
 		}
-	}
-
-	void OnNextDrawMaterialTimeUpdated(DateTime nextTime)
-	{
-		NextDrawTime = nextTime;
 	}
 
 	void OnCreateCharacter(Player player)
