@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    public List<GameObject> elementModels; //Using itemID to sort
+    public Dictionary<int,GameObject> elementModels = new Dictionary<int, GameObject>(); //Using itemID to sort
     public List<GameObject> ShipModels;
 
     public Dictionary<int, GameObject> UserGameObject = new Dictionary<int, GameObject>(); //UserID to GO
@@ -68,6 +68,26 @@ public class GameManager : MonoBehaviour
             UserManager.Instance.User.OperationManager.PlayerIDLogin(23, "TestServer");
         }
         // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
+    }
+
+    void LoadItemGameObject()
+    {
+        // itemID to item path in resources
+        elementModels.Add(17, Resources.Load("Ingredients/" + "basket") as GameObject);
+        elementModels.Add(13, Resources.Load("Ingredients/" + "coal") as GameObject);
+        elementModels.Add(31, Resources.Load("Ingredients/" + "fire") as GameObject);
+        elementModels.Add(12, Resources.Load("Ingredients/" + "gold") as GameObject);
+        elementModels.Add(1017, Resources.Load("Ingredients/" + "guitar") as GameObject);
+        //elementModels.Add(0, Resources.Load("Ingredients/" + "hammer") as GameObject);
+        elementModels.Add(30, Resources.Load("Ingredients/" + "milk") as GameObject);
+        elementModels.Add(35, Resources.Load("Ingredients/" + "oil") as GameObject);
+        elementModels.Add(8, Resources.Load("Ingredients/" + "rope") as GameObject);
+        elementModels.Add(1004, Resources.Load("Ingredients/" + "small_light") as GameObject);
+        elementModels.Add(32, Resources.Load("Ingredients/" + "steel") as GameObject);
+        elementModels.Add(7, Resources.Load("Ingredients/" + "stone") as GameObject);
+        elementModels.Add(3, Resources.Load("Ingredients/" + "take_copter_1") as GameObject);
+        elementModels.Add(21, Resources.Load("Ingredients/" + "water") as GameObject);
+        elementModels.Add(28, Resources.Load("Ingredients/" + "wood") as GameObject);
     }
 
     IEnumerator SlowUpdate()
