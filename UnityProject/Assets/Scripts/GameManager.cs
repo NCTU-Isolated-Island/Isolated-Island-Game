@@ -59,15 +59,10 @@ public class GameManager : MonoBehaviour
         VesselManager.Instance.OnVesselChange += OnVesselChange;
     }
 
-    public void DebugLogin(bool status)
+    public void Login()
     {
-        if (status == true)
-        {
-            //TODO need to REMOVE before beta!!!
-            //FacebookService.LoginWithFacbook();
-            UserManager.Instance.User.OperationManager.PlayerIDLogin(23, "TestServer");
-        }
-        // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
+        //FacebookService.LoginWithFacbook();
+        UserManager.Instance.User.OperationManager.PlayerIDLogin(23, "TestServer");
     }
 
     void LoadItemGameObject()
