@@ -93,11 +93,10 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 	public void BeginDecorate(int itemID)
 	{
-		itemID = 2;
 		print("BEgin");
-
+		print("itemID: " + itemID);
 		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity,
-			GameManager.Instance.PlayerGameObject.transform) as GameObject;
+			GameManager.Instance.PlayerGameObject.transform.Find("Decorations")) as GameObject;
 		CurrentSelectDecoration.name = itemID.ToString();
 
 		if(!AddedDecorations.Contains(CurrentSelectDecoration))
@@ -117,11 +116,16 @@ public class PlayerDecorationManager : MonoBehaviour {
 				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
 				entry.transform.localRotation.eulerAngles.x, entry.transform.localRotation.eulerAngles.y, entry.transform.localRotation.eulerAngles.z
 			);
-
+			print(entry.transform.localEulerAngles);
+			print(entry.transform.localRotation.eulerAngles.x);
 		}
 
 		foreach(GameObject entry in ModifiedDecorations)
 		{
+			if(AddedDecorations.Contains(entry))
+			{
+				continue;
+			}
 			UserManager.Instance.User.Player.OperationManager.UpdateDecorationOnVessel
 			(
 				System.Int32.Parse(entry.name),
@@ -137,15 +141,22 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 		print("Update");
 
+		foreach(GameObject entry in AddedDecorations)
+		{
+			Destroy(entry);
+
+		}
+
 		//Clear All 
 		ModifiedDecorations.Clear();
 		AddedDecorations.Clear();
 		RemovedDecorations.Clear();
 
-		foreach(GameObject entry in AddedDecorations)
-		{
-			Destroy(entry);
-		}
+		CurrentControlMode = ControlMode.Normal;
+
+		UIManager.Instance.RemoveCurrentPage();
+		UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
+
 
 	}
 
@@ -203,7 +214,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 				ShortClickTime = -99f;
 
 
-				if(deltaTime < 0.3f) // 短按
+				if(deltaTime < 0.9f) // 短按
 				{
 					CurrentControlMode = ControlMode.Rotate;
 				}
