@@ -21,11 +21,6 @@ public class FriendUIManager : MonoBehaviour {
     private GameObject friendSetContent;
     //
 
-    void InitSetting()
-    {
-
-    }
-
     void OnEnable()
     {
         LoadFriends();
@@ -35,6 +30,7 @@ public class FriendUIManager : MonoBehaviour {
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()
@@ -58,12 +54,6 @@ public class FriendUIManager : MonoBehaviour {
                 LoadFriends();
         };
         LoadFriends();
-    }
-
-    void OnDestroy()
-    {
-        UserManager.Instance.User.Player.OnFriendInformationChange -= OnFriendInformationChange;
-        UserManager.Instance.User.OnPlayerOnline -= RegisterPlayerEvents;
     }
 
     void OnFriendInformationChange(DataChangeType dataChangeType, FriendInformation information)

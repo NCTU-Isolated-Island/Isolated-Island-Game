@@ -24,6 +24,11 @@ public class InventoryPanel : MonoBehaviour
 
     private InventoryUsageType currentUsageType = InventoryUsageType.CheckInventoryItemDetail;
 
+    public void SetUsageType(InventoryUsageType usageType)
+    {
+        currentUsageType = usageType;
+    }
+
     private void Awake()
     {
         inventoryScrollViewContent = transform.Find("InventoryScrollView/Viewport/Content").GetComponent<RectTransform>();
