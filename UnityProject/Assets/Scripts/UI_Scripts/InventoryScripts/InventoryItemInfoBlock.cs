@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler
+public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPointerDownHandler
 {
     public InventoryItemInfo ItemInfo { get; private set; }
     private Image itemImage;
@@ -26,8 +26,16 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler
         this.usageType = usageType;
     }
 
+	public void OnPointerDown (PointerEventData eventData) 
+	{
+		print("Down");
+		if(this.usageType == InventoryPanel.InventoryUsageType.CheckInventoryItemDetail)
+			PlayerController.Instance.ClickDecoration(ItemInfo.Item.ItemID);
+	}
+
     public void OnPointerClick(PointerEventData eventData)
     {
+
         switch (this.usageType)
         {
             case InventoryPanel.InventoryUsageType.CheckInventoryItemDetail:

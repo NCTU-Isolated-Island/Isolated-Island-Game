@@ -6,6 +6,7 @@ using IsolatedIslandGame.Client.Communication;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour {
 
@@ -20,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 	public GameObject CurrentFocusPlayerGameObject;
 
 
-	public int ModelOrientMode = 0;
+	[HideInInspector]public int ModelOrientMode = 1;
 	public enum ViewMode{ FirstPerson, BirdView, NormalView }
 	public ViewMode CurrenViewMode = ViewMode.NormalView;
 
@@ -34,6 +35,10 @@ public class PlayerController : MonoBehaviour {
 
 	public delegate void PlayerAction();
 	public static event PlayerAction OnGetArea;
+
+	public bool InSelectMode = false;
+	float lastDecorationClick;
+	int SelectDecorationID;
 
 	void Awake()
 	{
@@ -98,6 +103,26 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
+		if(InSelectMode)
+		{
+			if(Input.GetMouseButtonUp(0))
+			{
+				InSelectMode = false;
+			}
+
+			if(Time.time - lastDecorationClick > 2)
+			{
+				InSelectMode = false;
+				//Decorate
+
+				UIManager.Instance.RemoveCurrentPage();
+				UIManager.Instance.SwapPage(UIManager.UIPageType.PutItem);
+				BeginDec(SelectDecorationID);
+
+				print("decorate");
+			}
+		}
+
 		CheckDoubleClick();
 
 		if(CurrentControlMode == ControlMode.Normal)
@@ -116,8 +141,15 @@ public class PlayerController : MonoBehaviour {
 			AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[userID],
 				new Vector3(0,-10.3f,40.8f),Quaternion.Euler(12.8f,0,0));
 		}
-
+		print(EventSystem.current.IsPointerOverGameObject());
 		PinchToZoom();
+	}
+
+	public void ClickDecoration(int Id)
+	{
+		lastDecorationClick = Time.time;
+		InSelectMode = true;
+		SelectDecorationID = Id;
 	}
 
 	public IEnumerator GetCurrentArea()
@@ -365,33 +397,33 @@ public class PlayerController : MonoBehaviour {
 
 
 	public void ChangeModelOrientation()
-	{
+	{print("change");
 		if(CurrentSelectDecoration == null)
 			return;
-		
+		print("INModel");
 		switch (ModelOrientMode) {
 		case 1:
-			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(0,0,0);
+			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(0,0,0);
 			ModelOrientMode = 2;
 			break;
 		case 2:
-			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(180,0,0);
+			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(180,0,0);
 			ModelOrientMode = 3;
 			break;
 		case 3:
-			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(0,0,90);
+			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(0,0,90);
 			ModelOrientMode = 4;
 			break;
 		case 4:
-			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(0,0,-90);
+			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(0,0,-90);
 			ModelOrientMode = 5;
 			break;
 		case 5:
-			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(90,0,0);
+			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(90,0,0);
 			ModelOrientMode = 6;
 			break;
 		case 6:
-			CurrentSelectDecoration.transform.rotation = Quaternion.Euler(-90,0,0);
+			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(-90,0,0);
 			ModelOrientMode = 1;
 			break;
 		default:
@@ -501,7 +533,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(entry.name));
 		}
-
+		print("Updated");
 		//Clear All 
 		ModifiedDecorations.Clear();
 		AddedDecorations.Clear();
@@ -510,9 +542,10 @@ public class PlayerController : MonoBehaviour {
 
 	public void BeginDec(int itemID)
 	{
-		
-
-		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
+		itemID = 2;
+		print("BEgin");
+		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity,
+			GameManager.Instance.PlayerGameObject.transform) as GameObject;
 
 		if(!AddedDecorations.Contains(CurrentSelectDecoration))
 			AddedDecorations.Add(CurrentSelectDecoration);
@@ -559,7 +592,7 @@ public class PlayerController : MonoBehaviour {
 //				}
 
 				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
-				{	print("23");
+				{
 					print(entireHitInfo.transform.name);
 					LastSelectDecoration = CurrentSelectDecoration;
 					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
@@ -589,7 +622,6 @@ public class PlayerController : MonoBehaviour {
 					}
 					print("short");
 					CurrentControlMode = ControlMode.Rotate;
-					print(entireHitInfo.transform.name);
 //					if(entireHitInfo.transform.gameObject != LastSelectDecoration)
 //					{
 						CurrentSelectDecoration.transform.localScale *= 2f;
@@ -622,7 +654,7 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			if(CurrentSelectDecoration != null && CurrentControlMode != ControlMode.Rotate)
-			{
+			{	print(EventSystem.current.IsPointerOverGameObject());
 				if(vesselHit)
 				{
 					CurrentSelectDecoration.transform.position = vesselHitInfo.point;

@@ -25,8 +25,8 @@ public class LocationSystem : MonoBehaviour {
 
 	void Update()
 	{	
-		//if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
-		if(Input.anyKeyDown)
+		if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
+		//if(Input.anyKeyDown)
 		{
 			
 			transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
