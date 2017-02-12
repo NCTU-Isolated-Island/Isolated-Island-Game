@@ -117,7 +117,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
 				entry.transform.localRotation.eulerAngles.x, entry.transform.localRotation.eulerAngles.y, entry.transform.localRotation.eulerAngles.z
 			);
-			Destroy(entry);
+
 		}
 
 		foreach(GameObject entry in ModifiedDecorations)
@@ -141,6 +141,12 @@ public class PlayerDecorationManager : MonoBehaviour {
 		ModifiedDecorations.Clear();
 		AddedDecorations.Clear();
 		RemovedDecorations.Clear();
+
+		foreach(GameObject entry in AddedDecorations)
+		{
+			Destroy(entry);
+		}
+
 	}
 
 	void DecorateProcess()

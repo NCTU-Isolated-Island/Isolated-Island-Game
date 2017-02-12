@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         {
             //TODO need to REMOVE before beta!!!
             //FacebookService.LoginWithFacbook();
-            UserManager.Instance.User.OperationManager.PlayerIDLogin(23, "TestServer");
+            UserManager.Instance.User.OperationManager.PlayerIDLogin(22, "TestServer");
         }
         // UserManager.Instance.User.Player.OperationManager.SendMessage(22,"123");
     }
@@ -248,12 +248,12 @@ public class GameManager : MonoBehaviour
                 switch (changeType)
                 {
                     case DataChangeType.Add:
-                        {
+                        {   print("before");
                             GameObject decorationGameObject = Instantiate(
                                 elementModels[decoration.Material.ItemID],
                                 userVesselGameObject.transform.Find("Decorations")
                             ) as GameObject;
-
+							print("after");
                             decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
                             decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
                             decorationGameObject.name = decoration.DecorationID.ToString();
