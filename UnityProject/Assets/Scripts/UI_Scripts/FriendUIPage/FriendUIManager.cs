@@ -56,12 +56,6 @@ public class FriendUIManager : MonoBehaviour {
         LoadFriends();
     }
 
-    void OnDestroy()
-    {
-        UserManager.Instance.User.Player.OnFriendInformationChange -= OnFriendInformationChange;
-        UserManager.Instance.User.OnPlayerOnline -= RegisterPlayerEvents;
-    }
-
     void OnFriendInformationChange(DataChangeType dataChangeType, FriendInformation information)
     {
         LoadFriends();

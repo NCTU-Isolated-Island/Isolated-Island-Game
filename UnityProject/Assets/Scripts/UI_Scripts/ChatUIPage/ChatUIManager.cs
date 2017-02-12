@@ -62,12 +62,6 @@ public class ChatUIManager : MonoBehaviour {
         UserManager.Instance.User.OnPlayerOnline += OnPlayerOnline;
     }
 
-    void OnDestroy()
-    {
-        UserManager.Instance.User.OnPlayerOnline -= OnPlayerOnline;
-        UserManager.Instance.User.Player.OnGetPlayerConversation -= OnGetPlayerConversation;
-    }
-
     void OnPlayerOnline(Player player)
     {
         UserManager.Instance.User.Player.OnGetPlayerConversation += OnGetPlayerConversation;
