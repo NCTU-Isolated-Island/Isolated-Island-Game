@@ -18,17 +18,17 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
                 port: SystemConfiguration.Instance.ServerPort
             );
         }
-        void OnGUI()
-        {
-            if (PhotonService.Instance.ServerConnected)
-            {
-                GUI.Label(new Rect(20, 10, 100, 20), "connected");
-            }
-            else
-            {
-                GUI.Label(new Rect(20, 10, 100, 20), "connect failed");
-            }
-        }
+//        void OnGUI()
+//        {
+//            if (PhotonService.Instance.ServerConnected)
+//            {
+//                GUI.Label(new Rect(20, 10, 100, 20), "connected");
+//            }
+//            else
+//            {
+//                GUI.Label(new Rect(20, 10, 100, 20), "connect failed");
+//            }
+//        }
 
         void OnDestroy()
         {

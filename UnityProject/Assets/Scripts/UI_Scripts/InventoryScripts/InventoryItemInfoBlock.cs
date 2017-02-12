@@ -28,9 +28,8 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPoi
 
 	public void OnPointerDown (PointerEventData eventData) 
 	{
-		print("Down");
 		if(this.usageType == InventoryPanel.InventoryUsageType.CheckInventoryItemDetail)
-			PlayerController.Instance.ClickDecoration(ItemInfo.Item.ItemID);
+			PlayerDecorationManager.Instance.ClickDecoration(ItemInfo.Item.ItemID);
 	}
 
     public void OnPointerClick(PointerEventData eventData)
@@ -50,7 +49,6 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPoi
                 UIManager.Instance.ToPreviousPage();
                 break;
             case InventoryPanel.InventoryUsageType.PutItemOnVessel:
-                throw new System.NotImplementedException("InventoryPanel.InventoryUsageType.PutItemOnVessel");
                 UIManager.Instance.ToPreviousPage();
                 break;
         }

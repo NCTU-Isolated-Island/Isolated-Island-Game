@@ -19,6 +19,8 @@ public class PutItemUIPage : MonoBehaviour {
 
     }
 
+
+
     void Awake()
 	{
         if (Instance == null)
@@ -26,22 +28,20 @@ public class PutItemUIPage : MonoBehaviour {
 
 		DoneButton = transform.Find("DoneButton").GetComponent<Button>();
 		RotateButton = transform.Find("RotateButton").GetComponent<Button>();
-
+	
 
 		DoneButton.onClick.AddListener(delegate {
-			PlayerController.Instance.UpdateModifiedDecorationsToServer();
+			PlayerDecorationManager.Instance.UpdateModifiedDecorationsToServer();
 		});
 
 		RotateButton.onClick.AddListener(delegate {
-			print("SUCCESS");
-			PlayerController.Instance.ChangeModelOrientation();
+			PlayerDecorationManager.Instance.ChangeModelOrientation();
 		});
 
-		gameObject.SetActive(false);
     }
 
-    void Start()
-    {
 
-    }
+
+
+	
 }

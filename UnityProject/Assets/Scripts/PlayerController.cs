@@ -10,28 +10,18 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour {
 
-	private bool finishPlacing = false; // 完成放置素材
-	private bool placingMaterial = false; //正在放置素材
 	private float lastTimeClick = -99f ;
 
 	public static PlayerController Instance;
 	public List<GameObject> InArea;
-	public GameObject LastSelectDecoration;
-	public GameObject CurrentSelectDecoration;
 	public GameObject CurrentFocusPlayerGameObject;
 
 
-	[HideInInspector]public int ModelOrientMode = 1;
 	public enum ViewMode{ FirstPerson, BirdView, NormalView }
 	public ViewMode CurrenViewMode = ViewMode.NormalView;
 
-	public enum ControlMode{ Normal, Decorate, Rotate}
-	public ControlMode CurrentControlMode = ControlMode.Normal;
 	float clickTime = -99f;
 
-	public List<GameObject> ModifiedDecorations = new List<GameObject>();
-	public List<GameObject> AddedDecorations = new List<GameObject>();
-	public List<GameObject> RemovedDecorations = new List<GameObject>();
 
 	public delegate void PlayerAction();
 	public static event PlayerAction OnGetArea;
@@ -50,6 +40,7 @@ public class PlayerController : MonoBehaviour {
 
 		Input.gyro.enabled = true;
 
+		DontDestroyOnLoad(gameObject);
 		//After Setting Up, Deactivate PlayerController, and wait for into MainScene
 		gameObject.SetActive(false);
 
@@ -59,73 +50,8 @@ public class PlayerController : MonoBehaviour {
 
 	void Update()
 	{
-		
 
-	
-		if(Input.GetKeyDown(KeyCode.Alpha1))
-		{
-			ChangeViewMode(ViewMode.BirdView);
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha2))
-		{
-			ChangeViewMode(ViewMode.FirstPerson);
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha3))
-		{
-			ChangeViewMode(ViewMode.NormalView);
-		}
-
-		if(Input.GetKeyDown(KeyCode.Alpha4))
-		{
-			CurrentControlMode = ControlMode.Normal;
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha5))
-		{
-			CurrentControlMode = ControlMode.Decorate;
-		}
-
-		if(Input.GetKeyDown(KeyCode.Alpha6))
-		{
-			UpdateModifiedDecorationsToServer();
-		}
-			
-		if(CurrentControlMode == ControlMode.Decorate || CurrentControlMode == ControlMode.Rotate)
-		{
-			DecorateProcess();
-		}
-
-		if(CurrentControlMode == ControlMode.Rotate)
-		{
-			if(Input.touchCount == 1)
-			{
-				RotateArountY(Input.touches[0].deltaPosition.x * -0.2f);
-
-			}
-		}
-
-		if(InSelectMode)
-		{
-			if(Input.GetMouseButtonUp(0))
-			{
-				InSelectMode = false;
-			}
-
-			if(Time.time - lastDecorationClick > 2)
-			{
-				InSelectMode = false;
-				//Decorate
-
-				UIManager.Instance.RemoveCurrentPage();
-				UIManager.Instance.SwapPage(UIManager.UIPageType.PutItem);
-				BeginDec(SelectDecorationID);
-
-				print("decorate");
-			}
-		}
-
-		CheckDoubleClick();
-
-		if(CurrentControlMode == ControlMode.Normal)
+		if(PlayerDecorationManager.Instance.CurrentControlMode == PlayerDecorationManager.ControlMode.Normal)
 		{
 			if(CurrenViewMode != ViewMode.FirstPerson && !CameraManager.Instance.using_cor)
 			{
@@ -141,16 +67,16 @@ public class PlayerController : MonoBehaviour {
 			AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[userID],
 				new Vector3(0,-10.3f,40.8f),Quaternion.Euler(12.8f,0,0));
 		}
-		print(EventSystem.current.IsPointerOverGameObject());
+
+		if(EventSystem.current.currentSelectedGameObject == null)
+		{
+			CheckDoubleClick();
+		}
+
+
 		PinchToZoom();
 	}
 
-	public void ClickDecoration(int Id)
-	{
-		lastDecorationClick = Time.time;
-		InSelectMode = true;
-		SelectDecorationID = Id;
-	}
 
 	public IEnumerator GetCurrentArea()
 	{
@@ -169,61 +95,61 @@ public class PlayerController : MonoBehaviour {
 			OnGetArea.Invoke();
 	}
 
-	public void StartPlaceDecoration()
-	{
-		//Check have that material
-		finishPlacing = false;
-		StartCoroutine(PlaceMaterial(3));
-
-	}
-
-	public void FinishPlaceDecoration()
-	{
-		finishPlacing = true;
-	}
-
-	IEnumerator PlaceMaterial(int itemID)
-	{
-		placingMaterial = true;
-
-		Vector3 position;
-		Quaternion rotation;
-
-		GameObject temp = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
-		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
-		Transparentize(temp);
-
-		RaycastHit hitInfo = new RaycastHit();
-
-		while(!finishPlacing)
-		{
-			//TODO 必須把Player模型設定成 "PlayerModel" Layer
-			Physics.Raycast
-			(
-				Camera.main.ScreenPointToRay(Input.mousePosition),
-				out hitInfo,
-				99999f,
-				LayerMask.GetMask("PlayerModel")
-			);
-			temp.transform.position = hitInfo.point;
-			yield return null;}
-
-
-		position = temp.transform.localPosition;
-		rotation = temp.transform.localRotation;
-
-		UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
-		(
-			itemID,
-			position.x, position.y, position.z,
-			rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
-		);
-
-
-		Destroy(temp);
-		placingMaterial = false;
-
-	}
+//	public void StartPlaceDecoration()
+//	{
+//		//Check have that material
+//		finishPlacing = false;
+//		StartCoroutine(PlaceMaterial(3));
+//
+//	}
+//
+//	public void FinishPlaceDecoration()
+//	{
+//		finishPlacing = true;
+//	}
+//
+//	IEnumerator PlaceMaterial(int itemID)
+//	{
+//		placingMaterial = true;
+//
+//		Vector3 position;
+//		Quaternion rotation;
+//
+//		GameObject temp = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
+//		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
+//		Transparentize(temp);
+//
+//		RaycastHit hitInfo = new RaycastHit();
+//
+//		while(!finishPlacing)
+//		{
+//			//TODO 必須把Player模型設定成 "PlayerModel" Layer
+//			Physics.Raycast
+//			(
+//				Camera.main.ScreenPointToRay(Input.mousePosition),
+//				out hitInfo,
+//				99999f,
+//				LayerMask.GetMask("PlayerModel")
+//			);
+//			temp.transform.position = hitInfo.point;
+//			yield return null;}
+//
+//
+//		position = temp.transform.localPosition;
+//		rotation = temp.transform.localRotation;
+//
+//		UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
+//		(
+//			itemID,
+//			position.x, position.y, position.z,
+//			rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
+//		);
+//
+//
+//		Destroy(temp);
+//		placingMaterial = false;
+//
+//	}
 
 	void CheckDoubleClick()
 	{
@@ -303,41 +229,41 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-	void SelectDecoration()
-	{
-
-		RaycastHit hitInfo = new RaycastHit();
-
-		bool hit = Physics.Raycast(
-			Camera.main.ScreenPointToRay(Input.mousePosition),
-			out hitInfo,
-			99999f,
-			LayerMask.GetMask("Decoration")
-		);
-
-		if(hit)
-		{
-
-			if(CurrentSelectDecoration)
-			{
-				DeTransparentize(CurrentSelectDecoration);
-			}
-
-
-			CurrentSelectDecoration = hitInfo.transform.gameObject;
-
-			Transparentize(CurrentSelectDecoration);
-
-		}
-		else
-		{
-			//CurrentSelectDecoration = null;
-
-
-		}
-
-
-	}
+//	void SelectDecoration()
+//	{
+//
+//		RaycastHit hitInfo = new RaycastHit();
+//
+//		bool hit = Physics.Raycast(
+//			Camera.main.ScreenPointToRay(Input.mousePosition),
+//			out hitInfo,
+//			99999f,
+//			LayerMask.GetMask("Decoration")
+//		);
+//
+//		if(hit)
+//		{
+//
+//			if(CurrentSelectDecoration)
+//			{
+//				DeTransparentize(CurrentSelectDecoration);
+//			}
+//
+//
+//			CurrentSelectDecoration = hitInfo.transform.gameObject;
+//
+//			Transparentize(CurrentSelectDecoration);
+//
+//		}
+//		else
+//		{
+//			//CurrentSelectDecoration = null;
+//
+//
+//		}
+//
+//
+//	}
 
 	void PinchToZoom()
 	{
@@ -396,45 +322,8 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-	public void ChangeModelOrientation()
-	{print("change");
-		if(CurrentSelectDecoration == null)
-			return;
-		print("INModel");
-		switch (ModelOrientMode) {
-		case 1:
-			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(0,0,0);
-			ModelOrientMode = 2;
-			break;
-		case 2:
-			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(180,0,0);
-			ModelOrientMode = 3;
-			break;
-		case 3:
-			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(0,0,90);
-			ModelOrientMode = 4;
-			break;
-		case 4:
-			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(0,0,-90);
-			ModelOrientMode = 5;
-			break;
-		case 5:
-			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(90,0,0);
-			ModelOrientMode = 6;
-			break;
-		case 6:
-			CurrentSelectDecoration.transform.localRotation = Quaternion.Euler(-90,0,0);
-			ModelOrientMode = 1;
-			break;
-		default:
-			break;
-		}
-	}
 
-	public void RotateArountY(float degree)
-	{
-		CurrentSelectDecoration.transform.Rotate(0,degree,0,Space.World);
-	}
+
 
 	void ShowVessel(GameObject vessel)
 	{
@@ -505,181 +394,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 	}
-		
-	//Final Stage After Clicking Done Button
-	public void UpdateModifiedDecorationsToServer()
-	{
-		foreach(GameObject entry in AddedDecorations)
-		{
-			UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
-			(
-				System.Int32.Parse(entry.name),
-				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
-				entry.transform.rotation.eulerAngles.x, entry.transform.rotation.eulerAngles.y, entry.transform.rotation.eulerAngles.z
-			);
-		}
 
-		foreach(GameObject entry in ModifiedDecorations)
-		{
-			UserManager.Instance.User.Player.OperationManager.UpdateDecorationOnVessel
-			(
-				System.Int32.Parse(entry.name),
-				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
-				entry.transform.rotation.eulerAngles.x, entry.transform.rotation.eulerAngles.y, entry.transform.rotation.eulerAngles.z
-			);
-		}
-
-		foreach(GameObject entry in RemovedDecorations)
-		{
-			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(entry.name));
-		}
-		print("Updated");
-		//Clear All 
-		ModifiedDecorations.Clear();
-		AddedDecorations.Clear();
-		RemovedDecorations.Clear();
-	}
-
-	public void BeginDec(int itemID)
-	{
-		itemID = 2;
-		print("BEgin");
-		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity,
-			GameManager.Instance.PlayerGameObject.transform) as GameObject;
-
-		if(!AddedDecorations.Contains(CurrentSelectDecoration))
-			AddedDecorations.Add(CurrentSelectDecoration);
-
-		CurrentControlMode = ControlMode.Decorate;
-
-	}
-
-	void DecorateProcess()
-	{
-		if(Input.touchCount == 1)
-		{
-			#region HitRaycaster
-			bool entireHit;
-			RaycastHit entireHitInfo = new RaycastHit();
-
-			entireHit = Physics.Raycast
-				(
-					Camera.main.ScreenPointToRay(Input.mousePosition),
-					out entireHitInfo,
-					99999f
-				);
-
-			bool vesselHit;
-			RaycastHit vesselHitInfo = new RaycastHit();
-			vesselHit = Physics.Raycast
-				(
-					Camera.main.ScreenPointToRay(Input.mousePosition),
-					out vesselHitInfo,
-					99999f,
-					LayerMask.GetMask("PlayerModel")
-				);
-			#endregion
-
-			if(Input.touches[0].phase == TouchPhase.Began)
-			{
-				clickTime = Time.time;
-
-//				if(CurrentControlMode == ControlMode.Rotate && 
-//					entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration") &&
-//					entireHitInfo.transform.gameObject != CurrentSelectDecoration)
-//				{
-//					CurrentSelectDecoration.transform.localScale *= 0.5f;
-//				}
-
-				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
-				{
-					print(entireHitInfo.transform.name);
-					LastSelectDecoration = CurrentSelectDecoration;
-					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
-					CurrentControlMode = ControlMode.Decorate;
-					if(!ModifiedDecorations.Contains(CurrentSelectDecoration))
-						ModifiedDecorations.Add(CurrentSelectDecoration);
-				}
-
-			}
-
-			if(Input.touches[0].phase == TouchPhase.Stationary || Input.touches[0].phase == TouchPhase.Moved)
-			{
-
-			}
-
-			if(Input.touches[0].phase == TouchPhase.Ended)
-			{
-				float deltaTime = Time.time - clickTime;
-				clickTime = -99f;
-
-
-				if(deltaTime < 0.5f) // 短按
-				{
-					if(LastSelectDecoration != null)
-					{
-						LastSelectDecoration.transform.localScale *= 0.5f;
-					}
-					print("short");
-					CurrentControlMode = ControlMode.Rotate;
-//					if(entireHitInfo.transform.gameObject != LastSelectDecoration)
-//					{
-						CurrentSelectDecoration.transform.localScale *= 2f;
-
-//					}
-				}
-				else // 長按
-				{
-					if(CurrentControlMode == ControlMode.Decorate)
-					{
-						if(vesselHit)
-						{
-							CurrentSelectDecoration = null;
-						}
-						else
-						{
-							if(!RemovedDecorations.Contains(CurrentSelectDecoration))
-								RemovedDecorations.Add(CurrentSelectDecoration);
-
-							CurrentSelectDecoration.SetActive(false);
-
-							CurrentSelectDecoration = null;
-						}
-					}
-
-				}
-
-
-
-			}
-
-			if(CurrentSelectDecoration != null && CurrentControlMode != ControlMode.Rotate)
-			{	print(EventSystem.current.IsPointerOverGameObject());
-				if(vesselHit)
-				{
-					CurrentSelectDecoration.transform.position = vesselHitInfo.point;
-				}
-				else
-				{
-					CurrentSelectDecoration.transform.position = 
-						Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 9;
-				}
-			}
-		}
-
-		if(Input.touchCount == 2)
-		{
-			Touch touchZero = Input.GetTouch(0);
-			Touch touchOne = Input.GetTouch(1);
-
-			float x = (touchZero.deltaPosition.x + touchOne.deltaPosition.x) * 0.075f;
-			float y = (touchZero.deltaPosition.x + touchOne.deltaPosition.x) * -0.05f;
-
-			CameraManager.Instance.CameraRotate(x);
-			CameraManager.Instance.CameraRotateHorizontal(y);
-
-		}
-	}
 
 
 }
