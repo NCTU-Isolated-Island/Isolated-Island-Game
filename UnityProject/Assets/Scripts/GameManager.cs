@@ -62,8 +62,8 @@ public class GameManager : MonoBehaviour
 
     public void Login()
     {
-        //FacebookService.LoginWithFacbook();
-        UserManager.Instance.User.OperationManager.PlayerIDLogin(22, "TestServer");
+        FacebookService.LoginWithFacbook();
+        //UserManager.Instance.User.OperationManager.PlayerIDLogin(22, "TestServer");
     }
 
     void LoadItemGameObject()
@@ -413,45 +413,6 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
-    void OnGUI()
-    {
-        //        if(UserManager.Instance.User.Player != null && UserManager.Instance.User.Player.Inventory != null)
-        //        {
-        //            foreach (InventoryItemInfo info in UserManager.Instance.User.Player.Inventory.ItemInfos)
-        //            {
-        //                GUILayout.Label(info.Item.ItemName + " : " + info.Count + " ID: " + info.Item.ItemID);
-        //            }
-        //            foreach(Vessel vessel in VesselManager.Instance.Vessels)
-        //            {
-        //                GUILayout.Label(string.Format("VesselName: {0}", vessel.PlayerInformation.nickname));
-        //                foreach (Decoration decoration in vessel.Decorations)
-        //                {
-        //                    GUILayout.Label(string.Format("DecorationID: {0}, MaterialName: {1}", decoration.DecorationID, decoration.Material.ItemName));
-        //                }
-        //            }
-        //        }
-        GUI.contentColor = Color.black;
-        foreach (Dictionary<int, GameObject> vessel in UserDecoration.Values)
-        {
-            foreach (KeyValuePair<int, GameObject> decoration in vessel)
-            {
-                GUILayout.Label("ID: " + decoration.Key);
-            }
-
-            GUILayout.Label("------------");
-        }
-    }
-
-    void ABC()
-    {
-        print(one());
-    }
-
-    int one()
-    {
-        return 1;
-    }
 
 
 }

@@ -214,7 +214,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 				ShortClickTime = -99f;
 
 
-				if(deltaTime < 0.9f) // 短按
+				if(deltaTime < 0.3f) // 短按
 				{
 					CurrentControlMode = ControlMode.Rotate;
 				}

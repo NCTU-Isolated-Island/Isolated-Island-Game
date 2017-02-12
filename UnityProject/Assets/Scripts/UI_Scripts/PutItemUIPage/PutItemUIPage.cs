@@ -19,6 +19,17 @@ public class PutItemUIPage : MonoBehaviour {
 
     }
 
+	void Update()
+	{
+		if(PlayerDecorationManager.Instance.CurrentControlMode == PlayerDecorationManager.ControlMode.Rotate)
+		{
+			RotateButton.interactable = true;
+		}
+		else
+		{
+			RotateButton.interactable = false;
+		}
+	}
 
 
     void Awake()
