@@ -66,7 +66,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
                 }
                 else
                 {
-                    FacebookService.LoginWithFacbook();
+                    GameManager.Instance.Login();
                 }
             }
             else

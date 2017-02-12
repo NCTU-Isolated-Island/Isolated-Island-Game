@@ -102,7 +102,7 @@ public class LogInUIManager : MonoBehaviour
         if(PhotonService.Instance.ServerConnected)
         {
             GetComponent<Button>().interactable = false;
-            GameManager.Instance.DebugLogin(true);
+            GameManager.Instance.Login();
         }
     }
 
