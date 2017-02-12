@@ -39,6 +39,7 @@ public class OtherBoatUIManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()
@@ -49,7 +50,8 @@ public class OtherBoatUIManager : MonoBehaviour
 
     void OnDisable()
     {
-        CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+        if (CameraManager.Instance != null)
+            CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
     }
 
     void InitialSetting()

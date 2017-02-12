@@ -22,6 +22,7 @@ public class CombineUIManager : MonoBehaviour {
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()

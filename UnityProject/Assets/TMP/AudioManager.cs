@@ -81,8 +81,8 @@ public class AudioManager : MonoBehaviour
     
     void Start()
     {
-        GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<BGMController>();
-        GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<Rigidbody>();
-        GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        //GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<BGMController>();
+        //GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<Rigidbody>();
+        //GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
 }
