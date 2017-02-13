@@ -70,6 +70,14 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     requirements.Add(requirement);
                 }
+                if (SpecializeRequirementToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirement(questRequirementID, out requirement))
+                {
+                    requirements.Add(requirement);
+                }
+                if (SpecializeRequirementToScanQR_CodeRequirement(questRequirementID, out requirement))
+                {
+                    requirements.Add(requirement);
+                }
             }
             return requirements;
         }
