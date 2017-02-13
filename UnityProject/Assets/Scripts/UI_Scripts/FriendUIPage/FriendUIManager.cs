@@ -100,10 +100,10 @@ public class FriendUIManager : MonoBehaviour {
                         friendGroup.text = "信仰";
                         break;
                     case GroupType.Businessman:
-                        friendGroup.text = "動物";
+                        friendGroup.text = "科技";
                         break;
                     case GroupType.Farmer:
-                        friendGroup.text = "農夫";
+                        friendGroup.text = "自然";
                         break;
                 }
             }

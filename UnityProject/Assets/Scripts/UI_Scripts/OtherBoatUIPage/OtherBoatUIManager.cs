@@ -61,6 +61,7 @@ public class OtherBoatUIManager : MonoBehaviour
 
     public void SetOtherPlayerInfo(int otherPlayerID)
     {
+        print("SetOtherPlayerInfo");
         if (PlayerInformationManager.Instance.FindPlayerInformation(otherPlayerID, out otherPlayerInfo))
         {
             titleText.text = otherPlayerInfo.nickname;
@@ -72,10 +73,10 @@ public class OtherBoatUIManager : MonoBehaviour
                     groupText.text = "信仰";
                     break;
                 case GroupType.Businessman:
-                    groupText.text = "商人";
+                    groupText.text = "科技";
                     break;
                 case GroupType.Farmer:
-                    groupText.text = "農夫";
+                    groupText.text = "自然";
                     break;
             }
         }

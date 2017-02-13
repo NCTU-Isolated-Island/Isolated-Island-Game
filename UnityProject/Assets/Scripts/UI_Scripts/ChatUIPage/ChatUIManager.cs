@@ -117,10 +117,10 @@ public class ChatUIManager : MonoBehaviour {
                     chatFriendGroup.text = "信仰";
                     break;
                 case GroupType.Businessman:
-                    chatFriendGroup.text = "動物";
+                    chatFriendGroup.text = "科技";
                     break;
                 case GroupType.Farmer:
-                    chatFriendGroup.text = "農夫";
+                    chatFriendGroup.text = "自然";
                     break;
             }
 
