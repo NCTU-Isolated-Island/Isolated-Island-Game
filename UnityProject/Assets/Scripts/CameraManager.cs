@@ -40,7 +40,6 @@ public class CameraManager : MonoBehaviour {
 		source.position = target.position;
 		source.rotation = target.rotation;
 		using_cor = false;
-		print("NOW!");
 		target.root.Find("CameraAnchor").localRotation = Quaternion.identity;
 		Camera.transform.parent = target.root.Find("CameraAnchor");
 	}

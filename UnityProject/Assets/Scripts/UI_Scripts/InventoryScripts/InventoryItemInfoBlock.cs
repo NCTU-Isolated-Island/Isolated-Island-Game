@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler
+public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPointerDownHandler
 {
     public InventoryItemInfo ItemInfo { get; private set; }
     private Image itemImage;
@@ -26,8 +26,15 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler
         this.usageType = usageType;
     }
 
+	public void OnPointerDown (PointerEventData eventData) 
+	{
+		if(this.usageType == InventoryPanel.InventoryUsageType.CheckInventoryItemDetail)
+			PlayerDecorationManager.Instance.ClickDecoration(ItemInfo.Item.ItemID);
+	}
+
     public void OnPointerClick(PointerEventData eventData)
     {
+
         switch (this.usageType)
         {
             case InventoryPanel.InventoryUsageType.CheckInventoryItemDetail:
@@ -42,7 +49,6 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler
                 UIManager.Instance.ToPreviousPage();
                 break;
             case InventoryPanel.InventoryUsageType.PutItemOnVessel:
-                throw new System.NotImplementedException("InventoryPanel.InventoryUsageType.PutItemOnVessel");
                 UIManager.Instance.ToPreviousPage();
                 break;
         }
