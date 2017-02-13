@@ -35,21 +35,15 @@ namespace IsolatedIslandGame.Client.Communication
         }
         public override void CheckSystemVersion(string serverVersion, string clientVersion)
         {
-            if(SystemConfiguration.Instance.ServerVersion != serverVersion)
+            if(SystemConfiguration.Instance.ServerVersion != serverVersion || SystemConfiguration.Instance.ClientVersion != clientVersion)
             {
+                UserManager.Instance.User.UserInform("提示", "有新版本，請更新以獲取最新的遊戲內容");
                 LogService.FatalFormat("ServerVersion Inconsistent {0}/{1}", SystemConfiguration.Instance.ServerVersion, serverVersion);
-            }
-            else
-            {
-                LogService.InfoFormat("ServerVersion: {0}", serverVersion);
-            }
-            if (SystemConfiguration.Instance.ClientVersion != clientVersion)
-            {
                 LogService.FatalFormat("ClientVersion Inconsistent {0}/{1}", SystemConfiguration.Instance.ClientVersion, clientVersion);
             }
             else
             {
-                LogService.InfoFormat("ClientVersion: {0}", clientVersion);
+                LogService.InfoFormat("ServerVersion: {0}", serverVersion);
             }
         }
 
