@@ -63,28 +63,35 @@ public class GameManager : MonoBehaviour
     public void Login()
     {
         FacebookService.LoginWithFacbook();
-        //UserManager.Instance.User.OperationManager.PlayerIDLogin(22, "TestServer");
+        //UserManager.Instance.User.OperationManager.PlayerIDLogin(35, "TestServer");
     }
 
     void LoadItemGameObject()
     {
         // itemID to item path in resources
+		elementModels.Add(1, Resources.Load("Ingredients/" + "Speaker") as GameObject);
+		elementModels.Add(3, Resources.Load("Ingredients/" + "take_copter_1") as GameObject);
+		elementModels.Add(7, Resources.Load("Ingredients/" + "stone") as GameObject);
+		elementModels.Add(8, Resources.Load("Ingredients/" + "rope") as GameObject);
+		elementModels.Add(9, Resources.Load("Ingredients/" + "pigment") as GameObject);
+		elementModels.Add(12, Resources.Load("Ingredients/" + "gold") as GameObject);
+		elementModels.Add(13, Resources.Load("Ingredients/" + "coal") as GameObject);
+		elementModels.Add(15, Resources.Load("Ingredients/" + "knife") as GameObject);
         elementModels.Add(17, Resources.Load("Ingredients/" + "basket") as GameObject);
-        elementModels.Add(13, Resources.Load("Ingredients/" + "coal") as GameObject);
+		elementModels.Add(21, Resources.Load("Ingredients/" + "water") as GameObject);
+		elementModels.Add(28, Resources.Load("Ingredients/" + "wood") as GameObject);
+		elementModels.Add(30, Resources.Load("Ingredients/" + "milk") as GameObject);
         elementModels.Add(31, Resources.Load("Ingredients/" + "fire") as GameObject);
-        elementModels.Add(12, Resources.Load("Ingredients/" + "gold") as GameObject);
+		elementModels.Add(32, Resources.Load("Ingredients/" + "steel") as GameObject);
+		elementModels.Add(35, Resources.Load("Ingredients/" + "oil") as GameObject);
+
+		elementModels.Add(1002, Resources.Load("Ingredients/" + "Computer") as GameObject);
+		elementModels.Add(1004, Resources.Load("Ingredients/" + "small_light") as GameObject);
         elementModels.Add(1017, Resources.Load("Ingredients/" + "guitar") as GameObject);
 		elementModels.Add(1023, Resources.Load("Ingredients/" + "electricity") as GameObject);
-        //elementModels.Add(0, Resources.Load("Ingredients/" + "hammer") as GameObject);
-        elementModels.Add(30, Resources.Load("Ingredients/" + "milk") as GameObject);
-        elementModels.Add(35, Resources.Load("Ingredients/" + "oil") as GameObject);
-        elementModels.Add(8, Resources.Load("Ingredients/" + "rope") as GameObject);
-        elementModels.Add(1004, Resources.Load("Ingredients/" + "small_light") as GameObject);
-        elementModels.Add(32, Resources.Load("Ingredients/" + "steel") as GameObject);
-        elementModels.Add(7, Resources.Load("Ingredients/" + "stone") as GameObject);
-        elementModels.Add(3, Resources.Load("Ingredients/" + "take_copter_1") as GameObject);
-        elementModels.Add(21, Resources.Load("Ingredients/" + "water") as GameObject);
-        elementModels.Add(28, Resources.Load("Ingredients/" + "wood") as GameObject);
+        
+		elementModels.Add(2005, Resources.Load("Ingredients/" + "imac") as GameObject);
+
     }
 
     IEnumerator SlowUpdate()
@@ -147,11 +154,6 @@ public class GameManager : MonoBehaviour
 
             PlayerController.Instance.gameObject.SetActive(true);
             CameraManager.Instance.ToNearAnchor(PlayerGameObject);
-
-            print("ON");
-            //UserManager.Instance.User.Player.OperationManager.SendMessage(23,"FirstMessageTest");
-
-
         }
         else
         {

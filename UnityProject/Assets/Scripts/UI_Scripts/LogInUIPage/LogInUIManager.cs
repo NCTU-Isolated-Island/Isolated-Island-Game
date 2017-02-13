@@ -115,7 +115,7 @@ public class LogInUIManager : MonoBehaviour
 
     public void DetermineNameAndSpeech()
     {
-        if (playerNameText.text.Length > 6)
+        if (playerNameText.text.Length > 20)
         {
             nameLengthExceedWarning.SetActive(true);
             return;
