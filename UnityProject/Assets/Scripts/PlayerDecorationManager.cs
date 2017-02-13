@@ -21,7 +21,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 	bool InSelectMode = false;
 	float DecorationClickTime;
-	float ShortClickTime = -99f;
+	public float ShortClickTime = -99f;
 	int SelectDecorationID;
 
 	public List<GameObject> ModifiedDecorations = new List<GameObject>();
@@ -110,6 +110,10 @@ public class PlayerDecorationManager : MonoBehaviour {
 	{
 		foreach(GameObject entry in AddedDecorations)
 		{
+			if(RemovedDecorations.Contains(entry))
+			{
+				continue;
+			}
 			UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
 			(
 				System.Int32.Parse(entry.name),
@@ -122,7 +126,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 		foreach(GameObject entry in ModifiedDecorations)
 		{
-			if(AddedDecorations.Contains(entry))
+			if(AddedDecorations.Contains(entry) || RemovedDecorations.Contains(entry))
 			{
 				continue;
 			}
@@ -136,6 +140,10 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 		foreach(GameObject entry in RemovedDecorations)
 		{
+			if(AddedDecorations.Contains(entry))
+			{
+				continue;
+			}
 			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(entry.name));
 		}
 
@@ -188,11 +196,12 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 			if(Input.touches[0].phase == TouchPhase.Began)
 			{
-				ShortClickTime = Time.time;
-
-
+				print("begin");
+				print(entireHitInfo.transform.gameObject.name);
 				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
 				{
+					ShortClickTime = Time.time;
+
 					print(entireHitInfo.transform.name);
 
 					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
@@ -220,7 +229,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 				}
 				else // 長按
 				{
-					if(CurrentControlMode == ControlMode.Decorate)
+					if(CurrentControlMode == ControlMode.Decorate && CurrentSelectDecoration != null)
 					{
 						if(vesselHit)
 						{
