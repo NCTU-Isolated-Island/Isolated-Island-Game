@@ -35,11 +35,11 @@ public class TransactionManager : MonoBehaviour
     private int opponentPlayerID;
 
     //TEST
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-            UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
-    }
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.T))
+    //        UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
+    //}
     //
 
     void Awake()

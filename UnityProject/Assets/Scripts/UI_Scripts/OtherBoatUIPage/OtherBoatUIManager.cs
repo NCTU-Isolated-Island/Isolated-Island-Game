@@ -127,6 +127,8 @@ public class OtherBoatUIManager : MonoBehaviour
 
         while (passTime < intervalTime)
         {
+            passTime += Time.deltaTime;
+
             float lerpAlpha = 0.1f * passTime / intervalTime + 0.9f * Mathf.Sqrt(1 - Mathf.Pow(passTime / intervalTime - 1, 2));
             if (isOn)
             {
@@ -139,7 +141,6 @@ public class OtherBoatUIManager : MonoBehaviour
                 interactionButtonsContent.GetComponent<RectTransform>().offsetMax = verTmp;
             }
 
-            passTime += Time.deltaTime;
             yield return null;
         }
         expandStatus = isOn;
