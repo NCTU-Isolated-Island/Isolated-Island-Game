@@ -20,6 +20,7 @@ public class MissionUIManager : MonoBehaviour {
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()
