@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IsolatedIslandGame.Library.LandmarkElements
+namespace IsolatedIslandGame.Protocol.Communication.SyncDataCodes
 {
-    public class LandmarkRoom
+    class LandmarkRoomSyncDataCode
     {
     }
 }
