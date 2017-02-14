@@ -35,8 +35,8 @@ public class BGMController : MonoBehaviour {
 
     void Start() // for testing
     {
-        BGMDictionary["a_girl_from_osaka_1"] = "Sound1";
-        BGMDictionary["a_new_generation_1"] = "Sound2";
+        BGMDictionary["winter_light_1"] = "winter";
+        BGMDictionary["cosy_and_warm_1"] = "cozyandwarm";
 
         Exited = true;
     }

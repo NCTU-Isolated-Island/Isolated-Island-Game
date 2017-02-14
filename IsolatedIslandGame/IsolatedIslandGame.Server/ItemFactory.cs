@@ -17,7 +17,25 @@ namespace IsolatedIslandGame.Server
             {
                 AddItem(item);
             }
-            ResetDrawMaterialTime();
+
+            DateTime now = DateTime.Now;
+
+            DatabaseService.RepositoryList.PlayerRepository.GlobalUpdateNextDrawMaterialTime(now);
+            foreach (Player player in PlayerFactory.Instance.Players)
+            {
+                player.NextDrawMaterialTime = now;
+            }
+
+            DateTime nextDrawMaterialTime = DateTime.Today;
+            while (nextDrawMaterialTime < DateTime.Now)
+            {
+                nextDrawMaterialTime += TimeSpan.FromHours(2);
+            }
+
+            Scheduler.Instance.AddTask(nextDrawMaterialTime, () => 
+            {
+                ResetDrawMaterialTime();
+            });
         }
 
         public override void AddItem(Item item)
@@ -72,7 +90,7 @@ namespace IsolatedIslandGame.Server
             DateTime nextDrawMaterialTime = DateTime.Today;
             while (nextDrawMaterialTime < DateTime.Now)
             {
-                nextDrawMaterialTime += TimeSpan.FromHours(6);
+                nextDrawMaterialTime += TimeSpan.FromHours(2);
             }
             DatabaseService.RepositoryList.PlayerRepository.GlobalUpdateNextDrawMaterialTime(nextDrawMaterialTime);
             foreach (Player player in PlayerFactory.Instance.Players)

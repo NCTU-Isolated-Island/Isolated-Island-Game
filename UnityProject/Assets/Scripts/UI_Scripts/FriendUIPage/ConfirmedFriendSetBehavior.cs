@@ -25,6 +25,7 @@ public class ConfirmedFriendSetBehavior : MonoBehaviour {
         friendSetButton.onClick.AddListener(
             delegate
             {
+                OtherBoatUIManager.Instance.SetOtherPlayerInfo(information.playerID);
                 UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
                 CameraManager.Instance.ToNearAnchor(GameManager.Instance.UserGameObject[information.playerID]);
                 FriendUIManager.Instance.gameObject.SetActive(false);
@@ -47,6 +48,7 @@ public class ConfirmedFriendSetBehavior : MonoBehaviour {
 
     public void CheckFriendVessel()
     {
+        OtherBoatUIManager.Instance.SetOtherPlayerInfo(information.playerID);
         UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
         // TODO
     }

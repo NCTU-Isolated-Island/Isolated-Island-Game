@@ -54,6 +54,14 @@ public class LogInUIManager : MonoBehaviour
         InitSetting();
     }
 
+    private void OnEnable()
+    {
+        GetComponent<Button>().interactable = true;
+    }
+    private void OnDisable()
+    {
+        GetComponent<Button>().interactable = false;
+    }
     public void ToCreateCharacterPage()
     {
         loginPage.SetActive(false);
@@ -93,7 +101,8 @@ public class LogInUIManager : MonoBehaviour
     {
         if(PhotonService.Instance.ServerConnected)
         {
-            GameManager.Instance.DebugLogin(true);
+            GetComponent<Button>().interactable = false;
+            GameManager.Instance.Login();
         }
     }
 
@@ -106,7 +115,7 @@ public class LogInUIManager : MonoBehaviour
 
     public void DetermineNameAndSpeech()
     {
-        if (playerNameText.text.Length > 6)
+        if (playerNameText.text.Length > 20)
         {
             nameLengthExceedWarning.SetActive(true);
             return;

@@ -17,15 +17,11 @@ public class BluePrintUIManager : MonoBehaviour {
     private Button blueprintButton;
     //
 
-    void InitSetting()
-    {
-
-    }
-
     void Awake()
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()
@@ -54,7 +50,12 @@ public class BluePrintUIManager : MonoBehaviour {
 
     public void LoadBluePrint()
     {
-        foreach(Blueprint bluePrint in UserManager.Instance.User.Player.KnownBlueprints)
+        foreach(Transform bluePrint in bluePrintSetContent.transform)
+        {
+            Destroy(bluePrint.gameObject);
+        }
+
+        foreach (Blueprint bluePrint in UserManager.Instance.User.Player.KnownBlueprints)
         {
             // Show BluePrint in UI
             GameObject tmp = Instantiate(bluePrintSet);
@@ -79,6 +80,15 @@ public class BluePrintUIManager : MonoBehaviour {
 
     public void ToCombineByBluePrint(Blueprint bluePrint)
     {
+        if (!HaveEnoughElement(bluePrint))
+        {
+            UserManager.Instance.User.UserInform("合成通知","素材不足");
+            return;
+        }
+
+        // Swap to Combine Page
+        UIManager.Instance.SwapPage(UIManager.UIPageType.Combine);
+
         foreach (var elementInfo in bluePrint.Requirements)
         {
             // Put Sprite to material.sprite
@@ -86,10 +96,18 @@ public class BluePrintUIManager : MonoBehaviour {
             ItemManager.Instance.FindItem(elementInfo.itemID, out item);
             CombineUIManager.Instance.materialSlots[elementInfo.positionIndex].SetSlotInfo(item);
         }
-
-        // Swap to Combine Page
-        UIManager.Instance.SwapPage(UIManager.UIPageType.Combine);
         // Put ingredients base on bluePrint formula
+    }
+
+    private bool HaveEnoughElement(Blueprint blueprint)
+    {
+        bool result = true;
+        foreach (Blueprint.ElementInfo elementInfo in blueprint.Requirements)
+        {
+            if (elementInfo.itemCount > UserManager.Instance.User.Player.Inventory.ItemCount(elementInfo.itemID))
+                result = false;
+        }
+        return result;
     }
 
 }

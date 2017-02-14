@@ -66,12 +66,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)SynthesizeMaterialResponseParameterCode.Products, blueprint.Products.ToArray() }
                             };
                             SendResponse(operationCode, responseParameters);
+                            subject.User.EventManager.UserInform("成功", "合成成功。");
                             return true;
                         }
                         else
                         {
                             LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, Player doesn't have these materials", subject.IdentityInformation);
                             SendError(operationCode, ErrorCode.PermissionDeny, "you don't have the materials");
+                            subject.User.EventManager.UserInform("失敗", "素材不足。");
                             return false;
                         }
                     }
@@ -79,6 +81,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     {
                         LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, there is no such a blueprint", subject.IdentityInformation);
                         SendError(operationCode, ErrorCode.InvalidOperation, "there is no such a blueprint");
+                        subject.User.EventManager.UserInform("失敗", "合成失敗。");
                         return false;
                     }
                 }

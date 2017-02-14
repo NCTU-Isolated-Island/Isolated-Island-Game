@@ -14,6 +14,16 @@ namespace IsolatedIslandGame.Database.Repositories
             public string questName;
             public string questDescription;
         }
+        protected struct QuestRequirementInfo
+        {
+            public int questRequirementID;
+            public QuestRequirementType questRequirementType;
+        }
+        protected struct QuestRewardInfo
+        {
+            public int questRewardID;
+            public QuestRewardType questRewardType;
+        }
 
         public abstract List<Quest> ListAll();
 
@@ -29,6 +39,7 @@ namespace IsolatedIslandGame.Database.Repositories
 
         #region Specialize QuestReward
         protected abstract bool SpecializeRewardToGiveItemReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeRewardToUnlockBlueprintReward(int rewardID, out QuestReward reward);
         #endregion
     }
 }

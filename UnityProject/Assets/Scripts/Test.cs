@@ -13,16 +13,46 @@ public class Test : MonoBehaviour {
 		
 	}
 
-
+	public bool InSelectMode;
 
 	void Update()
 	{
 		
+		if(Input.GetMouseButtonDown(0))
+		{
+			// check if click decoration
+			lastTimeClick = Time.time;
+			InSelectMode = true;
+		}
+
+
+		if(InSelectMode)
+		{
+			if(Input.GetMouseButtonUp(0))
+			{
+				InSelectMode = false;
+			}
+
+			if(Time.time - lastTimeClick > 2)
+			{
+				InSelectMode = false;
+				//Decorate
+
+			}
+		}
 
 
 
 	}
 
+	float lastTimeClick = -99f;
+
+	void CheckDoubleClick()
+	{
+		
+
+
+	}
 
 
 	public bool HaveEnoughElement(Blueprint blueprint)

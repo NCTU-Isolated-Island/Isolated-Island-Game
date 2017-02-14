@@ -39,6 +39,7 @@ public class OtherBoatUIManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()
@@ -49,7 +50,8 @@ public class OtherBoatUIManager : MonoBehaviour
 
     void OnDisable()
     {
-        CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+        if (CameraManager.Instance != null)
+            CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
     }
 
     void InitialSetting()
@@ -59,6 +61,7 @@ public class OtherBoatUIManager : MonoBehaviour
 
     public void SetOtherPlayerInfo(int otherPlayerID)
     {
+        print("SetOtherPlayerInfo");
         if (PlayerInformationManager.Instance.FindPlayerInformation(otherPlayerID, out otherPlayerInfo))
         {
             titleText.text = otherPlayerInfo.nickname;
@@ -70,10 +73,10 @@ public class OtherBoatUIManager : MonoBehaviour
                     groupText.text = "信仰";
                     break;
                 case GroupType.Businessman:
-                    groupText.text = "商人";
+                    groupText.text = "科技";
                     break;
                 case GroupType.Farmer:
-                    groupText.text = "農夫";
+                    groupText.text = "自然";
                     break;
             }
         }
@@ -88,7 +91,6 @@ public class OtherBoatUIManager : MonoBehaviour
     {
         UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Message);
         ChatUIManager.Instance.LoadMessagePage(otherPlayerInfo);
-        ChatUIManager.Instance.chattingPlayer = otherPlayerInfo;
     }
 
     public void OnClickExpandButton()

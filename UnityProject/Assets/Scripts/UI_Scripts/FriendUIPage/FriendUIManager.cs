@@ -21,11 +21,6 @@ public class FriendUIManager : MonoBehaviour {
     private GameObject friendSetContent;
     //
 
-    void InitSetting()
-    {
-
-    }
-
     void OnEnable()
     {
         LoadFriends();
@@ -35,6 +30,7 @@ public class FriendUIManager : MonoBehaviour {
     {
         if (Instance == null)
             Instance = this;
+        gameObject.SetActive(false);
     }
 
     void Start()
@@ -60,12 +56,6 @@ public class FriendUIManager : MonoBehaviour {
         LoadFriends();
     }
 
-    void OnDestroy()
-    {
-        UserManager.Instance.User.Player.OnFriendInformationChange -= OnFriendInformationChange;
-        UserManager.Instance.User.OnPlayerOnline -= RegisterPlayerEvents;
-    }
-
     void OnFriendInformationChange(DataChangeType dataChangeType, FriendInformation information)
     {
         LoadFriends();
@@ -85,7 +75,7 @@ public class FriendUIManager : MonoBehaviour {
             PlayerInformation friendInformation;
             if (PlayerInformationManager.Instance.FindPlayerInformation(friend.friendPlayerID, out friendInformation))
             {
-                if (friend.isConfirmed == false && friend.isInviter == false)
+                if (friend.isConfirmed == false && friend.isInviter == true)
                 {
                     tmp = Instantiate(invitingFriendSetPrefab);
                     tmp.transform.parent = friendSetContent.transform;
@@ -110,10 +100,10 @@ public class FriendUIManager : MonoBehaviour {
                         friendGroup.text = "信仰";
                         break;
                     case GroupType.Businessman:
-                        friendGroup.text = "動物";
+                        friendGroup.text = "科技";
                         break;
                     case GroupType.Farmer:
-                        friendGroup.text = "農夫";
+                        friendGroup.text = "自然";
                         break;
                 }
             }
