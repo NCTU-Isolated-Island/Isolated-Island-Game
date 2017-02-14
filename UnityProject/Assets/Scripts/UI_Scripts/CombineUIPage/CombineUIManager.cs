@@ -48,6 +48,7 @@ public class CombineUIManager : MonoBehaviour {
         {
             slot.SetSlotInfo(null);
         }
+        combineResultMessage.text = "";
     }
 
     public void PutInItemFromInventory(Item puttingItem)

@@ -78,11 +78,14 @@ public class AudioManager : MonoBehaviour
 
         isFading = false;
     }
-    
+
     void Start()
     {
-        //GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<BGMController>();
-        //GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.AddComponent<Rigidbody>();
-        //GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").Find("oil_tanker").gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.AddComponent<BGMController>();
+        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.AddComponent<MeshCollider>();
+        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<MeshCollider>().convex = true;
+        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<MeshCollider>().isTrigger = true;
+        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.AddComponent<Rigidbody>();
+        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
 }
