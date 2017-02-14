@@ -48,7 +48,7 @@ public class TransactionManager : MonoBehaviour
         {
             Instance = this;
         }
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     void Start()

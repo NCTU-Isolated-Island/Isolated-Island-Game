@@ -79,6 +79,13 @@ public class OtherBoatUIManager : MonoBehaviour
                     groupText.text = "自然";
                     break;
             }
+
+            // Add start Transaction Button Listener
+            startTransactionButton.onClick.AddListener(delegate
+            {
+                TransactionManager.Instance.SendTransactionRequest(otherPlayerID);
+            });
+
         }
     }
 
