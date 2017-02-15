@@ -53,11 +53,13 @@ namespace IsolatedIslandGame.Library.Landmarks
             if(ContainsRoom(room.LandmarkRoomID))
             {
                 roomDictionary[room.LandmarkRoomID] = room;
+                room.BindLandmark(this);
                 onLandmarkRoomChange?.Invoke(DataChangeType.Update, room);
             }
             else
             {
                 roomDictionary.Add(room.LandmarkRoomID, room);
+                room.BindLandmark(this);
                 onLandmarkRoomChange?.Invoke(DataChangeType.Add, room);
             }
         }

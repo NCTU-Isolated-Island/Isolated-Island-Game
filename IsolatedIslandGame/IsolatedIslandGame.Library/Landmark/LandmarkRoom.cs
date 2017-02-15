@@ -4,20 +4,30 @@ using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
 using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace IsolatedIslandGame.Library.Landmarks
 {
-    public class LandmarkRoom
+    public class LandmarkRoom : IIdentityProvidable
     {
         public int LandmarkRoomID { get; private set; }
         public string RoomName { get; private set; }
         public int HostPlayerID { get; private set; }
+        public Landmark Landmark { get; private set; }
         private Dictionary<int, MutiplayerSynthesizeParticipantInfo> mutiplayerSynthesizeParticipantInfoDictionary = new Dictionary<int, MutiplayerSynthesizeParticipantInfo>();
         public IEnumerable<MutiplayerSynthesizeParticipantInfo> MutiplayerSynthesizeParticipationInfos { get { return mutiplayerSynthesizeParticipantInfoDictionary.Values.ToArray(); } }
 
         public LandmarkRoomEventManager EventManager { get; private set; }
         public LandmarkRoomOperationManager OperationManager { get; private set; }
         public LandmarkRoomResponseManager ResponseManager { get; private set; }
+
+        public string IdentityInformation
+        {
+            get
+            {
+                return $"LandmarkRoom ID: {LandmarkRoomID}, Name: {RoomName}, HostPlayerID: {HostPlayerID}, Under Landmark: {Landmark.IdentityInformation}";
+            }
+        }
 
         public delegate void MutiplayerSynthesizeParticipantInfoChangeEventHandler(DataChangeType changeType, MutiplayerSynthesizeParticipantInfo info);
         private event MutiplayerSynthesizeParticipantInfoChangeEventHandler onMutiplayerSynthesizeParticipantInfoChange;
@@ -33,7 +43,10 @@ namespace IsolatedIslandGame.Library.Landmarks
             OperationManager = new LandmarkRoomOperationManager(this);
             ResponseManager = new LandmarRoomkResponseManager(this);
         }
-
+        public void BindLandmark(Landmark landmark)
+        {
+            Landmark = landmark;
+        }
         public bool ContainsMutiplayerSynthesizeParticipant(int playerID)
         {
             return mutiplayerSynthesizeParticipantInfoDictionary.ContainsKey(playerID);

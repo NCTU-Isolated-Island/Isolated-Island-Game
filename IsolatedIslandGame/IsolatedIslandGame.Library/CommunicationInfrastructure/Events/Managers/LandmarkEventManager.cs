@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.LandmarkEventHandlers;
 using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
+using IsolatedIslandGame.Protocol.Communication.EventParameters.Landmark;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using System.Collections.Generic;
@@ -52,6 +53,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
             SendEvent(LandmarkEventCode.SyncData, syncDataParameters);
+        }
+        internal void SendLandmarkRoomEvent(LandmarkRoom landmarkRoom, LandmarkRoomEventCode eventCode, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> eventData = new Dictionary<byte, object>
+            {
+                { (byte)LandmarkRoomEventParameterCode.LandmarkRoomID, landmark.LandmarkID },
+                { (byte)LandmarkRoomEventParameterCode.EventCode, (byte)eventCode },
+                { (byte)LandmarkRoomEventParameterCode.Parameters, parameters }
+            };
+            SendEvent(LandmarkEventCode.LandmarkRoomEvent, eventData);
         }
     }
 }
