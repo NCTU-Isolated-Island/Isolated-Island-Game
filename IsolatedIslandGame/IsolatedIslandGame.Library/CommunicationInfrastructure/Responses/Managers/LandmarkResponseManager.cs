@@ -1,9 +1,10 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.LandmarkResponseHandlers;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using IsolatedIslandGame.Protocol.Communication.ResponseParameters.Landmark;
 using System.Collections.Generic;
-using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers
 {
@@ -39,6 +40,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
         internal void SendResponse(CommunicationInterface communicationInterface, LandmarkOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
         {
             SystemManager.Instance.ResponseManager.SendLandmarkResponse(communicationInterface, landmark, operationCode, errorCode, debugMessage, parameters);
+        }
+        public void SendLandmarkRoomResponse(CommunicationInterface communicationInterface, LandmarkRoom landmarkRoom, LandmarkRoomOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> responseData = new Dictionary<byte, object>
+            {
+                { (byte)LandmarkRoomResponseParameterCode.LandmarkRoomID, landmarkRoom.LandmarkRoomID },
+                { (byte)LandmarkRoomResponseParameterCode.OperationCode, (byte)operationCode },
+                { (byte)LandmarkRoomResponseParameterCode.ReturnCode, (short)errorCode },
+                { (byte)LandmarkRoomResponseParameterCode.DebugMessage, debugMessage },
+                { (byte)LandmarkRoomResponseParameterCode.Parameters, parameters }
+            };
+            SendResponse(communicationInterface, LandmarkOperationCode.LandmarkRoomOperation, ErrorCode.NoError, null, responseData);
         }
     }
 }

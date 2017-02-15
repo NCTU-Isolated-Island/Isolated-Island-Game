@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         internal LandmarkRoomOperationManager(LandmarkRoom landmarkRoom)
         {
             this.landmarkRoom = landmarkRoom;
-            FetchDataResolver = new LandmarkRoomFetchDataResolver(landmark);
+            FetchDataResolver = new LandmarkRoomFetchDataResolver(landmarkRoom);
             operationTable = new Dictionary<LandmarkRoomOperationCode, LandmarkRoomOperationHandler>
             {
                 { LandmarkRoomOperationCode.FetchData, FetchDataResolver },

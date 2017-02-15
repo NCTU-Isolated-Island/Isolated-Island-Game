@@ -41,7 +41,7 @@ namespace IsolatedIslandGame.Library.Landmarks
 
             EventManager = new LandmarkRoomEventManager(this);
             OperationManager = new LandmarkRoomOperationManager(this);
-            ResponseManager = new LandmarRoomkResponseManager(this);
+            ResponseManager = new LandmarkRoomResponseManager(this);
         }
         public void BindLandmark(Landmark landmark)
         {
