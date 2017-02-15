@@ -87,6 +87,8 @@ public class FriendUIManager : MonoBehaviour {
                     tmp.transform.parent = friendSetContent.transform;
                     tmp.gameObject.GetComponent<ConfirmedFriendSetBehavior>().information = friendInformation;
                 }
+
+                tmp.GetComponent<RectTransform>().localScale = Vector2.one;
                 // Write info into prefab
 
                 Text friendName = tmp.transform.FindChild("FriendName").GetComponent<Text>();

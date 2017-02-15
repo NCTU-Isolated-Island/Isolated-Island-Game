@@ -60,6 +60,7 @@ public class BluePrintUIManager : MonoBehaviour {
             // Show BluePrint in UI
             GameObject tmp = Instantiate(bluePrintSet);
             tmp.transform.parent = bluePrintSetContent.transform;
+            tmp.GetComponent<RectTransform>().localScale = Vector2.one;
 
             Image[] material = new Image[3];
             for (int i = 0; i < 3; i++)

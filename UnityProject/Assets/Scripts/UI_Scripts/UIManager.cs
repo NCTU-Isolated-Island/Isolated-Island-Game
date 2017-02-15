@@ -50,9 +50,8 @@ public class UIManager : MonoBehaviour
     }
 
     public void SwapPage(UIPageType nextPage)
-    {      
-        if (PageStack.Peek() != UIPageType.Login)
-            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+    {
+        if (nextPage == PageStack.Peek()) return;
 
         if (nextPage == UIPageType.Inventory)
         {
@@ -72,7 +71,11 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
+        if (PageStack.Peek() != UIPageType.Login)
+            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+
         PageStack.Push(nextPage);
+
         //RemoveCurrentPage();
     }
 
