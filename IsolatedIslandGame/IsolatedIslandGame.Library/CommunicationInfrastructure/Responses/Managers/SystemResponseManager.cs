@@ -1,8 +1,10 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.SystemResponseHandlers;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.ResponseParameters.User;
+using IsolatedIslandGame.Protocol.Communication.ResponseParameters.System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers
@@ -46,6 +48,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
                 { (byte)SystemResponseParameterCode.Parameters, parameters }
             };
             communicationInterface.SendResponse(UserOperationCode.SystemOperation, ErrorCode.NoError, null, responseData);
+        }
+        public void SendLandmarkResponse(CommunicationInterface communicationInterface, Landmark landmark, LandmarkOperationCode operationCode, ErrorCode errorCode, string debugMessage, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> responseData = new Dictionary<byte, object>
+            {
+                { (byte)LandmarkResponseParameterCode.LandmarkID, landmark.LandmarkID },
+                { (byte)LandmarkResponseParameterCode.OperationCode, (byte)operationCode },
+                { (byte)LandmarkResponseParameterCode.ReturnCode, (short)errorCode },
+                { (byte)LandmarkResponseParameterCode.DebugMessage, debugMessage },
+                { (byte)LandmarkResponseParameterCode.Parameters, parameters }
+            };
+            SendResponse(communicationInterface, SystemOperationCode.LandmarkOperation, ErrorCode.NoError, null, responseData);
         }
     }
 }

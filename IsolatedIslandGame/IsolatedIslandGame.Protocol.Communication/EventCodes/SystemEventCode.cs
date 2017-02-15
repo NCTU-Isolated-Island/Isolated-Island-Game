@@ -4,5 +4,6 @@
     {
         SyncData,
         IslandResetTodayMaterialRanking,
+        LandmarkEvent
     }
 }

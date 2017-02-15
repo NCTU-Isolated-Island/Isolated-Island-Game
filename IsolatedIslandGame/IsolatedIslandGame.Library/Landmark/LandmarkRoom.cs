@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IsolatedIslandGame.Library.Landmark
+namespace IsolatedIslandGame.Library.Landmarks
 {
     public class LandmarkRoom
     {

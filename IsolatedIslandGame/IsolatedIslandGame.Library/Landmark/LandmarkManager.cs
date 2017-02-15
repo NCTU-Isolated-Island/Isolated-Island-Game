@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IsolatedIslandGame.Library.Landmark
+namespace IsolatedIslandGame.Library.Landmarks
 {
-    public class LandmarkManager
+    public abstract class LandmarkManager
     {
         public static LandmarkManager Instance { get; private set; }
         public static void Initial(LandmarkManager landmarkManager)
@@ -18,6 +18,7 @@ namespace IsolatedIslandGame.Library.Landmark
         private event Action<Landmark> onLandmarkUpdated;
         public event Action<Landmark> OnLandmarkUpdated { add { onLandmarkUpdated += value; } remove { onLandmarkUpdated -= value; } }
 
+        protected LandmarkManager() { }
         public bool ContainsLandmark(int landmarkID)
         {
             return landmarkDictionary.ContainsKey(landmarkID);
