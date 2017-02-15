@@ -1,10 +1,11 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.LandmarkOperationHandlers;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
 using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using IsolatedIslandGame.Protocol.Communication.OperationParameters.Landmark;
 using System.Collections.Generic;
-using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers
 {
@@ -52,6 +53,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)FetchDataParameterCode.Parameters, parameters }
             };
             SendOperation(LandmarkOperationCode.FetchData, fetchDataParameters);
+        }
+        public void SendLandmarkRoomOperation(LandmarkRoom landmarkRoom, LandmarkRoomOperationCode operationCode, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
+            {
+                { (byte)LandmarkRoomOperationParameterCode.LandmarkRoomID, landmarkRoom.LandmarkRoomID },
+                { (byte)LandmarkRoomOperationParameterCode.OperationCode, operationCode },
+                { (byte)LandmarkRoomOperationParameterCode.Parameters, parameters }
+            };
+            SendOperation(LandmarkOperationCode.LandmarkRoomOperation, operationParameters);
         }
     }
 }

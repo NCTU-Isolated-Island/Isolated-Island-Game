@@ -5,26 +5,26 @@ using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System.Collections.Generic;
 
-namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.LandmarkOperationHandlers
+namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.LandmarkRoomOperationHandlers
 {
-    public class LandmarkFetchDataResolver : LandmarkOperationHandler
+    public class LandmarkRoomFetchDataResolver : LandmarkRoomOperationHandler
     {
-        internal readonly Dictionary<LandmarkFetchDataCode, LandmarkFetchDataHandler> fetchTable;
+        internal readonly Dictionary<LandmarkRoomFetchDataCode, LandmarkRoomFetchDataHandler> fetchTable;
 
-        public LandmarkFetchDataResolver(Landmark subject) : base(subject, 2)
+        public LandmarkRoomFetchDataResolver(LandmarkRoom subject) : base(subject, 2)
         {
-            fetchTable = new Dictionary<LandmarkFetchDataCode, LandmarkFetchDataHandler>
+            fetchTable = new Dictionary<LandmarkRoomFetchDataCode, LandmarkRoomFetchDataHandler>
             {
 
             };
         }
 
-        internal override bool Handle(CommunicationInterface communicationInterface, LandmarkOperationCode operationCode, Dictionary<byte, object> parameters)
+        internal override bool Handle(CommunicationInterface communicationInterface, LandmarkRoomOperationCode operationCode, Dictionary<byte, object> parameters)
         {
             if (base.Handle(communicationInterface, operationCode, parameters))
             {
                 string debugMessage;
-                LandmarkFetchDataCode fetchCode = (LandmarkFetchDataCode)parameters[(byte)FetchDataParameterCode.FetchDataCode];
+                LandmarkRoomFetchDataCode fetchCode = (LandmarkRoomFetchDataCode)parameters[(byte)FetchDataParameterCode.FetchDataCode];
                 Dictionary<byte, object> resolvedParameters = (Dictionary<byte, object>)parameters[(byte)FetchDataParameterCode.Parameters];
                 if (fetchTable.ContainsKey(fetchCode))
                 {
@@ -32,7 +32,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 }
                 else
                 {
-                    debugMessage = string.Format("Landmark Fetch Operation Not Exist Fetch Code: {0}", fetchCode);
+                    debugMessage = string.Format("LandmarkRoom Fetch Operation Not Exist Fetch Code: {0}", fetchCode);
                     SendError(communicationInterface, operationCode, ErrorCode.InvalidOperation, debugMessage);
                     return false;
                 }
@@ -43,9 +43,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             }
         }
 
-        internal void SendOperation(LandmarkFetchDataCode fetchCode, Dictionary<byte, object> parameters)
+        internal void SendOperation(LandmarkRoomFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            landmark.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+            landmarkRoom.OperationManager.SendFetchDataOperation(fetchCode, parameters);
         }
     }
 }
