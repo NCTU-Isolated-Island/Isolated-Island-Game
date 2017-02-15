@@ -13,8 +13,10 @@ public class TransactionManager : MonoBehaviour
 
     // Basic Usage Variable
     public static TransactionManager Instance { get; private set; }
-   
+
     // UI Variable
+    public GameObject TransactionUIPage;
+
     [SerializeField]
     private TransactionSlotBehavior[] MyTransactionItem;
     [SerializeField]
@@ -27,6 +29,14 @@ public class TransactionManager : MonoBehaviour
     private GameObject TransactionConfirmedPanel;
     [SerializeField]
     private GameObject ChooseAmountPanel;
+
+    [SerializeField]
+    private Button ConfirmTransactionButton;
+    [SerializeField]
+    private Button UnlockTransactionSlotButton;
+    [SerializeField]
+    private Button CancelTransactionButton;
+    //
 
     public Transaction thisTransaction;
 
@@ -118,23 +128,23 @@ public class TransactionManager : MonoBehaviour
         ReceiveTransactionRequestPanel.SetActive(true);
     }
 
-    IEnumerator OnReceiveTransactionRequest_PopUI(bool OnOff) // true to pop , false to move back
-    {
-        float pass_time = 0;
-        Vector3 ori = ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition;
-        while (pass_time < 0.5f)
-        {
-            if (OnOff == true)
-                ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition =
-                    Vector3.Lerp(ori, Vector3.zero, pass_time / 0.5f);
-            else
-                ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition =
-                    Vector3.Lerp(ori, new Vector3(0, 105, 0), pass_time / 0.5f);
+    //IEnumerator OnReceiveTransactionRequest_PopUI(bool OnOff) // true to pop , false to move back
+    //{
+    //    float pass_time = 0;
+    //    Vector3 ori = ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition;
+    //    while (pass_time < 0.5f)
+    //    {
+    //        if (OnOff == true)
+    //            ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition =
+    //                Vector3.Lerp(ori, Vector3.zero, pass_time / 0.5f);
+    //        else
+    //            ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition =
+    //                Vector3.Lerp(ori, new Vector3(0, 105, 0), pass_time / 0.5f);
 
-            pass_time += Time.deltaTime;
-            yield return null;
-        }
-    }
+    //        pass_time += Time.deltaTime;
+    //        yield return null;
+    //    }
+    //}
 
     public void AcceptTransaction()
     {
@@ -146,17 +156,17 @@ public class TransactionManager : MonoBehaviour
 
     public void OnTransactionStart(Transaction transaction)
     {
+        // Swap to Transaction Page
+        UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
+
         // Ui Init Setting
-        InitUISetting();
+        InitialSetting();
 
         // Event Register
         thisTransaction = transaction;
         thisTransaction.OnTransactionItemChange += OnTransactionItemChange;
         thisTransaction.OnTransactionConfirmStatusChange += OnTransactionConfirmStatusChange;
         thisTransaction.OnTransactionEnd += OnTransactionEnd;
-
-        // Swap to Transaction Page
-        UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
     }
 
     public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
@@ -175,6 +185,7 @@ public class TransactionManager : MonoBehaviour
             OpponentTransactionItem[index].item = info.Item;
             OpponentTransactionItem[index].itemImage.sprite = Resources.Load<Sprite>("2D/" + info.Item.ItemID);
             OpponentTransactionItem[index].amount = info.Count;
+            OpponentTransactionItem[index].amountText.text = info.Count.ToString();
         }
         else
         {
@@ -182,6 +193,7 @@ public class TransactionManager : MonoBehaviour
             MyTransactionItem[index].item = info.Item;
             MyTransactionItem[index].itemImage.sprite = Resources.Load<Sprite>("2D/" + info.Item.ItemID);
             MyTransactionItem[index].amount = info.Count;
+            MyTransactionItem[index].amountText.text = info.Count.ToString();
         }
     }
 
@@ -225,16 +237,18 @@ public class TransactionManager : MonoBehaviour
 
     private void LockTransactionItemSlot(TransactionSlotBehavior slot)
     {
-        Color tmp = slot.itemImage.color;
-        tmp.a = 0.5f;
-        slot.itemImage.color = tmp;
+        //Color tmp = slot.itemImage.color;
+        //tmp.a = 0.5f;
+        //slot.itemImage.color = tmp;
+        slot.gameObject.GetComponent<Button>().interactable = false;
     }
 
     private void UnLockTransactionItemSlot(TransactionSlotBehavior slot)
     {
-        Color tmp = slot.itemImage.color;
-        tmp.a = 1;
-        slot.itemImage.color = tmp;
+        //Color tmp = slot.itemImage.color;
+        //tmp.a = 1;
+        //slot.itemImage.color = tmp;
+        slot.gameObject.GetComponent<Button>().interactable = true;
     }
 
     public void OnTransactionEnd(int transactionID, bool isSuccessful)
@@ -276,28 +290,43 @@ public class TransactionManager : MonoBehaviour
     //    ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Remove, info);
     //}
 
-    public void PopConfirmedPanel()
-    {
-        TransactionConfirmedPanel.SetActive(true);
-    }
+    //public void PopConfirmedPanel()
+    //{
+    //    TransactionConfirmedPanel.SetActive(true);
+    //}
 
     // Setting
 
-    private void InitUISetting()
+    private void InitialSetting()
     {
-        foreach(TransactionSlotBehavior slot in MyTransactionItem)
+        foreach (TransactionSlotBehavior slot in MyTransactionItem)
         {
             slot.amount = 0;
             slot.item = null;
-            slot.itemImage = null;
+            slot.itemImage.sprite = null;
+            slot.amountText.text = "";
         }
         foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
         {
             slot.amount = 0;
             slot.item = null;
-            slot.itemImage = null;
+            slot.itemImage.sprite = null;
+            slot.amountText.text = "";
         }
         thisTransaction = null;
+
+        ConfirmTransactionButton.onClick.AddListener(delegate
+        {
+            ConfirmTransaction();
+        });
+        CancelTransactionButton.onClick.AddListener(delegate
+        {
+            CancelTransaction();
+        });
+        UnlockTransactionSlotButton.onClick.AddListener(delegate
+        {
+            UnLockTransaction();
+        });
     }
 
     // TESTING

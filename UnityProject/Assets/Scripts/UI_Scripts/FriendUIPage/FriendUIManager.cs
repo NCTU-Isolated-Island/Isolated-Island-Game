@@ -91,6 +91,12 @@ public class FriendUIManager : MonoBehaviour {
 
                 Text friendName = tmp.transform.FindChild("FriendName").GetComponent<Text>();
                 Text friendGroup = tmp.transform.FindChild("FriendGroup").GetComponent<Text>();
+                Text friendSpeech;
+                if (tmp.transform.FindChild("FriendSpeech") != null)
+                {
+                    friendSpeech = tmp.transform.FindChild("FriendSpeech").GetComponent<Text>();
+                    friendSpeech.text = friendInformation.signature;
+                }
 
                 friendName.text = friendInformation.nickname;
 
