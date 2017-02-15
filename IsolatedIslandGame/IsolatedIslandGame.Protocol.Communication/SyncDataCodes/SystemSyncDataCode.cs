@@ -9,6 +9,5 @@
         IslandTotalScoreUpdated,
         IslandTodayMaterialRankingUpdated,
         IslandPlayerScoreRankingUpdated,
-        LandmarkUpdated,
     }
 }

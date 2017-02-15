@@ -17,9 +17,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                List<Blueprint.ElementInfo>  elementInfos = ((Blueprint.ElementInfo[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfos]).ToList();
+                List<Blueprint.ElementInfo>  elementInfos = (SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfosDataByteArray])).ToList();
 
-                lock(subject.Inventory)
+                lock (subject.Inventory)
                 {
                     Blueprint blueprint = BlueprintManager.Instance.Blueprints.FirstOrDefault(x => !x.IsBlueprintRequired && x.IsSufficientRequirements(elementInfos));
                     if (blueprint != null)
@@ -65,23 +65,23 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                                 { (byte)SynthesizeMaterialResponseParameterCode.Requirements, blueprint.Requirements.ToArray() },
                                 { (byte)SynthesizeMaterialResponseParameterCode.Products, blueprint.Products.ToArray() }
                             };
-                            SendResponse(operationCode, responseParameters);
                             subject.User.EventManager.UserInform("成功", "合成成功。");
+                            SendResponse(operationCode, responseParameters);
                             return true;
                         }
                         else
                         {
                             LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, Player doesn't have these materials", subject.IdentityInformation);
-                            SendError(operationCode, ErrorCode.PermissionDeny, "you don't have the materials");
                             subject.User.EventManager.UserInform("失敗", "素材不足。");
+                            SendError(operationCode, ErrorCode.PermissionDeny, "you don't have the materials");
                             return false;
                         }
                     }
                     else
                     {
                         LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, there is no such a blueprint", subject.IdentityInformation);
-                        SendError(operationCode, ErrorCode.InvalidOperation, "there is no such a blueprint");
                         subject.User.EventManager.UserInform("失敗", "合成失敗。");
+                        SendError(operationCode, ErrorCode.InvalidOperation, "there is no such a blueprint");
                         return false;
                     }
                 }

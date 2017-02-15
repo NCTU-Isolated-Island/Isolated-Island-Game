@@ -9,41 +9,41 @@ namespace IsolatedIslandGame.Library.Landmark
         public int LandmarkRoomID { get; private set; }
         public string RoomName { get; private set; }
         public int HostPlayerID { get; private set; }
-        private Dictionary<int, MutiplayerSynthesizeParticipationInfo> mutiplayerSynthesizeParticipationInfoDictionary = new Dictionary<int, MutiplayerSynthesizeParticipationInfo>();
-        public IEnumerable<MutiplayerSynthesizeParticipationInfo> MutiplayerSynthesizeParticipationInfos { get { return mutiplayerSynthesizeParticipationInfoDictionary.Values.ToArray(); } }
+        private Dictionary<int, MutiplayerSynthesizeParticipantInfo> mutiplayerSynthesizeParticipantInfoDictionary = new Dictionary<int, MutiplayerSynthesizeParticipantInfo>();
+        public IEnumerable<MutiplayerSynthesizeParticipantInfo> MutiplayerSynthesizeParticipationInfos { get { return mutiplayerSynthesizeParticipantInfoDictionary.Values.ToArray(); } }
 
-        public delegate void MutiplayerSynthesizeParticipationInfoChangeEventHandler(DataChangeType changeType, MutiplayerSynthesizeParticipationInfo info);
-        private event MutiplayerSynthesizeParticipationInfoChangeEventHandler onMutiplayerSynthesizeParticipationInfoChange;
-        public event MutiplayerSynthesizeParticipationInfoChangeEventHandler OnMutiplayerSynthesizeParticipationInfoChange { add { onMutiplayerSynthesizeParticipationInfoChange += value; } remove { onMutiplayerSynthesizeParticipationInfoChange -= value; } }
+        public delegate void MutiplayerSynthesizeParticipantInfoChangeEventHandler(DataChangeType changeType, MutiplayerSynthesizeParticipantInfo info);
+        private event MutiplayerSynthesizeParticipantInfoChangeEventHandler onMutiplayerSynthesizeParticipantInfoChange;
+        public event MutiplayerSynthesizeParticipantInfoChangeEventHandler OnMutiplayerSynthesizeParticipantInfoChange { add { onMutiplayerSynthesizeParticipantInfoChange += value; } remove { onMutiplayerSynthesizeParticipantInfoChange -= value; } }
 
         public bool ContainsMutiplayerSynthesizeParticipant(int playerID)
         {
-            return mutiplayerSynthesizeParticipationInfoDictionary.ContainsKey(playerID);
+            return mutiplayerSynthesizeParticipantInfoDictionary.ContainsKey(playerID);
         }
-        public bool FindMutiplayerSynthesizeParticipationInfo(int playerID, out MutiplayerSynthesizeParticipationInfo info)
+        public bool FindMutiplayerSynthesizeParticipantInfo(int playerID, out MutiplayerSynthesizeParticipantInfo info)
         {
-            return mutiplayerSynthesizeParticipationInfoDictionary.TryGetValue(playerID, out info);
+            return mutiplayerSynthesizeParticipantInfoDictionary.TryGetValue(playerID, out info);
         }
-        public void LoadMutiplayerSynthesizeParticipationInfo(MutiplayerSynthesizeParticipationInfo info)
+        public void LoadMutiplayerSynthesizeParticipantInfo(MutiplayerSynthesizeParticipantInfo info)
         {
-            if (ContainsMutiplayerSynthesizeParticipant(info.playerID))
+            if (ContainsMutiplayerSynthesizeParticipant(info.participantPlayerID))
             {
-                mutiplayerSynthesizeParticipationInfoDictionary[info.playerID] = info;
-                onMutiplayerSynthesizeParticipationInfoChange?.Invoke(DataChangeType.Update, info);
+                mutiplayerSynthesizeParticipantInfoDictionary[info.participantPlayerID] = info;
+                onMutiplayerSynthesizeParticipantInfoChange?.Invoke(DataChangeType.Update, info);
             }
             else
             {
-                mutiplayerSynthesizeParticipationInfoDictionary.Add(info.playerID, info);
-                onMutiplayerSynthesizeParticipationInfoChange?.Invoke(DataChangeType.Add, info);
+                mutiplayerSynthesizeParticipantInfoDictionary.Add(info.participantPlayerID, info);
+                onMutiplayerSynthesizeParticipantInfoChange?.Invoke(DataChangeType.Add, info);
             }
         }
         public void RemoveMutiplayerSynthesizeParticipant(int playerID)
         {
             if (ContainsMutiplayerSynthesizeParticipant(playerID))
             {
-                MutiplayerSynthesizeParticipationInfo info = mutiplayerSynthesizeParticipationInfoDictionary[playerID];
-                mutiplayerSynthesizeParticipationInfoDictionary.Remove(playerID);
-                onMutiplayerSynthesizeParticipationInfoChange?.Invoke(DataChangeType.Remove, info);
+                MutiplayerSynthesizeParticipantInfo info = mutiplayerSynthesizeParticipantInfoDictionary[playerID];
+                mutiplayerSynthesizeParticipantInfoDictionary.Remove(playerID);
+                onMutiplayerSynthesizeParticipantInfoChange?.Invoke(DataChangeType.Remove, info);
             }
         }
     }

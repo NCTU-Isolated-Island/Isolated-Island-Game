@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace IsolatedIslandGame.Protocol.Communication.SyncDataCodes
+﻿namespace IsolatedIslandGame.Protocol.Communication.SyncDataCodes
 {
-    class LandmarkRoomSyncDataCode
+    public enum LandmarkRoomSyncDataCode : byte
     {
+        MutiplayerSynthesizeParticipationInfoChange
     }
 }

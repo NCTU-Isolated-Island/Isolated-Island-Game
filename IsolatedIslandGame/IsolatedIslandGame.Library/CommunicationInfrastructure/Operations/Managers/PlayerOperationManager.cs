@@ -142,7 +142,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)SynthesizeMaterialParameterCode.BlueprintElementInfos, elementInfos }
+                { (byte)SynthesizeMaterialParameterCode.BlueprintElementInfosDataByteArray, SerializationHelper.TypeSerialize(elementInfos) }
             };
             SendOperation(PlayerOperationCode.SynthesizeMaterial, parameters);
         }
