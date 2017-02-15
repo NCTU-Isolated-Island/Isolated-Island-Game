@@ -6,7 +6,6 @@ public class AreaDetector : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-
         if (other.tag == "AreaProbe")
         {
             if (!PlayerController.Instance.InArea.Contains(this.gameObject))
@@ -20,7 +19,6 @@ public class AreaDetector : MonoBehaviour {
             {
                 case "ABC":
                     break;
-
                 default:
                     break;
             }
