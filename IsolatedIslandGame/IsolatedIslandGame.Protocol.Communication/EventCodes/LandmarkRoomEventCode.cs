@@ -1,8 +1,7 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.EventCodes
 {
-    public enum LandmarkEventCode : byte
+    public enum LandmarkRoomEventCode : byte
     {
         SyncData,
-        LandmarkRoomEvent
     }
 }

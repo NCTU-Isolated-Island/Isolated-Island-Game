@@ -1,8 +1,7 @@
 ﻿namespace IsolatedIslandGame.Protocol.Communication.OperationCodes
 {
-    public enum LandmarkOperationCode : byte
+    public enum LandmarkRoomOperationCode : byte
     {
         FetchData,
-        LandmarkRoomOperation
     }
 }
