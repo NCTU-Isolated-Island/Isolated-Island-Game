@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     public void Login()
     {
         FacebookService.LoginWithFacbook();
-        //UserManager.Instance.User.OperationManager.PlayerIDLogin(23, "TestServer");
+       // UserManager.Instance.User.OperationManager.PlayerIDLogin(31, "TestServer");
     }
 
     void LoadItemGameObject()
@@ -395,12 +395,6 @@ public class GameManager : MonoBehaviour
                         GameObject userVesselGameObject;
                         if (VesselIDGameObject.TryGetValue(vessel.VesselID, out userVesselGameObject))
                         {
-
-							if(PlayerController.Instance.CurrentFocusPlayerGameObject == UserGameObject[vessel.OwnerPlayerID])
-							{
-								CameraManager.Instance.ToFarAnchor(PlayerGameObject);
-							}
-
                             UserGameObject.Remove(vessel.OwnerPlayerID);
                             VesselIDGameObject.Remove(vessel.VesselID);
                             UserDecoration.Remove(vessel.OwnerPlayerID);

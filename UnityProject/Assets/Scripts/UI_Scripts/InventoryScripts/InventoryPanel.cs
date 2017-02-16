@@ -93,9 +93,12 @@ public class InventoryPanel : MonoBehaviour
             Destroy(child.gameObject);
         }
         inventoryItemInfoBlockDictionary.Clear();
-        foreach(var info in inventory.ItemInfos)
+        foreach (var info in inventory.ItemInfos)
         {
             InventoryItemInfoBlock infoBlock = Instantiate(inventoryItemInfoBlockPrefab);
+            //
+            infoBlock.GetComponent<RectTransform>().localScale = Vector3.one;
+            //
             infoBlock.transform.SetParent(inventoryScrollViewContent);
             infoBlock.Initial(info, currentUsageType);
             inventoryItemInfoBlockDictionary.Add(info.InventoryItemInfoID, infoBlock);
