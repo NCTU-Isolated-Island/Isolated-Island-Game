@@ -395,6 +395,11 @@ public class GameManager : MonoBehaviour
                         GameObject userVesselGameObject;
                         if (VesselIDGameObject.TryGetValue(vessel.VesselID, out userVesselGameObject))
                         {
+							if(PlayerController.Instance.CurrentFocusPlayerGameObject == UserGameObject[vessel.OwnerPlayerID])
+							{
+								CameraManager.Instance.ToFarAnchor(PlayerGameObject);
+							}
+
                             UserGameObject.Remove(vessel.OwnerPlayerID);
                             VesselIDGameObject.Remove(vessel.VesselID);
                             UserDecoration.Remove(vessel.OwnerPlayerID);
