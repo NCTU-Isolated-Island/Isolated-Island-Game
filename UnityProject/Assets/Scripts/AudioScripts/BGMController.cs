@@ -28,6 +28,8 @@ public class BGMController : MonoBehaviour {
 
     public void ChangeBGM(string oceanName)
     {
+        if (BGMDictionary.ContainsKey(oceanName) == false) return;
+
         string nextBGMpath = BGMDictionary[oceanName];
 
         if (nextBGMpath == PrevBGMpath) return;
