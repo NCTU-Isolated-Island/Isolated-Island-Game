@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     public void Login()
     {
         FacebookService.LoginWithFacbook();
-        //UserManager.Instance.User.OperationManager.PlayerIDLogin(35, "TestServer");
+       // UserManager.Instance.User.OperationManager.PlayerIDLogin(31, "TestServer");
     }
 
     void LoadItemGameObject()

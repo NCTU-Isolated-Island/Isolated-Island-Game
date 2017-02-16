@@ -36,6 +36,7 @@ public class MissionUIManager : MonoBehaviour
         {
             UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
         }
+        LoadQuestList(null);
     }
 
     void RegisterPlayerEvents(Player player)
@@ -45,6 +46,7 @@ public class MissionUIManager : MonoBehaviour
 
     void LoadQuestList(QuestRecord obj)
     {
+        print("LoadQuestList");
         foreach (Transform questRecord in missionSetContent.transform)
         {
             Destroy(questRecord.gameObject);
@@ -57,8 +59,8 @@ public class MissionUIManager : MonoBehaviour
             Text missionName = tmp.transform.Find("MissionName").GetComponent<Text>();
             Text missionCountDown = tmp.transform.Find("MissionCountDown").GetComponent<Text>();
             Text missionType = tmp.transform.Find("MissionType").GetComponent<Text>();
-            Text missionLocation = tmp.transform.Find("MissionLocation").GetComponent<Text>();
-            Text missionPrize = tmp.transform.Find("MissionPrize").GetComponent<Text>();
+            //Text missionLocation = tmp.transform.Find("MissionLocation").GetComponent<Text>();
+            //Text missionPrize = tmp.transform.Find("MissionPrize").GetComponent<Text>();
 
             missionName.text = questRecord.Quest.QuestName;
             //missionCountDown = questRecord.Quest;
@@ -82,6 +84,8 @@ public class MissionUIManager : MonoBehaviour
             }
             //missionLocation.text = questRecord.Quest;
 
+            tmp.transform.SetParent(missionSetContent.transform);
+            tmp.transform.localScale = Vector3.one;
         }
     }
 }
