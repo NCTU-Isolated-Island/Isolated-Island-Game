@@ -102,6 +102,8 @@ public class InventoryPanel : MonoBehaviour
             infoBlock.transform.SetParent(inventoryScrollViewContent);
             infoBlock.Initial(info, currentUsageType);
             inventoryItemInfoBlockDictionary.Add(info.InventoryItemInfoID, infoBlock);
+			infoBlock.GetComponent<RectTransform>().localScale = Vector3.one;
+
         }
     }
     private void RenderInventoryItemInfoChange(DataChangeType changeType, InventoryItemInfo info)
