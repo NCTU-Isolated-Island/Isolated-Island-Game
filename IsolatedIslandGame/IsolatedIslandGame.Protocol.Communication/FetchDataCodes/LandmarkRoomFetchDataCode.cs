@@ -2,5 +2,6 @@
 {
     public enum LandmarkRoomFetchDataCode : byte
     {
+        AllMultiplayerSynthesizeParticipantInfos,
     }
 }

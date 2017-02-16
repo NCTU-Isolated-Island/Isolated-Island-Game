@@ -22,6 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             operationTable = new Dictionary<SystemOperationCode, SystemOperationHandler>
             {
                 { SystemOperationCode.FetchData, FetchDataResolver },
+                { SystemOperationCode.LandmarkOperation, new LandmarkOperationResolver(systemManager) },
             };
         }
 

@@ -7,12 +7,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 {
     public abstract class LandmarkOperationHandler
     {
-        protected Landmark landmark;
+        protected Landmark subject;
         protected int correctParameterCount;
 
         internal LandmarkOperationHandler(Landmark landmark, int correctParameterCount)
         {
-            this.landmark = landmark;
+            this.subject = landmark;
             this.correctParameterCount = correctParameterCount;
         }
 
@@ -46,11 +46,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             LogService.ErrorFormat("Error On Landmark Operation: {1}, ErrorCode: {2}, Debug Message: {3}", operationCode, errorCode, debugMessage);
             Dictionary<byte, object> parameters = new Dictionary<byte, object>();
-            landmark.ResponseManager.SendResponse(communicationInterface, operationCode, errorCode, debugMessage, parameters);
+            subject.ResponseManager.SendResponse(communicationInterface, operationCode, errorCode, debugMessage, parameters);
         }
         internal void SendResponse(CommunicationInterface communicationInterface, LandmarkOperationCode operationCode, Dictionary<byte, object> parameter)
         {
-            landmark.ResponseManager.SendResponse(communicationInterface, operationCode, ErrorCode.NoError, null, parameter);
+            subject.ResponseManager.SendResponse(communicationInterface, operationCode, ErrorCode.NoError, null, parameter);
         }
     }
 }

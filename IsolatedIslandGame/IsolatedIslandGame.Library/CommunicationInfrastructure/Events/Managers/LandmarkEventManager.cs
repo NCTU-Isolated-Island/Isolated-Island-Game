@@ -22,6 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             eventTable = new Dictionary<LandmarkEventCode, EventHandler<Landmark, LandmarkEventCode>>
             {
                 { LandmarkEventCode.SyncData, SyncDataResolver },
+                { LandmarkEventCode.LandmarkRoomEvent, new LandmarkRoomEventResolver(landmark) },
             };
         }
 

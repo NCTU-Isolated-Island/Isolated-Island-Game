@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             operationTable = new Dictionary<LandmarkOperationCode, ResponseHandler<Landmark, LandmarkOperationCode>>
             {
                 { LandmarkOperationCode.FetchData, new LandmarkFetchDataResponseResolver(landmark) },
+                { LandmarkOperationCode.LandmarkRoomOperation, new LandmarkRoomOperationResponseResolver(landmark) },
             };
         }
 

@@ -55,7 +55,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
         internal void SendOperation(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            systemManager.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+            subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
         }
 
         public void FetchItem(int itemID)

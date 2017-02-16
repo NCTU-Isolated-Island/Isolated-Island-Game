@@ -1,4 +1,5 @@
 ﻿using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
@@ -34,5 +35,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         public abstract bool ChangeTransactionItem(int playerID, int transactionID, DataChangeType changeType, TransactionItemInfo info);
         public abstract bool CancelTransaction(int playerID, int transactionID);
         public abstract bool ReadPlayerMessage(int playerID, int playerMessageID);
+        public abstract bool CreateLandmarkRoom(int playerID, string roomName, out LandmarkRoom room);
     }
 }

@@ -1,15 +1,15 @@
 ﻿using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
-using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.System;
+using IsolatedIslandGame.Protocol.Communication.FetchDataResponseParameters.Landmark;
 using System;
 using System.Collections.Generic;
 
-namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.SystemResponseHandlers.FetchDataResponseHandlers
+namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handlers.LandmarkResponseHandlers.FetchDataResponseHandlers
 {
-    class FetchAllLandmarksResponseHandler : FetchDataResponseHandler<SystemManager, SystemFetchDataCode>
+    class FetchAllLandmarkRoomsResponseHandler : FetchDataResponseHandler<Landmark, LandmarkFetchDataCode>
     {
-        public FetchAllLandmarksResponseHandler(SystemManager subject) : base(subject)
+        public FetchAllLandmarkRoomsResponseHandler(Landmark subject) : base(subject)
         {
         }
 
@@ -19,9 +19,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 2)
+                        if (parameters.Count != 3)
                         {
-                            LogService.ErrorFormat(string.Format("FetchAllLandmarksResponse Parameter Error, Parameter Count: {0}", parameters.Count));
+                            LogService.ErrorFormat(string.Format("FetchAllLandmarkRoomsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
                         }
                         else
@@ -31,29 +31,28 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     }
                 default:
                     {
-                        LogService.ErrorFormat("FetchAllLandmarksResponse Error DebugMessage: {0}", debugMessage);
+                        LogService.ErrorFormat("FetchAllLandmarkRoomsResponse Error DebugMessage: {0}", debugMessage);
                         return false;
                     }
             }
         }
 
-        public override bool Handle(SystemFetchDataCode fetchCode, ErrorCode returnCode, string fetchDebugMessage, Dictionary<byte, object> parameters)
+        public override bool Handle(LandmarkFetchDataCode fetchCode, ErrorCode returnCode, string fetchDebugMessage, Dictionary<byte, object> parameters)
         {
             if (base.Handle(fetchCode, returnCode, fetchDebugMessage, parameters))
             {
                 try
                 {
-                    int landmarkID = (int)parameters[(byte)FetchAllLandmarksResponseParameterCode.LandmarkID];
-                    string landmarkName = (string)parameters[(byte)FetchAllLandmarksResponseParameterCode.LandmarkName];
+                    int landmarkRoomID = (int)parameters[(byte)FetchAllLandmarkRoomsResponseParameterCode.LandmarkRoomID];
+                    string roomName = (string)parameters[(byte)FetchAllLandmarkRoomsResponseParameterCode.RoomName];
+                    int hostPlayerID = (int)parameters[(byte)FetchAllLandmarkRoomsResponseParameterCode.HostPlayerID];
 
-                    Landmark landmark = new Landmark(landmarkID, landmarkName);
-                    LandmarkManager.Instance.LoadLandmark(landmark);
-                    landmark.OperationManager.FetchDataResolver.FetchAllLandmarkRooms();
+                    subject.LoadRoom(new LandmarkRoom(landmarkRoomID, roomName, hostPlayerID));
                     return true;
                 }
                 catch (InvalidCastException ex)
                 {
-                    LogService.Error("FetchAllLandmarksResponse Parameter Cast Error");
+                    LogService.Error("FetchAllLandmarkRoomsResponse Parameter Cast Error");
                     LogService.Error(ex.Message);
                     LogService.Error(ex.StackTrace);
                     return false;

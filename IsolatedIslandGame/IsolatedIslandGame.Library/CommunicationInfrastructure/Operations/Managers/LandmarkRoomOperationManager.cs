@@ -1,10 +1,12 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.LandmarkRoomOperationHandlers;
+using IsolatedIslandGame.Library.Landmarks;
+using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
 using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+using IsolatedIslandGame.Protocol.Communication.OperationParameters.LandmarkRoom;
 using System.Collections.Generic;
-using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers
 {
@@ -21,6 +23,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             operationTable = new Dictionary<LandmarkRoomOperationCode, LandmarkRoomOperationHandler>
             {
                 { LandmarkRoomOperationCode.FetchData, FetchDataResolver },
+                { LandmarkRoomOperationCode.ExitRoom, new ExitRoomHandler(landmarkRoom) },
+                { LandmarkRoomOperationCode.KickParticipant, new KickParticipantHandler(landmarkRoom) },
+                { LandmarkRoomOperationCode.StartMultiplayerSynthesize, new StartMultiplayerSynthesizeHandler(landmarkRoom) },
+                { LandmarkRoomOperationCode.ChangeMultiplayerSynthesizeItem, new ChangeMultiplayerSynthesizeItemHandler(landmarkRoom) },
+                { LandmarkRoomOperationCode.ChangeMultiplayerSynthesizeCheckStatus, new ChangeMultiplayerSynthesizeCheckStatusHandler(landmarkRoom) },
             };
         }
 
@@ -52,6 +59,41 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)FetchDataParameterCode.Parameters, parameters }
             };
             SendOperation(LandmarkRoomOperationCode.FetchData, fetchDataParameters);
+        }
+
+        public void ExitRoom()
+        {
+            SendOperation(LandmarkRoomOperationCode.ExitRoom, new Dictionary<byte, object> { });
+        }
+        public void KickParticipant(int playerID)
+        {
+            Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
+            {
+                { (byte)KickParticipantParameterCode.ParticipantPlayerID, playerID },
+            };
+            SendOperation(LandmarkRoomOperationCode.KickParticipant, fetchDataParameters);
+        }
+        public void StartMultiplayerSynthesize()
+        {
+            SendOperation(LandmarkRoomOperationCode.StartMultiplayerSynthesize, new Dictionary<byte, object> { });
+        }
+        public void ChangeMultiplayerSynthesizeItem(DataChangeType changeType, int itemID, int itemCount)
+        {
+            Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
+            {
+                { (byte)ChangeMultiplayerSynthesizeItemParameterCode.DataChangeType, (byte)changeType },
+                { (byte)ChangeMultiplayerSynthesizeItemParameterCode.ItemID, itemID },
+                { (byte)ChangeMultiplayerSynthesizeItemParameterCode.ItemCount, itemCount }
+            };
+            SendOperation(LandmarkRoomOperationCode.ChangeMultiplayerSynthesizeItem, fetchDataParameters);
+        }
+        public void ChangeMultiplayerSynthesizeCheckStatus(int checkStatus)
+        {
+            Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
+            {
+                { (byte)ChangeMultiplayerSynthesizeCheckStatusParameterCode.CheckStatus, checkStatus },
+            };
+            SendOperation(LandmarkRoomOperationCode.ChangeMultiplayerSynthesizeCheckStatus, fetchDataParameters);
         }
     }
 }

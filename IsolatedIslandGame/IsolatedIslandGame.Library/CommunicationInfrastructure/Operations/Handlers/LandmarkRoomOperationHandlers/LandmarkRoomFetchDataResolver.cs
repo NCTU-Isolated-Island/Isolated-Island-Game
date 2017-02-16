@@ -15,7 +15,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             fetchTable = new Dictionary<LandmarkRoomFetchDataCode, LandmarkRoomFetchDataHandler>
             {
-
+                { LandmarkRoomFetchDataCode.AllMultiplayerSynthesizeParticipantInfos, new FetchAllMultiplayerSynthesizeParticipantInfosHandler(subject) }
             };
         }
 
@@ -45,7 +45,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
         internal void SendOperation(LandmarkRoomFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            landmarkRoom.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+            subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+        }
+
+        public void AllMultiplayerSynthesizeParticipantInfos()
+        {
+            SendOperation(LandmarkRoomFetchDataCode.AllMultiplayerSynthesizeParticipantInfos, new Dictionary<byte, object>());
         }
     }
 }

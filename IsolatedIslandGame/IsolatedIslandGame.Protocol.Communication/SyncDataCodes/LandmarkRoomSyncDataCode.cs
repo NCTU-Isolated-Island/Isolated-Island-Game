@@ -2,6 +2,6 @@
 {
     public enum LandmarkRoomSyncDataCode : byte
     {
-        MutiplayerSynthesizeParticipationInfoChange
+        MultiplayerSynthesizeParticipantInfoChange
     }
 }

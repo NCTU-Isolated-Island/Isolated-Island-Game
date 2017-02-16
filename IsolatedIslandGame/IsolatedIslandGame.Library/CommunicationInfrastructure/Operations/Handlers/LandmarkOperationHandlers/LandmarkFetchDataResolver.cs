@@ -1,4 +1,5 @@
-﻿using IsolatedIslandGame.Library.Landmarks;
+﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.LandmarkOperationHandlers.FetchDataHandlers;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.FetchDataCodes;
 using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
@@ -15,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             fetchTable = new Dictionary<LandmarkFetchDataCode, LandmarkFetchDataHandler>
             {
-
+                { LandmarkFetchDataCode.AllLandmarkRooms, new FetchAllLandmarkRoomsHandler(subject) }
             };
         }
 
@@ -45,7 +46,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
         internal void SendOperation(LandmarkFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            landmark.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+            subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+        }
+
+        public void FetchAllLandmarkRooms()
+        {
+            SendOperation(LandmarkFetchDataCode.AllLandmarkRooms, new Dictionary<byte, object>());
         }
     }
 }

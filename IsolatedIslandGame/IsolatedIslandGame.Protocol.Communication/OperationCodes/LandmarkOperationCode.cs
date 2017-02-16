@@ -3,6 +3,8 @@
     public enum LandmarkOperationCode : byte
     {
         FetchData,
-        LandmarkRoomOperation
+        LandmarkRoomOperation,
+        CreateLandmarkRoom,
+        EnterLandmarkRoom
     }
 }

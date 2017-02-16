@@ -22,6 +22,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             operationTable = new Dictionary<LandmarkOperationCode, LandmarkOperationHandler>
             {
                 { LandmarkOperationCode.FetchData, FetchDataResolver },
+                { LandmarkOperationCode.LandmarkRoomOperation, new LandmarkRoomOperationResolver(landmark) },
+                { LandmarkOperationCode.CreateLandmarkRoom, new CreateLandmarkRoomHandler(landmark) },
+                { LandmarkOperationCode.EnterLandmarkRoom, new EnterLandmarkRoomHandler(landmark) },
             };
         }
 
@@ -63,6 +66,22 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)LandmarkRoomOperationParameterCode.Parameters, parameters }
             };
             SendOperation(LandmarkOperationCode.LandmarkRoomOperation, operationParameters);
+        }
+        public void CreateLandmarkRoom(string roomName)
+        {
+            Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
+            {
+                { (byte)CreateLandmarkRoomParameterCode.RoomName, roomName }
+            };
+            SendOperation(LandmarkOperationCode.CreateLandmarkRoom, operationParameters);
+        }
+        public void EnterLandmarkRoom(int landmarkRoomID)
+        {
+            Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
+            {
+                { (byte)EnterLandmarkRoomParameterCode.LandmarkRoomID, landmarkRoomID }
+            };
+            SendOperation(LandmarkOperationCode.EnterLandmarkRoom, operationParameters);
         }
     }
 }

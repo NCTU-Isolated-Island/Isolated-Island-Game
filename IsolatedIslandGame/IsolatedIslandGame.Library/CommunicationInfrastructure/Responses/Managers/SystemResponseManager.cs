@@ -20,6 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Manag
             operationTable = new Dictionary<SystemOperationCode, ResponseHandler<SystemManager, SystemOperationCode>>
             {
                 { SystemOperationCode.FetchData, new SystemFetchDataResponseResolver(systemManager) },
+                { SystemOperationCode.LandmarkOperation, new LandmarkOperationResponseResolver(systemManager) },
             };
         }
 
