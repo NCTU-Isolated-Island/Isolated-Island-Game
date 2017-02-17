@@ -17,6 +17,45 @@ public class MissionUIManager : MonoBehaviour
     private GameObject missionSet;
     [SerializeField]
     private GameObject missionSetContent;
+
+    //
+
+    [SerializeField]
+    private GameObject missionDetailScrollView;
+    [SerializeField]
+    private GameObject missionDetailContent;
+    [SerializeField]
+    private GameObject missionPrizeContent;
+    [SerializeField]
+    private GameObject missionPrizeSet;
+
+    //
+
+    public void OpenMissionDetailPage(Quest quest)
+    {
+        missionDetailScrollView.SetActive(true);
+
+        Text missionName = missionDetailContent.transform.Find("MissionName").GetComponent<Text>();
+        //Text missionCountDown = missionDetailContent.transform.Find("MissionCountDown").GetComponent<Text>();
+        Text missionDescription = missionDetailContent.transform.Find("MissionDescription").GetComponent<Text>();
+
+        missionName.text = quest.QuestName;
+        missionDescription.text = quest.QuestDescription;
+
+        foreach( QuestReward prize in quest.Rewards )
+        {
+            if(prize.QuestRewardType == QuestRewardType.GiveItem)
+            {
+                GameObject tmp = Instantiate(missionPrizeSet);
+                tmp.transform.SetParent(missionPrizeContent.transform);
+                Item item;
+                ItemManager.Instance.FindItem(prize.QuestRewardID, out item);
+                tmp.transform.Find("prizeItemName").GetComponent<Text>().text = item.ItemName;
+            }
+        }
+
+        // Add Detail Page Listener
+    }
     //
 
     void Awake()
@@ -46,7 +85,7 @@ public class MissionUIManager : MonoBehaviour
 
     void LoadQuestList(QuestRecord obj)
     {
-        print("LoadQuestList");
+        //print("LoadQuestList");
         foreach (Transform questRecord in missionSetContent.transform)
         {
             Destroy(questRecord.gameObject);
@@ -55,7 +94,9 @@ public class MissionUIManager : MonoBehaviour
         foreach (QuestRecord questRecord in UserManager.Instance.User.Player.QuestRecords)
         {
             GameObject tmp = Instantiate(missionSet);
-
+            //
+            tmp.GetComponent<MissionSetBehavior>().SetQuestInfo(questRecord.Quest);
+            //
             Text missionName = tmp.transform.Find("MissionName").GetComponent<Text>();
             Text missionCountDown = tmp.transform.Find("MissionCountDown").GetComponent<Text>();
             Text missionType = tmp.transform.Find("MissionType").GetComponent<Text>();

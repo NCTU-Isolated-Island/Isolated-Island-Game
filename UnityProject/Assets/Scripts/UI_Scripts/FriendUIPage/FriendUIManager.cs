@@ -63,7 +63,7 @@ public class FriendUIManager : MonoBehaviour {
 
     public void LoadFriends()
     {
-        print("Loading Friends");
+        //print("Loading Friends");
         foreach(Transform renderedFriend in friendSetContent.transform)
         {
             Destroy(renderedFriend.gameObject);
