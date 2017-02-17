@@ -42,15 +42,22 @@ public class MissionUIManager : MonoBehaviour
         missionName.text = quest.QuestName;
         missionDescription.text = quest.QuestDescription;
 
-        foreach( QuestReward prize in quest.Rewards )
+        foreach (Transform trash in missionPrizeContent.transform)
         {
-            if(prize.QuestRewardType == QuestRewardType.GiveItem)
+            Destroy(trash.gameObject);
+        }
+
+        foreach (QuestReward prize in quest.Rewards)
+        {
+            if (prize.QuestRewardType == QuestRewardType.GiveItem)
             {
                 GameObject tmp = Instantiate(missionPrizeSet);
                 tmp.transform.SetParent(missionPrizeContent.transform);
                 Item item;
                 ItemManager.Instance.FindItem(prize.QuestRewardID, out item);
                 tmp.transform.Find("prizeItemName").GetComponent<Text>().text = item.ItemName;
+
+                tmp.transform.localScale = Vector3.one;
             }
         }
 

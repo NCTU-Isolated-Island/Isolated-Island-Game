@@ -73,12 +73,14 @@ public class CombineUIManager : MonoBehaviour {
         }
         UserManager.Instance.User.Player.OperationManager.SynthesizeMaterial(materialInfos.ToArray());
 
-        foreach (var material in materialInfos)
-            print(material.positionIndex + " " + material.itemID);
+        //foreach (var material in materialInfos)
+        //    print(material.positionIndex + " " + material.itemID);
     }
 
     public void OnSynthesizeMaterialResponse(ErrorCode returnCode, Blueprint.ElementInfo[] requirements, Blueprint.ElementInfo[] products)
     {
+        print("Receive Systhesize Response");
+
         if (returnCode == ErrorCode.NoError)
         {
             combineResultImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + products[0].itemID);
