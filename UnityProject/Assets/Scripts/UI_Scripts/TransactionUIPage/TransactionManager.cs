@@ -277,7 +277,7 @@ public class TransactionManager : MonoBehaviour
     {
         //if (thisTransaction.IsLocked) return;
 
-        if (MyTransactionItem[info.PositionIndex].item == null)
+        if (MyTransactionItem[info.PositionIndex].amount == 0)
             ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Add, info);
         else
             ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Update, info);
@@ -313,7 +313,6 @@ public class TransactionManager : MonoBehaviour
             slot.itemImage.sprite = null;
             slot.amountText.text = "";
         }
-        thisTransaction = null;
 
         ConfirmTransactionButton.onClick.AddListener(delegate
         {
