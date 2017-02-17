@@ -77,11 +77,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         {
             SendOperation(LandmarkRoomOperationCode.StartMultiplayerSynthesize, new Dictionary<byte, object> { });
         }
-        public void ChangeMultiplayerSynthesizeItem(DataChangeType changeType, int itemID, int itemCount)
+        public void ChangeMultiplayerSynthesizeItem(int itemID, int itemCount)
         {
             Dictionary<byte, object> fetchDataParameters = new Dictionary<byte, object>
             {
-                { (byte)ChangeMultiplayerSynthesizeItemParameterCode.DataChangeType, (byte)changeType },
                 { (byte)ChangeMultiplayerSynthesizeItemParameterCode.ItemID, itemID },
                 { (byte)ChangeMultiplayerSynthesizeItemParameterCode.ItemCount, itemCount }
             };

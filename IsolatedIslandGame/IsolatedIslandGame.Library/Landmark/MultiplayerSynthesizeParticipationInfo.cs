@@ -1,6 +1,6 @@
 ﻿namespace IsolatedIslandGame.Library.Landmarks
 {
-    public struct MutiplayerSynthesizeParticipantInfo
+    public struct MultiplayerSynthesizeParticipantInfo
     {
         public int participantPlayerID;
         public int providedItemID;

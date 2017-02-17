@@ -22,7 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     LandmarkRoom room;
                     if (subject.FindRoom(landmarkRoomID, out room))
                     {
-                        room.LoadMutiplayerSynthesizeParticipantInfo(new MutiplayerSynthesizeParticipantInfo
+                        room.LoadMutiplayerSynthesizeParticipantInfo(new MultiplayerSynthesizeParticipantInfo
                         {
                             participantPlayerID = communicationInterface.User.Player.PlayerID,
                             providedItemID = 0,

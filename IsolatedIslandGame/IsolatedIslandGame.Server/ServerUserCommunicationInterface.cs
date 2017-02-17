@@ -9,6 +9,7 @@ using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
 using System;
+using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Server
 {
@@ -207,6 +208,11 @@ namespace IsolatedIslandGame.Server
             {
                 return false;
             }
+        }
+
+        public override bool CreateLandmarkRoom(int playerID, string roomName, out LandmarkRoom room)
+        {
+            throw new NotImplementedException();
         }
     }
 }

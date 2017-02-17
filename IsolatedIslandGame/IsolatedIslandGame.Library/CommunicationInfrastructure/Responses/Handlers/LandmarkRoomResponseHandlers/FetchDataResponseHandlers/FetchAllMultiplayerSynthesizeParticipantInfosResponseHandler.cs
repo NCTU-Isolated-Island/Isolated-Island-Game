@@ -48,7 +48,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     int providedItemCount = (int)parameters[(byte)FetchAllMultiplayerSynthesizeParticipantInfosResponseParameterCode.ProvidedItemCount];
                     bool isChecked = (bool)parameters[(byte)FetchAllMultiplayerSynthesizeParticipantInfosResponseParameterCode.IsChecked];
 
-                    subject.LoadMutiplayerSynthesizeParticipantInfo(new MutiplayerSynthesizeParticipantInfo
+                    subject.LoadMutiplayerSynthesizeParticipantInfo(new MultiplayerSynthesizeParticipantInfo
                     {
                         participantPlayerID = participantPlayerID,
                         providedItemID = providedItemID,

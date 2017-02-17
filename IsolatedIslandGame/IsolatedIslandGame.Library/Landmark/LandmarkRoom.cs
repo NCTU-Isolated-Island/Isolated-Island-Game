@@ -14,8 +14,10 @@ namespace IsolatedIslandGame.Library.Landmarks
         public string RoomName { get; private set; }
         public int HostPlayerID { get; private set; }
         public Landmark Landmark { get; private set; }
-        private Dictionary<int, MutiplayerSynthesizeParticipantInfo> mutiplayerSynthesizeParticipantInfoDictionary = new Dictionary<int, MutiplayerSynthesizeParticipantInfo>();
-        public IEnumerable<MutiplayerSynthesizeParticipantInfo> MutiplayerSynthesizeParticipationInfos { get { return mutiplayerSynthesizeParticipantInfoDictionary.Values.ToArray(); } }
+        private Dictionary<int, MultiplayerSynthesizeParticipantInfo> mutiplayerSynthesizeParticipantInfoDictionary = new Dictionary<int, MultiplayerSynthesizeParticipantInfo>();
+        public IEnumerable<MultiplayerSynthesizeParticipantInfo> MutiplayerSynthesizeParticipationInfos { get { return mutiplayerSynthesizeParticipantInfoDictionary.Values.ToArray(); } }
+        public bool CanStartMultiplayerSynthesize { get { return MutiplayerSynthesizeParticipationInfos.All(x => x.isChecked || x.participantPlayerID == HostPlayerID); } }
+
 
         public LandmarkRoomEventManager EventManager { get; private set; }
         public LandmarkRoomOperationManager OperationManager { get; private set; }
@@ -29,9 +31,12 @@ namespace IsolatedIslandGame.Library.Landmarks
             }
         }
 
-        public delegate void MutiplayerSynthesizeParticipantInfoChangeEventHandler(DataChangeType changeType, MutiplayerSynthesizeParticipantInfo info);
+        public delegate void MutiplayerSynthesizeParticipantInfoChangeEventHandler(DataChangeType changeType, MultiplayerSynthesizeParticipantInfo info);
         private event MutiplayerSynthesizeParticipantInfoChangeEventHandler onMutiplayerSynthesizeParticipantInfoChange;
         public event MutiplayerSynthesizeParticipantInfoChangeEventHandler OnMutiplayerSynthesizeParticipantInfoChange { add { onMutiplayerSynthesizeParticipantInfoChange += value; } remove { onMutiplayerSynthesizeParticipantInfoChange -= value; } }
+
+        private event Action<LandmarkRoom> onStartMultiplayerSynthesize;
+        public event Action<LandmarkRoom> OnStartMultiplayerSynthesize { add { onStartMultiplayerSynthesize += value; } remove { onStartMultiplayerSynthesize -= value; } }
 
         public LandmarkRoom(int landmarkRoomID, string roomName, int hostPlayerID)
         {
@@ -51,11 +56,11 @@ namespace IsolatedIslandGame.Library.Landmarks
         {
             return mutiplayerSynthesizeParticipantInfoDictionary.ContainsKey(playerID);
         }
-        public bool FindMutiplayerSynthesizeParticipantInfo(int playerID, out MutiplayerSynthesizeParticipantInfo info)
+        public bool FindMutiplayerSynthesizeParticipantInfo(int playerID, out MultiplayerSynthesizeParticipantInfo info)
         {
             return mutiplayerSynthesizeParticipantInfoDictionary.TryGetValue(playerID, out info);
         }
-        public void LoadMutiplayerSynthesizeParticipantInfo(MutiplayerSynthesizeParticipantInfo info)
+        public void LoadMutiplayerSynthesizeParticipantInfo(MultiplayerSynthesizeParticipantInfo info)
         {
             if (ContainsMutiplayerSynthesizeParticipant(info.participantPlayerID))
             {
@@ -72,9 +77,16 @@ namespace IsolatedIslandGame.Library.Landmarks
         {
             if (ContainsMutiplayerSynthesizeParticipant(playerID))
             {
-                MutiplayerSynthesizeParticipantInfo info = mutiplayerSynthesizeParticipantInfoDictionary[playerID];
+                MultiplayerSynthesizeParticipantInfo info = mutiplayerSynthesizeParticipantInfoDictionary[playerID];
                 mutiplayerSynthesizeParticipantInfoDictionary.Remove(playerID);
                 onMutiplayerSynthesizeParticipantInfoChange?.Invoke(DataChangeType.Remove, info);
+            }
+        }
+        public void StartMultiplayerSynthesize()
+        {
+            if(CanStartMultiplayerSynthesize)
+            {
+                onStartMultiplayerSynthesize?.Invoke(this);
             }
         }
     }

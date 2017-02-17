@@ -1,4 +1,5 @@
-﻿using IsolatedIslandGame.Library.Landmarks;
+﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.LandmarkRoomEventHandlers.SyncDataHandlers;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
@@ -19,7 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             subject.EventManager.SendSyncDataEvent(syncCode, parameters);
         }
 
-        public void SyncMultiplayerSynthesizeParticipantInfoChange(DataChangeType changeType, MutiplayerSynthesizeParticipantInfo info)
+        public void SyncMultiplayerSynthesizeParticipantInfoChange(DataChangeType changeType, MultiplayerSynthesizeParticipantInfo info)
         {
             PlayerInformation playerInformation;
             if (PlayerInformationManager.Instance.FindPlayerInformation(info.participantPlayerID, out playerInformation))

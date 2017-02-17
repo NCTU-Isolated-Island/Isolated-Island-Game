@@ -9,12 +9,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 {
     internal abstract class LandmarkRoomFetchDataHandler
     {
-        protected LandmarkRoom landmarkRoom;
+        protected LandmarkRoom subject;
         protected int correctParameterCount;
 
         public LandmarkRoomFetchDataHandler(LandmarkRoom landmarkRoom, int correctParameterCount)
         {
-            this.landmarkRoom = landmarkRoom;
+            this.subject = landmarkRoom;
             this.correctParameterCount = correctParameterCount;
         }
 
@@ -55,7 +55,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { (byte)FetchDataResponseParameterCode.Parameters, new Dictionary<byte, object>() }
             };
             LogService.ErrorFormat("Error On LandmarkRoom Fetch Operation: {0}, ErrorCode:{1}, Debug Message: {2}", fetchCode, errorCode, debugMessage);
-            landmarkRoom.ResponseManager.SendResponse(communicationInterface, LandmarkRoomOperationCode.FetchData, ErrorCode.NoError, null, eventData);
+            subject.ResponseManager.SendResponse(communicationInterface, LandmarkRoomOperationCode.FetchData, ErrorCode.NoError, null, eventData);
         }
 
         public void SendResponse(CommunicationInterface communicationInterface, LandmarkRoomFetchDataCode fetchCode, Dictionary<byte, object> parameters)
@@ -67,7 +67,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { (byte)FetchDataResponseParameterCode.DebugMessage, null },
                 { (byte)FetchDataResponseParameterCode.Parameters, parameters }
             };
-            landmarkRoom.ResponseManager.SendResponse(communicationInterface, LandmarkRoomOperationCode.FetchData, ErrorCode.NoError, null, eventData);
+            subject.ResponseManager.SendResponse(communicationInterface, LandmarkRoomOperationCode.FetchData, ErrorCode.NoError, null, eventData);
         }
     }
 }
