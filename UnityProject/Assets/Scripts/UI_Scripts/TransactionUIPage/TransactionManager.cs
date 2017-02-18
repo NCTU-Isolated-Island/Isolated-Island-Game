@@ -44,13 +44,12 @@ public class TransactionManager : MonoBehaviour
 
     private int opponentPlayerID;
 
-    //TEST
     //void Update()
     //{
     //    if (Input.GetKeyDown(KeyCode.T))
-    //        UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
+    //        SendTransactionRequest(23);
     //}
-    //
+
 
     void Awake()
     {
@@ -74,12 +73,6 @@ public class TransactionManager : MonoBehaviour
             UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
         }
     }
-    // Add to Initialize UI everytime a new transaction occurs
-    void OnEnable()
-    {
-        InitialSetting();
-    }
-    //
 
     public void PutInItemFromInventory(Item puttingItem)
     {
@@ -325,19 +318,6 @@ public class TransactionManager : MonoBehaviour
             slot.itemImage.sprite = null;
             slot.amountText.text = "";
         }
-
-        ConfirmTransactionButton.onClick.AddListener(delegate
-        {
-            ConfirmTransaction();
-        });
-        CancelTransactionButton.onClick.AddListener(delegate
-        {
-            CancelTransaction();
-        });
-        UnlockTransactionSlotButton.onClick.AddListener(delegate
-        {
-            UnLockTransaction();
-        });
     }
 
     // TESTING
