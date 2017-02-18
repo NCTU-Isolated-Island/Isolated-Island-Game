@@ -29,6 +29,8 @@ public class MissionUIManager : MonoBehaviour
     [SerializeField]
     private GameObject missionPrizeSet;
 
+    private Quest viewingQuest;
+
     //
 
     public void OpenMissionDetailPage(Quest quest)
@@ -49,19 +51,31 @@ public class MissionUIManager : MonoBehaviour
 
         foreach (QuestReward prize in quest.Rewards)
         {
+            print(prize.Description);
+            GameObject tmp = Instantiate(missionPrizeSet);
+            tmp.transform.SetParent(missionPrizeContent.transform);
+
             if (prize.QuestRewardType == QuestRewardType.GiveItem)
             {
-                GameObject tmp = Instantiate(missionPrizeSet);
-                tmp.transform.SetParent(missionPrizeContent.transform);
                 Item item;
                 ItemManager.Instance.FindItem(prize.QuestRewardID, out item);
-                tmp.transform.Find("prizeItemName").GetComponent<Text>().text = item.ItemName;
 
-                tmp.transform.localScale = Vector3.one;
+                tmp.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + item.ItemID);
+                //tmp.transform.Find("prizeItemName").GetComponent<Text>().text = item.ItemName;
+                tmp.transform.Find("prizeItemName").GetComponent<Text>().text = prize.Description;
             }
+            else if (prize.QuestRewardType == QuestRewardType.UnlockBlueprint)
+            {
+                // give a blurprint sprite
+                tmp.GetComponent<Image>().sprite = null;
+                //tmp.transform.Find("prizeItemName").GetComponent<Text>().text = "解鎖藍圖";
+                tmp.transform.Find("prizeItemName").GetComponent<Text>().text = prize.Description;
+            }
+            tmp.transform.localScale = Vector3.one;
         }
 
         // Add Detail Page Listener
+        viewingQuest = quest;
     }
     //
 
@@ -135,5 +149,11 @@ public class MissionUIManager : MonoBehaviour
             tmp.transform.SetParent(missionSetContent.transform);
             tmp.transform.localScale = Vector3.one;
         }
+    }
+
+    public void AcceptQuest()
+    {
+        throw new NotImplementedException();
+        // TODO : let player accept this quest
     }
 }

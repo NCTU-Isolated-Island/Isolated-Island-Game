@@ -74,7 +74,7 @@ public class TransactionManager : MonoBehaviour
             UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
         }
     }
-
+    // Add to Initialize UI everytime a new transaction occurs
     void OnEnable()
     {
         InitialSetting();

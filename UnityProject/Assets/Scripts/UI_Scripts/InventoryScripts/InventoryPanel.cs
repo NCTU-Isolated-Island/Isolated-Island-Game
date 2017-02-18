@@ -56,8 +56,13 @@ public class InventoryPanel : MonoBehaviour
 
     public void ClosePanel()
     {
+        // Special case dealing base on UI layer issue
+        if (currentUsageType == InventoryUsageType.PutInTransactionSlot)
+            TransactionManager.Instance.TransactionUIPage.SetActive(true);
+
         UIManager.Instance.ToPreviousPage();
     }
+
     public void ShowItemInfoDetail(InventoryItemInfo info)
     {
         ItemInfoDetailPanel itemInfoDetailPanel = Instantiate(itemInfoDetailPanelPrefab);
