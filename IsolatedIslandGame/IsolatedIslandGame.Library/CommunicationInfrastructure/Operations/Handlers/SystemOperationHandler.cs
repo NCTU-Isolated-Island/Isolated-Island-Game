@@ -43,7 +43,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         }
         internal void SendError(CommunicationInterface communicationInterface, SystemOperationCode operationCode, ErrorCode errorCode, string debugMessage)
         {
-            LogService.ErrorFormat("Error On System Operation: {1}, ErrorCode: {2}, Debug Message: {3}",operationCode, errorCode, debugMessage);
+            LogService.ErrorFormat("Error On System Operation: {0}, ErrorCode: {1}, Debug Message: {2}",operationCode, errorCode, debugMessage);
             Dictionary<byte, object> parameters = new Dictionary<byte, object>();
             subject.ResponseManager.SendResponse(communicationInterface, operationCode, errorCode, debugMessage, parameters);
         }

@@ -8,17 +8,17 @@ namespace IsolatedIslandGame.Server
     {
         public LandmarkFactory()
         {
-            OnLandmarkUpdated += AssemblyLandmark;
+            OnLandmarkUpdated += AssembleLandmark;
 
             DatabaseService.RepositoryList.LandmarkRepository.ListAll().ForEach(x => LoadLandmark(x));
         }
 
-        private void AssemblyLandmark(Landmark landmark)
+        private void AssembleLandmark(Landmark landmark)
         {
             landmark.OnLandmarkRoomChange += landmark.EventManager.SyncDataResolver.SyncLandmarkRoomChange;
-            landmark.OnLandmarkRoomChange += DynamicAssemblyLandmarkRoom;
+            landmark.OnLandmarkRoomChange += DynamicAssembleLandmarkRoom;
         }
-        private void DynamicAssemblyLandmarkRoom(DataChangeType changeType, LandmarkRoom room)
+        private void DynamicAssembleLandmarkRoom(DataChangeType changeType, LandmarkRoom room)
         {
             switch(changeType)
             {

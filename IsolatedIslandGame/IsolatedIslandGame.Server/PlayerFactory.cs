@@ -163,7 +163,7 @@ namespace IsolatedIslandGame.Server
             else
             {
                 playerDictionary.Add(player.PlayerID, player);
-                AssemblyPlayer(player);
+                AssemblePlayer(player);
                 player.User.PlayerOnline(player);
                 LogService.InfoFormat("PlayerID: {0} Online from: {1}", player.PlayerID, player.LastConnectedIPAddress);
                 return true;
@@ -173,14 +173,14 @@ namespace IsolatedIslandGame.Server
         {
             if (ContainsPlayer(player.PlayerID))
             {
-                DisassemblyPlayer(player);
+                DisassemblePlayer(player);
                 playerDictionary.Remove(player.PlayerID);
             }
             LogService.InfoFormat("PlayerID: {0} Offline", player.PlayerID);
             player.User.PlayerOffline();
         }
 
-        private void AssemblyPlayer(Player player)
+        private void AssemblePlayer(Player player)
         {
             player.OnCreateCharacter += DatabaseService.RepositoryList.PlayerRepository.Update;
             player.OnCreateCharacter += CreateVessel;
@@ -228,7 +228,7 @@ namespace IsolatedIslandGame.Server
             }
             player.OnQuestRecordUpdated += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
         }
-        private void DisassemblyPlayer(Player player)
+        private void DisassemblePlayer(Player player)
         {
             foreach(var transaction in player.Transactions)
             {
