@@ -1,25 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using IsolatedIslandGame.Library;
 
 public class BGMController : MonoBehaviour {
+
+    public static BGMController Instance { get; private set; }
 
     private bool Exited; // true if already exit previous
     private Dictionary<string, string> BGMDictionary;
 
     private string PrevBGMpath;
 
-	void OnTriggerStay(Collider EnterOcean)
+	void OnTriggerEnter(Collider EnterOcean)
     {
         if (Exited == false) return;
         if (BGMDictionary.ContainsKey(EnterOcean.name) == false) return;
+        ChangeBGM(EnterOcean.name);
 
-        string nextBGMpath = BGMDictionary[EnterOcean.name];
-
-        if (nextBGMpath == PrevBGMpath) return;
-        PrevBGMpath = nextBGMpath;
-
-        AudioManager.Instance.SetBGM(nextBGMpath);
         Exited = false;
     }
 
@@ -28,8 +26,25 @@ public class BGMController : MonoBehaviour {
         Exited = true;
     }
 
+    public void ChangeBGM(string oceanName)
+    {
+        if (BGMDictionary.ContainsKey(oceanName) == false) return;
+
+        string nextBGMpath = BGMDictionary[oceanName];
+
+        if (nextBGMpath == PrevBGMpath) return;
+        PrevBGMpath = nextBGMpath;
+
+        AudioManager.Instance.SetBGM(nextBGMpath);
+    }
+
     void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+            Destroy(this);
+
         BGMDictionary = new Dictionary<string, string>();
     }
 

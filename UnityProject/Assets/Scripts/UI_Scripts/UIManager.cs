@@ -50,9 +50,8 @@ public class UIManager : MonoBehaviour
     }
 
     public void SwapPage(UIPageType nextPage)
-    {      
-        if (PageStack.Peek() != UIPageType.Login)
-            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+    {
+        if (nextPage == PageStack.Peek()) return;
 
         if (nextPage == UIPageType.Inventory)
         {
@@ -72,7 +71,11 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
+        if (PageStack.Peek() != UIPageType.Login)
+            StartCoroutine(MovingPageToCenter(UIPageList[(int)nextPage]));
+
         PageStack.Push(nextPage);
+
         //RemoveCurrentPage();
     }
 
@@ -104,11 +107,12 @@ public class UIManager : MonoBehaviour
 
         while (passTime < 0.5f)
         {
+            passTime += Time.deltaTime;
+
             Vector2 nextPosition = rectTransform.anchoredPosition;
             nextPosition.y = Mathf.Lerp(-transform.root.GetComponent<RectTransform>().rect.height, 0, passTime / 0.5f);
             rectTransform.anchoredPosition = nextPosition;
-
-            passTime += Time.deltaTime;
+            
             yield return null;
         }
         rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, 0);
@@ -125,11 +129,12 @@ public class UIManager : MonoBehaviour
 
         while (passTime < 0.5f)
         {
+            passTime += Time.deltaTime;
+
             Vector2 nextPosition = rectTransform.anchoredPosition;
             nextPosition.y = Mathf.Lerp(targetY, -transform.root.GetComponent<RectTransform>().rect.height, passTime / 0.5f);
             rectTransform.anchoredPosition = nextPosition;
 
-            passTime += Time.deltaTime;
             yield return null;
         }
         rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -transform.root.GetComponent<RectTransform>().rect.height);
