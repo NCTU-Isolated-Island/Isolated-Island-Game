@@ -1,8 +1,6 @@
 ﻿using ExitGames.Client.Photon;
 using IsolatedIslandGame.Library;
-using IsolatedIslandGame.Library.CommunicationInfrastructure;
 using IsolatedIslandGame.Protocol;
-using IsolatedIslandGame.Protocol.Communication;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using System;

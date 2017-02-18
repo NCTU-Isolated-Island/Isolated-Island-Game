@@ -23,7 +23,7 @@ namespace IsolatedIslandGame.Server
                 if (DatabaseService.RepositoryList.TransactionRepository.Create(requesterPlayerID, accepterPlayerID, out transaction))
                 {
                     transactionDictionary.Add(transaction.TransactionID, transaction);
-                    AssemblyTransaction(transaction, requester, accepter);
+                    AssembleTransaction(transaction, requester, accepter);
                     return true;
                 }
                 else
@@ -126,7 +126,7 @@ namespace IsolatedIslandGame.Server
                     {
                         transaction.EndTransaction(false);
                     }
-                    DisassemblyTransaction(transaction, requester, accepter);
+                    DisassembleTransaction(transaction, requester, accepter);
                 }
                 else
                 {
@@ -146,7 +146,7 @@ namespace IsolatedIslandGame.Server
                 }
             }
         }
-        private void AssemblyTransaction(Transaction transaction, Player requester, Player accepter)
+        private void AssembleTransaction(Transaction transaction, Player requester, Player accepter)
         {
             transaction.OnTransactionConfirmStatusChange += requester.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
             transaction.OnTransactionConfirmStatusChange += accepter.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
@@ -162,7 +162,7 @@ namespace IsolatedIslandGame.Server
             requester.AddTransaction(transaction);
             accepter.AddTransaction(transaction);
         }
-        private void DisassemblyTransaction(Transaction transaction, Player requester, Player accepter)
+        private void DisassembleTransaction(Transaction transaction, Player requester, Player accepter)
         {
             transaction.OnTransactionConfirmStatusChange -= requester.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
             transaction.OnTransactionConfirmStatusChange -= accepter.EventManager.SyncDataResolver.SyncTransactionConfirmStatusChange;
