@@ -209,10 +209,5 @@ namespace IsolatedIslandGame.Server
                 return false;
             }
         }
-
-        public override bool CreateLandmarkRoom(int playerID, string roomName, out LandmarkRoom room)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -3,6 +3,7 @@
     public enum FetchAllLandmarksResponseParameterCode : byte
     {
         LandmarkID,
-        LandmarkName
+        LandmarkName,
+        Description
     }
 }

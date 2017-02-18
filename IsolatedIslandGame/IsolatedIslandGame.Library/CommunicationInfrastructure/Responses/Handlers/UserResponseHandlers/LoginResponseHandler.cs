@@ -64,6 +64,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTotalScore();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTodayMaterialRanking();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandPlayerScoreRanking();
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllItems();
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllLandmarks();
 
                     subject.ResponseManager.LoginResponse(returnCode, player);
 

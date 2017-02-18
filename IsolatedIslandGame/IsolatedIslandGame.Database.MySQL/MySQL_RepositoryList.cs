@@ -43,6 +43,9 @@ namespace IsolatedIslandGame.Database.MySQL
 
         private MySQL_QuestRepository questRepository = new MySQL_QuestRepository();
         public override QuestRepository QuestRepository { get { return questRepository; } }
+
+        private MySQL_LandmarkRepository landmarkRepository = new MySQL_LandmarkRepository();
+        public override LandmarkRepository LandmarkRepository { get { return landmarkRepository; } }
         #endregion
 
         #region text data

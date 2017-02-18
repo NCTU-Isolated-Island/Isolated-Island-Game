@@ -35,6 +35,5 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         public abstract bool ChangeTransactionItem(int playerID, int transactionID, DataChangeType changeType, TransactionItemInfo info);
         public abstract bool CancelTransaction(int playerID, int transactionID);
         public abstract bool ReadPlayerMessage(int playerID, int playerMessageID);
-        public abstract bool CreateLandmarkRoom(int playerID, string roomName, out LandmarkRoom room);
     }
 }

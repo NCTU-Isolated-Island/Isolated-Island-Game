@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     string roomName = (string)parameters[(byte)CreateLandmarkRoomParameterCode.RoomName];
                     LandmarkRoom room;
-                    if (communicationInterface.CreateLandmarkRoom(communicationInterface.User.Player.PlayerID, roomName, out room))
+                    if (subject.CreateRoom(communicationInterface.User.Player.PlayerID, roomName, out room))
                     {
                         return true;
                     }

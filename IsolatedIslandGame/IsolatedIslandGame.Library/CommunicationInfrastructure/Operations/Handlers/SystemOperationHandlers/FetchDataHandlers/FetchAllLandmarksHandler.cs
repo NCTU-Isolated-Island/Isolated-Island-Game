@@ -23,7 +23,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         var result = new Dictionary<byte, object>
                         {
                             { (byte)FetchAllLandmarksResponseParameterCode.LandmarkID, landmark.LandmarkID },
-                            { (byte)FetchAllLandmarksResponseParameterCode.LandmarkName, landmark.LandmarkName }
+                            { (byte)FetchAllLandmarksResponseParameterCode.LandmarkName, landmark.LandmarkName },
+                            { (byte)FetchAllLandmarksResponseParameterCode.Description, landmark.Description }
                         };
                         SendResponse(communicationInterface, SystemFetchDataCode.Vessel, result);
                     }

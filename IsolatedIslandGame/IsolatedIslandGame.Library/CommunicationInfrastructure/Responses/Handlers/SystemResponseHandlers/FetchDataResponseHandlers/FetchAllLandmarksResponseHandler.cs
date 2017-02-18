@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 2)
+                        if (parameters.Count != 3)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllLandmarksResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -45,8 +45,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 {
                     int landmarkID = (int)parameters[(byte)FetchAllLandmarksResponseParameterCode.LandmarkID];
                     string landmarkName = (string)parameters[(byte)FetchAllLandmarksResponseParameterCode.LandmarkName];
+                    string description = (string)parameters[(byte)FetchAllLandmarksResponseParameterCode.Description];
 
-                    Landmark landmark = new Landmark(landmarkID, landmarkName);
+                    Landmark landmark = new Landmark(landmarkID, landmarkName, description);
                     LandmarkManager.Instance.LoadLandmark(landmark);
                     landmark.OperationManager.FetchDataResolver.FetchAllLandmarkRooms();
                     return true;

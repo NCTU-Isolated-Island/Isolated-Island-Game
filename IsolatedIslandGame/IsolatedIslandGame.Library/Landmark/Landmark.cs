@@ -9,8 +9,12 @@ namespace IsolatedIslandGame.Library.Landmarks
 {
     public class Landmark : IIdentityProvidable
     {
+        private static int landmarkRoomCounter = 1;
+        private static object landmarkRoomCounterLock = new object();
+
         public int LandmarkID { get; private set; }
         public string LandmarkName { get; private set; }
+        public string Description { get; private set; }
 
         private Dictionary<int, LandmarkRoom> roomDictionary = new Dictionary<int, LandmarkRoom>();
         public IEnumerable<LandmarkRoom> Rooms { get { return roomDictionary.Values.ToArray(); } }
@@ -31,10 +35,11 @@ namespace IsolatedIslandGame.Library.Landmarks
         private event LandmarkRoomChangeEventHandler onLandmarkRoomChange;
         public event LandmarkRoomChangeEventHandler OnLandmarkRoomChange { add { onLandmarkRoomChange += value; } remove { onLandmarkRoomChange -= value; } }
 
-        public Landmark(int landmarkID, string landmarkName)
+        public Landmark(int landmarkID, string landmarkName, string description)
         {
             LandmarkID = landmarkID;
             LandmarkName = landmarkName;
+            Description = description;
 
             EventManager = new LandmarkEventManager(this);
             OperationManager = new LandmarkOperationManager(this);
@@ -70,6 +75,16 @@ namespace IsolatedIslandGame.Library.Landmarks
                 LandmarkRoom room = roomDictionary[roomID];
                 roomDictionary.Remove(roomID);
                 onLandmarkRoomChange?.Invoke(DataChangeType.Remove, room);
+            }
+        }
+        public bool CreateRoom(int hostPlayerID, string roomName, out LandmarkRoom room)
+        {
+            lock(landmarkRoomCounterLock)
+            {
+                room = new LandmarkRoom(landmarkRoomCounter, roomName, hostPlayerID);
+                landmarkRoomCounter++;
+                LoadRoom(room);
+                return true;
             }
         }
     }

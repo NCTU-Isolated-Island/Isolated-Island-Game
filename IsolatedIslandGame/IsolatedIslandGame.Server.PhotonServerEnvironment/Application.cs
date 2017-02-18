@@ -5,6 +5,7 @@ using IsolatedIslandGame.Database.MySQL;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.CommunicationInfrastructure;
 using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol.Communication;
 using IsolatedIslandGame.Server.Configuration;
@@ -93,6 +94,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             BlueprintManager.Initial(new BlueprintFactory());
             QuestManager.Initial(new QuestFactory());
             QuestRecordFactory.Initial(new Quests.ServerQuestRecordFactory());
+            LandmarkManager.Initial(new LandmarkFactory());
         }
         private void SetupManagers()
         {
