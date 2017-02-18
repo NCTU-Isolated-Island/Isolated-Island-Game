@@ -9,17 +9,6 @@ namespace IsolatedIslandGame.Client
         private event Action<Item> onItemUpdate;
         public override event Action<Item> OnItemUpdate { add { onItemUpdate += value; } remove { onItemUpdate -= value; } }
 
-        public ClientItemManager()
-        {
-            UserManager.Instance.User.OnPlayerOnline += (player) =>
-            {
-                if (player != null)
-                {
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllItems();
-                }
-            };
-        }
-
         public override void AddItem(Item item)
         {
             if (!ContainsItem(item.ItemID))

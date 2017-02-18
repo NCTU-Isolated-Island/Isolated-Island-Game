@@ -6,12 +6,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 {
     public abstract class SystemOperationHandler
     {
-        protected SystemManager systemManager;
+        protected SystemManager subject;
         protected int correctParameterCount;
 
         internal SystemOperationHandler(SystemManager systemManager, int correctParameterCount)
         {
-            this.systemManager = systemManager;
+            this.subject = systemManager;
             this.correctParameterCount = correctParameterCount;
         }
 
@@ -45,11 +45,11 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             LogService.ErrorFormat("Error On System Operation: {1}, ErrorCode: {2}, Debug Message: {3}",operationCode, errorCode, debugMessage);
             Dictionary<byte, object> parameters = new Dictionary<byte, object>();
-            systemManager.ResponseManager.SendResponse(communicationInterface, operationCode, errorCode, debugMessage, parameters);
+            subject.ResponseManager.SendResponse(communicationInterface, operationCode, errorCode, debugMessage, parameters);
         }
         internal void SendResponse(CommunicationInterface communicationInterface, SystemOperationCode operationCode, Dictionary<byte, object> parameter)
         {
-            systemManager.ResponseManager.SendResponse(communicationInterface, operationCode, ErrorCode.NoError, null, parameter);
+            subject.ResponseManager.SendResponse(communicationInterface, operationCode, ErrorCode.NoError, null, parameter);
         }
     }
 }

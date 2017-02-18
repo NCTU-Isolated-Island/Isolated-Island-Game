@@ -65,7 +65,14 @@ namespace IsolatedIslandGame.Library
                 {
                     case DataChangeType.Add:
                     case DataChangeType.Update:
-                        requesterTransactionItemInfos[info.PositionIndex] = info;
+                        if (accepterTransactionItemInfos.Any(x => x.Item == info.Item && x.PositionIndex != info.PositionIndex))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            accepterTransactionItemInfos[info.PositionIndex] = info;
+                        }
                         break;
                     case DataChangeType.Remove:
                         requesterTransactionItemInfos[info.PositionIndex] = null;
@@ -80,7 +87,14 @@ namespace IsolatedIslandGame.Library
                 {
                     case DataChangeType.Add:
                     case DataChangeType.Update:
-                        accepterTransactionItemInfos[info.PositionIndex] = info;
+                        if (accepterTransactionItemInfos.Any(x => x.Item == info.Item && x.PositionIndex != info.PositionIndex))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            accepterTransactionItemInfos[info.PositionIndex] = info;
+                        }
                         break;
                     case DataChangeType.Remove:
                         accepterTransactionItemInfos[info.PositionIndex] = null;

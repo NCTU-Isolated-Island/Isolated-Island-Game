@@ -3,5 +3,6 @@
     public enum SystemOperationCode : byte
     {
         FetchData,
+        LandmarkOperation,
     }
 }

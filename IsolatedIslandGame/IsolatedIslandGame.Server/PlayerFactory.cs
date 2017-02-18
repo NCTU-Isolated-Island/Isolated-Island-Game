@@ -248,10 +248,12 @@ namespace IsolatedIslandGame.Server
             {
                 VesselManager.Instance.RemoveVessel(player.Vessel.VesselID);
             }
-
-            Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
-            player.OnGetBlueprint -= playerGetBlueprintFunction;
-            playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
+            if (playerGetBlueprintFunctionDictionary.ContainsKey(player.PlayerID))
+            {
+                Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
+                player.OnGetBlueprint -= playerGetBlueprintFunction;
+                playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
+            }
 
             player.OnGetPlayerInformation -= player.EventManager.SyncDataResolver.SyncPlayerInformation;
 
