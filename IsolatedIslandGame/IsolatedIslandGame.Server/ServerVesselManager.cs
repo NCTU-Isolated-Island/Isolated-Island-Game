@@ -21,7 +21,7 @@ namespace IsolatedIslandGame.Server
             {
                 vesselDictionary.Add(vessel.VesselID, vessel);
                 vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
-                AssemblyVessel(vessel);
+                AssembleVessel(vessel);
                 onVesselChange?.Invoke(DataChangeType.Add, vessel);
             }
         }
@@ -61,7 +61,7 @@ namespace IsolatedIslandGame.Server
                 Vessel vessel = vesselDictionary[vesselID];
                 vesselDictionary.Remove(vesselID);
                 vesselDictionaryByOwnerPlayerID.Remove(vessel.OwnerPlayerID);
-                DisassemblyVessel(vessel);
+                DisassembleVessel(vessel);
                 onVesselChange?.Invoke(DataChangeType.Remove, vessel);
                 return true;
             }
@@ -74,13 +74,13 @@ namespace IsolatedIslandGame.Server
         {
             onVesselChange?.Invoke(DataChangeType.Update, vessel);
         }
-        private void AssemblyVessel(Vessel vessel)
+        private void AssembleVessel(Vessel vessel)
         {
             vessel.OnVesselFullDataUpdated += InformVesselFullDataUpdated;
             vessel.OnVesselTransformUpdated += SystemManager.Instance.EventManager.SyncDataResolver.SyncVesselTransform;
             vessel.OnDecorationChange += SystemManager.Instance.EventManager.SyncDataResolver.SyncVesselDecorationChange;
         }
-        private void DisassemblyVessel(Vessel vessel)
+        private void DisassembleVessel(Vessel vessel)
         {
             vessel.OnVesselFullDataUpdated -= InformVesselFullDataUpdated;
             vessel.OnVesselTransformUpdated -= SystemManager.Instance.EventManager.SyncDataResolver.SyncVesselTransform;

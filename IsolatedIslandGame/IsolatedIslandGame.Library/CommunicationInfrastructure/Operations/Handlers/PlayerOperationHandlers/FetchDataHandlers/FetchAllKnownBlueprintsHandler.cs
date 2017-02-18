@@ -25,8 +25,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.BlueprintID, blueprint.BlueprintID },
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.IsOrderless, blueprint.IsOrderless },
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.IsBlueprintRequired, blueprint.IsBlueprintRequired },
-                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.Requirements, blueprint.Requirements.ToArray() },
-                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.Products, blueprint.Products.ToArray() }
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.Requirements, SerializationHelper.TypeSerialize(blueprint.Requirements.ToArray()) },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.Products, SerializationHelper.TypeSerialize(blueprint.Products.ToArray()) }
                         };
                         SendResponse(fetchCode, result);
                     }
