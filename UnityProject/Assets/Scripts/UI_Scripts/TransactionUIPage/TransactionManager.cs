@@ -58,7 +58,9 @@ public class TransactionManager : MonoBehaviour
         {
             Instance = this;
         }
-        //gameObject.SetActive(false);
+        TransactionUIPage.SetActive(false);
+        ReceiveTransactionRequestPanel.SetActive(false);
+        MessagePanel.SetActive(false);
     }
 
     void Start()
@@ -73,6 +75,10 @@ public class TransactionManager : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        InitialSetting();
+    }
     //
 
     public void PutInItemFromInventory(Item puttingItem)
@@ -225,6 +231,9 @@ public class TransactionManager : MonoBehaviour
                 LockTransactionItemSlot(slot);
             foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
                 LockTransactionItemSlot(slot);
+
+            ConfirmTransactionButton.interactable = false;
+            UnlockTransactionSlotButton.interactable = true;
         }
         else
         {
@@ -232,22 +241,25 @@ public class TransactionManager : MonoBehaviour
                 UnLockTransactionItemSlot(slot);
             foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
                 UnLockTransactionItemSlot(slot);
+
+            ConfirmTransactionButton.interactable = true;
+            UnlockTransactionSlotButton.interactable = false;
         }
     }
 
     private void LockTransactionItemSlot(TransactionSlotBehavior slot)
     {
-        //Color tmp = slot.itemImage.color;
-        //tmp.a = 0.5f;
-        //slot.itemImage.color = tmp;
+        Color tmp = slot.itemImage.color;
+        tmp.a = 0.5f;
+        slot.itemImage.color = tmp;
         slot.gameObject.GetComponent<Button>().interactable = false;
     }
 
     private void UnLockTransactionItemSlot(TransactionSlotBehavior slot)
     {
-        //Color tmp = slot.itemImage.color;
-        //tmp.a = 1;
-        //slot.itemImage.color = tmp;
+        Color tmp = slot.itemImage.color;
+        tmp.a = 1;
+        slot.itemImage.color = tmp;
         slot.gameObject.GetComponent<Button>().interactable = true;
     }
 
