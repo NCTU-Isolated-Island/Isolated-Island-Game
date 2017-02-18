@@ -87,9 +87,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         protected override List<QuestRequirementRecord> ListRequirementRecordsOfQuestRecord(int questRecordID, int playerID)
         {
             List<QuestRequirementRecordInfo> infos = new List<QuestRequirementRecordInfo>();
-            string sqlString = @"SELECT QuestRequirementRecordID, QuestRequirementID, QuestRequirementType
-                from QuestRequirementRecordCollection 
-                WHERE QuestRecordID = @questRecordID;";
+            string sqlString = $@"SELECT QuestRequirementRecordID, {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection.QuestRequirementID, {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection.QuestRequirementType
+                from {DatabaseService.DatabaseName}_PlayerData.QuestRequirementRecordCollection, {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection
+                WHERE QuestRecordID = @questRecordID AND {DatabaseService.DatabaseName}_PlayerData.QuestRequirementRecordCollection.QuestRequirementID = {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection.QuestRequirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRecordID", questRecordID);
@@ -138,6 +138,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 requirementRecords.Add(requirementRecord);
                             }
                             break;
+                        default:
+                            LogService.Fatal($"MySQL_QuestRecordRepository ListRequirementRecordsOfQuestRecord QuestRequirementType: {info.questRequirementType} not implemented");
+                            break;
                     }
                 }
             }
@@ -147,13 +150,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             int questRequirementRecordID;
             string sqlString = @"INSERT INTO QuestRequirementRecordCollection 
-                (QuestRecordID,QuestRequirementID,QuestRequirementType) VALUES (@questRecordID,@questRequirementID,@questRequirementType) ;
+                (QuestRecordID,QuestRequirementID) VALUES (@questRecordID,@questRequirementID) ;
                 SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRecordID", questRecordID);
                 command.Parameters.AddWithValue("questRequirementID", requirement.QuestRequirementID);
-                command.Parameters.AddWithValue("questRequirementType", (byte)requirement.QuestRequirementType);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -186,6 +188,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     return true;
                 default:
                     requirementRecord = null;
+                    LogService.Fatal($"MySQL_QuestRecordRepository CreateQuestRequirementRecord QuestRequirementType: {requirement.QuestRequirementType} not implemented");
                     return false;
             }
         }

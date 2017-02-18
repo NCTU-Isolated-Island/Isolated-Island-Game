@@ -47,8 +47,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 
         protected override List<QuestRequirement> ListRequirementsOfQuest(int questID)
         {
-            List<int> requirementIDs = new List<int>();
-            string sqlString = @"SELECT QuestRequirementID from QuestRequirementCollection 
+            List<QuestRequirementInfo> requirementInfos = new List<QuestRequirementInfo>();
+            string sqlString = @"SELECT QuestRequirementID, QuestRequirementType from QuestRequirementCollection 
                 WHERE QuestID = @questID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
@@ -58,25 +58,43 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     while (reader.Read())
                     {
                         int questRequirementID = reader.GetInt32(0);
-                        requirementIDs.Add(questRequirementID);
+                        QuestRequirementType questRequirementType = (QuestRequirementType)reader.GetByte(1);
+
+                        requirementInfos.Add(new QuestRequirementInfo
+                        {
+                            questRequirementID = questRequirementID,
+                            questRequirementType = questRequirementType
+                        });
                     }
                 }
             }
             List<QuestRequirement> requirements = new List<QuestRequirement>();
-            foreach(int questRequirementID in requirementIDs)
+            foreach(var info in requirementInfos)
             {
                 QuestRequirement requirement;
-                if (SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirement(questRequirementID, out requirement))
+                switch(info.questRequirementType)
                 {
-                    requirements.Add(requirement);
-                }
-                if (SpecializeRequirementToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirement(questRequirementID, out requirement))
-                {
-                    requirements.Add(requirement);
-                }
-                if (SpecializeRequirementToScanQR_CodeRequirement(questRequirementID, out requirement))
-                {
-                    requirements.Add(requirement);
+                    case QuestRequirementType.SendMessageToDifferentOnlineFriendInTheSameSpecificOcean:
+                        if (SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.CloseDealWithDifferentFriendInTheSameSpecificOcean:
+                        if (SpecializeRequirementToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.ScanQR_Code:
+                        if (SpecializeRequirementToScanQR_CodeRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    default:
+                        LogService.Fatal($"MySQL_QuestRepository ListRequirementsOfQuest QuestRequirementType: {info.questRequirementType} not implemented");
+                        break;
                 }
             }
             return requirements;
@@ -84,8 +102,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 
         protected override List<QuestReward> ListRewardsOfQuest(int questID)
         {
-            List<int> rewardIDs = new List<int>();
-            string sqlString = @"SELECT QuestRewardID from QuestRewardCollection 
+            List<QuestRewardInfo> rewardInfos = new List<QuestRewardInfo>();
+            string sqlString = @"SELECT QuestRewardID, QuestRewardType from QuestRewardCollection 
                 WHERE QuestID = @questID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
@@ -95,17 +113,37 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     while (reader.Read())
                     {
                         int questRewardID = reader.GetInt32(0);
-                        rewardIDs.Add(questRewardID);
+                        QuestRewardType questRewardType = (QuestRewardType)reader.GetByte(1);
+
+                        rewardInfos.Add(new QuestRewardInfo
+                        {
+                            questRewardID = questRewardID,
+                            questRewardType = questRewardType
+                        });
                     }
                 }
             }
             List<QuestReward> rewards = new List<QuestReward>();
-            foreach (int questRewardID in rewardIDs)
+            foreach (var info in rewardInfos)
             {
                 QuestReward reward;
-                if (SpecializeRewardToGiveItemReward(questRewardID, out reward))
+                switch(info.questRewardType)
                 {
-                    rewards.Add(reward);
+                    case QuestRewardType.GiveItem:
+                        if (SpecializeRewardToGiveItemReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.UnlockBlueprint:
+                        if (SpecializeRewardToUnlockBlueprintReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    default:
+                        LogService.Fatal($"MySQL_QuestRepository ListRewardsOfQuest QuestRewardType: {info.questRewardType} not implemented");
+                        break;
                 }
             }
             return rewards;
@@ -201,6 +239,30 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         int itemCount = reader.GetInt32(1);
 
                         reward = new GiveItemQuestReward(rewardID, itemID, itemCount);
+                        return true;
+                    }
+                    else
+                    {
+                        reward = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeRewardToUnlockBlueprintReward(int rewardID, out QuestReward reward)
+        {
+            string sqlString = @"SELECT BlueprintID
+                from UnlockBlueprintQuestRewardCollection WHERE QuestRewardID = @rewardID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("rewardID", rewardID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int blueprintID = reader.GetInt32(0);
+
+                        reward = new UnlockBlueprintQuestReward(rewardID, blueprintID);
                         return true;
                     }
                     else

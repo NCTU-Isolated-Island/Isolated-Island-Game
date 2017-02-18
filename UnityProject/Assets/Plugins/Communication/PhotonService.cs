@@ -19,11 +19,6 @@ namespace IsolatedIslandGame.Client.Communication
         static PhotonService()
         {
             instance = new PhotonService();
-            RegisterTypes();
-        }
-        private static void RegisterTypes()
-        {
-            PhotonPeer.RegisterType(typeof(Blueprint.ElementInfo), (byte)SerializationTypeCode.BlueprintElementInfo, SerializationHelper.Serialize<Blueprint.ElementInfo>, SerializationHelper.Deserialize<Blueprint.ElementInfo>);
         }
 
         private PhotonPeer peer;

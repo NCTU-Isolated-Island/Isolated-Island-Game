@@ -1,4 +1,5 @@
 ﻿using IsolatedIslandGame.Library.Items;
+using IsolatedIslandGame.Library.Landmarks;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;

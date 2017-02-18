@@ -8,7 +8,7 @@ namespace IsolatedIslandGame.Library
 {
     public class Inventory
     {
-        public static int DefaultCapacity { get { return 20; } }
+        public static int DefaultCapacity { get { return 100; } }
 
         public int InventoryID { get; private set; }
         public int Capacity { get; private set; }

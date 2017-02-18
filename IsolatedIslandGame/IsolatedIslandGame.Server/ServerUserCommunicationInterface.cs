@@ -9,6 +9,7 @@ using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
 using System;
+using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Server
 {

@@ -6,6 +6,6 @@
         OperationCode,
         ReturnCode,
         DebugMessage,
-        Parameters,
+        Parameters
     }
 }

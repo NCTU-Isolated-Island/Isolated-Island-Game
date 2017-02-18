@@ -1,4 +1,5 @@
-﻿using MsgPack.Serialization;
+﻿using IsolatedIslandGame.Protocol;
+using MsgPack.Serialization;
 using System.Text;
 
 namespace IsolatedIslandGame.Library.Quests.Rewards
@@ -7,6 +8,7 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
     {
         [MessagePackMember(1)]
         public int BlueprintID { get; private set; }
+        public override QuestRewardType QuestRewardType { get { return QuestRewardType.UnlockBlueprint; } }
         public override string Description
         {
             get

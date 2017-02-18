@@ -18,9 +18,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             if (base.Handle(operationCode, parameters))
             {
                 Random randomGenerator = new Random(DateTime.Now.GetHashCode());
-                IEnumerable<Item> basicMaterials = ItemManager.Instance.Items.Where(x => x.ItemID < 2000);
+                IEnumerable<Item> basicMaterials = ItemManager.Instance.Items.Where(x => x.ItemID < 1000);
                 Item randomItem = basicMaterials.ElementAt(randomGenerator.Next(0, basicMaterials.Count()));
-                int randomNumber = randomGenerator.Next(1, 10);
+                int randomNumber = 1;
 
                 lock(subject.Inventory)
                 {

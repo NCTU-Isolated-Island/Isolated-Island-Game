@@ -2,9 +2,11 @@
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers.SystemEventHandlers;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.EventParameters.User;
+using IsolatedIslandGame.Protocol.Communication.EventParameters.System;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using System.Collections.Generic;
+using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
 {
@@ -22,6 +24,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             {
                 { SystemEventCode.SyncData, SyncDataResolver },
                 { SystemEventCode.IslandResetTodayMaterialRanking, new IslandResetTodayMaterialRankingHandler(systemManager) },
+                { SystemEventCode.LandmarkEvent, new LandmarkEventResolver(systemManager) },
             };
         }
 
@@ -58,6 +61,16 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)SyncDataEventParameterCode.Parameters, parameters }
             };
             SendEvent(SystemEventCode.SyncData, syncDataParameters);
+        }
+        internal void SendLandmarkEvent(Landmark landmark, LandmarkEventCode eventCode, Dictionary<byte, object> parameters)
+        {
+            Dictionary<byte, object> eventData = new Dictionary<byte, object>
+            {
+                { (byte)LandmarkEventParameterCode.LandmarkID, landmark.LandmarkID },
+                { (byte)LandmarkEventParameterCode.EventCode, (byte)eventCode },
+                { (byte)LandmarkEventParameterCode.Parameters, parameters }
+            };
+            SendEvent(SystemEventCode.LandmarkEvent, eventData);
         }
 
         public void IslandResetTodayMaterialRanking()
