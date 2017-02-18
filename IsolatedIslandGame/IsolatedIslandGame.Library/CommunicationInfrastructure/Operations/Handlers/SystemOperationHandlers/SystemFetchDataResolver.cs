@@ -24,7 +24,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { SystemFetchDataCode.VesselDecorations, new FetchVesselDecorationsHandler(subject) },
                 { SystemFetchDataCode.IslandTotalScore, new FetchIslandTotalScoreHandler(subject) },
                 { SystemFetchDataCode.IslandTodayMaterialRanking, new FetchIslandTodayMaterialRankingHandler(subject) },
-                { SystemFetchDataCode.IslandPlayerScoreRanking, new FetchIslandPlayerScoreRankingHandler(subject) }
+                { SystemFetchDataCode.IslandPlayerScoreRanking, new FetchIslandPlayerScoreRankingHandler(subject) },
+                { SystemFetchDataCode.AllLandmarks, new FetchAllLandmarksHandler(subject) }
             };
         }
 
@@ -54,7 +55,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
         internal void SendOperation(SystemFetchDataCode fetchCode, Dictionary<byte, object> parameters)
         {
-            systemManager.OperationManager.SendFetchDataOperation(fetchCode, parameters);
+            subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
         }
 
         public void FetchItem(int itemID)
@@ -108,6 +109,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         public void FetchIslandPlayerScoreRanking()
         {
             SendOperation(SystemFetchDataCode.IslandPlayerScoreRanking, new Dictionary<byte, object>());
+        }
+        public void FetchAllLandmarks()
+        {
+            SendOperation(SystemFetchDataCode.AllLandmarks, new Dictionary<byte, object>());
         }
     }
 }

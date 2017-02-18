@@ -63,7 +63,7 @@ public class FriendUIManager : MonoBehaviour {
 
     public void LoadFriends()
     {
-        print("Loading Friends");
+        //print("Loading Friends");
         foreach(Transform renderedFriend in friendSetContent.transform)
         {
             Destroy(renderedFriend.gameObject);
@@ -87,10 +87,18 @@ public class FriendUIManager : MonoBehaviour {
                     tmp.transform.parent = friendSetContent.transform;
                     tmp.gameObject.GetComponent<ConfirmedFriendSetBehavior>().information = friendInformation;
                 }
+
+                tmp.GetComponent<RectTransform>().localScale = Vector2.one;
                 // Write info into prefab
 
                 Text friendName = tmp.transform.FindChild("FriendName").GetComponent<Text>();
                 Text friendGroup = tmp.transform.FindChild("FriendGroup").GetComponent<Text>();
+                Text friendSpeech;
+                if (tmp.transform.FindChild("FriendSpeech") != null)
+                {
+                    friendSpeech = tmp.transform.FindChild("FriendSpeech").GetComponent<Text>();
+                    friendSpeech.text = friendInformation.signature;
+                }
 
                 friendName.text = friendInformation.nickname;
 

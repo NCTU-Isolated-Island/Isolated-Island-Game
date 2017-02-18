@@ -102,6 +102,7 @@ public class ChatUIManager : MonoBehaviour {
         {
             GameObject tmp = Instantiate(messageSet);
             tmp.transform.SetParent(messageSetContent.transform);
+            tmp.GetComponent<RectTransform>().localScale = Vector2.one;
 
             Text chatFriendName = tmp.transform.FindChild("chatFriendName").GetComponent<Text>();
             Text chatFriendGroup = tmp.transform.FindChild("chatFriendGroup").GetComponent<Text>();
@@ -173,6 +174,7 @@ public class ChatUIManager : MonoBehaviour {
                 textObj.text = entry.message.content;
 
                 bubble.transform.SetParent(messageBubbleContent.transform);
+                bubble.GetComponent<RectTransform>().localScale = Vector2.one;
             }
             else if(entry.receiverPlayerID == chatPlayer.playerID)
             {
@@ -181,6 +183,7 @@ public class ChatUIManager : MonoBehaviour {
                 textObj.text = entry.message.content;
 
                 bubble.transform.SetParent(messageBubbleContent.transform);
+                bubble.GetComponent<RectTransform>().localScale = Vector2.one;
             }
         }
     }

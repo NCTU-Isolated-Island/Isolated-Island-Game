@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Client.Scripts.SystemScripts
 {
@@ -15,6 +16,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             PlayerInformationManager.Initial(new PlayerInformationManager());
             Island.Initial();
             QuestManager.Initial(new QuestManager());
+            LandmarkManager.Initial(new LandmarkManager());
 
             Application.targetFrameRate = 60;
         }

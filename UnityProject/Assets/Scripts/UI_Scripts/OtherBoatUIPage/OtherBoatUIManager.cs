@@ -79,6 +79,18 @@ public class OtherBoatUIManager : MonoBehaviour
                     groupText.text = "自然";
                     break;
             }
+
+            // Control addFriend Button
+            if (UserManager.Instance.User.Player.ContainsFriend(otherPlayerID) == true)
+                addFriendButton.interactable = true;
+            else
+                addFriendButton.interactable = false;
+            // Add start Transaction Button Listener
+            startTransactionButton.onClick.AddListener(delegate
+            {
+                TransactionManager.Instance.SendTransactionRequest(otherPlayerID);
+            });
+
         }
     }
 
@@ -127,6 +139,8 @@ public class OtherBoatUIManager : MonoBehaviour
 
         while (passTime < intervalTime)
         {
+            passTime += Time.deltaTime;
+
             float lerpAlpha = 0.1f * passTime / intervalTime + 0.9f * Mathf.Sqrt(1 - Mathf.Pow(passTime / intervalTime - 1, 2));
             if (isOn)
             {
@@ -139,7 +153,6 @@ public class OtherBoatUIManager : MonoBehaviour
                 interactionButtonsContent.GetComponent<RectTransform>().offsetMax = verTmp;
             }
 
-            passTime += Time.deltaTime;
             yield return null;
         }
         expandStatus = isOn;

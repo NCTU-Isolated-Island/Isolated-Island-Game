@@ -15,6 +15,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             fetchResponseTable.Add(SystemFetchDataCode.IslandTotalScore, new FetchIslandTotalScoreResponseHandler(subject));
             fetchResponseTable.Add(SystemFetchDataCode.IslandTodayMaterialRanking, new FetchIslandTodayMaterialRankingResponseHandler(subject));
             fetchResponseTable.Add(SystemFetchDataCode.IslandPlayerScoreRanking, new FetchIslandPlayerScoreRankingResponseHandler(subject));
+            fetchResponseTable.Add(SystemFetchDataCode.AllLandmarks, new FetchAllLandmarksResponseHandler(subject));
         }
     }
 }
