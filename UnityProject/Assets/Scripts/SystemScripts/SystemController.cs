@@ -17,8 +17,6 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             Island.Initial();
             QuestManager.Initial(new QuestManager());
             LandmarkManager.Initial(new LandmarkManager());
-
-            Application.targetFrameRate = 60;
         }
     }
 }

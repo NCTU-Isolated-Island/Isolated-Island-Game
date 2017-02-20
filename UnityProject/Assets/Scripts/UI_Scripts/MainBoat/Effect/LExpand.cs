@@ -9,10 +9,10 @@ public class LExpand : MonoBehaviour
     [SerializeField]
     private bool LButtonStatus;
 
-    [SerializeField]
-    private GameObject settingButton;
-    [SerializeField]
-    private GameObject aboutButton;
+    //[SerializeField]
+    //private GameObject settingButton;
+    //[SerializeField]
+    //private GameObject aboutButton;
 
     [SerializeField]
     private GameObject viewportHorizontal;
@@ -28,8 +28,8 @@ public class LExpand : MonoBehaviour
     //
     private void SetNotLExpandButtonStatus(bool OnOff)
     {
-        settingButton.SetActive(OnOff);
-        aboutButton.SetActive(OnOff);
+        //settingButton.SetActive(OnOff);
+        //aboutButton.SetActive(OnOff);
     }
     //
     void Awake()

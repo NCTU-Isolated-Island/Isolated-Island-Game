@@ -14,17 +14,15 @@ public class UIManager : MonoBehaviour
         Login, Main, OtherBoat, Inventory, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem
     }
 
-    //public Dictionary<UIPageType, GameObject> UIPageDictionary = new Dictionary<UIPageType, GameObject>();
     public GameObject[] UIPageList = new GameObject[10];
     public Stack<UIPageType> PageStack = new Stack<UIPageType>();
 
     // DEBUG
-    //public UIPageType[] ttt;
-    //void Update()
-    //{
-    //    ttt = PageStack.ToArray();
-    //}
-    //
+    void OnGUI()
+    {
+        GUI.Label(new Rect(100, 100, 100, 100), (1 / Time.deltaTime).ToString());
+    }
+
 
     // Variables for creating character
     private int CampNum;
