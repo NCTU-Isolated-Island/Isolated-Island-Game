@@ -245,7 +245,8 @@ public class TransactionManager : MonoBehaviour
         Color tmp = slot.itemImage.color;
         tmp.a = 0.5f;
         slot.itemImage.color = tmp;
-        slot.gameObject.GetComponent<Button>().interactable = false;
+        if (slot.gameObject.GetComponent<Button>() != null)
+            slot.gameObject.GetComponent<Button>().interactable = false;
     }
 
     private void UnLockTransactionItemSlot(TransactionSlotBehavior slot)
@@ -253,7 +254,8 @@ public class TransactionManager : MonoBehaviour
         Color tmp = slot.itemImage.color;
         tmp.a = 1;
         slot.itemImage.color = tmp;
-        slot.gameObject.GetComponent<Button>().interactable = true;
+        if (slot.gameObject.GetComponent<Button>() != null)
+            slot.gameObject.GetComponent<Button>().interactable = true;
     }
 
     public void OnTransactionEnd(int transactionID, bool isSuccessful)
@@ -318,6 +320,13 @@ public class TransactionManager : MonoBehaviour
             slot.itemImage.sprite = null;
             slot.amountText.text = "";
         }
+        foreach (TransactionSlotBehavior slot in MyTransactionItem)
+            UnLockTransactionItemSlot(slot);
+        foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
+            UnLockTransactionItemSlot(slot);
+
+        ConfirmTransactionButton.interactable = true;
+        UnlockTransactionSlotButton.interactable = false;
     }
 
     // TESTING
