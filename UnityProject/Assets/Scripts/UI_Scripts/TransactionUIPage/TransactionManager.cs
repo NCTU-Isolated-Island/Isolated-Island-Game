@@ -225,7 +225,9 @@ public class TransactionManager : MonoBehaviour
             foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
                 LockTransactionItemSlot(slot);
 
-            ConfirmTransactionButton.interactable = false;
+            if (playerID == UserManager.Instance.User.Player.PlayerID)
+                ConfirmTransactionButton.interactable = false;
+
             UnlockTransactionSlotButton.interactable = true;
         }
         else
@@ -235,7 +237,9 @@ public class TransactionManager : MonoBehaviour
             foreach (TransactionSlotBehavior slot in OpponentTransactionItem)
                 UnLockTransactionItemSlot(slot);
 
-            ConfirmTransactionButton.interactable = true;
+            if (playerID == UserManager.Instance.User.Player.PlayerID)
+                ConfirmTransactionButton.interactable = true;
+
             UnlockTransactionSlotButton.interactable = false;
         }
     }
