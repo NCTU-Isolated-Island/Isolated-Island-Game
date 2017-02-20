@@ -77,7 +77,7 @@ namespace IsolatedIslandGame.Server
                                         inventoryCheck = false;
                                         break;
                                     }
-                                    if (accepter.Inventory.AddItemCheck(info.Item.ItemID, info.Count))
+                                    if (!accepter.Inventory.AddItemCheck(info.Item.ItemID, info.Count))
                                     {
                                         inventoryCheck = false;
                                         break;
@@ -87,12 +87,12 @@ namespace IsolatedIslandGame.Server
                                 {
                                     foreach (var info in transaction.AccepterTransactionItemInfos)
                                     {
-                                        if (accepter.Inventory.RemoveItemCheck(info.Item.ItemID, info.Count))
+                                        if (!accepter.Inventory.RemoveItemCheck(info.Item.ItemID, info.Count))
                                         {
                                             inventoryCheck = false;
                                             break;
                                         }
-                                        if (requester.Inventory.AddItemCheck(info.Item.ItemID, info.Count))
+                                        if (!requester.Inventory.AddItemCheck(info.Item.ItemID, info.Count))
                                         {
                                             inventoryCheck = false;
                                             break;
