@@ -24,7 +24,7 @@ public class InventoryPanel : MonoBehaviour
 
     public enum InventoryUsageType
     {
-        CheckInventoryItemDetail , PutInCombineSlot , PutInTransactionSlot , PutItemOnVessel
+        CheckInventoryItemDetail , PutInCombineSlot , PutInTransactionSlot , PutItemOnVessel , Donation
     }
     [SerializeField]
     private InventoryUsageType currentUsageType = InventoryUsageType.CheckInventoryItemDetail;
@@ -78,6 +78,10 @@ public class InventoryPanel : MonoBehaviour
         itemInfoDetailPanel.transform.SetParent(transform);
         itemInfoDetailPanel.GetComponent<RectTransform>().localScale = Vector3.one;
         itemInfoDetailPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -37.5f);
+        // Fix offset so it won't shrink
+        itemInfoDetailPanel.GetComponent<RectTransform>().offsetMax = new Vector2(0, -50);
+        itemInfoDetailPanel.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        //
         itemInfoDetailPanel.Initial(info);
     }
 

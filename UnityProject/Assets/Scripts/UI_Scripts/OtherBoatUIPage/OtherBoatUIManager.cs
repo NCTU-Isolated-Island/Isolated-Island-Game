@@ -28,6 +28,8 @@ public class OtherBoatUIManager : MonoBehaviour
     private Button startChatButton;
     [SerializeField]
     private Button startTransactionButton;
+    [SerializeField]
+    private Button donateButton;
 
     //
     private bool expandStatus;
@@ -85,13 +87,23 @@ public class OtherBoatUIManager : MonoBehaviour
                 addFriendButton.interactable = false;
             else
                 addFriendButton.interactable = true;
-            // Add start Transaction Button Listener
-            startTransactionButton.onClick.AddListener(delegate
-            {
-                TransactionManager.Instance.SendTransactionRequest(otherPlayerID);
-            });
 
         }
+    }
+
+    public void OpenInventoryPanelForDonation()
+    {
+        UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
+    }
+
+    public void DonateToOtherPlayer(Item item)
+    {
+        
+    }
+
+    public void SendTransactionRequest()
+    {
+        TransactionManager.Instance.SendTransactionRequest(otherPlayerInfo.playerID);
     }
 
     public void SendFriendRequest()

@@ -64,6 +64,9 @@ public class UIManager : MonoBehaviour
                 case UIPageType.PutItem:
                     InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.PutItemOnVessel);
                     break;
+                case UIPageType.OtherBoat:
+                    InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.Donation);
+                    break;
                 default:
                     InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.CheckInventoryItemDetail);
                     break;

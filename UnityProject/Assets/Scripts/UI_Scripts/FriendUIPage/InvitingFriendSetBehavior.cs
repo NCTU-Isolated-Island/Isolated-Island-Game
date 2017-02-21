@@ -25,9 +25,21 @@ public class InvitingFriendSetBehavior : MonoBehaviour {
                 CameraManager.Instance.ToNearAnchor(GameManager.Instance.UserGameObject[information.playerID]);
                 FriendUIManager.Instance.gameObject.SetActive(false);
             });
-        
+        UpdateButtonStatus();
     }
-	
+
+    public void UpdateButtonStatus()
+    {
+        //print("UpdateButtonStatus");
+        if (PlayerInformationManager.Instance.FindPlayerInformation(information.playerID, out information))
+        {
+            if (GameManager.Instance.UserGameObject.ContainsKey(information.playerID))
+                friendSetButton.interactable = true;
+            else
+                friendSetButton.interactable = false;
+        }
+    }
+
     public void AcceptFriendInvite()
     {
         UserManager.Instance.User.Player.OperationManager.AcceptFriend(information.playerID);
