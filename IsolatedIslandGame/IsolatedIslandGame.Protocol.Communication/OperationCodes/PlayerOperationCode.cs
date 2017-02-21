@@ -24,6 +24,7 @@
         ReadPlayerMessage,
         SendMaterialToIsland,
         ScanQR_Code,
-        DiscardItem
+        DiscardItem,
+        DonateItemToPlayer
     }
 }

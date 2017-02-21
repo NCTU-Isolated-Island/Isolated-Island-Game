@@ -128,5 +128,11 @@ namespace IsolatedIslandGame.Client.Communication
             LogService.FatalFormat("ClienPlayer ReadPlayerMessage ");
             return false;
         }
+
+        public override bool DonateItemToPlayer(int senderPlayerID, int receiverPlayerID, Item item, int itemCount)
+        {
+            LogService.FatalFormat("ClienPlayer DonateItemToPlayer ");
+            return false;
+        }
     }
 }
