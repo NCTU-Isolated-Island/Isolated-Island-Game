@@ -82,9 +82,9 @@ public class OtherBoatUIManager : MonoBehaviour
 
             // Control addFriend Button
             if (UserManager.Instance.User.Player.ContainsFriend(otherPlayerID) == true)
-                addFriendButton.interactable = true;
-            else
                 addFriendButton.interactable = false;
+            else
+                addFriendButton.interactable = true;
             // Add start Transaction Button Listener
             startTransactionButton.onClick.AddListener(delegate
             {

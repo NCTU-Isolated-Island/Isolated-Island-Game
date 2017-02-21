@@ -36,7 +36,7 @@ public class ConfirmedFriendSetBehavior : MonoBehaviour {
 
     public void UpdateButtonStatus()
     {
-        print("UpdateButtonStatus");
+        //print("UpdateButtonStatus");
         if (PlayerInformationManager.Instance.FindPlayerInformation(information.playerID, out information))
         {
             if (GameManager.Instance.UserGameObject.ContainsKey(information.playerID))

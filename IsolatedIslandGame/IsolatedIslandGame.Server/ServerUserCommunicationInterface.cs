@@ -8,8 +8,6 @@ using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
-using System;
-using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Server
 {
@@ -202,6 +200,37 @@ namespace IsolatedIslandGame.Server
                 else
                 {
                     return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool DonateItemToPlayer(int senderPlayerID, int receiverPlayerID, Item item, int itemCount)
+        {
+            Player sender, receiver;
+            if (PlayerFactory.Instance.FindPlayer(senderPlayerID, out sender) && PlayerFactory.Instance.FindPlayer(receiverPlayerID, out receiver))
+            {
+                lock(sender.Inventory)
+                {
+                    lock(receiver.Inventory)
+                    {
+                        if(sender.Inventory.RemoveItemCheck(item.ItemID, itemCount) && sender.Inventory.AddItemCheck(item.ItemID, itemCount))
+                        {
+                            sender.Inventory.RemoveItem(item.ItemID, itemCount);
+                            sender.Inventory.AddItem(item, itemCount);
+                            sender.User.EventManager.UserInform("成功", "贈送物品成功");
+                            receiver.User.EventManager.UserInform("提示", $"{sender.Nickname} 贈送了{itemCount}個{item.ItemName}給你");
+                            return true;
+                        }
+                        else
+                        {
+                            sender.User.EventManager.UserInform("失敗", "贈送物品失敗，且確認是否擁有足夠的物品");
+                            return false;
+                        }
+                    }
                 }
             }
             else

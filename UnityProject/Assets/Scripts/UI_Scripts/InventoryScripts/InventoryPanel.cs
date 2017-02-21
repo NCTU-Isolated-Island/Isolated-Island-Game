@@ -17,11 +17,16 @@ public class InventoryPanel : MonoBehaviour
     [SerializeField]
     private ItemInfoDetailPanel itemInfoDetailPanelPrefab;
 
+    //
+    [SerializeField]
+    private Button toMainPageButton;
+        //
+
     public enum InventoryUsageType
     {
         CheckInventoryItemDetail , PutInCombineSlot , PutInTransactionSlot , PutItemOnVessel
     }
-
+    [SerializeField]
     private InventoryUsageType currentUsageType = InventoryUsageType.CheckInventoryItemDetail;
 
     public void SetUsageType(InventoryUsageType usageType)
@@ -52,12 +57,21 @@ public class InventoryPanel : MonoBehaviour
         currentUsageType = usageType;
         RenderInventory(inventory);
         // Add Effects
+        if (currentUsageType == InventoryUsageType.PutInTransactionSlot)
+            toMainPageButton.gameObject.SetActive(false);
+        else
+            toMainPageButton.gameObject.SetActive(true);
     }
 
     public void ClosePanel()
     {
+        // Special case dealing base on UI layer issue
+        if (currentUsageType == InventoryUsageType.PutInTransactionSlot)
+            TransactionManager.Instance.TransactionUIPage.SetActive(true);
+
         UIManager.Instance.ToPreviousPage();
     }
+
     public void ShowItemInfoDetail(InventoryItemInfo info)
     {
         ItemInfoDetailPanel itemInfoDetailPanel = Instantiate(itemInfoDetailPanelPrefab);

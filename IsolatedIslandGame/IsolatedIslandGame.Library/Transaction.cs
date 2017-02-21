@@ -15,8 +15,8 @@ namespace IsolatedIslandGame.Library
         public bool IsLocked { get { return IsRequesterConfirmed || IsAccepterConfirmed; } }
         private TransactionItemInfo[] requesterTransactionItemInfos = new TransactionItemInfo[6];
         private TransactionItemInfo[] accepterTransactionItemInfos = new TransactionItemInfo[6];
-        public IEnumerable<TransactionItemInfo> RequesterTransactionItemInfos { get { return requesterTransactionItemInfos.ToArray(); } }
-        public IEnumerable<TransactionItemInfo> AccepterTransactionItemInfos { get { return accepterTransactionItemInfos.ToArray(); } }
+        public IEnumerable<TransactionItemInfo> RequesterTransactionItemInfos { get { return requesterTransactionItemInfos.Where(x => x != null).ToArray(); } }
+        public IEnumerable<TransactionItemInfo> AccepterTransactionItemInfos { get { return accepterTransactionItemInfos.Where(x => x != null).ToArray(); } }
 
         public delegate void TransactionConfirmStatusChangeEventHandler(int transactionID, int playerID, bool isConfirmed);
         private event TransactionConfirmStatusChangeEventHandler onTransactionConfirmStatusChange;
@@ -65,13 +65,13 @@ namespace IsolatedIslandGame.Library
                 {
                     case DataChangeType.Add:
                     case DataChangeType.Update:
-                        if (accepterTransactionItemInfos.Any(x => x.Item == info.Item && x.PositionIndex != info.PositionIndex))
+                        if (RequesterTransactionItemInfos.Any(x => x.Item == info.Item && x.PositionIndex != info.PositionIndex))
                         {
                             return false;
                         }
                         else
                         {
-                            accepterTransactionItemInfos[info.PositionIndex] = info;
+                            requesterTransactionItemInfos[info.PositionIndex] = info;
                         }
                         break;
                     case DataChangeType.Remove:
@@ -87,7 +87,7 @@ namespace IsolatedIslandGame.Library
                 {
                     case DataChangeType.Add:
                     case DataChangeType.Update:
-                        if (accepterTransactionItemInfos.Any(x => x.Item == info.Item && x.PositionIndex != info.PositionIndex))
+                        if (AccepterTransactionItemInfos.Any(x => x.Item == info.Item && x.PositionIndex != info.PositionIndex))
                         {
                             return false;
                         }
