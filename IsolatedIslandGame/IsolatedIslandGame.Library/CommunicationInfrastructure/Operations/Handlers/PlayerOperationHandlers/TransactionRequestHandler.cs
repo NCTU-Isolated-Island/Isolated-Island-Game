@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 if (subject.User.CommunicationInterface.TransactionRequest(subject.PlayerID, accepterPlayerID))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, TransactionRequest, AccepterPlayerID: {accepterPlayerID}");
+                    subject.User.EventManager.UserInform("成功", "已發出交易邀請");
                     return true;
                 }
                 else
