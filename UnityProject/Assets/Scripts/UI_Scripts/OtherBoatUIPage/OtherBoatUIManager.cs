@@ -31,11 +31,24 @@ public class OtherBoatUIManager : MonoBehaviour
     [SerializeField]
     private Button donateButton;
 
+    [SerializeField]
+    private GameObject chooseAmountPanel;
+    [SerializeField]
+    private Dropdown chooseAmountDropdown;
+
     //
     private bool expandStatus;
 
     private float ver_ori;
     private IEnumerator coroutine;
+
+    class DonationInfo
+    {
+        public Item item;
+        public int amount;
+    }
+    private DonationInfo donationInfo = new DonationInfo();
+
     //
     void Awake()
     {
@@ -54,6 +67,7 @@ public class OtherBoatUIManager : MonoBehaviour
     {
         if (CameraManager.Instance != null)
             CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
+        chooseAmountPanel.SetActive(false);
     }
 
     void InitialSetting()
@@ -96,9 +110,23 @@ public class OtherBoatUIManager : MonoBehaviour
         UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
     }
 
-    public void DonateToOtherPlayer(Item item)
+    public void ConfirmDonationItem(Item item)
     {
-        
+        donationInfo.item = item;
+        chooseAmountPanel.SetActive(true);
+    }
+
+    public void ConfirmDonationAmount()
+    {
+        donationInfo.amount = chooseAmountDropdown.value + 1;
+        DonateToOtherPlayer();
+    }
+
+    public void DonateToOtherPlayer()
+    {
+        UserManager.Instance.User.Player.OperationManager.DonateItemToPlayer(otherPlayerInfo.playerID, donationInfo.item.ItemID, donationInfo.amount);
+
+        chooseAmountPanel.SetActive(false);
     }
 
     public void SendTransactionRequest()
