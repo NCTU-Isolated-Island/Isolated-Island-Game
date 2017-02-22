@@ -10,7 +10,7 @@ public class UserInformPanel : MonoBehaviour
     {
         titleText = transform.Find("Title").GetComponent<Text>();
         contentText = transform.Find("Content").GetComponent<Text>();
-        transform.Find("Confrim").GetComponent<Button>().onClick.AddListener(() => 
+        transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => 
         {
             Destroy(gameObject);
         });
