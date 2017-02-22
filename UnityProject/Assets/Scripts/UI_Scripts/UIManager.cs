@@ -156,6 +156,6 @@ public class UIManager : MonoBehaviour
         panel.RenderUserInform(title, content);
         panel.transform.SetParent(transform);
         panel.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        panel.GetComponent<RectTransform>().localScale = Vector2.one;
+        panel.GetComponent<RectTransform>().localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
     }
 }
