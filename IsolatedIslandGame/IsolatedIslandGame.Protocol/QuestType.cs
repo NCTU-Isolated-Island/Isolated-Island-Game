@@ -5,6 +5,7 @@
         QR_Code,
         MutiplayerSynthesize,
         SendMessage,
-        CloseDeal
+        CloseDeal,
+        CumulativeLogin
     }
 }

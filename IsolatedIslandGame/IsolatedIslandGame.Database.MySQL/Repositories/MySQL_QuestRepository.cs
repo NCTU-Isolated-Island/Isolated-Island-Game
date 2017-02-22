@@ -92,6 +92,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                             requirements.Add(requirement);
                         }
                         break;
+                    case QuestRequirementType.CumulativeLogin:
+                        if (SpecializeRequirementToCumulativeLoginRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
                     default:
                         LogService.Fatal($"MySQL_QuestRepository ListRequirementsOfQuest QuestRequirementType: {info.questRequirementType} not implemented");
                         break;
@@ -211,6 +217,29 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         string qrCodeString = reader.GetString(0);
                         requirement = new ScanQR_CodeQuestRequirement(requirementID, qrCodeString);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeRequirementToCumulativeLoginRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT CumulativeLoginCount
+                from CumulativeLoginQuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int cumulativeLoginCount = reader.GetInt32(0);
+                        requirement = new CumulativeLoginQuestRequirement(requirementID, cumulativeLoginCount);
                         return true;
                     }
                     else

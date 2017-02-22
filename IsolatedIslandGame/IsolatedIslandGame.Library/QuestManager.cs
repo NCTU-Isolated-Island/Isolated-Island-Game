@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library.Quests;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IsolatedIslandGame.Library
 {
@@ -13,6 +14,8 @@ namespace IsolatedIslandGame.Library
 
         protected Dictionary<int, Quest> questDictionary = new Dictionary<int, Quest>();
         protected Dictionary<int, QuestRequirement> questRequirementDictionary = new Dictionary<int, QuestRequirement>();
+
+        public IEnumerable<Quest> Quests { get { return questDictionary.Values.ToArray(); } }
 
         public QuestManager() { }
         public bool ContainsQuest(int questID)

@@ -3,6 +3,6 @@
     public enum QuestRewardType : byte
     {
         GiveItem,
-        UnlockBlueprint
+        UnlockBlueprint,
     }
 }

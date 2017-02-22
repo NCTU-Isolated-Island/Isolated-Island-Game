@@ -46,6 +46,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.ScanQR_Code, new ScanQR_CodeHandler(player) },
                 { PlayerOperationCode.DiscardItem, new DiscardItemHandler(player) },
                 { PlayerOperationCode.DonateItemToPlayer, new DonateItemToPlayerHandler(player) },
+                { PlayerOperationCode.TakeQuestReward, new TakeQuestRewardHandler(player) },
             };
         }
 
@@ -284,6 +285,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)DonateItemToPlayerParameterCode.ItemCount, itemCount }
             };
             SendOperation(PlayerOperationCode.DonateItemToPlayer, parameters);
+        }
+        public void TakeQuestReward(int questRecordID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)TakeQuestRewardParameterCode.QuestRecorndID, questRecordID }
+            };
+            SendOperation(PlayerOperationCode.TakeQuestReward, parameters);
         }
     }
 }

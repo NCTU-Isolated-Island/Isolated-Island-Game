@@ -28,6 +28,7 @@ namespace IsolatedIslandGame.Library.Quests
                 {
                     QuestRecordFactory.Instance?.MarkQuestRecordHasGottenReward(QuestRecordID);
                 }
+                onQuestRecordStatusChange?.Invoke(this);
             }
         }
         public bool IsFinished { get { return requirementRecords.TrueForAll(x => x.IsSufficient); } }
@@ -45,16 +46,12 @@ namespace IsolatedIslandGame.Library.Quests
             PlayerID = playerID;
             Quest = quest;
             this.requirementRecords = requirementRecords;
-            HasGottenReward = hasGottenReward;
+            this.hasGottenReward = hasGottenReward;
             foreach (var requirementRecord in requirementRecords)
             {
                 requirementRecord.OnRequirementStatusChange += (record) =>
                 {
                     onQuestRecordStatusChange?.Invoke(this);
-                    if(IsFinished && !HasGottenReward)
-                    {
-                        giveReward?.Invoke();
-                    }
                 };
             }
         }
@@ -63,15 +60,27 @@ namespace IsolatedIslandGame.Library.Quests
             requirementRecords.ForEach(x => x.RegisterObserverEvents(player));
             giveReward = () => 
             {
-                HasGottenReward = true;
+                bool canGiveReward = true;
                 foreach (var questReward in Quest.Rewards)
                 {
-                    if (questReward.GiveRewardCheck(player))
+                    if (!questReward.GiveRewardCheck(player))
+                    {
+                        canGiveReward = false;
+                        break;
+                    }
+                }
+                if(canGiveReward)
+                {
+                    foreach (var questReward in Quest.Rewards)
                     {
                         questReward.GiveReward(player);
                     }
+                    HasGottenReward = true;
                 }
             };
+        }
+        public void GiveReward()
+        {
             if (IsFinished && !HasGottenReward)
             {
                 giveReward?.Invoke();

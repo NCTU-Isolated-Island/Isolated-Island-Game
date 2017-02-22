@@ -18,12 +18,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 command.Parameters.AddWithValue("itemID", info.Item.ItemID);
                 command.Parameters.AddWithValue("itemCount", info.Count);
                 command.Parameters.AddWithValue("positionIndex", info.PositionIndex);
-                using (MySqlDataReader reader = command.ExecuteReader())
+                if (command.ExecuteNonQuery() <= 0)
                 {
-                    if (command.ExecuteNonQuery() <= 0)
-                    {
-                        LogService.Error($"MySQL_TransactionItemInfoRepository Save TransactionItemInfo Error TransactionID: {transactionID}, PlayerID: {playerID}, ItemID: {info.Item.ItemID}, ItemCount: {info.Count}, PositionIndex: {info.PositionIndex}");
-                    }
+                    LogService.Error($"MySQL_TransactionItemInfoRepository Save TransactionItemInfo Error TransactionID: {transactionID}, PlayerID: {playerID}, ItemID: {info.Item.ItemID}, ItemCount: {info.Count}, PositionIndex: {info.PositionIndex}");
                 }
             }
         }

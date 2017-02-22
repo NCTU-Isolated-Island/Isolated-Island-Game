@@ -35,6 +35,7 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeRequirementToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeRequirementToScanQR_CodeRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeRequirementToCumulativeLoginRequirement(int requirementID, out QuestRequirement requirement);
         #endregion
 
         #region Specialize QuestReward
