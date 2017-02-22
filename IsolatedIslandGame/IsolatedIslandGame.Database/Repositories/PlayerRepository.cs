@@ -11,5 +11,6 @@ namespace IsolatedIslandGame.Database.Repositories
         public abstract void Update(Player player);
         public abstract bool ReadPlayerInformation(int playerID, out PlayerInformation playerInformation);
         public abstract void GlobalUpdateNextDrawMaterialTime(DateTime nextDrawMaterialTime);
+        public abstract void UpdateLastLoginTime(int playerID, DateTime loginTime, out bool isTodayFirstLogin, out int cumulativeLoginCount);
     }
 }

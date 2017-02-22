@@ -25,6 +25,7 @@
         SendMaterialToIsland,
         ScanQR_Code,
         DiscardItem,
-        DonateItemToPlayer
+        DonateItemToPlayer,
+        TakeQuestReward
     }
 }

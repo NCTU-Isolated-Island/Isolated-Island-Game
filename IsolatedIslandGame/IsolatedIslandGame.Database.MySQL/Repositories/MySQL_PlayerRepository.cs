@@ -178,6 +178,61 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             {
                 command.Parameters.AddWithValue("nextDrawMaterialTime", nextDrawMaterialTime);
                 LogService.Info($"GlobalUpdateNextDrawMaterialTime to {command.ExecuteNonQuery()} players");
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.ErrorFormat("MySQLPlayerRepository GlobalUpdateNextDrawMaterialTime no affected row");
+                }
+            }
+        }
+
+        public override void UpdateLastLoginTime(int playerID, DateTime loginTime, out bool isTodayFirstLogin, out int cumulativeLoginCount)
+        {
+            DateTime lastLoginTime;
+            int originCumulativeLoginCount;
+            string sqlString = @"SELECT  
+                LastLoginTime, CumulativeLoginCount
+                from PlayerCollection WHERE PlayerID = @playerID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("playerID", playerID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        lastLoginTime = reader.GetDateTime(0);
+                        originCumulativeLoginCount = reader.GetInt32(1);
+                    }
+                    else
+                    {
+                        isTodayFirstLogin = false;
+                        cumulativeLoginCount = 0;
+                        return;
+                    }
+                }
+            }
+            if(lastLoginTime.Day != loginTime.Day)
+            {
+                isTodayFirstLogin = true;
+                cumulativeLoginCount = originCumulativeLoginCount + 1;
+            }
+            else
+            {
+                isTodayFirstLogin = false;
+                cumulativeLoginCount = originCumulativeLoginCount;
+            }
+
+            sqlString = @"UPDATE PlayerCollection 
+                SET LastLoginTime = @lastLoginTime, CumulativeLoginCount = @cumulativeLoginCount
+                WHERE PlayerID = @playerID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("lastLoginTime", loginTime);
+                command.Parameters.AddWithValue("cumulativeLoginCount", cumulativeLoginCount);
+                command.Parameters.AddWithValue("playerID", playerID);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.ErrorFormat("MySQLPlayerRepository UpdateLastLoginTime no affected row, PlayerID: {0}", playerID);
+                }
             }
         }
     }

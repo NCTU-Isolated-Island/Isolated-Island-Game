@@ -33,5 +33,7 @@ namespace IsolatedIslandGame.Database.Repositories
 
         public abstract bool MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(int requirementRecordID);
         protected abstract bool SpecializeRequirementRecordToScanQR_CodeRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
+
+        protected abstract bool SpecializeRequirementRecordToCumulativeLoginRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord);
     }
 }

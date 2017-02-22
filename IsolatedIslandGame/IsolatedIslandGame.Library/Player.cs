@@ -94,6 +94,9 @@ namespace IsolatedIslandGame.Library
 
         private event Action<DateTime> onNextDrawMaterialTimeUpdated;
         public event Action<DateTime> OnNextDrawMaterialTimeUpdated { add { onNextDrawMaterialTimeUpdated += value; } remove { onNextDrawMaterialTimeUpdated -= value; } }
+
+        private event Action<bool, int> onLoginStatusUpdated;
+        public event Action<bool, int> OnLoginStatusUpdated { add { onLoginStatusUpdated += value; } remove { onLoginStatusUpdated -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress, DateTime nextDrawMaterialTime)
@@ -278,6 +281,10 @@ namespace IsolatedIslandGame.Library
         public void ScanQR_Code(string qrCodeString)
         {
             onScanQR_Code?.Invoke(qrCodeString);
+        }
+        public void UpdateLoginStatus(bool isTodayFirstLogin, int cumulativeLoginCount)
+        {
+            onLoginStatusUpdated?.Invoke(isTodayFirstLogin, cumulativeLoginCount);
         }
     }
 }

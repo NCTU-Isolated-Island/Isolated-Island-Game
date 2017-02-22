@@ -138,6 +138,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 requirementRecords.Add(requirementRecord);
                             }
                             break;
+                        case QuestRequirementType.CumulativeLogin:
+                            if (SpecializeRequirementRecordToCumulativeLoginRequirementRecord(info.questRequirementRecordID, requirement, playerID, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
                         default:
                             LogService.Fatal($"MySQL_QuestRecordRepository ListRequirementRecordsOfQuestRecord QuestRequirementType: {info.questRequirementType} not implemented");
                             break;
@@ -184,6 +190,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 case QuestRequirementType.ScanQR_Code:
                     {
                         requirementRecord = new ScanQR_CodeQuestRequirementRecord(questRequirementRecordID, requirement, false);
+                    }
+                    return true;
+                case QuestRequirementType.CumulativeLogin:
+                    {
+                        requirementRecord = new CumulativeLoginQuestRequirementRecord(questRequirementRecordID, requirement);
                     }
                     return true;
                 default:
@@ -299,7 +310,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 
         public override bool MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(int requirementRecordID)
         {
-            string sqlString = @"INSERT INTO HasCcannedCorrectQR_CodeQuestRequirementRecordCollection 
+            string sqlString = @"INSERT INTO HasScannedCorrectQR_CodeQuestRequirementRecordCollection 
                 (QuestRequirementRecordID) VALUES (@requirementRecordID) ;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -318,7 +329,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         protected override bool SpecializeRequirementRecordToScanQR_CodeRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord)
         {
             string sqlString = @"SELECT QuestRequirementRecordID
-                from HasCcannedCorrectQR_CodeQuestRequirementRecordCollection 
+                from HasScannedCorrectQR_CodeQuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -338,6 +349,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
             
+        }
+
+        protected override bool SpecializeRequirementRecordToCumulativeLoginRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord)
+        {
+            requirementRecord = new CumulativeLoginQuestRequirementRecord(requirementRecordID, requirement);
+            return true;
         }
     }
 }
