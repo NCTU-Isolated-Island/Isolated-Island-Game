@@ -16,8 +16,8 @@
                         ServerAddress = "140.113.123.134",
                         ServerPort = 4532,
                         //ServerPort = 4531,
-                        ServerVersion = "Release0.1",
-                        ClientVersion = "Release0.1"
+                        ServerVersion = "Release0.2",
+                        ClientVersion = "Release0.2"
                     };
                 }
                 return instance;
