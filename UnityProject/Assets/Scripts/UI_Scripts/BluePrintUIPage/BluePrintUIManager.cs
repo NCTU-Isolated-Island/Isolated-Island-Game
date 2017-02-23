@@ -74,6 +74,18 @@ public class BluePrintUIManager : MonoBehaviour {
                 material[elementInfo.positionIndex].sprite = Resources.Load<Sprite>("2D/" +  elementInfo.itemID);
             }
 
+            foreach (var elementInfo in bluePrint.Products)
+            {
+                // Put Sprite to result.sprite , currently only one product
+                result.sprite = Resources.Load<Sprite>("2D/" + elementInfo.itemID);
+            }
+
+            foreach (Image element in material)
+            {
+                if (element.sprite == null)
+                    Destroy(element.gameObject);
+            }
+
             blueprintButton = tmp.GetComponent<Button>();
             blueprintButton.onClick.AddListener(delegate { ToCombineByBluePrint(bluePrint); });
         }
