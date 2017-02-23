@@ -25,8 +25,8 @@ public class TransactionManager : MonoBehaviour
     private GameObject ReceiveTransactionRequestPanel;
     [SerializeField]
     private GameObject MessagePanel;
-    [SerializeField]
-    private GameObject TransactionConfirmedPanel;
+    //[SerializeField]
+    //private GameObject TransactionConfirmedPanel;
     [SerializeField]
     private GameObject ChooseAmountPanel;
 

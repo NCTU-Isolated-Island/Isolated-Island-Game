@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     // enum all UI pages
     public enum UIPageType
     {
-        Login, Main, OtherBoat, Inventory, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem
+        Login, Main, OtherBoat, Inventory, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem , IsolatedIsland
     }
 
     public GameObject[] UIPageList = new GameObject[10];
@@ -21,6 +21,12 @@ public class UIManager : MonoBehaviour
     void OnGUI()
     {
         GUI.Label(new Rect(50, 50, 100, 100), (1 / Time.deltaTime).ToString());
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+            SwapPage(UIPageType.IsolatedIsland);
     }
 
 
@@ -50,7 +56,10 @@ public class UIManager : MonoBehaviour
     public void SwapPage(UIPageType nextPage)
     {
         if (nextPage == PageStack.Peek()) return;
-
+        //
+        if (PageStack.Count > 1)
+            UIPageList[(int)PageStack.Peek()].SetActive(false);
+        //
         if (nextPage == UIPageType.Inventory)
         {
             switch (PageStack.Peek())
@@ -66,6 +75,9 @@ public class UIManager : MonoBehaviour
                     break;
                 case UIPageType.OtherBoat:
                     InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.Donation);
+                    break;
+                case UIPageType.IsolatedIsland:
+                    InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.ThrowMaterialToIsland);
                     break;
                 default:
                     InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.CheckInventoryItemDetail);
@@ -84,7 +96,9 @@ public class UIManager : MonoBehaviour
     {
         // Remove Inventory -> use InventoryPanel.ClosePanel()
         UIPageType tmp = PageStack.Pop();
-
+        //
+        UIPageList[(int)PageStack.Peek()].SetActive(true);
+        //
         StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
     }
 

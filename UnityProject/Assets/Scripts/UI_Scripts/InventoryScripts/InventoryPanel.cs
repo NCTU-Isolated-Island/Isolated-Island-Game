@@ -24,8 +24,9 @@ public class InventoryPanel : MonoBehaviour
 
     public enum InventoryUsageType
     {
-        CheckInventoryItemDetail , PutInCombineSlot , PutInTransactionSlot , PutItemOnVessel , Donation
+        CheckInventoryItemDetail , PutInCombineSlot , PutInTransactionSlot , PutItemOnVessel , Donation , ThrowMaterialToIsland
     }
+
     [SerializeField]
     private InventoryUsageType currentUsageType = InventoryUsageType.CheckInventoryItemDetail;
 
