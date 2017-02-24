@@ -55,38 +55,28 @@ public class MaterialScoreBoardManager : MonoBehaviour
             Destroy(oldSet.gameObject);
         }
 
-        foreach (Island.PlayerScoreInfo info in Island.Instance.PlayerScoreRanking.Where(x => UserManager.Instance.User.Player.ContainsFriend(x.playerID)))
+        foreach (Island.PlayerMaterialInfo info in Island.Instance.TodayMaterialRanking.OrderBy(x => x).Reverse())
         {
-            PlayerInformation playerInformation;
+            Item item;
 
-            if (!PlayerInformationManager.Instance.FindPlayerInformation(info.playerID, out playerInformation)) continue;
+            if (!ItemManager.Instance.FindItem(info.materialItemID, out item)) continue;
 
             GameObject score = Instantiate(materialScoreSet);
             Image image = score.transform.Find("Image").gameObject.GetComponent<Image>();
-            Text playerGroup = score.transform.Find("PlayerGroup").gameObject.GetComponent<Text>();
+            Text materialName = score.transform.Find("MaterialName").gameObject.GetComponent<Text>();
+            Text materialDescription = score.transform.Find("MaterialDescription").gameObject.GetComponent<Text>();
+            Text materialScore = score.transform.Find("MaterialScore").gameObject.GetComponent<Text>();
             Text playerName = score.transform.Find("PlayerName").gameObject.GetComponent<Text>();
-            Text playerSpeech = score.transform.Find("PlayerSpeech").gameObject.GetComponent<Text>();
-            Text playerScore = score.transform.Find("PlayerScore").gameObject.GetComponent<Text>();
 
-            playerName.text = playerInformation.nickname;
-            playerSpeech.text = playerInformation.signature;
-            playerScore.text = string.Format("得分 : {0}", info.score.ToString());
+            image.sprite = Resources.Load<Sprite>("2D/" + item.ItemID);
+            materialName.text = item.ItemName;
+            materialDescription.text = item.Description;
+            materialScore.text = string.Format("分數 : {0}", (item as IsolatedIslandGame.Library.Items.Material).Score);
 
-            switch (playerInformation.groupType)
-            {
-                case GroupType.Animal:
-                    playerGroup.text = "信仰";
-                    image.sprite = Resources.Load<Sprite>("GroupIcon/animal");
-                    break;
-                case GroupType.Businessman:
-                    playerGroup.text = "科技";
-                    image.sprite = Resources.Load<Sprite>("GroupIcon/businessman");
-                    break;
-                case GroupType.Farmer:
-                    playerGroup.text = "自然";
-                    image.sprite = Resources.Load<Sprite>("GroupIcon/farmer");
-                    break;
-            }
+            PlayerInformation playerInformation;
+            if (!PlayerInformationManager.Instance.FindPlayerInformation(info.playerID, out playerInformation)) continue;
+
+            playerName.text = string.Format("投放玩家 : {0}", playerInformation.nickname);
 
             score.transform.SetParent(materialScoreSetContent.transform);
             score.GetComponent<RectTransform>().localScale = Vector3.one;
