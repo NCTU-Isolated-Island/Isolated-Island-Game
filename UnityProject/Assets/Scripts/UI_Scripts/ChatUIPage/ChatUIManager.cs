@@ -1,25 +1,15 @@
 ﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class ChatUIManager : MonoBehaviour {
 
     public static ChatUIManager Instance { get; private set; }
-
-    private class sort : IComparer<PlayerConversation>
-    {
-        int IComparer<PlayerConversation>.Compare(PlayerConversation _objA, PlayerConversation _objB)
-        {
-            DateTime a_time = _objA.message.sendTime;
-            DateTime b_time = _objB.message.sendTime;
-
-            return a_time.CompareTo(b_time);
-        }
-    }
 
     // UI Variable for Record page
     [SerializeField]
@@ -160,12 +150,7 @@ public class ChatUIManager : MonoBehaviour {
         if (playerConversationTable.ContainsKey(chatPlayer.playerID))
             conversation = playerConversationTable[chatPlayer.playerID];
 
-        // TODO : Sort conversation by date
-        //
-        conversation.Sort((IComparer<PlayerConversation>)new sort());
-        //
-
-        foreach (var entry in conversation)
+        foreach (var entry in conversation.OrderBy(x => x.message.sendTime))
         {
             // Make sure not rendered same message
             if (renderedMessage.Contains(entry.message.playerMessageID)) return;

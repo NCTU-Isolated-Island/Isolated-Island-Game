@@ -78,13 +78,13 @@ public class FriendUIManager : MonoBehaviour {
                 if (friend.isConfirmed == false && friend.isInviter == true)
                 {
                     tmp = Instantiate(invitingFriendSetPrefab);
-                    tmp.transform.parent = friendSetContent.transform;
+                    tmp.transform.SetParent(friendSetContent.transform);
                     tmp.gameObject.GetComponent<InvitingFriendSetBehavior>().information = friendInformation;
                 }
                 else
                 {
                     tmp = Instantiate(confirmedFriendSetPrefab);
-                    tmp.transform.parent = friendSetContent.transform;
+                    tmp.transform.SetParent(friendSetContent.transform);
                     tmp.gameObject.GetComponent<ConfirmedFriendSetBehavior>().information = friendInformation;
                 }
 

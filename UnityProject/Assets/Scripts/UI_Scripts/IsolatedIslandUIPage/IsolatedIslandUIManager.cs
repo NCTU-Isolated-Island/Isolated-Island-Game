@@ -69,17 +69,21 @@ public class IsolatedIslandUIManager : MonoBehaviour
     {
         GameObject newPage = Instantiate(scoreBoardPage);
         AdjustPageStatus(newPage);
+        ScoreBoardManager.Instance.TargetCurrentScoreBoardPage(newPage);
+        ScoreBoardManager.Instance.LoadScoreBoard();
     }
 
     public void OpenFriendScoreBoardPage()
     {
         GameObject newPage = Instantiate(friendScoreBoardPage);
         AdjustPageStatus(newPage);
+        // Target to newPage
+        FriendScoreManager.Instance.TargetCurrentScoreBoardPage(newPage);
+        FriendScoreManager.Instance.LoadScoreBoard();
     }
 
     public void OpenThrowMaterialPage()
     {
-        //TODO
         UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
     }
 
