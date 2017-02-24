@@ -26,11 +26,11 @@ public class UIManager : MonoBehaviour
         GUI.Label(new Rect(50, 50, 100, 100), (1 / Time.deltaTime).ToString());
     }
 
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.I))
-    //        SwapPage(UIPageType.IsolatedIsland);
-    //}
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+            SwapPage(UIPageType.IsolatedIsland);
+    }
 
 
     // Variables for creating character

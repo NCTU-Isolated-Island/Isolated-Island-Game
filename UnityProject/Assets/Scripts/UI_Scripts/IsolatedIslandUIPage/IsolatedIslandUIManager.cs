@@ -104,6 +104,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private void ThrowMaterialToIsland(Item item)
     {
         // call Throw Item API;
+        UserManager.Instance.User.Player.OperationManager.SendMaterialToIsland(item.ItemID);
         print("ThrowMaterialToIsland");
     }
 
