@@ -6,10 +6,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FriendScoreManager : MonoBehaviour
+public class MaterialScoreBoardManager : MonoBehaviour
 {
-
-    public static FriendScoreManager Instance { get; private set; }
+    public static MaterialScoreBoardManager Instance { get; private set; }
 
     void Awake()
     {
@@ -20,9 +19,9 @@ public class FriendScoreManager : MonoBehaviour
     [SerializeField]
     private GameObject currentScoreBoardPage;
     [SerializeField]
-    private GameObject friendScoreSetContent;
+    private GameObject materialScoreSetContent;
     [SerializeField]
-    private GameObject friendScoreSet;
+    private GameObject materialScoreSet;
 
     void Start()
     {
@@ -44,14 +43,14 @@ public class FriendScoreManager : MonoBehaviour
     public void TargetCurrentScoreBoardPage(GameObject scoreBoardPage)
     {
         currentScoreBoardPage = scoreBoardPage;
-        friendScoreSetContent = currentScoreBoardPage.transform.GetComponentInChildren<ContentSizeFitter>().gameObject;
+        materialScoreSetContent = currentScoreBoardPage.transform.GetComponentInChildren<ContentSizeFitter>().gameObject;
     }
 
     public void LoadScoreBoard()
     {
         if (currentScoreBoardPage == null) return;
 
-        foreach (Transform oldSet in friendScoreSetContent.transform)
+        foreach (Transform oldSet in materialScoreSetContent.transform)
         {
             Destroy(oldSet.gameObject);
         }
@@ -62,7 +61,7 @@ public class FriendScoreManager : MonoBehaviour
 
             if (!PlayerInformationManager.Instance.FindPlayerInformation(info.playerID, out playerInformation)) continue;
 
-            GameObject score = Instantiate(friendScoreSet);
+            GameObject score = Instantiate(materialScoreSet);
             Image image = score.transform.Find("Image").gameObject.GetComponent<Image>();
             Text playerGroup = score.transform.Find("PlayerGroup").gameObject.GetComponent<Text>();
             Text playerName = score.transform.Find("PlayerName").gameObject.GetComponent<Text>();
@@ -89,7 +88,7 @@ public class FriendScoreManager : MonoBehaviour
                     break;
             }
 
-            score.transform.SetParent(friendScoreSetContent.transform);
+            score.transform.SetParent(materialScoreSetContent.transform);
             score.GetComponent<RectTransform>().localScale = Vector3.one;
         }
     }
@@ -98,5 +97,4 @@ public class FriendScoreManager : MonoBehaviour
     {
         LoadScoreBoard();
     }
-
 }

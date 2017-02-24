@@ -135,7 +135,7 @@ public class ChatUIManager : MonoBehaviour {
 
     public void LoadMessagePage(PlayerInformation chatPlayer)
     {
-        foreach(Transform bubble in messageBubbleContent.transform)
+        foreach (Transform bubble in messageBubbleContent.transform)
         {
             Destroy(bubble.gameObject);
         }
@@ -156,23 +156,27 @@ public class ChatUIManager : MonoBehaviour {
             if (renderedMessage.Contains(entry.message.playerMessageID)) return;
             renderedMessage.Add(entry.message.playerMessageID);
 
-            if(entry.receiverPlayerID == UserManager.Instance.User.Player.PlayerID)
+            if (entry.receiverPlayerID == UserManager.Instance.User.Player.PlayerID)
             {
                 GameObject bubble = Instantiate(receiveMessageBubble);
-                Text textObj = bubble.transform.FindChild("Bubble").FindChild("Text").GetComponent<Text>();
+                Text textObj = bubble.transform.GetComponentInChildren<Text>();
                 textObj.text = entry.message.content;
 
                 bubble.transform.SetParent(messageBubbleContent.transform);
                 bubble.GetComponent<RectTransform>().localScale = Vector2.one;
+                // Adjust bubble height
+                //bubble.transform.Find("Bubble").GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.gameObject.GetComponent<RectTransform>().rect.height + 10);
             }
-            else if(entry.receiverPlayerID == chatPlayer.playerID)
+            else if (entry.receiverPlayerID == chatPlayer.playerID)
             {
                 GameObject bubble = Instantiate(sendMessageBubble);
-                Text textObj = bubble.transform.FindChild("Bubble").FindChild("Text").GetComponent<Text>();
+                Text textObj = bubble.transform.GetComponentInChildren<Text>();
                 textObj.text = entry.message.content;
 
                 bubble.transform.SetParent(messageBubbleContent.transform);
                 bubble.GetComponent<RectTransform>().localScale = Vector2.one;
+                // Adjust bubble height
+                //bubble.transform.Find("Bubble").GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.gameObject.GetComponent<RectTransform>().rect.height + 10);
             }
         }
     }

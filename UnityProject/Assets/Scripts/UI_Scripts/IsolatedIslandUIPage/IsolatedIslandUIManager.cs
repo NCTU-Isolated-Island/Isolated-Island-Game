@@ -25,6 +25,8 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private GameObject scoreBoardPage;
     [SerializeField]
     private GameObject friendScoreBoardPage;
+    [SerializeField]
+    private GameObject materialScoreBoardPage;
 
     [SerializeField]
     private GameObject confirmItemPanel;
@@ -80,6 +82,14 @@ public class IsolatedIslandUIManager : MonoBehaviour
         // Target to newPage
         FriendScoreManager.Instance.TargetCurrentScoreBoardPage(newPage);
         FriendScoreManager.Instance.LoadScoreBoard();
+    }
+
+    public void OpenMaterialScoreBoardPage()
+    {
+        GameObject newPage = Instantiate(materialScoreBoardPage);
+        AdjustPageStatus(newPage);
+        MaterialScoreBoardManager.Instance.TargetCurrentScoreBoardPage(newPage);
+        MaterialScoreBoardManager.Instance.LoadScoreBoard();
     }
 
     public void OpenThrowMaterialPage()
