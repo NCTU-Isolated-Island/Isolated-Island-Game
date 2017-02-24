@@ -58,11 +58,11 @@ public class MainBoatUIManager : MonoBehaviour {
                     });
                     break;
             }
-            //button.onClick.AddListener(delegate
-            //{
-            //    if (MainBoatUIManager.Instance.maskStatus)
-            //        MainBoatUIManager.Instance.ReverseMaskStatus();
-            //});
+            button.onClick.AddListener(delegate
+            {
+                if (MainBoatUIManager.Instance.maskStatus)
+                    MainBoatUIManager.Instance.ReverseMaskStatus();
+            });
         }
 
         foreach (Button button in verticalButtonList)

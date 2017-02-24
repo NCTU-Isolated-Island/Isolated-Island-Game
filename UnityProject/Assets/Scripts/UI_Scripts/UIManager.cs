@@ -7,11 +7,14 @@ using IsolatedIslandGame.Library;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
-
+    // Setting Variables
+    [SerializeField]
+    private float SwapPageTimeInterval;
+    //
     // enum all UI pages
     public enum UIPageType
     {
-        Login, Main, OtherBoat, Inventory, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem , IsolatedIsland
+        Login, Main, OtherBoat, Inventory, Combine, Mission, Friend, Chat_Message, Chat_Record, Transaction, BluePrint, PutItem, IsolatedIsland
     }
 
     public GameObject[] UIPageList = new GameObject[10];
@@ -23,11 +26,11 @@ public class UIManager : MonoBehaviour
         GUI.Label(new Rect(50, 50, 100, 100), (1 / Time.deltaTime).ToString());
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-            SwapPage(UIPageType.IsolatedIsland);
-    }
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.I))
+    //        SwapPage(UIPageType.IsolatedIsland);
+    //}
 
 
     // Variables for creating character
@@ -51,6 +54,9 @@ public class UIManager : MonoBehaviour
         UIPageList[(int)UIPageType.Login] = GameObject.Find("UI/LogIn");
 
         UserManager.Instance.User.OnUserInform += RenderUserInform;
+
+        SwapPageTimeInterval = 0.5f;
+        //SwapPageTimeInterval = 0.000001f;
     }
 
     public void SwapPage(UIPageType nextPage)
@@ -120,14 +126,14 @@ public class UIManager : MonoBehaviour
 
         rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -transform.root.GetComponent<RectTransform>().rect.height);
 
-        while (passTime < 0.5f)
+        while (passTime < SwapPageTimeInterval)
         {
             passTime += Time.deltaTime;
 
             Vector2 nextPosition = rectTransform.anchoredPosition;
-            nextPosition.y = Mathf.Lerp(-transform.root.GetComponent<RectTransform>().rect.height, 0, passTime / 0.5f);
+            nextPosition.y = Mathf.Lerp(-transform.root.GetComponent<RectTransform>().rect.height, 0, passTime / SwapPageTimeInterval);
             rectTransform.anchoredPosition = nextPosition;
-            
+
             yield return null;
         }
         rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, 0);
@@ -142,12 +148,12 @@ public class UIManager : MonoBehaviour
         RectTransform rectTransform = page.GetComponent<RectTransform>();
         float targetY = rectTransform.anchoredPosition.y;
 
-        while (passTime < 0.5f)
+        while (passTime < SwapPageTimeInterval)
         {
             passTime += Time.deltaTime;
 
             Vector2 nextPosition = rectTransform.anchoredPosition;
-            nextPosition.y = Mathf.Lerp(targetY, -transform.root.GetComponent<RectTransform>().rect.height, passTime / 0.5f);
+            nextPosition.y = Mathf.Lerp(targetY, -transform.root.GetComponent<RectTransform>().rect.height, passTime / SwapPageTimeInterval);
             rectTransform.anchoredPosition = nextPosition;
 
             yield return null;

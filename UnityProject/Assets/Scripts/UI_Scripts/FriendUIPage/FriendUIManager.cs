@@ -94,6 +94,8 @@ public class FriendUIManager : MonoBehaviour {
                 Text friendName = tmp.transform.FindChild("FriendName").GetComponent<Text>();
                 Text friendGroup = tmp.transform.FindChild("FriendGroup").GetComponent<Text>();
                 Text friendSpeech;
+                Image image = tmp.transform.FindChild("Image").GetComponent<Image>();
+
                 if (tmp.transform.FindChild("FriendSpeech") != null)
                 {
                     friendSpeech = tmp.transform.FindChild("FriendSpeech").GetComponent<Text>();
@@ -106,12 +108,15 @@ public class FriendUIManager : MonoBehaviour {
                 {
                     case GroupType.Animal:
                         friendGroup.text = "信仰";
+                        image.sprite = Resources.Load<Sprite>("GroupIcon/animal");
                         break;
                     case GroupType.Businessman:
                         friendGroup.text = "科技";
+                        image.sprite = Resources.Load<Sprite>("GroupIcon/businessman");
                         break;
                     case GroupType.Farmer:
                         friendGroup.text = "自然";
+                        image.sprite = Resources.Load<Sprite>("GroupIcon/farmer");
                         break;
                 }
             }

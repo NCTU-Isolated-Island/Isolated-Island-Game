@@ -106,6 +106,7 @@ public class ChatUIManager : MonoBehaviour {
 
             Text chatFriendName = tmp.transform.FindChild("chatFriendName").GetComponent<Text>();
             Text chatFriendGroup = tmp.transform.FindChild("chatFriendGroup").GetComponent<Text>();
+            Image chatFriendImage = tmp.transform.FindChild("Image").GetComponent<Image>();
 
             PlayerInformation opponentPlayer;
             PlayerInformationManager.Instance.FindPlayerInformation(GetOtherPlayerID(entry.Value[0]), out opponentPlayer);
@@ -116,12 +117,15 @@ public class ChatUIManager : MonoBehaviour {
             {
                 case GroupType.Animal:
                     chatFriendGroup.text = "信仰";
+                    chatFriendImage.sprite = Resources.Load<Sprite>("GroupIcon/animal");
                     break;
                 case GroupType.Businessman:
                     chatFriendGroup.text = "科技";
+                    chatFriendImage.sprite = Resources.Load<Sprite>("GroupIcon/businessman");
                     break;
                 case GroupType.Farmer:
                     chatFriendGroup.text = "自然";
+                    chatFriendImage.sprite = Resources.Load<Sprite>("GroupIcon/farmer");
                     break;
             }
 
