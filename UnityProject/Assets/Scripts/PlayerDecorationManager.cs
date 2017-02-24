@@ -45,10 +45,14 @@ public class PlayerDecorationManager : MonoBehaviour {
 		{
 			if(Input.touchCount == 1)
 			{
-				RotateArountY(Input.touches[0].deltaPosition.x * -0.2f);
-
-			}
-		}
+				
+#if UNITY_ANDROID
+                RotateArountY(Input.touches[0].deltaPosition.x * -0.5f);
+#else
+                RotateArountY(Input.touches[0].deltaPosition.x * -0.2f);
+#endif
+            }
+        }
 
 		if(EventSystem.current.currentSelectedGameObject == null)
 		{
@@ -172,7 +176,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 	{
 		if(Input.touchCount == 1)
 		{
-			#region HitRaycaster
+#region HitRaycaster
 			bool entireHit;
 			RaycastHit entireHitInfo = new RaycastHit();
 
@@ -192,7 +196,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 					99999f,
 					LayerMask.GetMask("PlayerModel")
 				);
-			#endregion
+#endregion
 
 			if(Input.touches[0].phase == TouchPhase.Began)
 			{
@@ -278,7 +282,12 @@ public class PlayerDecorationManager : MonoBehaviour {
 			float x = (touchZero.deltaPosition.x + touchOne.deltaPosition.x) * 0.075f;
 			float y = (touchZero.deltaPosition.x + touchOne.deltaPosition.x) * -0.05f;
 
-			CameraManager.Instance.CameraRotate(x);
+#if UNITY_ANDROID
+            x *= 4.5f;
+            y *= 4.5f;
+#endif
+
+            CameraManager.Instance.CameraRotate(x);
 			CameraManager.Instance.CameraRotateHorizontal(y);
 
 		}

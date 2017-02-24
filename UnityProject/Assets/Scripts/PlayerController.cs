@@ -210,7 +210,12 @@ public class PlayerController : MonoBehaviour {
 			float x = touch.deltaPosition.x * 0.15f;
 			float y = touch.deltaPosition.y * -0.1f;
 
-			CameraManager.Instance.CameraRotate(x);
+#if UNITY_ANDROID
+            x *= 4.5f;
+            y *= 4.5f;
+#endif
+
+            CameraManager.Instance.CameraRotate(x);
 			CameraManager.Instance.CameraRotateHorizontal(y);
 		}
 
@@ -277,13 +282,17 @@ public class PlayerController : MonoBehaviour {
 			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
 			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
-			// Find the magnitude of the vector (the distance) between the touches in each frame.
-			float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+
+
+            // Find the magnitude of the vector (the distance) between the touches in each frame.
+            float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
 			float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
 
 			// Find the difference in the distances between each frame.
 			float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
-
+#if UNITY_ANDROID
+            deltaMagnitudeDiff *= 4.5f;
+#endif
 
 			CameraManager.Instance.Zoom((deltaMagnitudeDiff * 0.001f) + 1);
 
