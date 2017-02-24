@@ -85,16 +85,20 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     public void WaitForUserConfim(Item item)
     {
-        confirmItemPanel.SetActive(true);
-        confirmItemPanel.transform.Find("Message").gameObject.GetComponent<Text>().text
-            = string.Format("確定要將 {0} 投放至島上嗎? \n 一天只能進行一次投放喔!", item.ItemName);
+        GameObject confrimPanel = Instantiate(confirmItemPanel);
 
-        confirmItemPanel.transform.Find("Confirm").gameObject.GetComponent<Button>().onClick.AddListener(delegate
+        confrimPanel.transform.SetParent(gameObject.transform);
+        confrimPanel.transform.Find("Message").gameObject.GetComponent<Text>().text
+            = string.Format("確定要將 {0} 投放至島上嗎? \n 一天只能進行一次投放喔!", item.ItemName);
+        confrimPanel.transform.Find("Cancel").gameObject.GetComponent<Button>().onClick.AddListener(delegate { Destroy(confrimPanel); });
+        confrimPanel.transform.Find("Confirm").gameObject.GetComponent<Button>().onClick.AddListener(delegate
         {
             ThrowMaterialToIsland(item);
-            confirmItemPanel.transform.Find("Message").gameObject.GetComponent<Text>().text = "";
-            confirmItemPanel.SetActive(false);
+            Destroy(confrimPanel);
         });
+
+        confrimPanel.transform.localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
+        confrimPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 30, 0);
     }
 
     private void ThrowMaterialToIsland(Item item)
