@@ -20,8 +20,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     int blueprintID = (int)parameters[(byte)GetBlueprintParameterCode.BlueprintID];
                     bool isOrderless = (bool)parameters[(byte)GetBlueprintParameterCode.IsOrderless];
                     bool isBlueprintRequired = (bool)parameters[(byte)GetBlueprintParameterCode.IsBlueprintRequired];
-                    Blueprint.ElementInfo[] requirements = (Blueprint.ElementInfo[])parameters[(byte)GetBlueprintParameterCode.Requirements];
-                    Blueprint.ElementInfo[] products = (Blueprint.ElementInfo[])parameters[(byte)GetBlueprintParameterCode.Products];
+                    Blueprint.ElementInfo[] requirements = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)GetBlueprintParameterCode.Requirements]);
+                    Blueprint.ElementInfo[] products = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)GetBlueprintParameterCode.Products]);
 
                     Blueprint blueprint = new Blueprint(blueprintID, isOrderless, isBlueprintRequired, requirements, products);
                     BlueprintManager.Instance.AddBlueprint(blueprint);

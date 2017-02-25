@@ -38,19 +38,15 @@ namespace IsolatedIslandGame.Server
             }
         }
 
-        public bool AddTask(DateTime timestamp, Action task)
+        public void AddTask(DateTime timestamp, Action task)
         {
             lock (tasks)
             {
-                if(!tasks.ContainsKey(timestamp))
+                while(tasks.ContainsKey(timestamp))
                 {
-                    tasks.Add(timestamp, task);
-                    return true;
+                    timestamp += TimeSpan.MinValue;
                 }
-                else
-                {
-                    return false;
-                }
+                tasks.Add(timestamp, task);
             }
         }
     }
