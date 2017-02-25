@@ -59,7 +59,7 @@ public class BluePrintUIManager : MonoBehaviour {
         {
             // Show BluePrint in UI
             GameObject tmp = Instantiate(bluePrintSet);
-            tmp.transform.parent = bluePrintSetContent.transform;
+            tmp.transform.SetParent(bluePrintSetContent.transform);
             tmp.GetComponent<RectTransform>().localScale = Vector2.one;
 
             Image[] material = new Image[3];
@@ -72,6 +72,18 @@ public class BluePrintUIManager : MonoBehaviour {
             {
                 // Put Sprite to material.sprite
                 material[elementInfo.positionIndex].sprite = Resources.Load<Sprite>("2D/" +  elementInfo.itemID);
+            }
+
+            foreach (var elementInfo in bluePrint.Products)
+            {
+                // Put Sprite to result.sprite , currently only one product
+                result.sprite = Resources.Load<Sprite>("2D/" + elementInfo.itemID);
+            }
+
+            foreach (Image element in material)
+            {
+                if (element.sprite == null)
+                    Destroy(element.gameObject);
             }
 
             blueprintButton = tmp.GetComponent<Button>();

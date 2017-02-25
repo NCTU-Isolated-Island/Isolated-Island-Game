@@ -17,6 +17,7 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPoi
         itemNameText = transform.Find("ItemNameText").GetComponent<Text>();
         itemCountText = transform.Find("ItemCountText").GetComponent<Text>();
     }
+
     public void Initial(InventoryItemInfo itemInfo , InventoryPanel.InventoryUsageType usageType)
     {
         ItemInfo = itemInfo;
@@ -26,15 +27,16 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPoi
         this.usageType = usageType;
     }
 
-	public void OnPointerDown (PointerEventData eventData) 
-	{
-		if(this.usageType == InventoryPanel.InventoryUsageType.CheckInventoryItemDetail)
-			PlayerDecorationManager.Instance.ClickDecoration(ItemInfo.Item.ItemID);
-	}
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (this.usageType == InventoryPanel.InventoryUsageType.CheckInventoryItemDetail)
+            PlayerDecorationManager.Instance.ClickDecoration(ItemInfo.Item.ItemID);
+        //else if (this.usageType == InventoryPanel.InventoryUsageType.ThrowMaterialToIsland)
+        //    ;//TODO : Drag to Throw Item on island
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-
         switch (this.usageType)
         {
             case InventoryPanel.InventoryUsageType.CheckInventoryItemDetail:
@@ -52,8 +54,11 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPoi
                 OtherBoatUIManager.Instance.ConfirmDonationItem(ItemInfo.Item);
                 UIManager.Instance.ToPreviousPage();
                 break;
-            case InventoryPanel.InventoryUsageType.PutItemOnVessel:
+            case InventoryPanel.InventoryUsageType.ThrowMaterialToIsland:
+                IsolatedIslandUIManager.Instance.WaitForUserConfim(ItemInfo.Item);
                 UIManager.Instance.ToPreviousPage();
+                break;
+            default:
                 break;
         }
     }

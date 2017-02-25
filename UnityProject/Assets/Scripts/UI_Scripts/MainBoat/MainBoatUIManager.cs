@@ -101,11 +101,11 @@ public class MainBoatUIManager : MonoBehaviour {
                     button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Combine); });
                     break;
             }
-            button.onClick.AddListener(delegate
-            {
-                if (MainBoatUIManager.Instance.maskStatus)
-                    MainBoatUIManager.Instance.ReverseMaskStatus();
-            });
+            //button.onClick.AddListener(delegate
+            //{
+            //    if (MainBoatUIManager.Instance.maskStatus)
+            //        MainBoatUIManager.Instance.ReverseMaskStatus();
+            //});
         }
     }
 	

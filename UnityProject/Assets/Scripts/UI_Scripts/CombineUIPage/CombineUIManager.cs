@@ -48,6 +48,8 @@ public class CombineUIManager : MonoBehaviour {
         {
             slot.SetSlotInfo(null);
         }
+        combineResultImage.GetComponent<Image>().sprite = null;
+
         combineResultMessage.text = "";
     }
 
