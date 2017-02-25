@@ -82,12 +82,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             {
                 command.Parameters.AddWithValue("senderPlayerID", info.playerID);
                 command.Parameters.AddWithValue("materialItemID", info.materialItemID);
-                using (MySqlDataReader reader = command.ExecuteReader())
+                if (command.ExecuteNonQuery() <= 0)
                 {
-                    if (command.ExecuteNonQuery() <= 0)
-                    {
-                        LogService.Error($"MySQL_IslandMaterialRepository Save Error SenderPlayerID: {info.playerID}, MaterialItemID: {info.materialItemID}");
-                    }
+                    LogService.Error($"MySQL_IslandMaterialRepository Save Error SenderPlayerID: {info.playerID}, MaterialItemID: {info.materialItemID}");
                 }
             }
         }

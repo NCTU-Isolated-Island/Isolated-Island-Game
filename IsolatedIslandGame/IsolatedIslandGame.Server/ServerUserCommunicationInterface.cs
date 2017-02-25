@@ -220,7 +220,7 @@ namespace IsolatedIslandGame.Server
                         if(sender.Inventory.RemoveItemCheck(item.ItemID, itemCount) && sender.Inventory.AddItemCheck(item.ItemID, itemCount))
                         {
                             sender.Inventory.RemoveItem(item.ItemID, itemCount);
-                            sender.Inventory.AddItem(item, itemCount);
+                            receiver.Inventory.AddItem(item, itemCount);
                             sender.User.EventManager.UserInform("成功", "贈送物品成功");
                             receiver.User.EventManager.UserInform("提示", $"{sender.Nickname} 贈送了{itemCount}個{item.ItemName}給你");
                             return true;
