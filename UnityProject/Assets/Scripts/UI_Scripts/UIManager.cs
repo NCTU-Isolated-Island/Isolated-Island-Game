@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     // DEBUG
     void OnGUI()
     {
-        GUI.Label(new Rect(100, 100, 100, 100), (1 / Time.deltaTime).ToString());
+        GUI.Label(new Rect(50, 50, 100, 100), (1 / Time.deltaTime).ToString());
     }
 
 
@@ -63,6 +63,9 @@ public class UIManager : MonoBehaviour
                     break;
                 case UIPageType.PutItem:
                     InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.PutItemOnVessel);
+                    break;
+                case UIPageType.OtherBoat:
+                    InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.Donation);
                     break;
                 default:
                     InventoryPanel.Instance.ShowPanel(InventoryPanel.InventoryUsageType.CheckInventoryItemDetail);
@@ -153,6 +156,6 @@ public class UIManager : MonoBehaviour
         panel.RenderUserInform(title, content);
         panel.transform.SetParent(transform);
         panel.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        panel.GetComponent<RectTransform>().localScale = Vector2.one;
+        panel.GetComponent<RectTransform>().localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
     }
 }

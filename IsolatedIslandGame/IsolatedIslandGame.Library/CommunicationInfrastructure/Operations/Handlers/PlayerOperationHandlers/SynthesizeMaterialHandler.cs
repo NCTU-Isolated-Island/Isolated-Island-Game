@@ -62,8 +62,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             }
                             Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
                             {
-                                { (byte)SynthesizeMaterialResponseParameterCode.Requirements, blueprint.Requirements.ToArray() },
-                                { (byte)SynthesizeMaterialResponseParameterCode.Products, blueprint.Products.ToArray() }
+                                { (byte)SynthesizeMaterialResponseParameterCode.Requirements, SerializationHelper.TypeSerialize(blueprint.Requirements.ToArray()) },
+                                { (byte)SynthesizeMaterialResponseParameterCode.Products, SerializationHelper.TypeSerialize(blueprint.Products.ToArray()) }
                             };
                             subject.User.EventManager.UserInform("成功", "合成成功。");
                             SendResponse(operationCode, responseParameters);

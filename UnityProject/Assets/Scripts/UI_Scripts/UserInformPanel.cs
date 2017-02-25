@@ -8,9 +8,9 @@ public class UserInformPanel : MonoBehaviour
 
     private void Awake()
     {
-        titleText = transform.Find("TitlePanel/TitleText").GetComponent<Text>();
-        contentText = transform.Find("ContentPanel/ContentText").GetComponent<Text>();
-        transform.Find("ContentPanel").GetComponent<Button>().onClick.AddListener(() => 
+        titleText = transform.Find("Title").GetComponent<Text>();
+        contentText = transform.Find("Content").GetComponent<Text>();
+        transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => 
         {
             Destroy(gameObject);
         });

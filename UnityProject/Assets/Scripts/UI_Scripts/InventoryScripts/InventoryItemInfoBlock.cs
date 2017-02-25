@@ -48,6 +48,10 @@ public class InventoryItemInfoBlock : MonoBehaviour, IPointerClickHandler , IPoi
                 TransactionManager.Instance.PutInItemFromInventory(ItemInfo.Item);
                 UIManager.Instance.ToPreviousPage();
                 break;
+            case InventoryPanel.InventoryUsageType.Donation:
+                OtherBoatUIManager.Instance.ConfirmDonationItem(ItemInfo.Item);
+                UIManager.Instance.ToPreviousPage();
+                break;
             case InventoryPanel.InventoryUsageType.PutItemOnVessel:
                 UIManager.Instance.ToPreviousPage();
                 break;

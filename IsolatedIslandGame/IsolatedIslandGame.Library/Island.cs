@@ -83,6 +83,7 @@ namespace IsolatedIslandGame.Library
         {
             if(todayMaterialRanking.ContainsKey(player.PlayerID))
             {
+                player.User.EventManager.UserInform("失敗", "每天只能投送一個素材");
                 return false;
             }
             else
@@ -100,10 +101,12 @@ namespace IsolatedIslandGame.Library
                         UpdatePlayerScoreRanking(new PlayerScoreInfo { playerID = player.PlayerID, score = material.Score });
                     }
                     onSendMaterial?.Invoke(player, material);
+                    player.User.EventManager.UserInform("成功", $"已投送素材 {material.ItemName}, 價值{material.Score}點分數");
                     return true;
                 }
                 else
                 {
+                    player.User.EventManager.UserInform("失敗", "你不屬於任何一個陣營");
                     return false;
                 }
             }

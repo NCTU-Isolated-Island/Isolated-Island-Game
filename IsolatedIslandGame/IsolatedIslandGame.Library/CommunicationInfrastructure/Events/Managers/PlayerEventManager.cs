@@ -66,10 +66,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.BlueprintID },
-                { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.IsOrderless },
-                { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.IsBlueprintRequired },
-                { (byte)GetBlueprintParameterCode.Requirements, blueprint.Requirements.ToArray() },
-                { (byte)GetBlueprintParameterCode.Products, blueprint.Products.ToArray() }
+                { (byte)GetBlueprintParameterCode.IsOrderless, blueprint.IsOrderless },
+                { (byte)GetBlueprintParameterCode.IsBlueprintRequired, blueprint.IsBlueprintRequired },
+                { (byte)GetBlueprintParameterCode.Requirements, SerializationHelper.TypeSerialize(blueprint.Requirements.ToArray()) },
+                { (byte)GetBlueprintParameterCode.Products, SerializationHelper.TypeSerialize(blueprint.Products.ToArray()) }
             };
             SendEvent(PlayerEventCode.GetBlueprint, parameters);
         }

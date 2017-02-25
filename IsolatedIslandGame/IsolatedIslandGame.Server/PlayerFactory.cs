@@ -228,6 +228,7 @@ namespace IsolatedIslandGame.Server
             };
             playerGetBlueprintFunctionDictionary.Add(player.PlayerID, playerGetBlueprintFunction); ;
             player.OnGetBlueprint += playerGetBlueprintFunction;
+            player.OnGetBlueprint += player.EventManager.GetBlueprint;
 
             player.OnGetPlayerInformation += player.EventManager.SyncDataResolver.SyncPlayerInformation;
 
@@ -272,6 +273,7 @@ namespace IsolatedIslandGame.Server
                 Action<Blueprint> playerGetBlueprintFunction = playerGetBlueprintFunctionDictionary[player.PlayerID];
                 player.OnGetBlueprint -= playerGetBlueprintFunction;
                 playerGetBlueprintFunctionDictionary.Remove(player.PlayerID);
+                player.OnGetBlueprint -= player.EventManager.GetBlueprint;
             }
 
             player.OnGetPlayerInformation -= player.EventManager.SyncDataResolver.SyncPlayerInformation;
