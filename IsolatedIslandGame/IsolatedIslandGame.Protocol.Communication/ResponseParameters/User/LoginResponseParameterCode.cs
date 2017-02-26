@@ -8,6 +8,7 @@
         Signature,
         GroupType,
         LastConnectedIPAddress,
-        NextDrawMaterialTime
+        NextDrawMaterialTime,
+        CumulativeLoginCount
     }
 }

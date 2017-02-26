@@ -6,6 +6,7 @@
         ItemName,
         Description,
         MaterialID,
-        Score
+        Score,
+        GroupType
     }
 }

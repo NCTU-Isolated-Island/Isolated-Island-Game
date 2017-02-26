@@ -194,7 +194,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     return true;
                 case QuestRequirementType.CumulativeLogin:
                     {
-                        requirementRecord = new CumulativeLoginQuestRequirementRecord(questRequirementRecordID, requirement);
+                        requirementRecord = new CumulativeLoginQuestRequirementRecord(questRequirementRecordID, requirement, false);
                     }
                     return true;
                 default:
@@ -353,7 +353,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 
         protected override bool SpecializeRequirementRecordToCumulativeLoginRequirementRecord(int requirementRecordID, QuestRequirement requirement, int playerID, out QuestRequirementRecord requirementRecord)
         {
-            requirementRecord = new CumulativeLoginQuestRequirementRecord(requirementRecordID, requirement);
+            requirementRecord = new CumulativeLoginQuestRequirementRecord(requirementRecordID, requirement, false);
             return true;
         }
     }

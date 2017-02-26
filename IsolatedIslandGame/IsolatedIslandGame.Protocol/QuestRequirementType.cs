@@ -6,6 +6,6 @@
         CloseDealWithDifferentFriendInTheSameSpecificOcean,
         ScanQR_Code,
         TimeLimit,
-        CumulativeLogin
+        CumulativeLogin,
     }
 }

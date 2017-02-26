@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IsolatedIslandGame.Library;
 using System.Threading;
 
-namespace IsolatedIslandGame.Server
+namespace IsolatedIslandGame.Library
 {
     public class Scheduler
     {

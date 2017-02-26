@@ -3,13 +3,14 @@ using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests.Rewards
 {
-    public class GiveItemQuestReward : QuestReward
+    public class GiveSpecificNumberSpecificItemQuestReward : QuestReward
     {
         [MessagePackMember(1)]
-        public int ItemID { get; private set; }
-        [MessagePackMember(2)]
         public int ItemCount { get; private set; }
-        public override QuestRewardType QuestRewardType { get { return QuestRewardType.GiveItem; } }
+        [MessagePackMember(2)]
+        public int ItemID { get; private set; }
+        
+        public override QuestRewardType QuestRewardType { get { return QuestRewardType.GiveSpecificNumberSpecificItem; } }
         public override string Description
         {
             get
@@ -17,21 +18,21 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
                 Item item;
                 if(ItemManager.Instance.FindItem(ItemID, out item))
                 {
-                    return $"{item.ItemName} x{ItemCount}";
+                    return $"給予{item.ItemName} x{ItemCount}";
                 }
                 else
                 {
-                    return $"未知的物品 x{ItemCount}";
+                    return $"給予未知的物品 x{ItemCount}";
                 }
             }
         }
 
         [MessagePackDeserializationConstructor]
-        public GiveItemQuestReward() { }
-        public GiveItemQuestReward(int questRewardID, int itemID, int itemCount) : base(questRewardID)
+        public GiveSpecificNumberSpecificItemQuestReward() { }
+        public GiveSpecificNumberSpecificItemQuestReward(int questRewardID, int itemCount, int itemID) : base(questRewardID)
         {
-            ItemID = itemID;
             ItemCount = itemCount;
+            ItemID = itemID;
         }
 
         public override void GiveReward(Player player)

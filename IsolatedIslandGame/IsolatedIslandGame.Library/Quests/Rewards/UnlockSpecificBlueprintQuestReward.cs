@@ -4,11 +4,11 @@ using System.Text;
 
 namespace IsolatedIslandGame.Library.Quests.Rewards
 {
-    public class UnlockBlueprintQuestReward : QuestReward
+    public class UnlockSpecificBlueprintQuestReward : QuestReward
     {
         [MessagePackMember(1)]
         public int BlueprintID { get; private set; }
-        public override QuestRewardType QuestRewardType { get { return QuestRewardType.UnlockBlueprint; } }
+        public override QuestRewardType QuestRewardType { get { return QuestRewardType.UnlockSpecificBlueprint; } }
         public override string Description
         {
             get
@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
                 Blueprint blueprint;
                 if (BlueprintManager.Instance.FindBlueprint(BlueprintID, out blueprint))
                 {
-                    StringBuilder stringBuilder = new StringBuilder("藍圖： ");
+                    StringBuilder stringBuilder = new StringBuilder("解鎖藍圖： ");
                     Item item;
                     foreach(var info in blueprint.Requirements)
                     {
@@ -45,14 +45,14 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
                 }
                 else
                 {
-                    return $"未知的藍圖";
+                    return $"解鎖未知的藍圖";
                 }
             }
         }
 
         [MessagePackDeserializationConstructor]
-        public UnlockBlueprintQuestReward() { }
-        public UnlockBlueprintQuestReward(int questRewardID, int blueprintID) : base(questRewardID)
+        public UnlockSpecificBlueprintQuestReward() { }
+        public UnlockSpecificBlueprintQuestReward(int questRewardID, int blueprintID) : base(questRewardID)
         {
             BlueprintID = blueprintID;
         }

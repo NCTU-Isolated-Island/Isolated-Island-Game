@@ -2,7 +2,11 @@
 {
     public enum QuestRewardType : byte
     {
-        GiveItem,
-        UnlockBlueprint,
+        GiveSpecificNumberSpecificItem,
+        UnlockSpecificBlueprint,
+        AcceptSpecificQuest,
+        GiveSpecificNumberSpecificScoreRandomMaterial,
+        GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterial,
+        GiveSpecificNumberSpecificScoreBelongingGroupRandomMaterial,
     }
 }

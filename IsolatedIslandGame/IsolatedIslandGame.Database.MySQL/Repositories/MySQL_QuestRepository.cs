@@ -135,14 +135,38 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 QuestReward reward;
                 switch(info.questRewardType)
                 {
-                    case QuestRewardType.GiveItem:
-                        if (SpecializeRewardToGiveItemReward(info.questRewardID, out reward))
+                    case QuestRewardType.GiveSpecificNumberSpecificItem:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificItemQuestReward(info.questRewardID, out reward))
                         {
                             rewards.Add(reward);
                         }
                         break;
-                    case QuestRewardType.UnlockBlueprint:
-                        if (SpecializeRewardToUnlockBlueprintReward(info.questRewardID, out reward))
+                    case QuestRewardType.UnlockSpecificBlueprint:
+                        if (SpecializeQuestRewardToUnlockSpecificBlueprintQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.AcceptSpecificQuest:
+                        if (SpecializeQuestRewardToAcceptSpecificQuestQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.GiveSpecificNumberSpecificScoreRandomMaterial:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificScoreRandomMaterialQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterial:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.GiveSpecificNumberSpecificScoreBelongingGroupRandomMaterial:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificScoreBelongingGroupRandomMaterialQuestReward(info.questRewardID, out reward))
                         {
                             rewards.Add(reward);
                         }
@@ -253,10 +277,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         #endregion
 
         #region Specialize QuestReward
-        protected override bool SpecializeRewardToGiveItemReward(int rewardID, out QuestReward reward)
+        protected override bool SpecializeQuestRewardToGiveSpecificNumberSpecificItemQuestReward(int rewardID, out QuestReward reward)
         {
-            string sqlString = @"SELECT ItemID, ItemCount
-                from GiveItemQuestRewardCollection WHERE QuestRewardID = @rewardID;";
+            string sqlString = @"SELECT ItemCount, ItemID
+                from givespecificnumberspecificitemquestrewardcollection WHERE QuestRewardID = @rewardID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("rewardID", rewardID);
@@ -264,10 +288,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        int itemID = reader.GetInt32(0);
-                        int itemCount = reader.GetInt32(1);
+                        int itemCount = reader.GetInt32(0);
+                        int itemID = reader.GetInt32(1);
 
-                        reward = new GiveItemQuestReward(rewardID, itemID, itemCount);
+                        reward = new GiveSpecificNumberSpecificItemQuestReward(rewardID, itemCount, itemID);
                         return true;
                     }
                     else
@@ -278,10 +302,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool SpecializeRewardToUnlockBlueprintReward(int rewardID, out QuestReward reward)
+        protected override bool SpecializeQuestRewardToUnlockSpecificBlueprintQuestReward(int rewardID, out QuestReward reward)
         {
             string sqlString = @"SELECT BlueprintID
-                from UnlockBlueprintQuestRewardCollection WHERE QuestRewardID = @rewardID;";
+                from unlockspecificblueprintquestrewardcollection WHERE QuestRewardID = @rewardID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("rewardID", rewardID);
@@ -291,7 +315,107 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         int blueprintID = reader.GetInt32(0);
 
-                        reward = new UnlockBlueprintQuestReward(rewardID, blueprintID);
+                        reward = new UnlockSpecificBlueprintQuestReward(rewardID, blueprintID);
+                        return true;
+                    }
+                    else
+                    {
+                        reward = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRewardToAcceptSpecificQuestQuestReward(int rewardID, out QuestReward reward)
+        {
+            string sqlString = @"SELECT AcceptedQuesiID
+                from acceptspecificquestquestrewardcollection WHERE QuestRewardID = @rewardID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("rewardID", rewardID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int acceptedQuesiID = reader.GetInt32(0);
+
+                        reward = new AcceptSpecificQuestQuestReward(rewardID, acceptedQuesiID);
+                        return true;
+                    }
+                    else
+                    {
+                        reward = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreRandomMaterialQuestReward(int rewardID, out QuestReward reward)
+        {
+            string sqlString = @"SELECT MaterialCount, MaterialScore
+                from gsnssrm_questrewardcollection WHERE QuestRewardID = @rewardID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("rewardID", rewardID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int materialCount = reader.GetInt32(0);
+                        int materialScore = reader.GetInt32(1);
+
+                        reward = new GiveSpecificNumberSpecificScoreRandomMaterialQuestReward(rewardID, materialCount, materialScore);
+                        return true;
+                    }
+                    else
+                    {
+                        reward = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward)
+        {
+            string sqlString = @"SELECT MaterialCount, MaterialScore. GroupType
+                from gsnsssgrm_questrewardcollection WHERE QuestRewardID = @rewardID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("rewardID", rewardID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int materialCount = reader.GetInt32(0);
+                        int materialScore = reader.GetInt32(1);
+                        GroupType groupType = (GroupType)reader.GetByte(2);
+
+                        reward = new GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward(rewardID, materialCount, materialScore, groupType);
+                        return true;
+                    }
+                    else
+                    {
+                        reward = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreBelongingGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward)
+        {
+            string sqlString = @"SELECT MaterialCount, MaterialScore
+                from gsnssbgrm_questrewardcollection WHERE QuestRewardID = @rewardID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("rewardID", rewardID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int materialCount = reader.GetInt32(0);
+                        int materialScore = reader.GetInt32(1);
+
+                        reward = new GiveSpecificNumberSpecificScoreBelongingGroupRandomMaterialQuestReward(rewardID, materialCount, materialScore);
                         return true;
                     }
                     else
