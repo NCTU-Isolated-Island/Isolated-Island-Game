@@ -7,6 +7,7 @@ using IsolatedIslandGame.Protocol.Communication.FetchDataParameters;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.Player;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers
 {
@@ -144,7 +145,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)SynthesizeMaterialParameterCode.BlueprintElementInfosDataByteArray, SerializationHelper.BlueprintElementInfoArraySerialize(elementInfos) }
+                { (byte)SynthesizeMaterialParameterCode.BlueprintElementInfosItemID_Array, elementInfos.Select(x => x.itemID).ToArray() },
+                { (byte)SynthesizeMaterialParameterCode.BlueprintElementInfosItemCountArray, elementInfos.Select(x => x.itemCount).ToArray() },
+                { (byte)SynthesizeMaterialParameterCode.BlueprintElementInfosPositionIndexArray, elementInfos.Select(x => x.positionIndex).ToArray() }
             };
             SendOperation(PlayerOperationCode.SynthesizeMaterial, parameters);
         }

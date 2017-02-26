@@ -53,6 +53,9 @@ namespace IsolatedIslandGame.Library
         private Dictionary<int, QuestRecord> questRecordDictionary = new Dictionary<int, QuestRecord>();
         public IEnumerable<QuestRecord> QuestRecords { get { return questRecordDictionary.Values.ToArray(); } }
 
+        private Dictionary<int, QuestRecordInformation> questRecordInformationDictionary = new Dictionary<int, QuestRecordInformation>();
+        public IEnumerable<QuestRecordInformation> QuestRecordInformations { get { return questRecordInformationDictionary.Values.ToArray(); } }
+
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
         public PlayerResponseManager ResponseManager { get; private set; }
@@ -89,6 +92,9 @@ namespace IsolatedIslandGame.Library
 
         private event Action<QuestRecord> onQuestRecordUpdated;
         public event Action<QuestRecord> OnQuestRecordUpdated { add { onQuestRecordUpdated += value; } remove { onQuestRecordUpdated -= value; } }
+
+        private event Action<QuestRecordInformation> onQuestRecordInformationUpdated;
+        public event Action<QuestRecordInformation> OnQuestRecordInformationUpdated { add { onQuestRecordInformationUpdated += value; } remove { onQuestRecordInformationUpdated -= value; } }
 
         private event Action<string> onScanQR_Code;
         public event Action<string> OnScanQR_Code { add { onScanQR_Code += value; } remove { onScanQR_Code -= value; } }
@@ -276,6 +282,18 @@ namespace IsolatedIslandGame.Library
                 questRecordDictionary.Add(questRecord.QuestRecordID, questRecord);
                 onQuestRecordUpdated?.Invoke(questRecord);
             }
+        }
+        public void LoadQuestRecordInformation(QuestRecordInformation information)
+        {
+            if(questRecordInformationDictionary.ContainsKey(information.questRecordID))
+            {
+                questRecordInformationDictionary[information.questRecordID] = information;
+            }
+            else
+            {
+                questRecordInformationDictionary.Add(information.questRecordID, information);
+            }
+            onQuestRecordInformationUpdated?.Invoke(information);
         }
         public void ScanQR_Code(string qrCodeString)
         {

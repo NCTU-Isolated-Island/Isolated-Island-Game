@@ -1,13 +1,10 @@
 ﻿using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests.Rewards
 {
     public class GiveSpecificNumberSpecificItemQuestReward : QuestReward
     {
-        [MessagePackMember(1)]
         public int ItemCount { get; private set; }
-        [MessagePackMember(2)]
         public int ItemID { get; private set; }
         
         public override QuestRewardType QuestRewardType { get { return QuestRewardType.GiveSpecificNumberSpecificItem; } }
@@ -27,8 +24,6 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
             }
         }
 
-        [MessagePackDeserializationConstructor]
-        public GiveSpecificNumberSpecificItemQuestReward() { }
         public GiveSpecificNumberSpecificItemQuestReward(int questRewardID, int itemCount, int itemID) : base(questRewardID)
         {
             ItemCount = itemCount;

@@ -1,11 +1,9 @@
 ﻿using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests.Requirements
 {
     public class CumulativeLoginQuestRequirement : QuestRequirement
     {
-        [MessagePackMember(1)]
         public int CumulativeLoginCount { get; private set; }
         public override QuestRequirementType QuestRequirementType
         {
@@ -22,8 +20,6 @@ namespace IsolatedIslandGame.Library.Quests.Requirements
             }
         }
 
-        [MessagePackDeserializationConstructor]
-        public CumulativeLoginQuestRequirement() { }
         public CumulativeLoginQuestRequirement(int questRequirementID, int cumulativeLoginCount) : base(questRequirementID)
         {
             CumulativeLoginCount = cumulativeLoginCount;

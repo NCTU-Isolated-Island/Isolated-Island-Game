@@ -1,11 +1,9 @@
 ﻿using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests.Requirements
 {
     public class ScanQR_CodeQuestRequirement : QuestRequirement
     {
-        [MessagePackMember(1)]
         public string QR_CodeString { get; private set; }
         public override QuestRequirementType QuestRequirementType
         {
@@ -22,8 +20,6 @@ namespace IsolatedIslandGame.Library.Quests.Requirements
             }
         }
 
-        [MessagePackDeserializationConstructor]
-        public ScanQR_CodeQuestRequirement() { }
         public ScanQR_CodeQuestRequirement(int questRequirementID, string qrCodeString) : base(questRequirementID)
         {
             QR_CodeString = qrCodeString;

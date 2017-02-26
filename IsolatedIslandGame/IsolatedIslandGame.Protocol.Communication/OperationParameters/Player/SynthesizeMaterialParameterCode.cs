@@ -2,6 +2,8 @@
 {
     public enum SynthesizeMaterialParameterCode : byte
     {
-        BlueprintElementInfosDataByteArray
+        BlueprintElementInfosItemID_Array,
+        BlueprintElementInfosItemCountArray,
+        BlueprintElementInfosPositionIndexArray
     }
 }

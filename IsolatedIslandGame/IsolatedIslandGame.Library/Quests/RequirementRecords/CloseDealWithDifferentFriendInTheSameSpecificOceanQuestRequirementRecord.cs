@@ -1,6 +1,5 @@
 ﻿using IsolatedIslandGame.Library.Quests.Requirements;
 using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,6 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
 {
     public class CloseDealWithDifferentFriendInTheSameSpecificOceanQuestRequirementRecord : QuestRequirementRecord
     {
-        [MessagePackMember(3)]
         private HashSet<int> friendPlayerID_Set = new HashSet<int>();
         public IEnumerable<int> OnlineFriendPlayerIDs { get { return friendPlayerID_Set.ToArray(); } }
         public override bool IsSufficient
@@ -31,8 +29,6 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         private event Action<QuestRequirementRecord> onRequirementStatusChange;
         public override event Action<QuestRequirementRecord> OnRequirementStatusChange { add { onRequirementStatusChange += value; } remove { onRequirementStatusChange -= value; } }
 
-        [MessagePackDeserializationConstructor]
-        public CloseDealWithDifferentFriendInTheSameSpecificOceanQuestRequirementRecord() { }
         public CloseDealWithDifferentFriendInTheSameSpecificOceanQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, HashSet<int> friendPlayerID_Set) : base(questRequirementRecordID, requirement)
         {
             this.friendPlayerID_Set = friendPlayerID_Set;

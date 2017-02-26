@@ -1,12 +1,10 @@
 ﻿using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 using System.Text;
 
 namespace IsolatedIslandGame.Library.Quests.Rewards
 {
     public class UnlockSpecificBlueprintQuestReward : QuestReward
     {
-        [MessagePackMember(1)]
         public int BlueprintID { get; private set; }
         public override QuestRewardType QuestRewardType { get { return QuestRewardType.UnlockSpecificBlueprint; } }
         public override string Description
@@ -50,8 +48,6 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
             }
         }
 
-        [MessagePackDeserializationConstructor]
-        public UnlockSpecificBlueprintQuestReward() { }
         public UnlockSpecificBlueprintQuestReward(int questRewardID, int blueprintID) : base(questRewardID)
         {
             BlueprintID = blueprintID;

@@ -2,6 +2,13 @@
 {
     public enum SyncQuestRecordUpdatedParameterCode : byte
     {
-        QuestRecordDataByteArray
+        QuestRecordID,
+        QuestType,
+        QuestName,
+        QuestDescription,
+        RequirementsDescription,
+        RewardsDescription,
+        HasGottenReward,
+        IsFinished
     }
 }

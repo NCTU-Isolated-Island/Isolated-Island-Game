@@ -1,12 +1,10 @@
 ﻿using IsolatedIslandGame.Library.Quests.Requirements;
-using MsgPack.Serialization;
 using System;
 
 namespace IsolatedIslandGame.Library.Quests.RequirementRecords
 {
     public class CumulativeLoginQuestRequirementRecord : QuestRequirementRecord
     {
-        [MessagePackMember(3)]
         private bool hasAchievedCumulativeLoginCount;
         public bool HasAchievedCumulativeLoginCount
         {
@@ -47,8 +45,6 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         private event Action<QuestRequirementRecord> onRequirementStatusChange;
         public override event Action<QuestRequirementRecord> OnRequirementStatusChange { add { onRequirementStatusChange += value; } remove { onRequirementStatusChange -= value; } }
 
-        [MessagePackDeserializationConstructor]
-        public CumulativeLoginQuestRequirementRecord() { }
         public CumulativeLoginQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, bool hasAchievedCumulativeLoginCount) : base(questRequirementRecordID, requirement)
         {
             this.hasAchievedCumulativeLoginCount = hasAchievedCumulativeLoginCount;

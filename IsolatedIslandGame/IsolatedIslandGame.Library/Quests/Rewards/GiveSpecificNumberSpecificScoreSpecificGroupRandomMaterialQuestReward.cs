@@ -1,6 +1,5 @@
 ﻿using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 using System;
 using System.Linq;
 
@@ -8,11 +7,8 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
 {
     public class GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward : QuestReward
     {
-        [MessagePackMember(1)]
         public int MaterialCount { get; private set; }
-        [MessagePackMember(2)]
         public int MaterialScore { get; private set; }
-        [MessagePackMember(3)]
         public GroupType GroupType { get; private set; }
 
         public override QuestRewardType QuestRewardType { get { return QuestRewardType.GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterial; } }
@@ -24,8 +20,6 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
             }
         }
 
-        [MessagePackDeserializationConstructor]
-        public GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward() { }
         public GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward(int questRewardID, int materialCount, int materialScore, GroupType groupType) : base(questRewardID)
         {
             MaterialCount = materialCount;

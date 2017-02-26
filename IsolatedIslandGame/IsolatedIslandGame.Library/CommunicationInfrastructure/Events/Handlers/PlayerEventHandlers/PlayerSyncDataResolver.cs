@@ -89,11 +89,19 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             };
             SendSyncData(PlayerSyncDataCode.TransactionConfirmStatusChange, parameters);
         }
-        public void SyncQuestRecordUpdated(QuestRecord questRecord)
+        public void SyncQuestRecordUpdated(QuestRecord record)
         {
+            QuestRecordInformation information = record.QuestRecordInformation;
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordDataByteArray, SerializationHelper.QuestRecordSerialize(questRecord) },
+                { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordID, information.questRecordID },
+                { (byte)SyncQuestRecordUpdatedParameterCode.QuestType, information.questType },
+                { (byte)SyncQuestRecordUpdatedParameterCode.QuestName, information.questName },
+                { (byte)SyncQuestRecordUpdatedParameterCode.QuestDescription, information.questDescription },
+                { (byte)SyncQuestRecordUpdatedParameterCode.RequirementsDescription, information.requirementsDescription },
+                { (byte)SyncQuestRecordUpdatedParameterCode.RewardsDescription, information.rewardsDescription },
+                { (byte)SyncQuestRecordUpdatedParameterCode.HasGottenReward, information.hasGottenReward },
+                { (byte)SyncQuestRecordUpdatedParameterCode.IsFinished, information.isFinished }
             };
             SendSyncData(PlayerSyncDataCode.QuestRecordUpdated, parameters);
         }

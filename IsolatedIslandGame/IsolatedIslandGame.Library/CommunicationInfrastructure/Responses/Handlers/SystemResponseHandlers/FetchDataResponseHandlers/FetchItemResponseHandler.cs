@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 3 && parameters.Count != 5)
+                        if (parameters.Count != 3 && parameters.Count != 6)
                         {
                             LogService.ErrorFormat(string.Format("FetchItemResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;

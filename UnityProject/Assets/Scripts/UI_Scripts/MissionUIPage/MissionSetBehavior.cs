@@ -1,4 +1,5 @@
 ﻿using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Library.Quests;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class MissionSetBehavior : MonoBehaviour {
 
-    private Quest thisQuest;
+    private QuestRecordInformation information;
     private Button button;
 
     void Start()
@@ -14,13 +15,13 @@ public class MissionSetBehavior : MonoBehaviour {
         button = gameObject.GetComponent<Button>();
         button.onClick.AddListener(delegate
         {
-            MissionUIManager.Instance.OpenMissionDetailPage(thisQuest);
+            MissionUIManager.Instance.OpenMissionDetailPage(information);
         });
     }
 
-    public void SetQuestInfo(Quest quest)
+    public void SetQuestInfo(QuestRecordInformation information)
     {
-        thisQuest = quest;
+        this.information = information;
     }
 	
 }

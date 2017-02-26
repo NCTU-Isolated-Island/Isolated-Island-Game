@@ -1,11 +1,9 @@
 ﻿using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests.Rewards
 {
     public class AcceptSpecificQuestQuestReward : QuestReward
     {
-        [MessagePackMember(1)]
         public int AcceptedQuesiID { get; private set; }
 
         public override QuestRewardType QuestRewardType { get { return QuestRewardType.AcceptSpecificQuest; } }
@@ -17,8 +15,6 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
             }
         }
 
-        [MessagePackDeserializationConstructor]
-        public AcceptSpecificQuestQuestReward() { }
         public AcceptSpecificQuestQuestReward(int questRewardID, int acceptedQuesiID) : base(questRewardID)
         {
             AcceptedQuesiID = acceptedQuesiID;

@@ -25,8 +25,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.BlueprintID, blueprint.BlueprintID },
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.IsOrderless, blueprint.IsOrderless },
                             { (byte)FetchAllKnownBlueprintsResponseParameterCode.IsBlueprintRequired, blueprint.IsBlueprintRequired },
-                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.Requirements, SerializationHelper.BlueprintElementInfoArraySerialize(blueprint.Requirements.ToArray()) },
-                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.Products, SerializationHelper.BlueprintElementInfoArraySerialize(blueprint.Products.ToArray()) }
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.RequirementsItemID_Array, blueprint.Requirements.Select(x => x.itemID).ToArray() },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.RequirementsItemCountArray, blueprint.Requirements.Select(x => x.itemCount).ToArray() },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.RequirementsPositionIndexArray, blueprint.Requirements.Select(x => x.positionIndex).ToArray() },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.ProductsItemID_Array, blueprint.Products.Select(x => x.itemID).ToArray() },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.ProductsItemCountArray, blueprint.Products.Select(x => x.itemCount).ToArray() },
+                            { (byte)FetchAllKnownBlueprintsResponseParameterCode.ProductsPositionIndexArray, blueprint.Products.Select(x => x.positionIndex).ToArray() }
                         };
                         SendResponse(fetchCode, result);
                     }

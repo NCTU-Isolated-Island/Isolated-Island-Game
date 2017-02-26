@@ -1,13 +1,10 @@
 ﻿using IsolatedIslandGame.Protocol;
-using MsgPack.Serialization;
 
 namespace IsolatedIslandGame.Library.Quests.Requirements
 {
     public class SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement : QuestRequirement
     {
-        [MessagePackMember(1)]
         public OceanType SpecificOceanType { get; private set; }
-        [MessagePackMember(2)]
         public int RequiredFriendNumber { get; private set; }
         public override QuestRequirementType QuestRequirementType
         {
@@ -24,8 +21,6 @@ namespace IsolatedIslandGame.Library.Quests.Requirements
             }
         }
 
-        [MessagePackDeserializationConstructor]
-        public SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement() { }
         public SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(int questRequirementID, OceanType specificOceanType, int requiredFriendNumber) : base(questRequirementID)
         {
             SpecificOceanType = specificOceanType;

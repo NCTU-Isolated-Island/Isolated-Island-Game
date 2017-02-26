@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 1)
+                        if (parameters.Count != 8)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllQuestRecordsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -43,11 +43,28 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 try
                 {
-                    byte[] questRecordDataByteArray = (byte[])parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordDataByteArray];
-                    QuestRecord questRecord = SerializationHelper.QuestRecordDeserialize(questRecordDataByteArray);
+                    int questRecordID = (int)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordID];
+                    QuestType questType = (QuestType)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestType];
+                    string questName = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestName];
+                    string questDescription = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestDescription];
+                    string requirementsDescription = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.RequirementsDescription];
+                    string rewardsDescription = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.RewardsDescription];
+                    bool hasGottenReward = (bool)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.HasGottenReward];
+                    bool isFinished = (bool)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.IsFinished];
 
-                    QuestManager.Instance.AddQuest(questRecord.Quest);
-                    subject.AddQuestRecord(questRecord);
+                    QuestRecordInformation information = new QuestRecordInformation
+                    {
+                        questRecordID = questRecordID,
+                        questType = questType,
+                        questName = questName,
+                        questDescription = questDescription,
+                        requirementsDescription = requirementsDescription,
+                        rewardsDescription = rewardsDescription,
+                        hasGottenReward = hasGottenReward,
+                        isFinished = isFinished
+                    };
+
+                    subject.LoadQuestRecordInformation(information);
                     return true;
                 }
                 catch (InvalidCastException ex)

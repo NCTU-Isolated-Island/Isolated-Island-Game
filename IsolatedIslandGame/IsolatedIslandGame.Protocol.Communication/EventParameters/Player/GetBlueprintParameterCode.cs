@@ -5,7 +5,11 @@
         BlueprintID,
         IsOrderless,
         IsBlueprintRequired,
-        Requirements,
-        Products
+        RequirementsItemID_Array,
+        RequirementsItemCountArray,
+        RequirementsPositionIndexArray,
+        ProductsItemID_Array,
+        ProductsItemCountArray,
+        ProductsPositionIndexArray,
     }
 }

@@ -43,7 +43,7 @@ namespace IsolatedIslandGame.Library
             {
                 while(tasks.ContainsKey(timestamp))
                 {
-                    timestamp += TimeSpan.MinValue;
+                    timestamp += TimeSpan.FromSeconds(1);
                 }
                 tasks.Add(timestamp, task);
             }
