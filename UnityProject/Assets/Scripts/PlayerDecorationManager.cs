@@ -110,7 +110,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 			AddedDecorations.Add(CurrentSelectDecoration);
 
 		CurrentControlMode = ControlMode.Decorate;
-
+		OutlineSystem.Instance.gameObject.SetActive(true);
 	}
 
 	void Transparentize(GameObject target)
@@ -193,6 +193,9 @@ public class PlayerDecorationManager : MonoBehaviour {
 		{
 			DeTransparentize(CurrentSelectDecoration);
 		}
+
+		OutlineSystem.Instance.gameObject.SetActive(false);
+
 	}
 
 	void DecorateProcess()

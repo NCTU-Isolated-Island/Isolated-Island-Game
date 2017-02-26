@@ -46,6 +46,8 @@ public class OutlineSystem : MonoBehaviour
     public Material blurMaterial;
     public Material outlineMaterial;
 
+	public static OutlineSystem Instance;
+
     //Used to check if the screen size has been changed
     private Vector2 prevSize;
 
@@ -55,7 +57,15 @@ public class OutlineSystem : MonoBehaviour
         {
             mainCamera = Camera.main;
         }
+
+		if(Instance == null)
+		{
+			Instance = this;
+		}	
+
         UpdateRenderTextureSizes();
+
+		gameObject.SetActive(false);
     }
     
 
