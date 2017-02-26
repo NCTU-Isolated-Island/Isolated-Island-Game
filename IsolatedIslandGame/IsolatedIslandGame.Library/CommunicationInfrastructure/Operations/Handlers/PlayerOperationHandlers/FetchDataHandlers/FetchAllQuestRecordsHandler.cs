@@ -18,9 +18,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     foreach (var questRecord in subject.QuestRecords)
                     {
+                        var information = questRecord.QuestRecordInformation;
                         var result = new Dictionary<byte, object>
                         {
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordDataByteArray, SerializationHelper.TypeSerialize(questRecord) }
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordID, information.questRecordID },
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestType, information.questType },
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestName, information.questName },
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestDescription, information.questDescription },
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.RequirementsDescription, information.requirementsDescription },
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.RewardsDescription, information.rewardsDescription },
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.HasGottenReward, information.hasGottenReward },
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.IsFinished, information.isFinished }
                         };
                         SendResponse(fetchCode, result);
                     }

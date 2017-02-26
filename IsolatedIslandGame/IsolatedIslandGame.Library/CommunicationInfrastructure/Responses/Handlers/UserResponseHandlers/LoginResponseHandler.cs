@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 7)
+                        if (parameters.Count != 8)
                         {
                             LogService.ErrorFormat(string.Format("LoginResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -51,8 +51,9 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     GroupType groupType = (GroupType)parameters[(byte)LoginResponseParameterCode.GroupType];
                     string lastConnectedIPAddress = (string)parameters[(byte)LoginResponseParameterCode.LastConnectedIPAddress];
                     DateTime nextDrawMaterialTime = DateTime.FromBinary((long)parameters[(byte)LoginResponseParameterCode.NextDrawMaterialTime]);
+                    int cumulativeLoginCount = (int)parameters[(byte)LoginResponseParameterCode.CumulativeLoginCount];
 
-                    Player player = new Player(playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress), nextDrawMaterialTime);
+                    Player player = new Player(playerID, facebookID, nickname, signature, groupType, IPAddress.Parse(lastConnectedIPAddress), nextDrawMaterialTime, cumulativeLoginCount);
                     player.BindUser(subject);
                     subject.PlayerOnline(player);
                     subject.Player.OperationManager.FetchDataResolver.FetchInventory();

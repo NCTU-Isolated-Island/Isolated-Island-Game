@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 2)
+                        if (parameters.Count != 6)
                         {
                             LogService.ErrorFormat(string.Format("SynthesizeMaterial Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -41,8 +41,27 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 try
                 {
-                    Blueprint.ElementInfo[] requirements = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Requirements]);
-                    Blueprint.ElementInfo[] products = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Products]);
+                    int[] requirementsItemID_Array = (int[])parameters[(byte)SynthesizeMaterialResponseParameterCode.RequirementsItemID_Array];
+                    int[] requirementsItemCountArray = (int[])parameters[(byte)SynthesizeMaterialResponseParameterCode.RequirementsItemCountArray];
+                    int[] requirementsPositionIndexArray = (int[])parameters[(byte)SynthesizeMaterialResponseParameterCode.RequirementsPositionIndexArray];
+                    int[] productsItemID_Array = (int[])parameters[(byte)SynthesizeMaterialResponseParameterCode.ProductsItemID_Array];
+                    int[] productsItemCountArray = (int[])parameters[(byte)SynthesizeMaterialResponseParameterCode.ProductsItemCountArray];
+                    int[] productsPositionIndexArray = (int[])parameters[(byte)SynthesizeMaterialResponseParameterCode.ProductsPositionIndexArray];
+                    Blueprint.ElementInfo[] requirements = new Blueprint.ElementInfo[requirementsItemID_Array.Length];
+                    Blueprint.ElementInfo[] products = new Blueprint.ElementInfo[productsItemID_Array.Length];
+                    for (int i = 0; i < requirementsItemID_Array.Length; i++)
+                    {
+                        requirements[i].itemID = requirementsItemID_Array[i];
+                        requirements[i].itemCount = requirementsItemCountArray[i];
+                        requirements[i].positionIndex = requirementsPositionIndexArray[i];
+                    }
+                    for (int i = 0; i < productsItemID_Array.Length; i++)
+                    {
+                        products[i].itemID = productsItemID_Array[i];
+                        products[i].itemCount = productsItemCountArray[i];
+                        products[i].positionIndex = productsPositionIndexArray[i];
+                    }
+
                     subject.ResponseManager.SynthesizeMaterialResponse(returnCode, requirements, products);
                     return true;
                 }

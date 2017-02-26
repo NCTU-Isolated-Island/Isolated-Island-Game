@@ -1,5 +1,7 @@
 ﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
+using IsolatedIslandGame.Library.Quests.Requirements;
+using IsolatedIslandGame.Library.Quests.Rewards;
 using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
 
@@ -39,8 +41,12 @@ namespace IsolatedIslandGame.Database.Repositories
         #endregion
 
         #region Specialize QuestReward
-        protected abstract bool SpecializeRewardToGiveItemReward(int rewardID, out QuestReward reward);
-        protected abstract bool SpecializeRewardToUnlockBlueprintReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificItemQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToUnlockSpecificBlueprintQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToAcceptSpecificQuestQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreRandomMaterialQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreBelongingGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         #endregion
     }
 }

@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 5)
+                        if (parameters.Count != 9)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllKnownBlueprintsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -45,8 +45,26 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     int blueprintID = (int)parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.BlueprintID];
                     bool isOrderless = (bool)parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.IsOrderless];
                     bool isBlueprintRequired = (bool)parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.IsBlueprintRequired];
-                    Blueprint.ElementInfo[] requirements = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.Requirements]);
-                    Blueprint.ElementInfo[] products = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.Products]);
+                    int[] requirementsItemID_Array = (int[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.RequirementsItemID_Array];
+                    int[] requirementsItemCountArray = (int[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.RequirementsItemCountArray];
+                    int[] requirementsPositionIndexArray = (int[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.RequirementsPositionIndexArray];
+                    int[] productsItemID_Array = (int[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.ProductsItemID_Array];
+                    int[] productsItemCountArray = (int[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.ProductsItemCountArray];
+                    int[] productsPositionIndexArray = (int[])parameters[(byte)FetchAllKnownBlueprintsResponseParameterCode.ProductsPositionIndexArray];
+                    Blueprint.ElementInfo[] requirements = new Blueprint.ElementInfo[requirementsItemID_Array.Length];
+                    Blueprint.ElementInfo[] products = new Blueprint.ElementInfo[productsItemID_Array.Length];
+                    for (int i = 0; i < requirementsItemID_Array.Length; i++)
+                    {
+                        requirements[i].itemID = requirementsItemID_Array[i];
+                        requirements[i].itemCount = requirementsItemCountArray[i];
+                        requirements[i].positionIndex = requirementsPositionIndexArray[i];
+                    }
+                    for (int i = 0; i < productsItemID_Array.Length; i++)
+                    {
+                        products[i].itemID = productsItemID_Array[i];
+                        products[i].itemCount = productsItemCountArray[i];
+                        products[i].positionIndex = productsPositionIndexArray[i];
+                    }
 
                     Blueprint blueprint = new Blueprint(blueprintID, isOrderless, isBlueprintRequired, requirements, products);
                     BlueprintManager.Instance.AddBlueprint(blueprint);

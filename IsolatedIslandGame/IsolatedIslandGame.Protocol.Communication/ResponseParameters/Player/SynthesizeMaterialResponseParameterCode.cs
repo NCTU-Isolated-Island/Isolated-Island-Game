@@ -2,7 +2,11 @@
 {
     public enum SynthesizeMaterialResponseParameterCode : byte
     {
-        Requirements,
-        Products
+        RequirementsItemID_Array,
+        RequirementsItemCountArray,
+        RequirementsPositionIndexArray,
+        ProductsItemID_Array,
+        ProductsItemCountArray,
+        ProductsPositionIndexArray,
     }
 }

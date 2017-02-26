@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
+using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using System.Collections.Generic;
 

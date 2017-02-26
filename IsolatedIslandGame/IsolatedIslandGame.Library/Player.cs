@@ -37,6 +37,7 @@ namespace IsolatedIslandGame.Library
                 onNextDrawMaterialTimeUpdated?.Invoke(nextDrawMaterialTime);
             }
         }
+        public int CumulativeLoginCount { get; private set; }
 
         private Dictionary<int, Blueprint> knownBlueprintDictionary = new Dictionary<int, Blueprint>();
         public IEnumerable<Blueprint> KnownBlueprints { get { return knownBlueprintDictionary.Values.ToArray(); } }
@@ -51,6 +52,9 @@ namespace IsolatedIslandGame.Library
 
         private Dictionary<int, QuestRecord> questRecordDictionary = new Dictionary<int, QuestRecord>();
         public IEnumerable<QuestRecord> QuestRecords { get { return questRecordDictionary.Values.ToArray(); } }
+
+        private Dictionary<int, QuestRecordInformation> questRecordInformationDictionary = new Dictionary<int, QuestRecordInformation>();
+        public IEnumerable<QuestRecordInformation> QuestRecordInformations { get { return questRecordInformationDictionary.Values.ToArray(); } }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerOperationManager OperationManager { get; private set; }
@@ -89,17 +93,17 @@ namespace IsolatedIslandGame.Library
         private event Action<QuestRecord> onQuestRecordUpdated;
         public event Action<QuestRecord> OnQuestRecordUpdated { add { onQuestRecordUpdated += value; } remove { onQuestRecordUpdated -= value; } }
 
+        private event Action<QuestRecordInformation> onQuestRecordInformationUpdated;
+        public event Action<QuestRecordInformation> OnQuestRecordInformationUpdated { add { onQuestRecordInformationUpdated += value; } remove { onQuestRecordInformationUpdated -= value; } }
+
         private event Action<string> onScanQR_Code;
         public event Action<string> OnScanQR_Code { add { onScanQR_Code += value; } remove { onScanQR_Code -= value; } }
 
         private event Action<DateTime> onNextDrawMaterialTimeUpdated;
         public event Action<DateTime> OnNextDrawMaterialTimeUpdated { add { onNextDrawMaterialTimeUpdated += value; } remove { onNextDrawMaterialTimeUpdated -= value; } }
-
-        private event Action<bool, int> onLoginStatusUpdated;
-        public event Action<bool, int> OnLoginStatusUpdated { add { onLoginStatusUpdated += value; } remove { onLoginStatusUpdated -= value; } }
         #endregion
 
-        public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress, DateTime nextDrawMaterialTime)
+        public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress, DateTime nextDrawMaterialTime, int cumulativeLoginCount)
         {
             PlayerID = playerID;
             FacebookID = facebookID;
@@ -108,6 +112,7 @@ namespace IsolatedIslandGame.Library
             GroupType = groupType;
             LastConnectedIPAddress = lastConnectedIPAddress;
             NextDrawMaterialTime = nextDrawMaterialTime;
+            CumulativeLoginCount = cumulativeLoginCount;
 
             EventManager = new PlayerEventManager(this);
             OperationManager = new PlayerOperationManager(this);
@@ -278,13 +283,21 @@ namespace IsolatedIslandGame.Library
                 onQuestRecordUpdated?.Invoke(questRecord);
             }
         }
+        public void LoadQuestRecordInformation(QuestRecordInformation information)
+        {
+            if(questRecordInformationDictionary.ContainsKey(information.questRecordID))
+            {
+                questRecordInformationDictionary[information.questRecordID] = information;
+            }
+            else
+            {
+                questRecordInformationDictionary.Add(information.questRecordID, information);
+            }
+            onQuestRecordInformationUpdated?.Invoke(information);
+        }
         public void ScanQR_Code(string qrCodeString)
         {
             onScanQR_Code?.Invoke(qrCodeString);
-        }
-        public void UpdateLoginStatus(bool isTodayFirstLogin, int cumulativeLoginCount)
-        {
-            onLoginStatusUpdated?.Invoke(isTodayFirstLogin, cumulativeLoginCount);
         }
     }
 }

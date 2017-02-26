@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IsolatedIslandGame.Library;
 using System.Threading;
 
-namespace IsolatedIslandGame.Server
+namespace IsolatedIslandGame.Library
 {
     public class Scheduler
     {
@@ -44,7 +43,7 @@ namespace IsolatedIslandGame.Server
             {
                 while(tasks.ContainsKey(timestamp))
                 {
-                    timestamp += TimeSpan.MinValue;
+                    timestamp += TimeSpan.FromSeconds(1);
                 }
                 tasks.Add(timestamp, task);
             }

@@ -66,6 +66,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 
         public override bool Read(int playerID, out Player player)
         {
+            bool isTodayFirstLogin;
+            int cumulativeLoginCount;
+            UpdateLastLoginTime(playerID, DateTime.Now, out isTodayFirstLogin, out cumulativeLoginCount);
             string sqlString = @"SELECT  
                 FacebookID, Nickname, Signature, GroupType, LastConnectedIPAddress, NextDrawMaterialTime
                 from PlayerCollection WHERE PlayerID = @playerID;";
@@ -83,7 +86,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         IPAddress lastConnectedIPAddress = reader.IsDBNull(4) ? IPAddress.None : IPAddress.Parse(reader.GetString(4));
                         DateTime nextDrawMaterialTime = reader.GetDateTime(5);
 
-                        player = new Player(playerID, facebookID, nickname, signature, groupType, lastConnectedIPAddress, nextDrawMaterialTime);
+                        player = new Player(playerID, facebookID, nickname, signature, groupType, lastConnectedIPAddress, nextDrawMaterialTime, cumulativeLoginCount);
                         return true;
                     }
                     else

@@ -2,6 +2,13 @@
 {
     public enum FetchAllQuestRecordsResponseParameterCode : byte
     {
-        QuestRecordDataByteArray
+        QuestRecordID,
+        QuestType,
+        QuestName,
+        QuestDescription,
+        RequirementsDescription,
+        RewardsDescription,
+        HasGottenReward,
+        IsFinished
     }
 }

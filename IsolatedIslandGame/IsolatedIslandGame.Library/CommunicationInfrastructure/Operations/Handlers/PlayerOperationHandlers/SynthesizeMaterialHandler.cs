@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 {
     class SynthesizeMaterialHandler : PlayerOperationHandler
     {
-        public SynthesizeMaterialHandler(Player subject) : base(subject, 1)
+        public SynthesizeMaterialHandler(Player subject) : base(subject, 3)
         {
         }
 
@@ -17,7 +17,19 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                List<Blueprint.ElementInfo>  elementInfos = (SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfosDataByteArray])).ToList();
+                int[] blueprintElementInfosItemID_Array = (int[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfosItemID_Array];
+                int[] blueprintElementInfosItemCountArray = (int[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfosItemCountArray];
+                int[] blueprintElementInfosPositionIndexArray = (int[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfosPositionIndexArray];
+                List<Blueprint.ElementInfo> elementInfos = new List<Blueprint.ElementInfo>();
+                for(int i = 0; i < blueprintElementInfosItemID_Array.Length; i++)
+                {
+                    elementInfos.Add(new Blueprint.ElementInfo
+                    {
+                        itemID = blueprintElementInfosItemID_Array[i],
+                        itemCount = blueprintElementInfosItemCountArray[i],
+                        positionIndex = blueprintElementInfosPositionIndexArray[i]
+                    });
+                }
 
                 lock (subject.Inventory)
                 {
@@ -62,8 +74,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             }
                             Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
                             {
-                                { (byte)SynthesizeMaterialResponseParameterCode.Requirements, SerializationHelper.TypeSerialize(blueprint.Requirements.ToArray()) },
-                                { (byte)SynthesizeMaterialResponseParameterCode.Products, SerializationHelper.TypeSerialize(blueprint.Products.ToArray()) }
+                                { (byte)SynthesizeMaterialResponseParameterCode.RequirementsItemID_Array, blueprint.Requirements.Select(x => x.itemID).ToArray() },
+                                { (byte)SynthesizeMaterialResponseParameterCode.RequirementsItemCountArray, blueprint.Requirements.Select(x => x.itemCount).ToArray() },
+                                { (byte)SynthesizeMaterialResponseParameterCode.RequirementsPositionIndexArray, blueprint.Requirements.Select(x => x.positionIndex).ToArray() },
+                                { (byte)SynthesizeMaterialResponseParameterCode.ProductsItemID_Array, blueprint.Products.Select(x => x.itemID).ToArray() },
+                                { (byte)SynthesizeMaterialResponseParameterCode.ProductsItemCountArray, blueprint.Products.Select(x => x.itemCount).ToArray() },
+                                { (byte)SynthesizeMaterialResponseParameterCode.ProductsPositionIndexArray, blueprint.Products.Select(x => x.positionIndex).ToArray() }
                             };
                             subject.User.EventManager.UserInform("成功", "合成成功。");
                             SendResponse(operationCode, responseParameters);

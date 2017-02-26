@@ -1,13 +1,17 @@
-﻿namespace IsolatedIslandGame.Library.Items
+﻿using IsolatedIslandGame.Protocol;
+
+namespace IsolatedIslandGame.Library.Items
 {
     public class Material : Item
     {
         public int MaterialID { get; private set; }
         public int Score { get; private set; }
-        public Material(int itemID, string itemName, string description, int materialID, int score) : base(itemID, itemName, description)
+        public GroupType GroupType { get; private set; }
+        public Material(int itemID, string itemName, string description, int materialID, int score, GroupType groupType) : base(itemID, itemName, description)
         {
             MaterialID = materialID;
             Score = score;
+            GroupType = groupType;
         }
     }
 }

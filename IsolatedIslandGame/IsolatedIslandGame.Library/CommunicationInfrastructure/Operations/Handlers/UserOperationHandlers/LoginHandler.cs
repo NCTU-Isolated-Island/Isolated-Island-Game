@@ -33,6 +33,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         { (byte)LoginResponseParameterCode.GroupType, (byte)player.GroupType },
                         { (byte)LoginResponseParameterCode.LastConnectedIPAddress, player.LastConnectedIPAddress.ToString() },
                         { (byte)LoginResponseParameterCode.NextDrawMaterialTime, player.NextDrawMaterialTime.ToBinary() },
+                        { (byte)LoginResponseParameterCode.CumulativeLoginCount, player.CumulativeLoginCount },
                     };
                     SendResponse(operationCode, responseParameters);
                 }

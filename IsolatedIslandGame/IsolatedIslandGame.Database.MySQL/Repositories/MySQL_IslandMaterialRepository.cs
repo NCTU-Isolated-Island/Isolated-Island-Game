@@ -11,9 +11,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override int ReadTotalScore(GroupType groupType)
         {
             string sqlString = $@"SELECT SUM(Score) FROM
-                (SELECT Score, GroupType FROM {DatabaseService.DatabaseName}_ArchiveData.IslandMaterialCollection, {DatabaseService.DatabaseName}_SettingData.MaterialCollection, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection 
+                (SELECT Score, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection.GroupType as TGroupType FROM {DatabaseService.DatabaseName}_ArchiveData.IslandMaterialCollection, {DatabaseService.DatabaseName}_SettingData.MaterialCollection, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection 
                 WHERE SenderPlayerID = PlayerID AND MaterialItemID = ItemID) as ScoreTable
-                WHERE GroupType = @groupType GROUP BY GroupType;";
+                WHERE TGroupType = @groupType GROUP BY TGroupType;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("groupType", (byte)groupType);

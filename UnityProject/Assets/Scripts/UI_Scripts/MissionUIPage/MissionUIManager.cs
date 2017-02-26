@@ -1,10 +1,7 @@
 ﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
-using IsolatedIslandGame.Library.Quests.Rewards;
 using IsolatedIslandGame.Protocol;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,11 +27,11 @@ public class MissionUIManager : MonoBehaviour
     [SerializeField]
     private GameObject missionPrizeSet;
 
-    private Quest viewingQuest;
+    private QuestRecordInformation viewingQuest;
 
     //
 
-    public void OpenMissionDetailPage(Quest quest)
+    public void OpenMissionDetailPage(QuestRecordInformation information)
     {
         missionDetailScrollView.SetActive(true);
 
@@ -42,41 +39,41 @@ public class MissionUIManager : MonoBehaviour
         //Text missionCountDown = missionDetailContent.transform.Find("MissionCountDown").GetComponent<Text>();
         Text missionDescription = missionDetailContent.transform.Find("MissionDescription").GetComponent<Text>();
 
-        missionName.text = quest.QuestName;
-        missionDescription.text = quest.QuestDescription;
+        missionName.text = information.questName;
+        missionDescription.text = information.questDescription;
 
         foreach (Transform trash in missionPrizeContent.transform)
         {
             Destroy(trash.gameObject);
         }
 
-        foreach (QuestReward prize in quest.Rewards)
-        {
-            print(prize.Description);
-            GameObject tmp = Instantiate(missionPrizeSet);
-            tmp.transform.SetParent(missionPrizeContent.transform);
+        //foreach (QuestReward prize in quest.Rewards)
+        //{
+        //    print(prize.Description);
+        //    GameObject tmp = Instantiate(missionPrizeSet);
+        //    tmp.transform.SetParent(missionPrizeContent.transform);
 
-            if (prize.QuestRewardType == QuestRewardType.GiveSpecificNumberSpecificItem)
-            {
-                Item item;
-                ItemManager.Instance.FindItem((prize as GiveSpecificNumberSpecificItemQuestReward).ItemID, out item);
+        //    if (prize.QuestRewardType == QuestRewardType.GiveSpecificNumberSpecificItem)
+        //    {
+        //        Item item;
+        //        ItemManager.Instance.FindItem(prize.QuestRewardID, out item);
 
-                tmp.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + item.ItemID);
-                //tmp.transform.Find("prizeItemName").GetComponent<Text>().text = item.ItemName;
-                tmp.transform.Find("prizeItemName").GetComponent<Text>().text = prize.Description;
-            }
-            else if (prize.QuestRewardType == QuestRewardType.UnlockSpecificBlueprint)
-            {
-                // give a blurprint sprite
-                tmp.GetComponent<Image>().sprite = null;
-                //tmp.transform.Find("prizeItemName").GetComponent<Text>().text = "解鎖藍圖";
-                tmp.transform.Find("prizeItemName").GetComponent<Text>().text = prize.Description;
-            }
-            tmp.transform.localScale = Vector3.one;
-        }
+        //        tmp.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + item.ItemID);
+        //        //tmp.transform.Find("prizeItemName").GetComponent<Text>().text = item.ItemName;
+        //        tmp.transform.Find("prizeItemName").GetComponent<Text>().text = prize.Description;
+        //    }
+        //    else if (prize.QuestRewardType == QuestRewardType.UnlockSpecificBlueprint)
+        //    {
+        //        // give a blurprint sprite
+        //        tmp.GetComponent<Image>().sprite = null;
+        //        //tmp.transform.Find("prizeItemName").GetComponent<Text>().text = "解鎖藍圖";
+        //        tmp.transform.Find("prizeItemName").GetComponent<Text>().text = prize.Description;
+        //    }
+        //    tmp.transform.localScale = Vector3.one;
+        //}
 
         // Add Detail Page Listener
-        viewingQuest = quest;
+        viewingQuest = information;
     }
     //
 
@@ -97,27 +94,27 @@ public class MissionUIManager : MonoBehaviour
         {
             UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
         }
-        LoadQuestList(null);
+        LoadQuestList(new QuestRecordInformation());
     }
 
     void RegisterPlayerEvents(Player player)
     {
-        player.OnQuestRecordUpdated += LoadQuestList;
+        player.OnQuestRecordInformationUpdated += LoadQuestList;
     }
 
-    void LoadQuestList(QuestRecord obj)
+    void LoadQuestList(QuestRecordInformation information)
     {
         //print("LoadQuestList");
-        foreach (Transform questRecord in missionSetContent.transform)
+        foreach (Transform questRecordObject in missionSetContent.transform)
         {
-            Destroy(questRecord.gameObject);
+            Destroy(questRecordObject.gameObject);
         }
 
-        foreach (QuestRecord questRecord in UserManager.Instance.User.Player.QuestRecords)
+        foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations)
         {
             GameObject tmp = Instantiate(missionSet);
             //
-            tmp.GetComponent<MissionSetBehavior>().SetQuestInfo(questRecord.Quest);
+            tmp.GetComponent<MissionSetBehavior>().SetQuestInfo(questRecordInformation);
             //
             Text missionName = tmp.transform.Find("MissionName").GetComponent<Text>();
             Text missionCountDown = tmp.transform.Find("MissionCountDown").GetComponent<Text>();
@@ -125,9 +122,9 @@ public class MissionUIManager : MonoBehaviour
             //Text missionLocation = tmp.transform.Find("MissionLocation").GetComponent<Text>();
             //Text missionPrize = tmp.transform.Find("MissionPrize").GetComponent<Text>();
 
-            missionName.text = questRecord.Quest.QuestName;
+            missionName.text = questRecordInformation.questName;
             //missionCountDown = questRecord.Quest;
-            switch (questRecord.Quest.QuestType)
+            switch (questRecordInformation.questType)
             {
                 case QuestType.QR_Code:
                     missionType.text = "掃描 QR code";

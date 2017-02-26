@@ -80,15 +80,6 @@ namespace IsolatedIslandGame.Server
                             errorCode = ErrorCode.Fail;
                             return false;
                         }
-                        else
-                        {
-                            Quest quest;
-                            QuestRecord record;
-                            if ((QuestManager.Instance as QuestFactory).FindCumulativeLoginQuest(1, out quest))
-                            {
-                                quest.CreateRecord(player.PlayerID, out record);
-                            }
-                        }
                     }
                     else
                     {
@@ -176,15 +167,6 @@ namespace IsolatedIslandGame.Server
                 AssemblePlayer(player);
                 player.User.PlayerOnline(player);
                 LogService.InfoFormat("PlayerID: {0} Online from: {1}", player.PlayerID, player.LastConnectedIPAddress);
-
-                bool isTodayFirstLogin;
-                int cumulativeLoginCount;
-                DatabaseService.RepositoryList.PlayerRepository.UpdateLastLoginTime(player.PlayerID, DateTime.Now, out isTodayFirstLogin, out cumulativeLoginCount);
-                if(isTodayFirstLogin)
-                {
-                    IssueCumulativeLoginQuest(player, cumulativeLoginCount);
-                }
-                player.UpdateLoginStatus(isTodayFirstLogin, cumulativeLoginCount);
                 return true;
             }
         }
@@ -308,18 +290,6 @@ namespace IsolatedIslandGame.Server
             SHA512 sha512 = new SHA512CryptoServiceProvider();
             string passwordHash = Convert.ToBase64String(sha512.ComputeHash(Encoding.Default.GetBytes(password)));
             return passwordHash;
-        }
-
-        private void IssueCumulativeLoginQuest(Player player, int cumulativeLoginCount)
-        {
-            Quest quest;
-            QuestRecord record;
-            if ((QuestManager.Instance as QuestFactory).FindCumulativeLoginQuest(cumulativeLoginCount, out quest) && quest.CreateRecord(player.PlayerID, out record))
-            {
-                record.RegisterObserverEvents(player);
-                player.AddQuestRecord(record);
-                record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
-            }
         }
     }
 }

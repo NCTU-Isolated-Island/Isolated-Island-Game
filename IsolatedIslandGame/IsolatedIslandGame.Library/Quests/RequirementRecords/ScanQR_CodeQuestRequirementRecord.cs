@@ -1,12 +1,10 @@
 ﻿using IsolatedIslandGame.Library.Quests.Requirements;
-using MsgPack.Serialization;
 using System;
 
 namespace IsolatedIslandGame.Library.Quests.RequirementRecords
 {
     public class ScanQR_CodeQuestRequirementRecord : QuestRequirementRecord
     {
-        [MessagePackMember(3)]
         private bool hasScannedCorrectQR_Code;
         public bool HasScannedCorrectQR_Code
         {
@@ -39,8 +37,6 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         private event Action<QuestRequirementRecord> onRequirementStatusChange;
         public override event Action<QuestRequirementRecord> OnRequirementStatusChange { add { onRequirementStatusChange += value; } remove { onRequirementStatusChange -= value; } }
 
-        [MessagePackDeserializationConstructor]
-        public ScanQR_CodeQuestRequirementRecord() { }
         public ScanQR_CodeQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, bool hasScannedCorrectScanQR_Code) : base(questRequirementRecordID, requirement)
         {
             this.hasScannedCorrectQR_Code = hasScannedCorrectScanQR_Code;
