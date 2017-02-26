@@ -52,7 +52,7 @@ namespace IsolatedIslandGame.Client
                 }
                 else
                 {
-                    material = new Material(item.ItemID, item.ItemName, item.Description, 0, 0);
+                    material = new Material(item.ItemID, item.ItemName, item.Description, 0, 0, Protocol.GroupType.No);
                     itemDictionary[itemID] = material;
                     if (onItemUpdate != null)
                     {

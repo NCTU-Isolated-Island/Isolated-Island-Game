@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
+using IsolatedIslandGame.Library.Quests.Rewards;
 using IsolatedIslandGame.Protocol;
 using System;
 using System.Collections;
@@ -55,16 +56,16 @@ public class MissionUIManager : MonoBehaviour
             GameObject tmp = Instantiate(missionPrizeSet);
             tmp.transform.SetParent(missionPrizeContent.transform);
 
-            if (prize.QuestRewardType == QuestRewardType.GiveItem)
+            if (prize.QuestRewardType == QuestRewardType.GiveSpecificNumberSpecificItem)
             {
                 Item item;
-                ItemManager.Instance.FindItem(prize.QuestRewardID, out item);
+                ItemManager.Instance.FindItem((prize as GiveSpecificNumberSpecificItemQuestReward).ItemID, out item);
 
                 tmp.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + item.ItemID);
                 //tmp.transform.Find("prizeItemName").GetComponent<Text>().text = item.ItemName;
                 tmp.transform.Find("prizeItemName").GetComponent<Text>().text = prize.Description;
             }
-            else if (prize.QuestRewardType == QuestRewardType.UnlockBlueprint)
+            else if (prize.QuestRewardType == QuestRewardType.UnlockSpecificBlueprint)
             {
                 // give a blurprint sprite
                 tmp.GetComponent<Image>().sprite = null;
@@ -134,10 +135,10 @@ public class MissionUIManager : MonoBehaviour
                 case QuestType.MutiplayerSynthesize:
                     missionType.text = "多人合成";
                     break;
-                case QuestType.SendMessage:
+                case QuestType.Message:
                     missionType.text = "傳送訊息";
                     break;
-                case QuestType.CloseDeal:
+                case QuestType.Deal:
                     missionType.text = "完成交易";
                     break;
                 default:
