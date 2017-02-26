@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             if (base.Handle(operationCode, parameters))
             {
-                List<Blueprint.ElementInfo>  elementInfos = (SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfosDataByteArray])).ToList();
+                List<Blueprint.ElementInfo>  elementInfos = (SerializationHelper.BlueprintElementInfoArrayDeserialize((byte[])parameters[(byte)SynthesizeMaterialParameterCode.BlueprintElementInfosDataByteArray])).ToList();
 
                 lock (subject.Inventory)
                 {
@@ -62,8 +62,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             }
                             Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
                             {
-                                { (byte)SynthesizeMaterialResponseParameterCode.Requirements, SerializationHelper.TypeSerialize(blueprint.Requirements.ToArray()) },
-                                { (byte)SynthesizeMaterialResponseParameterCode.Products, SerializationHelper.TypeSerialize(blueprint.Products.ToArray()) }
+                                { (byte)SynthesizeMaterialResponseParameterCode.Requirements, SerializationHelper.BlueprintElementInfoArraySerialize(blueprint.Requirements.ToArray()) },
+                                { (byte)SynthesizeMaterialResponseParameterCode.Products, SerializationHelper.BlueprintElementInfoArraySerialize(blueprint.Products.ToArray()) }
                             };
                             subject.User.EventManager.UserInform("成功", "合成成功。");
                             SendResponse(operationCode, responseParameters);

@@ -93,7 +93,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordDataByteArray, SerializationHelper.TypeSerialize(questRecord) },
+                { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordDataByteArray, SerializationHelper.QuestRecordSerialize(questRecord) },
             };
             SendSyncData(PlayerSyncDataCode.QuestRecordUpdated, parameters);
         }

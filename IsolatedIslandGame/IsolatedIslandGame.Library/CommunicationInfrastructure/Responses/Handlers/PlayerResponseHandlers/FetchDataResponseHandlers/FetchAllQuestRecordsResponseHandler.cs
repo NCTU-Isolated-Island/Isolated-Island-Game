@@ -44,7 +44,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                 try
                 {
                     byte[] questRecordDataByteArray = (byte[])parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordDataByteArray];
-                    QuestRecord questRecord = SerializationHelper.TypeDeserialize<QuestRecord>(questRecordDataByteArray);
+                    QuestRecord questRecord = SerializationHelper.QuestRecordDeserialize(questRecordDataByteArray);
 
                     QuestManager.Instance.AddQuest(questRecord.Quest);
                     subject.AddQuestRecord(questRecord);

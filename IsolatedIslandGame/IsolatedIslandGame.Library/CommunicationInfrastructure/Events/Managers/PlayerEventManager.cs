@@ -68,8 +68,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { (byte)GetBlueprintParameterCode.BlueprintID, blueprint.BlueprintID },
                 { (byte)GetBlueprintParameterCode.IsOrderless, blueprint.IsOrderless },
                 { (byte)GetBlueprintParameterCode.IsBlueprintRequired, blueprint.IsBlueprintRequired },
-                { (byte)GetBlueprintParameterCode.Requirements, SerializationHelper.TypeSerialize(blueprint.Requirements.ToArray()) },
-                { (byte)GetBlueprintParameterCode.Products, SerializationHelper.TypeSerialize(blueprint.Products.ToArray()) }
+                { (byte)GetBlueprintParameterCode.Requirements, SerializationHelper.BlueprintElementInfoArraySerialize(blueprint.Requirements.ToArray()) },
+                { (byte)GetBlueprintParameterCode.Products, SerializationHelper.BlueprintElementInfoArraySerialize(blueprint.Products.ToArray()) }
             };
             SendEvent(PlayerEventCode.GetBlueprint, parameters);
         }

@@ -41,8 +41,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 try
                 {
-                    Blueprint.ElementInfo[] requirements = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Requirements]);
-                    Blueprint.ElementInfo[] products = SerializationHelper.TypeDeserialize<Blueprint.ElementInfo[]>((byte[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Products]);
+                    Blueprint.ElementInfo[] requirements = SerializationHelper.BlueprintElementInfoArrayDeserialize((byte[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Requirements]);
+                    Blueprint.ElementInfo[] products = SerializationHelper.BlueprintElementInfoArrayDeserialize((byte[])parameters[(byte)SynthesizeMaterialResponseParameterCode.Products]);
                     subject.ResponseManager.SynthesizeMaterialResponse(returnCode, requirements, products);
                     return true;
                 }

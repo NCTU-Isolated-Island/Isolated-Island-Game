@@ -69,7 +69,6 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             {
                 LogService.Fatal("Load SystemConfiguration Fail");
             }
-            Photon.SocketServer.Protocol.TryRegisterCustomType(typeof(Blueprint.ElementInfo), (byte)SerializationTypeCode.BlueprintElementInfo, SerializationHelper.Serialize<Blueprint.ElementInfo>, SerializationHelper.Deserialize<Blueprint.ElementInfo>);
         }
         private void SetupServices()
         {

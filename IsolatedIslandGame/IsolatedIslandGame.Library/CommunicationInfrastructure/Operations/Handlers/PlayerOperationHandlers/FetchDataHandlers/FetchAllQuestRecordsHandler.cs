@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     {
                         var result = new Dictionary<byte, object>
                         {
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordDataByteArray, SerializationHelper.TypeSerialize(questRecord) }
+                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordDataByteArray, SerializationHelper.QuestRecordSerialize(questRecord) }
                         };
                         SendResponse(fetchCode, result);
                     }

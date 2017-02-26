@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 try
                 {
                     byte[] questRecordDataByteArray = (byte[])parameters[(byte)SyncQuestRecordUpdatedParameterCode.QuestRecordDataByteArray];
-                    QuestRecord questRecord = SerializationHelper.TypeDeserialize<QuestRecord>(questRecordDataByteArray);
+                    QuestRecord questRecord = SerializationHelper.QuestRecordDeserialize(questRecordDataByteArray);
 
                     QuestManager.Instance.AddQuest(questRecord.Quest);
                     subject.AddQuestRecord(questRecord);
