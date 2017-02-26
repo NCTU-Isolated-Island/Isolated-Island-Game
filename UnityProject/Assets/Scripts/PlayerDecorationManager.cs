@@ -99,15 +99,35 @@ public class PlayerDecorationManager : MonoBehaviour {
 	{
 		print("BEgin");
 		print("itemID: " + itemID);
+
 		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity,
 			GameManager.Instance.PlayerGameObject.transform.Find("Decorations")) as GameObject;
 		CurrentSelectDecoration.name = itemID.ToString();
+
+		Transparentize(CurrentSelectDecoration);
 
 		if(!AddedDecorations.Contains(CurrentSelectDecoration))
 			AddedDecorations.Add(CurrentSelectDecoration);
 
 		CurrentControlMode = ControlMode.Decorate;
 
+	}
+
+	void Transparentize(GameObject target)
+	{
+		target.layer = LayerMask.NameToLayer("Outline");
+		for (int i = 0; i < target.transform.childCount; i++) {
+			target.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("Outline");
+		}
+	}
+
+	void DeTransparentize(GameObject target)
+	{
+
+		target.layer = LayerMask.NameToLayer("Decoration");
+		for (int i = 0; i < target.transform.childCount; i++) {
+			target.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("Decoration");
+		}
 	}
 
 	public void UpdateModifiedDecorationsToServer()
@@ -169,7 +189,10 @@ public class PlayerDecorationManager : MonoBehaviour {
 		UIManager.Instance.RemoveCurrentPage();
 		UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
 
-
+		if(CurrentSelectDecoration != null)
+		{
+			DeTransparentize(CurrentSelectDecoration);
+		}
 	}
 
 	void DecorateProcess()
@@ -202,13 +225,17 @@ public class PlayerDecorationManager : MonoBehaviour {
 			{
 				print("begin");
 				print(entireHitInfo.transform.gameObject.name);
-				if(entireHit && entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration"))
+				if(entireHit && (entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Decoration") || entireHitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Outline")))
 				{
 					ShortClickTime = Time.time;
 
 					print(entireHitInfo.transform.name);
 
+					if(CurrentSelectDecoration != null)
+						DeTransparentize(CurrentSelectDecoration);
+
 					CurrentSelectDecoration = entireHitInfo.transform.gameObject;
+					Transparentize(CurrentSelectDecoration);
 					CurrentControlMode = ControlMode.Decorate;
 					if(!ModifiedDecorations.Contains(CurrentSelectDecoration))
 						ModifiedDecorations.Add(CurrentSelectDecoration);
@@ -237,6 +264,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 					{
 						if(vesselHit)
 						{
+							DeTransparentize(CurrentSelectDecoration);
 							CurrentSelectDecoration = null;
 						}
 						else
@@ -244,6 +272,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 							if(!RemovedDecorations.Contains(CurrentSelectDecoration))
 								RemovedDecorations.Add(CurrentSelectDecoration);
 
+							DeTransparentize(CurrentSelectDecoration);
 							CurrentSelectDecoration.SetActive(false);
 
 							CurrentSelectDecoration = null;
@@ -327,5 +356,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 			break;
 		}
 	}
+
+
 
 }

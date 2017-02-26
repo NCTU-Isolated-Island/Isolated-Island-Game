@@ -95,62 +95,6 @@ public class PlayerController : MonoBehaviour {
 			OnGetArea.Invoke();
 	}
 
-//	public void StartPlaceDecoration()
-//	{
-//		//Check have that material
-//		finishPlacing = false;
-//		StartCoroutine(PlaceMaterial(3));
-//
-//	}
-//
-//	public void FinishPlaceDecoration()
-//	{
-//		finishPlacing = true;
-//	}
-//
-//	IEnumerator PlaceMaterial(int itemID)
-//	{
-//		placingMaterial = true;
-//
-//		Vector3 position;
-//		Quaternion rotation;
-//
-//		GameObject temp = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity) as GameObject;
-//		temp.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
-//		Transparentize(temp);
-//
-//		RaycastHit hitInfo = new RaycastHit();
-//
-//		while(!finishPlacing)
-//		{
-//			//TODO 必須把Player模型設定成 "PlayerModel" Layer
-//			Physics.Raycast
-//			(
-//				Camera.main.ScreenPointToRay(Input.mousePosition),
-//				out hitInfo,
-//				99999f,
-//				LayerMask.GetMask("PlayerModel")
-//			);
-//			temp.transform.position = hitInfo.point;
-//			yield return null;}
-//
-//
-//		position = temp.transform.localPosition;
-//		rotation = temp.transform.localRotation;
-//
-//		UserManager.Instance.User.Player.OperationManager.AddDecorationToVessel
-//		(
-//			itemID,
-//			position.x, position.y, position.z,
-//			rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
-//		);
-//
-//
-//		Destroy(temp);
-//		placingMaterial = false;
-//
-//	}
-
 	void CheckDoubleClick()
 	{
 		if(Input.GetMouseButtonDown(0))
@@ -234,42 +178,6 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-//	void SelectDecoration()
-//	{
-//
-//		RaycastHit hitInfo = new RaycastHit();
-//
-//		bool hit = Physics.Raycast(
-//			Camera.main.ScreenPointToRay(Input.mousePosition),
-//			out hitInfo,
-//			99999f,
-//			LayerMask.GetMask("Decoration")
-//		);
-//
-//		if(hit)
-//		{
-//
-//			if(CurrentSelectDecoration)
-//			{
-//				DeTransparentize(CurrentSelectDecoration);
-//			}
-//
-//
-//			CurrentSelectDecoration = hitInfo.transform.gameObject;
-//
-//			Transparentize(CurrentSelectDecoration);
-//
-//		}
-//		else
-//		{
-//			//CurrentSelectDecoration = null;
-//
-//
-//		}
-//
-//
-//	}
-
 	void PinchToZoom()
 	{
 		if (Input.touchCount == 2)
@@ -312,27 +220,6 @@ public class PlayerController : MonoBehaviour {
 
 
 	}
-
-	void Transparentize(GameObject target)
-	{
-
-		foreach(UnityEngine.Material entry in target.GetComponent<MeshRenderer>().materials)
-		{
-			entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 0.5f);
-		}
-	}
-
-	void DeTransparentize(GameObject target)
-	{
-		foreach(UnityEngine.Material entry in target.GetComponent<MeshRenderer>().materials)
-		{
-			entry.color = new Color( entry.color.r, entry.color.g, entry.color.b, 1f);
-		}
-	}
-
-
-
-
 
 	void ShowVessel(GameObject vessel)
 	{
