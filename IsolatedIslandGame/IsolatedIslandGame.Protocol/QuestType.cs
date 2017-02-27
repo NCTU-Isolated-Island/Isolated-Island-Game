@@ -6,7 +6,7 @@
         Ocean,
         Message,
         Friend,
-        Deal,
+        Trade,
         Island,
         Synthesize,
         QR_Code,

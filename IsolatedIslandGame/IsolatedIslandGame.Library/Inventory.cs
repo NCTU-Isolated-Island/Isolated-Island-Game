@@ -15,13 +15,18 @@ namespace IsolatedIslandGame.Library
         private Dictionary<int, InventoryItemInfo> itemInfoDictionary;
         private InventoryItemInfo[] itemInfos;
         public int DifferentItemCount { get { return itemInfoDictionary.Count; } }
-        
+        public int DifferentMaterialCount { get { return itemInfoDictionary.Count(x => x.Value.Item is Material); } }
+
 
         public IEnumerable<InventoryItemInfo> ItemInfos { get { return itemInfoDictionary.Values.OrderBy(x => x.PositionIndex); } }
 
         public delegate void InventoryItemInfoChangeEventHandler(DataChangeType changeType, InventoryItemInfo info);
         private event InventoryItemInfoChangeEventHandler onItemInfoChange;
         public event InventoryItemInfoChangeEventHandler OnItemInfoChange { add { onItemInfoChange += value; } remove { onItemInfoChange -= value; } }
+
+        public delegate void InventoryItemCountChangeEventHandler(int itemID, int countDelta);
+        private event InventoryItemCountChangeEventHandler onItemCountChange;
+        public event InventoryItemCountChangeEventHandler OnItemCountChange { add { onItemCountChange += value; } remove { onItemCountChange -= value; } }
 
         public Inventory(int inventoryID, int capacity)
         {
@@ -111,6 +116,7 @@ namespace IsolatedIslandGame.Library
             {
                 info.Count += count;
                 onItemInfoChange?.Invoke(DataChangeType.Update, info);
+                onItemCountChange?.Invoke(item.ItemID, count);
             }
             else
             {
@@ -123,6 +129,7 @@ namespace IsolatedIslandGame.Library
                         info.OnInventoryItemInfoUpdate += UpdateItemInfo;
                         itemInfos[info.PositionIndex] = info;
                         onItemInfoChange?.Invoke(DataChangeType.Add, info);
+                        onItemCountChange?.Invoke(item.ItemID, count);
                     }
                     else if(InventoryItemInfoFactory.Instance == null)
                     {
@@ -131,6 +138,7 @@ namespace IsolatedIslandGame.Library
                         info.OnInventoryItemInfoUpdate += UpdateItemInfo;
                         itemInfos[info.PositionIndex] = info;
                         onItemInfoChange?.Invoke(DataChangeType.Add, info);
+                        onItemCountChange?.Invoke(item.ItemID, count);
                     }
                 }
             }
@@ -158,6 +166,7 @@ namespace IsolatedIslandGame.Library
                     {
                         onItemInfoChange?.Invoke(DataChangeType.Update, info);
                     }
+                    onItemCountChange?.Invoke(itemID, -count);
                 }
             }
         }

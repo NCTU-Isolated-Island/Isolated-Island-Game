@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
+using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
@@ -46,6 +47,7 @@ namespace IsolatedIslandGame.Library
 
         private Dictionary<int, FriendInformation> friendInformationDictionary = new Dictionary<int, FriendInformation>();
         public IEnumerable<FriendInformation> FriendInformations { get { return friendInformationDictionary.Values.ToArray(); } }
+        public int FriendCount { get { return friendInformationDictionary.Count; } }
 
         private Dictionary<int, Transaction> transactionDictionary = new Dictionary<int, Transaction>();
         public IEnumerable<Transaction> Transactions { get { return transactionDictionary.Values.ToArray(); } }
@@ -101,6 +103,10 @@ namespace IsolatedIslandGame.Library
 
         private event Action<DateTime> onNextDrawMaterialTimeUpdated;
         public event Action<DateTime> OnNextDrawMaterialTimeUpdated { add { onNextDrawMaterialTimeUpdated += value; } remove { onNextDrawMaterialTimeUpdated -= value; } }
+
+        public delegate void SynthesizeResultEventHandler(bool isSuccessful, Blueprint blueprint);
+        private event SynthesizeResultEventHandler onSynthesizeResultGenerated;
+        public event SynthesizeResultEventHandler OnSynthesizeResultGenerated { add { onSynthesizeResultGenerated += value; } remove { onSynthesizeResultGenerated -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress, DateTime nextDrawMaterialTime, int cumulativeLoginCount)
@@ -298,6 +304,65 @@ namespace IsolatedIslandGame.Library
         public void ScanQR_Code(string qrCodeString)
         {
             onScanQR_Code?.Invoke(qrCodeString);
+        }
+        public bool SynthesizeMaterial(List<Blueprint.ElementInfo> elementInfos, out Blueprint resultBlueprint)
+        {
+            resultBlueprint = BlueprintManager.Instance.Blueprints.FirstOrDefault(x => !x.IsBlueprintRequired && x.IsSufficientRequirements(elementInfos));
+            if(resultBlueprint != null)
+            {
+                lock (Inventory)
+                {
+                    bool inventoryCheck = true;
+
+                    foreach (var requirement in resultBlueprint.Requirements)
+                    {
+                        if (!Inventory.RemoveItemCheck(requirement.itemID, requirement.itemCount))
+                        {
+                            inventoryCheck = false;
+                            break;
+                        }
+                    }
+                    foreach (var product in resultBlueprint.Products)
+                    {
+                        if (!Inventory.AddItemCheck(product.itemID, product.itemCount))
+                        {
+                            inventoryCheck = false;
+                            break;
+                        }
+                    }
+                    if (inventoryCheck)
+                    {
+                        if (!IsKnownBlueprint(resultBlueprint.BlueprintID))
+                        {
+                            GetBlueprint(resultBlueprint);
+                        }
+                        foreach (var requirement in resultBlueprint.Requirements)
+                        {
+                            Inventory.RemoveItem(requirement.itemID, requirement.itemCount);
+                        }
+                        foreach (var product in resultBlueprint.Products)
+                        {
+                            Item item;
+                            if (ItemManager.Instance.FindItem(product.itemID, out item))
+                            {
+                                Inventory.AddItem(item, product.itemCount);
+                            }
+                        }
+                        onSynthesizeResultGenerated?.Invoke(true, resultBlueprint);
+                        return true;
+                    }
+                    else
+                    {
+                        onSynthesizeResultGenerated?.Invoke(false, resultBlueprint);
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                onSynthesizeResultGenerated?.Invoke(false, null);
+                return false;
+            }
         }
     }
 }
