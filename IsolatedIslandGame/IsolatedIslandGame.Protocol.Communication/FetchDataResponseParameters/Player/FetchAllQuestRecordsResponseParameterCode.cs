@@ -6,6 +6,7 @@
         QuestType,
         QuestName,
         QuestDescription,
+        IsHidden,
         RequirementsDescription,
         RewardsDescription,
         HasGottenReward,

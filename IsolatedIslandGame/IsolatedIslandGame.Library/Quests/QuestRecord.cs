@@ -78,7 +78,10 @@ namespace IsolatedIslandGame.Library.Quests
         }
         public void RegisterObserverEvents(Player player)
         {
-            requirementRecords.ForEach(x => x.RegisterObserverEvents(player));
+            if(!IsFinished)
+            {
+                requirementRecords.ForEach(x => x.RegisterObserverEvents(player));
+            }
             giveReward = () => 
             {
                 bool canGiveReward = true;

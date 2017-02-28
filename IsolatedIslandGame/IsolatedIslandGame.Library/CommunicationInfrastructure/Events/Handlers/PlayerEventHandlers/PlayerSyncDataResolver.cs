@@ -95,9 +95,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             var parameters = new Dictionary<byte, object>
             {
                 { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordID, information.questRecordID },
-                { (byte)SyncQuestRecordUpdatedParameterCode.QuestType, information.questType },
+                { (byte)SyncQuestRecordUpdatedParameterCode.QuestType, (byte)information.questType },
                 { (byte)SyncQuestRecordUpdatedParameterCode.QuestName, information.questName },
                 { (byte)SyncQuestRecordUpdatedParameterCode.QuestDescription, information.questDescription },
+                { (byte)SyncQuestRecordUpdatedParameterCode.IsHidden, information.isHidden },
                 { (byte)SyncQuestRecordUpdatedParameterCode.RequirementsDescription, information.requirementsDescription },
                 { (byte)SyncQuestRecordUpdatedParameterCode.RewardsDescription, information.rewardsDescription },
                 { (byte)SyncQuestRecordUpdatedParameterCode.HasGottenReward, information.hasGottenReward },

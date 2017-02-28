@@ -8,6 +8,7 @@ namespace IsolatedIslandGame.Library.Quests
         public QuestType questType;
         public string questName;
         public string questDescription;
+        public bool isHidden;
         public string requirementsDescription;
         public string rewardsDescription;
         public bool hasGottenReward;

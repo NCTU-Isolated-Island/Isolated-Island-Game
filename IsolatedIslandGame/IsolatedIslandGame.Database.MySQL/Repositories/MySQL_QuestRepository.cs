@@ -14,7 +14,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override List<Quest> ListAll()
         {
             List<QuestInfo> questInfos = new List<QuestInfo>();
-            string sqlString = @"SELECT QuestID, QuestType, QuestName, QuestDescription from QuestCollection ;";
+            string sqlString = @"SELECT QuestID, QuestType, QuestName, QuestDescription, IsHidden from QuestCollection ;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -25,12 +25,15 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         QuestType questType = (QuestType)reader.GetByte(1);
                         string questName = reader.GetString(2);
                         string questDescription = reader.GetString(3);
+                        bool isHidden = reader.GetBoolean(4);
+
                         questInfos.Add(new QuestInfo
                         {
                             questID = questID,
                             questType = questType,
                             questName = questName,
-                            questDescription = questDescription
+                            questDescription = questDescription,
+                            isHidden = isHidden
                         });
                     }
                 }
@@ -40,7 +43,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             {
                 List<QuestRequirement> requirements = ListRequirementsOfQuest(questInfo.questID);
                 List<QuestReward> rewards = ListRewardsOfQuest(questInfo.questID);
-                quests.Add(new Quest(questInfo.questID, questInfo.questType, questInfo.questName, requirements, rewards, questInfo.questDescription));
+                quests.Add(new Quest(questInfo.questID, questInfo.questType, questInfo.questName, questInfo.isHidden, questInfo.questDescription, requirements, rewards));
             }
             return quests;
         }
@@ -74,26 +77,110 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 QuestRequirement requirement;
                 switch(info.questRequirementType)
                 {
-                    case QuestRequirementType.SendMessageToDifferentOnlineFriendInTheSameSpecificOcean:
-                        if (SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirement(info.questRequirementID, out requirement))
+                    case QuestRequirementType.CumulativeLoginSpecificDay:
+                        if (SpecializeQuestRequirementToCumulativeLoginSpecificDayQuestRequirement(info.questRequirementID, out requirement))
                         {
                             requirements.Add(requirement);
                         }
                         break;
-                    case QuestRequirementType.CloseDealWithDifferentFriendInTheSameSpecificOcean:
-                        if (SpecializeRequirementToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirement(info.questRequirementID, out requirement))
+                    case QuestRequirementType.StayInSpecificOcean:
+                        if (SpecializeQuestRequirementToStayInSpecificOceanQuestRequirement(info.questRequirementID, out requirement))
                         {
                             requirements.Add(requirement);
                         }
                         break;
-                    case QuestRequirementType.ScanQR_Code:
-                        if (SpecializeRequirementToScanQR_CodeRequirement(info.questRequirementID, out requirement))
+                    case QuestRequirementType.MakeFriendSuccessfulSpecificNumberOfTime:
+                        if (SpecializeQuestRequirementToMakeFriendSuccessfulSpecificNumberOfTimeQuestRequirement(info.questRequirementID, out requirement))
                         {
                             requirements.Add(requirement);
                         }
                         break;
-                    case QuestRequirementType.CumulativeLogin:
-                        if (SpecializeRequirementToCumulativeLoginRequirement(info.questRequirementID, out requirement))
+                    case QuestRequirementType.CloseDealSpecificNumberOfTime:
+                        if (SpecializeQuestRequirementToCloseDealSpecificNumberOfTimeQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.SendMaterialToIslandSpecificNumberOfTime:
+                        if (SpecializeQuestRequirementToSendMaterialToIslandSpecificNumberOfTimeQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.ExistedInSpecificNumberOcean:
+                        if (SpecializeQuestRequirementToExistedInSpecificNumberOceanQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.SendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOcean:
+                        if (SpecializeQuestRequirementToSendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.CloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOcean:
+                        if (SpecializeQuestRequirementToCloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.GetSpecificItem:
+                        if (SpecializeQuestRequirementToGetSpecificItemQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.CloseDealWithOutlander:
+                        if (SpecializeQuestRequirementToCloseDealWithOutlanderQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.CollectSpecificNumberBelongingGroupMaterial:
+                        if (SpecializeQuestRequirementToCollectSpecificNumberBelongingGroupMaterialQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.SynthesizeSpecificScoreMaterial:
+                        if (SpecializeQuestRequirementToSynthesizeSpecificScoreMaterialQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.ScanSpecificQR_Code:
+                        if (SpecializeQuestRequirementToScanSpecificQR_CodeQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.HaveSpecificNumberFriend:
+                        if (SpecializeQuestRequirementToHaveSpecificNumberFriendQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.SynthesizeSuccessfulSpecificNumberOfTime:
+                        if (SpecializeQuestRequirementToSynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.HaveSpecificNumberKindMaterial:
+                        if (SpecializeQuestRequirementToHaveSpecificNumberKindMaterialQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.AddSpecificNumberDecorationToVessel:
+                        if (SpecializeQuestRequirementToAddSpecificNumberDecorationToVesselQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.HaveSpecificNumberDecorationOnVessel:
+                        if (SpecializeQuestRequirementToHaveSpecificNumberDecorationOnVesselQuestRequirement(info.questRequirementID, out requirement))
                         {
                             requirements.Add(requirement);
                         }
@@ -180,10 +267,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         }
 
         #region Specialize QuestRequirement
-        protected override bool SpecializeRequirementToSendMessageToDifferentOnlineFriendTheSameSpecificOceanRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeQuestRequirementToCumulativeLoginSpecificDayQuestRequirement(int requirementID, out QuestRequirement requirement)
         {
-            string sqlString = @"SELECT SpecificOceanType, RequiredFriendNumber
-                from SMTDOFITSSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            string sqlString = @"SELECT SpecificDayCount
+                from CLSD_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -191,9 +278,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        OceanType specificOceanType = (OceanType)reader.GetByte(0);
-                        int requiredFriendNumber = reader.GetInt32(1);
-                        requirement = new SendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(requirementID, specificOceanType, requiredFriendNumber);
+                        int specificDayCount = reader.GetInt32(0);
+                        requirement = new CumulativeLoginSpecificDayQuestRequirement(requirementID, specificDayCount);
                         return true;
                     }
                     else
@@ -204,10 +290,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool SpecializeRequirementToCloseDealWithDifferentFriendInTheSameSpecificOceanRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeQuestRequirementToStayInSpecificOceanQuestRequirement(int requirementID, out QuestRequirement requirement)
         {
-            string sqlString = @"SELECT SpecificOceanType, RequiredFriendNumber
-                from CDWDFITSSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            string sqlString = @"SELECT SpecificOceanType
+                from SISO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -215,9 +301,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        OceanType specificOceanType = (OceanType)reader.GetByte(0);
-                        int requiredFriendNumber = reader.GetInt32(1);
-                        requirement = new CloseDealWithDifferentFriendInTheSameSpecificOceanQuestRequirement(requirementID, specificOceanType, requiredFriendNumber);
+                        OceanType SpecificOceanType = (OceanType)reader.GetByte(0);
+                        requirement = new StayInSpecificOceanQuestRequirement(requirementID, SpecificOceanType);
                         return true;
                     }
                     else
@@ -228,10 +313,241 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool SpecializeRequirementToScanQR_CodeRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeQuestRequirementToMakeFriendSuccessfulSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificNumberOfTime
+                from MFSSNOT_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificNumberOfTime = reader.GetInt32(0);
+                        requirement = new MakeFriendSuccessfulSpecificNumberOfTimeQuestRequirement(requirementID, specificNumberOfTime);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToCloseDealSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificNumberOfTime
+                from CDSNOT_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificNumberOfTime = reader.GetInt32(0);
+                        requirement = new CloseDealSpecificNumberOfTimeQuestRequirement(requirementID, specificNumberOfTime);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToSendMaterialToIslandSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificNumberOfTime
+                from SMTISNOT_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificNumberOfTime = reader.GetInt32(0);
+                        requirement = new SendMaterialToIslandSpecificNumberOfTimeQuestRequirement(requirementID, specificNumberOfTime);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToExistedInSpecificNumberOceanQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificOceanNumber
+                from EISNO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificOceanNumber = reader.GetInt32(0);
+                        requirement = new ExistedInSpecificNumberOceanQuestRequirement(requirementID, specificOceanNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToSendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificOceanType, SpecificFriendNumber
+                from SMTSNDOFITSSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        OceanType specificOceanType = (OceanType)reader.GetByte(0);
+                        int specificFriendNumber = reader.GetInt32(1);
+                        requirement = new SendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirement(requirementID, specificOceanType, specificFriendNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToCloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificOceanType, SpecificFriendNumber
+                from CDWSNDFITSSO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        OceanType specificOceanType = (OceanType)reader.GetByte(0);
+                        int specificFriendNumber = reader.GetInt32(1);
+                        requirement = new CloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirement(requirementID, specificOceanType, specificFriendNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToGetSpecificItemQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificItemID
+                from GSI_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificItemID = reader.GetInt32(0);
+                        requirement = new GetSpecificItemQuestRequirement(requirementID, specificItemID);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToCloseDealWithOutlanderQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT QuestRequirementID
+                from CDWO_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        requirement = new CloseDealWithOutlanderQuestRequirement(requirementID);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToCollectSpecificNumberBelongingGroupMaterialQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificMaterialNumber
+                from CSNBGM_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificMaterialNumber = reader.GetInt32(0);
+                        requirement = new CollectSpecificNumberBelongingGroupMaterialQuestRequirement(requirementID, specificMaterialNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToSynthesizeSpecificScoreMaterialQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificMaterialScore
+                from SSSM_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificMaterialScore = reader.GetInt32(0);
+                        requirement = new SynthesizeSpecificScoreMaterialQuestRequirement(requirementID, specificMaterialScore);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToScanSpecificQR_CodeQuestRequirement(int requirementID, out QuestRequirement requirement)
         {
             string sqlString = @"SELECT QR_CodeString
-                from ScanQR_CodeQuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+                from SSQRC_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -239,8 +555,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        string qrCodeString = reader.GetString(0);
-                        requirement = new ScanQR_CodeQuestRequirement(requirementID, qrCodeString);
+                        string QR_CodeString = reader.GetString(0);
+                        requirement = new ScanSpecificQR_CodeQuestRequirement(requirementID, QR_CodeString);
                         return true;
                     }
                     else
@@ -251,10 +567,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool SpecializeRequirementToCumulativeLoginRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeQuestRequirementToHaveSpecificNumberFriendQuestRequirement(int requirementID, out QuestRequirement requirement)
         {
-            string sqlString = @"SELECT CumulativeLoginCount
-                from CumulativeLoginQuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            string sqlString = @"SELECT SpecificFriendNumber
+                from HSNF_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -262,8 +578,100 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        int cumulativeLoginCount = reader.GetInt32(0);
-                        requirement = new CumulativeLoginQuestRequirement(requirementID, cumulativeLoginCount);
+                        int specificFriendNumber = reader.GetInt32(0);
+                        requirement = new HaveSpecificNumberFriendQuestRequirement(requirementID, specificFriendNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToSynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificSuccessfulNumber
+                from SSSNOT_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificSuccessfulNumber = reader.GetInt32(0);
+                        requirement = new SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement(requirementID, specificSuccessfulNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToHaveSpecificNumberKindMaterialQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificKindNumber
+                from HSNKM_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificKindNumber = reader.GetInt32(0);
+                        requirement = new HaveSpecificNumberKindMaterialQuestRequirement(requirementID, specificKindNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToAddSpecificNumberDecorationToVesselQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificDecorationNumber
+                from ASNDTV_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificDecorationNumber = reader.GetInt32(0);
+                        requirement = new AddSpecificNumberDecorationToVesselQuestRequirement(requirementID, specificDecorationNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToHaveSpecificNumberDecorationOnVesselQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificDecorationNumber
+                from HSNDOV_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int specificDecorationNumber = reader.GetInt32(0);
+                        requirement = new HaveSpecificNumberDecorationOnVesselQuestRequirement(requirementID, specificDecorationNumber);
                         return true;
                     }
                     else
