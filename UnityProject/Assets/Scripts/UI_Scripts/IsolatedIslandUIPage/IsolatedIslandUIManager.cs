@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using IsolatedIslandGame.Protocol;
 using UnityEngine.UI;
 
 public class IsolatedIslandUIManager : MonoBehaviour
@@ -66,6 +67,14 @@ public class IsolatedIslandUIManager : MonoBehaviour
             Destroy(page);
         });
     }
+
+	void OnEnable()
+	{
+		LoadIslandPieChart ();
+		transform.Find ("BackButton").gameObject.GetComponent<Button> ().onClick.AddListener (delegate {
+			AuxCameraSystem.Instance.UnShow ();
+		});
+	}
 
     public void OpenScoreBoardPage()
     {
@@ -174,5 +183,32 @@ public class IsolatedIslandUIManager : MonoBehaviour
         }
         expandStatus = isOn;
     }
+
+	public void LoadIslandPieChart()
+	{
+		// TMP : r as animal , g as businessman , b as farmer
+
+		AuxCameraSystem.Instance.ShowIsland ();
+
+		float r, g, b;
+		float totalScore;
+		r = Island.Instance.GetTotalScore (GroupType.Animal);
+		g = Island.Instance.GetTotalScore (GroupType.Businessman);
+		b = Island.Instance.GetTotalScore (GroupType.Farmer);
+		print ("r = " + r.ToString ());
+		print ("g = " + g.ToString ());
+		print ("b = " + b.ToString ());
+		totalScore = r + g + b;
+		r = r / totalScore;
+		g = g / totalScore;
+		b = b / totalScore;
+
+		Image redArea = transform.Find ("PieChart/Pie_RedArea").GetComponent<Image> ();
+		Image greenArea = transform.Find ("PieChart/Pie_GreenArea").GetComponent<Image> ();
+		Image blueArea = transform.Find ("PieChart/Pie_BlueArea").GetComponent<Image> ();
+		redArea.fillAmount = r + g + b;
+		greenArea.fillAmount = g + b;
+		blueArea.fillAmount = b;
+	}
 
 }

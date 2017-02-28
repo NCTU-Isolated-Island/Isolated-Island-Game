@@ -74,7 +74,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 				InSelectMode = false;
 				//Decorate
 
-				UIManager.Instance.RemoveCurrentPage();
+				//UIManager.Instance.RemoveCurrentPage();
 				UIManager.Instance.SwapPage(UIManager.UIPageType.PutItem);
 				BeginDecorate(SelectDecorationID);
 
@@ -186,8 +186,8 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 		CurrentControlMode = ControlMode.Normal;
 
-		UIManager.Instance.RemoveCurrentPage();
-		UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
+		UIManager.Instance.ToPreviousPage();
+		//UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
 
 		if(CurrentSelectDecoration != null)
 		{

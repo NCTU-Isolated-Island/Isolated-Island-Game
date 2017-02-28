@@ -166,6 +166,9 @@ public class TransactionManager : MonoBehaviour
         thisTransaction.OnTransactionItemChange += OnTransactionItemChange;
         thisTransaction.OnTransactionConfirmStatusChange += OnTransactionConfirmStatusChange;
         thisTransaction.OnTransactionEnd += OnTransactionEnd;
+
+		// call API
+		AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[opponentPlayerID] , new Vector3(0,-5.98f,31.5f) , Quaternion.Euler(15f,0,0));
     }
 
     public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
