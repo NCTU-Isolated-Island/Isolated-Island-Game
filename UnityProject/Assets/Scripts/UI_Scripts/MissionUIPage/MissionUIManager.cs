@@ -80,53 +80,71 @@ public class MissionUIManager : MonoBehaviour
     }
 
     void LoadQuestList(QuestRecordInformation information)
-    {
-        //print("LoadQuestList");
-        foreach (Transform questRecordObject in missionSetContent.transform)
-        {
-            Destroy(questRecordObject.gameObject);
-        }
+	{
+		//print("LoadQuestList");
+		foreach (Transform questRecordObject in missionSetContent.transform) {
+			Destroy (questRecordObject.gameObject);
+		}
 
-        foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations)
-        {
+		foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations) {
 			if (questRecordInformation.isFinished && questRecordInformation.hasGottenReward)
 				continue;
 
-            GameObject tmp = Instantiate(missionSet);
-            //
-            tmp.GetComponent<MissionSetBehavior>().SetQuestInfo(questRecordInformation);
-            //
-            Text missionName = tmp.transform.Find("MissionName").GetComponent<Text>();
-            Text missionType = tmp.transform.Find("MissionType").GetComponent<Text>();
+			GameObject tmp = Instantiate (missionSet);
+			//
+			tmp.GetComponent<MissionSetBehavior> ().SetQuestInfo (questRecordInformation);
+			//
+			Text missionName = tmp.transform.Find ("MissionName").GetComponent<Text> ();
+			Text missionType = tmp.transform.Find ("MissionType").GetComponent<Text> ();
 
 			if (questRecordInformation.isFinished == false)
 				missionName.text = questRecordInformation.questName;
 			else
 				missionName.text = "已完成 點擊以領取獎勵";
 
-            switch (questRecordInformation.questType)
-            {
-                case QuestType.QR_Code:
-                    missionType.text = "掃描 QR code";
-                    break;
-                case QuestType.MutiplayerSynthesize:
-                    missionType.text = "多人合成";
-                    break;
-                case QuestType.Message:
-                    missionType.text = "傳送訊息";
-                    break;
-                case QuestType.Trade:
-                    missionType.text = "完成交易";
-                    break;
-                default:
-                    missionType.text = "";
-                    break;
-            }
+			switch (questRecordInformation.questType) {
+			case QuestType.QR_Code:
+				missionType.text = "掃描 QR code";
+				break;
+			case QuestType.MutiplayerSynthesize:
+				missionType.text = "多人合成";
+				break;
+			case QuestType.Message:
+				missionType.text = "傳送訊息";
+				break;
+			case QuestType.Trade:
+				missionType.text = "完成交易";
+				break;
+			case QuestType.Synthesize:
+				missionType.text = "個人合成";
+				break;
+			case QuestType.Achievement:
+				missionType.text = "解除成就";
+				break;
+			case QuestType.CollectItem:
+				missionType.text = "收集素材";
+				break;
+			case QuestType.Friend:
+				missionType.text = "加入好友";
+				break;
+			case QuestType.Island:
+				missionType.text = "島嶼";
+				break;
+			case QuestType.Login:
+				missionType.text = "登入";
+				break;
+			case QuestType.Ocean:
+				missionType.text = "海洋";
+				break;
+			default:
+				missionType.text = "";
+				break;
+			}
 
-            tmp.transform.SetParent(missionSetContent.transform);
-            tmp.transform.localScale = Vector3.one;
-        }
-    }
+			tmp.transform.SetParent (missionSetContent.transform);
+			tmp.transform.localScale = Vector3.one;
+		}
+	}
 
     public void AcceptQuest()
     {
