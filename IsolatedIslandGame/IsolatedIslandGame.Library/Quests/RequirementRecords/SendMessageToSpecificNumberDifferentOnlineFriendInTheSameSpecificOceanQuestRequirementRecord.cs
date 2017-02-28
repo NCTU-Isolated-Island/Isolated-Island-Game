@@ -52,7 +52,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
                     {
                         if (!friendPlayerID_Set.Contains(conversation.receiverPlayerID))
                         {
-                            if (friendPlayerID_Set.Add(conversation.receiverPlayerID) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddPlayerIDToSendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirementRecord(QuestRequirementRecordID, conversation.receiverPlayerID)))
+                            if (friendPlayerID_Set.Add(conversation.receiverPlayerID) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddPlayerIDToSendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirementRecord(this, conversation.receiverPlayerID)))
                             {
                                 onRequirementStatusChange?.Invoke(this);
                             }

@@ -1,6 +1,8 @@
 ﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
+using IsolatedIslandGame.Library.Quests.RequirementRecords;
+using IsolatedIslandGame.Protocol;
 
 namespace IsolatedIslandGame.Server.Quests
 {
@@ -19,17 +21,77 @@ namespace IsolatedIslandGame.Server.Quests
             return DatabaseService.RepositoryList.QuestRecordRepository.MarkQuestRecordHasGottenReward(questRecordID);
         }
 
-        public override bool AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
+        public override void UpdateCumulativeLoginSpecificDayQuestRequirementRecord(CumulativeLoginSpecificDayQuestRequirementRecord record)
         {
-            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToSendMessageToDifferentOnlineFriendInTheSameSpecificOceanQuestRequirementRecord(requirementRecordID, friendPlayerID);
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateCumulativeLoginSpecificDayQuestRequirementRecord(record);
         }
-        public override bool AddPlayerIDToCloseDealWithDifferentFriendInTheSameOceanQuestRequirementRecord(int requirementRecordID, int friendPlayerID)
+        public override void UpdateStayInSpecificOceanQuestRequirementRecord(StayInSpecificOceanQuestRequirementRecord record)
         {
-            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToCloseDealWithDifferentFriendInTheSameSpecificOceanQuestRequirementRecord(requirementRecordID, friendPlayerID);
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateStayInSpecificOceanQuestRequirementRecord(record);
         }
-        public override bool MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(int requirementRecordID)
+        public override void UpdateMakeFriendSuccessfulSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulSpecificNumberOfTimeQuestRequirementRecord record)
         {
-            return DatabaseService.RepositoryList.QuestRecordRepository.MarkScanQR_CodeQuestRequirementRecordHasScannedCorrectQR_Code(requirementRecordID);
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateMakeFriendSuccessfulSpecificNumberOfTimeQuestRequirementRecord(record);
+        }
+        public override void UpdateCloseDealSpecificNumberOfTimeQuestRequirementRecord(CloseDealSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateCloseDealSpecificNumberOfTimeQuestRequirementRecord(record);
+        }
+        public override void UpdateSendMaterialToIslandSpecificNumberOfTimeQuestRequirementRecord(SendMaterialToIslandSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateSendMaterialToIslandSpecificNumberOfTimeQuestRequirementRecord(record);
+        }
+        public override bool AddOceanToExistedInSpecificNumberOceanQuestRequirementRecord(ExistedInSpecificNumberOceanQuestRequirementRecord record, OceanType locatedOceanType)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.AddOceanToExistedInSpecificNumberOceanQuestRequirementRecord(record, locatedOceanType);
+        }
+        public override bool AddPlayerIDToSendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirementRecord(SendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirementRecord record, int theOtherPlayerID)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToSendMessageToSpecificNumberDifferentOnlineFriendInTheSameSpecificOceanQuestRequirementRecord(record, theOtherPlayerID);
+        }
+        public override bool AddPlayerIDToCloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirementRecord(CloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirementRecord record, int theOtherPlayerID)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToCloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirementRecord(record, theOtherPlayerID);
+        }
+        public override void UpdateGetSpecificItemQuestRequirementRecord(GetSpecificItemQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateGetSpecificItemQuestRequirementRecord(record);
+        }
+        public override void UpdateCloseDealWithOutlanderQuestRequirementRecord(CloseDealWithOutlanderQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateCloseDealWithOutlanderQuestRequirementRecord(record);
+        }
+        public override void UpdateCollectSpecificNumberBelongingGroupMaterialQuestRequirementRecord(CollectSpecificNumberBelongingGroupMaterialQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateCollectSpecificNumberBelongingGroupMaterialQuestRequirementRecord(record);
+        }
+        public override void UpdateSynthesizeSpecificScoreMaterialQuestRequirementRecord(SynthesizeSpecificScoreMaterialQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateSynthesizeSpecificScoreMaterialQuestRequirementRecord(record);
+        }
+        public override void UpdateScanSpecificQR_CodeQuestRequirementRecord(ScanSpecificQR_CodeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateScanSpecificQR_CodeQuestRequirementRecord(record);
+        }
+        public override void UpdateHaveSpecificNumberFriendQuestRequirementRecord(HaveSpecificNumberFriendQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateHaveSpecificNumberFriendQuestRequirementRecord(record);
+        }
+        public override void UpdateSynthesizeSuccessfulSpecificNumberOfTimeQuestRequirementRecord(SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateSynthesizeSuccessfulSpecificNumberOfTimeQuestRequirementRecord(record);
+        }
+        public override void UpdateHaveSpecificNumberKindMaterialQuestRequirementRecord(HaveSpecificNumberKindMaterialQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateHaveSpecificNumberKindMaterialQuestRequirementRecord(record);
+        }
+        public override void UpdateAddSpecificNumberDecorationToVesselQuestRequirementRecord(AddSpecificNumberDecorationToVesselQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateAddSpecificNumberDecorationToVesselQuestRequirementRecord(record);
+        }
+        public override void UpdateHaveSpecificNumberDecorationOnVesselQuestRequirementRecord(HaveSpecificNumberDecorationOnVesselQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateHaveSpecificNumberDecorationOnVesselQuestRequirementRecord(record);
         }
     }
 }

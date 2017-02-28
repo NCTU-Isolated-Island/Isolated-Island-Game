@@ -55,7 +55,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
                             {
                                 if (!friendPlayerID_Set.Contains(theOtherPlayerID))
                                 {
-                                    if (friendPlayerID_Set.Add(theOtherPlayerID) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddPlayerIDToCloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirementRecord(QuestRequirementRecordID, theOtherPlayerID)))
+                                    if (friendPlayerID_Set.Add(theOtherPlayerID) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddPlayerIDToCloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirementRecord(this, theOtherPlayerID)))
                                     {
                                         onRequirementStatusChange?.Invoke(this);
                                     }

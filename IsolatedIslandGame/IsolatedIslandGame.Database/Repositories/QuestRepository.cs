@@ -15,6 +15,7 @@ namespace IsolatedIslandGame.Database.Repositories
             public QuestType questType;
             public string questName;
             public string questDescription;
+            public bool isHidden;
         }
         protected struct QuestRequirementInfo
         {

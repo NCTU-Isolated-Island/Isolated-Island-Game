@@ -43,7 +43,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
                     {
                         if (!existedOceanSet.Contains(locatedOceanType))
                         {
-                            if (existedOceanSet.Add(locatedOceanType) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddOceanToExistedInSpecificNumberOceanQuestRequirementRecord(QuestRequirementRecordID, locatedOceanType)))
+                            if (existedOceanSet.Add(locatedOceanType) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddOceanToExistedInSpecificNumberOceanQuestRequirementRecord(this, locatedOceanType)))
                             {
                                 onRequirementStatusChange?.Invoke(this);
                             }

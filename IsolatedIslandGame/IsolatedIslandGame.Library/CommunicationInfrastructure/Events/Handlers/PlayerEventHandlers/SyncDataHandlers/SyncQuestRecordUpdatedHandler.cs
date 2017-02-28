@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
 {
     class SyncQuestRecordUpdatedHandler : SyncDataHandler<Player, PlayerSyncDataCode>
     {
-        public SyncQuestRecordUpdatedHandler(Player subject) : base(subject, 8)
+        public SyncQuestRecordUpdatedHandler(Player subject) : base(subject, 9)
         {
         }
         internal override bool Handle(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -22,6 +22,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                     QuestType questType = (QuestType)parameters[(byte)SyncQuestRecordUpdatedParameterCode.QuestType];
                     string questName = (string)parameters[(byte)SyncQuestRecordUpdatedParameterCode.QuestName];
                     string questDescription = (string)parameters[(byte)SyncQuestRecordUpdatedParameterCode.QuestDescription];
+                    bool isHidden = (bool)parameters[(byte)SyncQuestRecordUpdatedParameterCode.IsHidden];
                     string requirementsDescription = (string)parameters[(byte)SyncQuestRecordUpdatedParameterCode.RequirementsDescription];
                     string rewardsDescription = (string)parameters[(byte)SyncQuestRecordUpdatedParameterCode.RewardsDescription];
                     bool hasGottenReward = (bool)parameters[(byte)SyncQuestRecordUpdatedParameterCode.HasGottenReward];
@@ -33,6 +34,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                         questType = questType,
                         questName = questName,
                         questDescription = questDescription,
+                        isHidden = isHidden,
                         requirementsDescription = requirementsDescription,
                         rewardsDescription = rewardsDescription,
                         hasGottenReward = hasGottenReward,

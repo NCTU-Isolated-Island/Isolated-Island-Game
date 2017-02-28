@@ -19,7 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             {
                 case ErrorCode.NoError:
                     {
-                        if (parameters.Count != 8)
+                        if (parameters.Count != 9)
                         {
                             LogService.ErrorFormat(string.Format("FetchAllQuestRecordsResponse Parameter Error, Parameter Count: {0}", parameters.Count));
                             return false;
@@ -47,6 +47,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     QuestType questType = (QuestType)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestType];
                     string questName = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestName];
                     string questDescription = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.QuestDescription];
+                    bool isHidden = (bool)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.IsHidden];
                     string requirementsDescription = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.RequirementsDescription];
                     string rewardsDescription = (string)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.RewardsDescription];
                     bool hasGottenReward = (bool)parameters[(byte)FetchAllQuestRecordsResponseParameterCode.HasGottenReward];
@@ -58,6 +59,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                         questType = questType,
                         questName = questName,
                         questDescription = questDescription,
+                        isHidden = isHidden,
                         requirementsDescription = requirementsDescription,
                         rewardsDescription = rewardsDescription,
                         hasGottenReward = hasGottenReward,

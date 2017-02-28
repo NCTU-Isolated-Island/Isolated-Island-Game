@@ -14,7 +14,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override List<Quest> ListAll()
         {
             List<QuestInfo> questInfos = new List<QuestInfo>();
-            string sqlString = @"SELECT QuestID, QuestType, QuestName, QuestDescription from QuestCollection ;";
+            string sqlString = @"SELECT QuestID, QuestType, QuestName, QuestDescription, IsHidden from QuestCollection ;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -25,12 +25,15 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         QuestType questType = (QuestType)reader.GetByte(1);
                         string questName = reader.GetString(2);
                         string questDescription = reader.GetString(3);
+                        bool isHidden = reader.GetBoolean(4);
+
                         questInfos.Add(new QuestInfo
                         {
                             questID = questID,
                             questType = questType,
                             questName = questName,
-                            questDescription = questDescription
+                            questDescription = questDescription,
+                            isHidden = isHidden
                         });
                     }
                 }
@@ -40,7 +43,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             {
                 List<QuestRequirement> requirements = ListRequirementsOfQuest(questInfo.questID);
                 List<QuestReward> rewards = ListRewardsOfQuest(questInfo.questID);
-                quests.Add(new Quest(questInfo.questID, questInfo.questType, questInfo.questName, requirements, rewards, questInfo.questDescription));
+                quests.Add(new Quest(questInfo.questID, questInfo.questType, questInfo.questName, questInfo.isHidden, questInfo.questDescription, requirements, rewards));
             }
             return quests;
         }
