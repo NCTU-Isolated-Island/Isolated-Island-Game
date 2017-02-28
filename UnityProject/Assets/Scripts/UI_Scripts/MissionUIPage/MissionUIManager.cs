@@ -135,7 +135,7 @@ public class MissionUIManager : MonoBehaviour
                 case QuestType.Message:
                     missionType.text = "傳送訊息";
                     break;
-                case QuestType.Deal:
+                case QuestType.Trade:
                     missionType.text = "完成交易";
                     break;
                 default:
