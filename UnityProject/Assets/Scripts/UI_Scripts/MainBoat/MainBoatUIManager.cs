@@ -67,40 +67,59 @@ public class MainBoatUIManager : MonoBehaviour {
 
         foreach (Button button in verticalButtonList)
         {
-            switch (button.name)
-            {
-                case "ToIngredientsButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory); });
-                    break;
-                case "ToBluePrintButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.BluePrint); });
-                    break;
-                case "ToMissionButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Mission); });
-                    break;
-                case "ToFriendButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Friend); });
-                    break;
-                case "ToChatButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Record); });
-                    break;
-                case "ToEverydayButton":
+			switch (button.name) {
+			case "ToIngredientsButton":
+				button.onClick.AddListener (delegate {
+					UIManager.Instance.SwapPage (UIManager.UIPageType.Inventory);
+				});
+				break;
+			case "ToBluePrintButton":
+				button.onClick.AddListener (delegate {
+					UIManager.Instance.SwapPage (UIManager.UIPageType.BluePrint);
+				});
+				break;
+			case "ToMissionButton":
+				button.onClick.AddListener (delegate {
+					UIManager.Instance.SwapPage (UIManager.UIPageType.Mission);
+				});
+				break;
+			case "ToFriendButton":
+				button.onClick.AddListener (delegate {
+					UIManager.Instance.SwapPage (UIManager.UIPageType.Friend);
+				});
+				break;
+			case "ToChatButton":
+				button.onClick.AddListener (delegate {
+					UIManager.Instance.SwapPage (UIManager.UIPageType.Chat_Record);
+				});
+				break;
+			case "ToEverydayButton":
                     // TODO : Add listener to this button
-                    break;
-                case "ToPutItemButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.PutItem); });
-                    break;
-                case "DrawMaterialButton":
-                    button.onClick.AddListener(delegate
-                    {
-                        Debug.Log("Draw Material");
-                        UserManager.Instance.User.Player.OperationManager.DrawMaterial();
-                    });
-                    break;
-                case "ToCombineButton":
-                    button.onClick.AddListener(delegate { UIManager.Instance.SwapPage(UIManager.UIPageType.Combine); });
-                    break;
-            }
+				break;
+//			case "ToPutItemButton":
+//				button.onClick.AddListener (delegate {
+//					UIManager.Instance.SwapPage (UIManager.UIPageType.PutItem);
+//				});
+//				break;
+			case "DrawMaterialButton":
+				button.onClick.AddListener (delegate {
+					Debug.Log ("Draw Material");
+					UserManager.Instance.User.Player.OperationManager.DrawMaterial ();
+				});
+				break;
+			case "ToCombineButton":
+				button.onClick.AddListener (delegate {
+					UIManager.Instance.SwapPage (UIManager.UIPageType.Combine);
+				});
+				break;
+			case "ToPutItemButton":
+				button.onClick.AddListener (delegate {
+					PlayerDecorationManager.Instance.CurrentControlMode = PlayerDecorationManager.ControlMode.Decorate;
+					UIManager.Instance.SwapPage (UIManager.UIPageType.PutItem);
+					// need API
+				});
+				break;
+			}
             //button.onClick.AddListener(delegate
             //{
             //    if (MainBoatUIManager.Instance.maskStatus)
