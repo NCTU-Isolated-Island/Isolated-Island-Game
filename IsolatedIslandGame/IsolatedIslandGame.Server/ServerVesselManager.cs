@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol;
+using System;
 
 namespace IsolatedIslandGame.Server
 {
@@ -9,6 +10,9 @@ namespace IsolatedIslandGame.Server
         public override event Vessel.VesselTransformUpdatedEventHandler OnVesselTransformUpdated;
         private event VesselChangeEventHandler onVesselChange;
         public override event VesselChangeEventHandler OnVesselChange { add { onVesselChange += value; } remove { onVesselChange -= value; } }
+
+        private event Action<Vessel> onVesselOceanChanged;
+        public event Action<Vessel> OnVesselOceanChanged { add { onVesselOceanChanged += value; } remove { onVesselOceanChanged -= value; } }
 
         public ServerVesselManager()
         {
@@ -79,12 +83,18 @@ namespace IsolatedIslandGame.Server
             vessel.OnVesselFullDataUpdated += InformVesselFullDataUpdated;
             vessel.OnVesselTransformUpdated += SystemManager.Instance.EventManager.SyncDataResolver.SyncVesselTransform;
             vessel.OnDecorationChange += SystemManager.Instance.EventManager.SyncDataResolver.SyncVesselDecorationChange;
+            vessel.OnOceanTypeChanged += DetectVesselOceanChange;
         }
         private void DisassembleVessel(Vessel vessel)
         {
             vessel.OnVesselFullDataUpdated -= InformVesselFullDataUpdated;
             vessel.OnVesselTransformUpdated -= SystemManager.Instance.EventManager.SyncDataResolver.SyncVesselTransform;
             vessel.OnDecorationChange -= SystemManager.Instance.EventManager.SyncDataResolver.SyncVesselDecorationChange;
+            vessel.OnOceanTypeChanged -= DetectVesselOceanChange;
+        }
+        private void DetectVesselOceanChange(Vessel vessel)
+        {
+            onVesselOceanChanged?.Invoke(vessel);
         }
     }
 }

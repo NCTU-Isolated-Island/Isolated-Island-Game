@@ -57,11 +57,20 @@ namespace IsolatedIslandGame.Server
                 Player player;
                 if (DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                 {
-                    if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player))
+                    bool isTodayFirstLogin;
+                    if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player, out isTodayFirstLogin))
                     {
                         debugMessage = $"Player not in PlayerRepository, PlayerID: {playerID}";
                         errorCode = ErrorCode.Fail;
                         return false;
+                    }
+                    else if(isTodayFirstLogin)
+                    {
+                        foreach (Quest quest in (QuestManager.Instance as QuestFactory).QuestsWhenTodayFirstLogin)
+                        {
+                            QuestRecord record;
+                            quest.CreateRecord(playerID, out record);
+                        }
                     }
                 }
                 else
@@ -74,11 +83,25 @@ namespace IsolatedIslandGame.Server
                     }
                     if (DatabaseService.RepositoryList.PlayerRepository.Contains(facebookID, out playerID))
                     {
-                        if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player))
+                        bool isTodayFirstLogin;
+                        if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player, out isTodayFirstLogin))
                         {
                             debugMessage = $"Player not in PlayerRepository, PlayerID: {playerID}";
                             errorCode = ErrorCode.Fail;
                             return false;
+                        }
+                        else
+                        {
+                            foreach(Quest quest in (QuestManager.Instance as QuestFactory).QuestsWhenRegistered)
+                            {
+                                QuestRecord record;
+                                quest.CreateRecord(playerID, out record);
+                            }
+                            foreach (Quest quest in (QuestManager.Instance as QuestFactory).QuestsWhenTodayFirstLogin)
+                            {
+                                QuestRecord record;
+                                quest.CreateRecord(playerID, out record);
+                            }
                         }
                     }
                     else
@@ -114,7 +137,8 @@ namespace IsolatedIslandGame.Server
                 debugMessage = null;
                 errorCode = ErrorCode.NoError;
                 Player player;
-                if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player))
+                bool isTodayFirstLogin;
+                if (!DatabaseService.RepositoryList.PlayerRepository.Read(playerID, out player, out isTodayFirstLogin))
                 {
                     debugMessage = $"Player not in PlayerRepository, PlayerID: {playerID}";
                     errorCode = ErrorCode.Fail;
@@ -123,6 +147,14 @@ namespace IsolatedIslandGame.Server
                 else
                 {
                     player.BindUser(user);
+                    if (isTodayFirstLogin)
+                    {
+                        foreach (Quest quest in (QuestManager.Instance as QuestFactory).QuestsWhenTodayFirstLogin)
+                        {
+                            QuestRecord record;
+                            quest.CreateRecord(playerID, out record);
+                        }
+                    }
                     if (PlayerOnline(player))
                     {
                         return true;
@@ -282,6 +314,17 @@ namespace IsolatedIslandGame.Server
                 {
                     VesselManager.Instance.AddVessel(vessel);
                     player.BindVessel(vessel);
+
+                    foreach (Quest quest in (QuestManager.Instance as QuestFactory).QuestsWhenChosedGroup)
+                    {
+                        QuestRecord record;
+                        if(quest.CreateRecord(player.PlayerID, out record))
+                        {
+                            record.RegisterObserverEvents(player);
+                            player.AddQuestRecord(record);
+                            record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                        }
+                    }
                 }
             }
         }

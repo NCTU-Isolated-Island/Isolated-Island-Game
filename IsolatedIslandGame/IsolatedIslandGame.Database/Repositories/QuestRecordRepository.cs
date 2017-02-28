@@ -25,6 +25,7 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract List<QuestRequirementRecord> ListRequirementRecordsOfQuestRecord(int questRecordID, int playerID);
         public abstract bool CreateQuestRequirementRecord(int questRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         public abstract bool MarkQuestRecordHasGottenReward(int questRecordID);
+        public abstract bool IsPlayerHasAnyStillNotGottenRewardQuest(int playerID, int questID);
 
         #region create quest requirement record
         protected abstract bool CreateCumulativeLoginSpecificDayQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
