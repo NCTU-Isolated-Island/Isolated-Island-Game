@@ -33,6 +33,12 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract List<QuestRequirement> ListRequirementsOfQuest(int questID);
 
         protected abstract List<QuestReward> ListRewardsOfQuest(int questID);
+        public abstract List<int> ListQuestIDsWhenRegistered();
+        public abstract List<int> ListQuestIDsWhenChosedGroup();
+        public abstract List<int> ListQuestIDsWhenTodayFirstLogin();
+        public abstract List<int> ListQuestIDsWhenEveryHourPassed();
+        public abstract List<int> ListQuestIDsWhenEveryDayPassed();
+        public abstract Dictionary<OceanType, List<int>> ListQuestIDsWhenEnteredSpecificOcean();
 
         #region Specialize QuestRequirement
         protected abstract bool SpecializeQuestRequirementToCumulativeLoginSpecificDayQuestRequirement(int requirementID, out QuestRequirement requirement);

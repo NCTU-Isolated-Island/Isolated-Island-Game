@@ -359,6 +359,27 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
+        public override bool IsPlayerHasAnyStillNotGottenRewardQuest(int playerID, int questID)
+        {
+            string sqlString = @"SELECT QuestRecordID
+                from QuestRecordCollection 
+                WHERE PlayerID = @playerID AND QuestID = @questID AND HasGottenReward = false;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("playerID", playerID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
 
         #region create quest requirement record
         protected override bool CreateCumulativeLoginSpecificDayQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)

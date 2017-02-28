@@ -192,7 +192,6 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             }
             return requirements;
         }
-
         protected override List<QuestReward> ListRewardsOfQuest(int questID)
         {
             List<QuestRewardInfo> rewardInfos = new List<QuestRewardInfo>();
@@ -264,6 +263,120 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
             return rewards;
+        }
+
+        public override List<int> ListQuestIDsWhenRegistered()
+        {
+            List<int> questIDs = new List<int>();
+            string sqlString = @"SELECT QuestID from QuestsWhenRegistered ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int questID = reader.GetInt32(0);
+                        questIDs.Add(questID);
+                    }
+                }
+            }
+            return questIDs;
+        }
+        public override List<int> ListQuestIDsWhenChosedGroup()
+        {
+            List<int> questIDs = new List<int>();
+            string sqlString = @"SELECT QuestID from QuestsWhenChosedGroup ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int questID = reader.GetInt32(0);
+                        questIDs.Add(questID);
+                    }
+                }
+            }
+            return questIDs;
+        }
+        public override List<int> ListQuestIDsWhenTodayFirstLogin()
+        {
+            List<int> questIDs = new List<int>();
+            string sqlString = @"SELECT QuestID from QuestsWhenTodayFirstLogin ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int questID = reader.GetInt32(0);
+                        questIDs.Add(questID);
+                    }
+                }
+            }
+            return questIDs;
+        }
+        public override List<int> ListQuestIDsWhenEveryHourPassed()
+        {
+            List<int> questIDs = new List<int>();
+            string sqlString = @"SELECT QuestID from QuestsWhenEveryHourPassed ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int questID = reader.GetInt32(0);
+                        questIDs.Add(questID);
+                    }
+                }
+            }
+            return questIDs;
+        }
+        public override List<int> ListQuestIDsWhenEveryDayPassed()
+        {
+            List<int> questIDs = new List<int>();
+            string sqlString = @"SELECT QuestID from QuestsWhenEveryDayPassed ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int questID = reader.GetInt32(0);
+                        questIDs.Add(questID);
+                    }
+                }
+            }
+            return questIDs;
+        }
+        public override Dictionary<OceanType, List<int>> ListQuestIDsWhenEnteredSpecificOcean()
+        {
+            Dictionary<OceanType, List<int>> ocean_QuestID_Pairs = new Dictionary<OceanType, List<int>>
+            {
+                { OceanType.Unknown, new List<int>() },
+                { OceanType.Type1, new List<int>() },
+                { OceanType.Type2, new List<int>() },
+                { OceanType.Type3, new List<int>() },
+                { OceanType.Type4, new List<int>() },
+                { OceanType.Type5, new List<int>() },
+                { OceanType.Type6, new List<int>() },
+                { OceanType.Type7, new List<int>() }
+            };
+            string sqlString = @"SELECT OceanType, QuestID from QuestsWhenEnteredSpecificOcean ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        OceanType oceanType = (OceanType)reader.GetByte(0);
+                        int questID = reader.GetInt32(1);
+                        ocean_QuestID_Pairs[oceanType].Add(questID);
+                    }
+                }
+            }
+            return ocean_QuestID_Pairs;
         }
 
         #region Specialize QuestRequirement

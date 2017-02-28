@@ -3,6 +3,7 @@ using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace IsolatedIslandGame.Database.MySQL.Repositories
@@ -64,9 +65,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             }
         }
 
-        public override bool Read(int playerID, out Player player)
+        public override bool Read(int playerID, out Player player, out bool isTodayFirstLogin)
         {
-            bool isTodayFirstLogin;
             int cumulativeLoginCount;
             UpdateLastLoginTime(playerID, DateTime.Now, out isTodayFirstLogin, out cumulativeLoginCount);
             string sqlString = @"SELECT  
@@ -237,6 +237,24 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     LogService.ErrorFormat("MySQLPlayerRepository UpdateLastLoginTime no affected row, PlayerID: {0}", playerID);
                 }
             }
+        }
+
+        public override List<int> ListAllPlayerID()
+        {
+            List<int> playerIDs = new List<int>();
+            string sqlString = @"SELECT PlayerID from PlayerCollection ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int playerID = reader.GetInt32(0);
+                        playerIDs.Add(playerID);
+                    }
+                }
+            }
+            return playerIDs;
         }
     }
 }
