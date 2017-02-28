@@ -30,7 +30,6 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             SetupConfiguration();
             Scheduler.Inital(TimeSpan.FromSeconds(1));
             SetupServices();
-            SetupFactories();
             SetupManagers();
             
             
@@ -83,22 +82,19 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
                 Log.Info("Database Setup Successiful.......");
             }
         }
-        private void SetupFactories()
+        private void SetupManagers()
         {
             UserFactory.Initial();
+            SystemManager.Initial(new ServerSystemManager());
             PlayerFactory.Initial();
             ItemManager.Initial(new ItemFactory());
             InventoryItemInfoFactory.Initial(new Items.ServerInventoryItemInfoFactory());
             DecorationFactory.Initial(new Items.ServerDecorationFactory());
             BlueprintManager.Initial(new BlueprintFactory());
+            VesselManager.Initial(new ServerVesselManager());
             QuestManager.Initial(new QuestFactory());
             QuestRecordFactory.Initial(new Quests.ServerQuestRecordFactory());
             LandmarkManager.Initial(new LandmarkFactory());
-        }
-        private void SetupManagers()
-        {
-            SystemManager.Initial(new ServerSystemManager());
-            VesselManager.Initial(new ServerVesselManager());
             FriendManager.InitialManager();
             PlayerInformationManager.Initial(new ServerPlayerInformationManager());
             TransactionManager.Initial();

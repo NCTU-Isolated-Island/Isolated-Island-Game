@@ -12,7 +12,20 @@ namespace IsolatedIslandGame.Library
         public float LocationX { get; private set; }
         public float LocationZ { get; private set; }
         public float RotationEulerAngleY { get; private set; }
-        public OceanType LocatedOceanType { get; private set; }
+        private OceanType locatedOceanType;
+        public OceanType LocatedOceanType
+        {
+            get { return locatedOceanType; }
+            private set
+            {
+                OceanType originOcean = locatedOceanType;
+                locatedOceanType = value;
+                if (originOcean != locatedOceanType)
+                {
+                    onOceanTypeChanged?.Invoke(this);
+                }
+            }
+        }
 
         private Dictionary<int, Decoration> decorationDictionary;
         public int DecorationCount { get { return decorationDictionary.Count; } }
@@ -28,6 +41,9 @@ namespace IsolatedIslandGame.Library
 
         private event Action<Vessel> onVesselFullDataUpdated;
         public event Action<Vessel> OnVesselFullDataUpdated { add { onVesselFullDataUpdated += value; } remove { onVesselFullDataUpdated -= value; } }
+
+        private event Action<Vessel> onOceanTypeChanged;
+        public event Action<Vessel> OnOceanTypeChanged { add { onOceanTypeChanged += value; } remove { onOceanTypeChanged -= value; } }
 
         public Vessel(int vesselID, int ownerPlayerID, float locationX, float locationZ, float rotationEulerAngleY, OceanType locatedOceanType)
         {
