@@ -5,13 +5,13 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
 {
     public class SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirementRecord : QuestRequirementRecord
     {
-        private int successfulNumberOfTime;
-        public int SuccessfulNumberOfTime
+        private int successfulCount;
+        public int SuccessfulCount
         {
-            get { return successfulNumberOfTime; }
+            get { return successfulCount; }
             private set
             {
-                successfulNumberOfTime = value;
+                successfulCount = value;
                 QuestRecordFactory.Instance?.UpdateSynthesizeSuccessfulSpecificNumberOfTimeQuestRequirementRecord(this);
                 onRequirementStatusChange?.Invoke(this);
             }
@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         {
             get
             {
-                return SuccessfulNumberOfTime >= (Requirement as SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement).SpecificSuccessfulNumber;
+                return SuccessfulCount >= (Requirement as SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement).SpecificSuccessfulNumber;
             }
         }
 
@@ -28,16 +28,16 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         {
             get
             {
-                return $"成功次數： {SuccessfulNumberOfTime}/{(Requirement as SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement).SpecificSuccessfulNumber}";
+                return $"成功次數： {SuccessfulCount}/{(Requirement as SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement).SpecificSuccessfulNumber}";
             }
         }
 
         private event Action<QuestRequirementRecord> onRequirementStatusChange;
         public override event Action<QuestRequirementRecord> OnRequirementStatusChange { add { onRequirementStatusChange += value; } remove { onRequirementStatusChange -= value; } }
 
-        public SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, int successfulNumberOfTime) : base(questRequirementRecordID, requirement)
+        public SynthesizeSuccessfulSpecificNumberOfTimeQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, int successfulCount) : base(questRequirementRecordID, requirement)
         {
-            this.successfulNumberOfTime = successfulNumberOfTime;
+            this.successfulCount = successfulCount;
         }
         internal override void RegisterObserverEvents(Player player)
         {
@@ -45,7 +45,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
             {
                 if (!IsSufficient && isSuccessful)
                 {
-                    SuccessfulNumberOfTime = SuccessfulNumberOfTime + 1;
+                    SuccessfulCount = SuccessfulCount + 1;
                 }
             };
         }

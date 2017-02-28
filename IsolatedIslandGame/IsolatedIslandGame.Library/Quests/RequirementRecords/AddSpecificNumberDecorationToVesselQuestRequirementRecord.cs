@@ -5,13 +5,13 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
 {
     public class AddSpecificNumberDecorationToVesselQuestRequirementRecord : QuestRequirementRecord
     {
-        private int addedDecorationNumber;
-        public int AddedDecorationNumber
+        private int addedDecorationCount;
+        public int AddedDecorationCount
         {
-            get { return addedDecorationNumber; }
+            get { return addedDecorationCount; }
             private set
             {
-                addedDecorationNumber = value;
+                addedDecorationCount = value;
                 QuestRecordFactory.Instance?.UpdateAddSpecificNumberDecorationToVesselQuestRequirementRecord(this);
                 onRequirementStatusChange?.Invoke(this);
             }
@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         {
             get
             {
-                return AddedDecorationNumber >= (Requirement as AddSpecificNumberDecorationToVesselQuestRequirement).SpecificDecorationNumber;
+                return AddedDecorationCount >= (Requirement as AddSpecificNumberDecorationToVesselQuestRequirement).SpecificDecorationNumber;
             }
         }
 
@@ -28,16 +28,16 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         {
             get
             {
-                return $"裝飾數量： {AddedDecorationNumber}/{(Requirement as HaveSpecificNumberDecorationOnVesselQuestRequirement).SpecificDecorationNumber}";
+                return $"裝飾數量： {AddedDecorationCount}/{(Requirement as HaveSpecificNumberDecorationOnVesselQuestRequirement).SpecificDecorationNumber}";
             }
         }
 
         private event Action<QuestRequirementRecord> onRequirementStatusChange;
         public override event Action<QuestRequirementRecord> OnRequirementStatusChange { add { onRequirementStatusChange += value; } remove { onRequirementStatusChange -= value; } }
 
-        public AddSpecificNumberDecorationToVesselQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, int addedDecorationNumber) : base(questRequirementRecordID, requirement)
+        public AddSpecificNumberDecorationToVesselQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, int addedDecorationCount) : base(questRequirementRecordID, requirement)
         {
-            this.addedDecorationNumber = addedDecorationNumber;
+            this.addedDecorationCount = addedDecorationCount;
         }
         internal override void RegisterObserverEvents(Player player)
         {
@@ -45,7 +45,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
             {
                 if (!IsSufficient && changeType == Protocol.DataChangeType.Add)
                 {
-                    AddedDecorationNumber = AddedDecorationNumber + 1;
+                    AddedDecorationCount = AddedDecorationCount + 1;
                 }
             };
         }

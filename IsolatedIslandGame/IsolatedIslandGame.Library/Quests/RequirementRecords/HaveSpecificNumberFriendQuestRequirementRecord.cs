@@ -5,13 +5,13 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
 {
     public class HaveSpecificNumberFriendQuestRequirementRecord : QuestRequirementRecord
     {
-        private int friendNumber;
-        public int FriendNumber
+        private int friendCount;
+        public int FriendCount
         {
-            get { return friendNumber; }
+            get { return friendCount; }
             private set
             {
-                friendNumber = value;
+                friendCount = value;
                 QuestRecordFactory.Instance?.UpdateHaveSpecificNumberFriendQuestRequirementRecord(this);
                 onRequirementStatusChange?.Invoke(this);
             }
@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         {
             get
             {
-                return FriendNumber >= (Requirement as HaveSpecificNumberFriendQuestRequirement).SpecificFriendNumber;
+                return FriendCount >= (Requirement as HaveSpecificNumberFriendQuestRequirement).SpecificFriendNumber;
             }
         }
 
@@ -28,28 +28,28 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         {
             get
             {
-                return $"好友數量： {FriendNumber}/{(Requirement as HaveSpecificNumberFriendQuestRequirement).SpecificFriendNumber}";
+                return $"好友數量： {FriendCount}/{(Requirement as HaveSpecificNumberFriendQuestRequirement).SpecificFriendNumber}";
             }
         }
 
         private event Action<QuestRequirementRecord> onRequirementStatusChange;
         public override event Action<QuestRequirementRecord> OnRequirementStatusChange { add { onRequirementStatusChange += value; } remove { onRequirementStatusChange -= value; } }
 
-        public HaveSpecificNumberFriendQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, int friendNumber) : base(questRequirementRecordID, requirement)
+        public HaveSpecificNumberFriendQuestRequirementRecord(int questRequirementRecordID, QuestRequirement requirement, int friendCount) : base(questRequirementRecordID, requirement)
         {
-            this.friendNumber = friendNumber;
+            this.friendCount = friendCount;
         }
         internal override void RegisterObserverEvents(Player player)
         {
             if (!IsSufficient)
             {
-                FriendNumber = player.FriendCount;
+                FriendCount = player.FriendCount;
             }
             player.OnFriendInformationChange += (changeType, information) =>
             {
                 if (!IsSufficient)
                 {
-                    FriendNumber = player.FriendCount;
+                    FriendCount = player.FriendCount;
                 }
             };
         }

@@ -9,7 +9,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
     public class CloseDealWithSpecificNumberDifferentFriendInTheSameSpecificOceanQuestRequirementRecord : QuestRequirementRecord
     {
         private HashSet<int> friendPlayerID_Set = new HashSet<int>();
-        public IEnumerable<int> OnlineFriendPlayerIDs { get { return friendPlayerID_Set.ToArray(); } }
+        public IEnumerable<int> FriendPlayerIDs { get { return friendPlayerID_Set.ToArray(); } }
         public override bool IsSufficient
         {
             get
