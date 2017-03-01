@@ -68,6 +68,9 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreSpecificGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificScoreBelongingGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelRandomMaterialQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelSpecificGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelBelongingGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         #endregion
     }
 }

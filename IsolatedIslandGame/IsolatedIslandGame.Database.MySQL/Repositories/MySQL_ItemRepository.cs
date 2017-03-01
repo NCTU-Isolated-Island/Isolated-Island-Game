@@ -15,8 +15,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             int materialID = 0;
             int score = 0;
             GroupType groupType = GroupType.No;
+            int level = 0;
             string sqlString = @"SELECT  
-                MaterialID, Score, GroupType
+                MaterialID, Score, GroupType, Level
                 from MaterialCollection WHERE ItemID = @itemID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
@@ -28,6 +29,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         materialID = reader.GetInt32(0);
                         score = reader.GetInt32(1);
                         groupType = (GroupType)reader.GetByte(2);
+                        level = reader.GetInt32(3);
                     }
                 }
             }
@@ -49,7 +51,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         }
                         else
                         {
-                            item = new Material(itemID, itemName, description, materialID, score, groupType);
+                            item = new Material(itemID, itemName, description, materialID, score, groupType, level);
                         }
                         return true;
                     }
@@ -81,7 +83,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
             sqlString = @"SELECT  
-                MaterialID, ItemID, Score, GroupType
+                MaterialID, ItemID, Score, GroupType, Level
                 from MaterialCollection;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
@@ -93,10 +95,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         int itemID = reader.GetInt32(1);
                         int score = reader.GetInt32(2);
                         GroupType groupType = (GroupType)reader.GetByte(3);
+                        int level = reader.GetInt32(4);
                         if (itemDictionary.ContainsKey(itemID))
                         {
                             Item item = itemDictionary[itemID];
-                            itemDictionary[itemID] = new Material(item.ItemID, item.ItemName, item.Description, materialID, score, groupType);
+                            itemDictionary[itemID] = new Material(item.ItemID, item.ItemName, item.Description, materialID, score, groupType, level);
                         }
                     }
                 }

@@ -8,5 +8,8 @@
         GiveSpecificNumberSpecificScoreRandomMaterial,
         GiveSpecificNumberSpecificScoreSpecificGroupRandomMaterial,
         GiveSpecificNumberSpecificScoreBelongingGroupRandomMaterial,
+        GiveSpecificNumberSpecificLevelRandomMaterial,
+        GiveSpecificNumberSpecificLevelSpecificGroupRandomMaterial,
+        GiveSpecificNumberSpecificLevelBelongingGroupRandomMaterial,
     }
 }

@@ -7,6 +7,7 @@
         Description,
         MaterialID,
         Score,
-        GroupType
+        GroupType,
+        Level
     }
 }
