@@ -8,7 +8,7 @@ public class AuxCameraSystem : MonoBehaviour {
 	public Camera AuxCamera;
 	public float RotationSpeed = 30;
 
-	private bool hasModel = false;
+	public bool hasModel = false;
 	private GameObject model;
 
 

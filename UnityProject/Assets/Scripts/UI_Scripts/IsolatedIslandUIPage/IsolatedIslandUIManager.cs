@@ -39,10 +39,13 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
 	void OnDisable()
 	{
-		AuxCameraSystem.Instance.UnShow ();
-		Destroy (FriendScoreManager.Instance.currentScoreBoardPage);
-		Destroy (ScoreBoardManager.Instance.currentScoreBoardPage);
-		Destroy (MaterialScoreBoardManager.Instance.currentScoreBoardPage);
+		try {
+			AuxCameraSystem.Instance.UnShow ();
+			Destroy (FriendScoreManager.Instance.currentScoreBoardPage);
+			Destroy (ScoreBoardManager.Instance.currentScoreBoardPage);
+			Destroy (MaterialScoreBoardManager.Instance.currentScoreBoardPage);
+		} catch {
+		}
 	}
 
     void Awake()
