@@ -47,14 +47,14 @@ public class CameraManager : MonoBehaviour {
 	IEnumerator MoveObjectToFPV(Transform source, Transform target, float overTime)
 	{
 		float startTime = Time.time;
-		Vector3 start_pos = source.position;
+		Vector3 start_pos = source.localPosition;
 		while (Time.time < startTime + overTime)
 		{
-			source.position = Vector3.Lerp(start_pos, target.position, (Time.time - startTime) / overTime);
+			source.localPosition = Vector3.Lerp(start_pos, target.localPosition, (Time.time - startTime) / overTime);
 			//source.LookAt(target.parent); // look at the vessel , not the anchor
 			yield return null;
 		}
-		source.position = target.position;
+		source.localPosition = target.localPosition;
 		using_cor = false;
 		target.root.Find("CameraAnchor").rotation = Quaternion.identity;
 	}
