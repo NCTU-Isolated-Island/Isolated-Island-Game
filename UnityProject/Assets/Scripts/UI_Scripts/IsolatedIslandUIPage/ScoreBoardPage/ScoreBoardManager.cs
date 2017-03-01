@@ -17,7 +17,7 @@ public class ScoreBoardManager : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject currentScoreBoardPage;
+	public GameObject currentScoreBoardPage;
     [SerializeField]
     private GameObject scoreSetContent;
     [SerializeField]

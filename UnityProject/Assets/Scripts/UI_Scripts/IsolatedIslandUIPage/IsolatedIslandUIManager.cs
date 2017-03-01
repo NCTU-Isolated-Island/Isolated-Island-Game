@@ -37,6 +37,14 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private float ver_ori;
     private IEnumerator coroutine;
 
+	void OnDisable()
+	{
+		AuxCameraSystem.Instance.UnShow ();
+		Destroy (FriendScoreManager.Instance.currentScoreBoardPage);
+		Destroy (ScoreBoardManager.Instance.currentScoreBoardPage);
+		Destroy (MaterialScoreBoardManager.Instance.currentScoreBoardPage);
+	}
+
     void Awake()
     {
         if (Instance == null)
