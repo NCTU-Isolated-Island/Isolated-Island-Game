@@ -110,11 +110,12 @@ public class PlayerDecorationManager : MonoBehaviour {
 			AddedDecorations.Add(CurrentSelectDecoration);
 
 		CurrentControlMode = ControlMode.Decorate;
-		OutlineSystem.Instance.gameObject.SetActive(true);
+		//OutlineSystem.Instance.gameObject.SetActive(true);
 	}
 
 	void Transparentize(GameObject target)
 	{
+		return;
 		target.layer = LayerMask.NameToLayer("Outline");
 		for (int i = 0; i < target.transform.childCount; i++) {
 			target.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("Outline");
@@ -123,7 +124,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 	void DeTransparentize(GameObject target)
 	{
-
+		return;
 		target.layer = LayerMask.NameToLayer("Decoration");
 		for (int i = 0; i < target.transform.childCount; i++) {
 			target.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("Decoration");
@@ -194,7 +195,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 			DeTransparentize(CurrentSelectDecoration);
 		}
 
-		OutlineSystem.Instance.gameObject.SetActive(false);
+		//OutlineSystem.Instance.gameObject.SetActive(false);
 
 	}
 
