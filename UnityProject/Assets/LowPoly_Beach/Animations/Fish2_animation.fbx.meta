@@ -1,0 +1,158 @@
+fileFormatVersion: 2
+guid: d2d9f729cf7ec5b4fbd757fd11838cb4
+timeCreated: 1480983177
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Fin_L
+    100002: Fin_R
+    100004: Fish2
+    100006: Fish2Armature
+    100008: //RootNode
+    100010: Root
+    100012: Root2
+    100014: Tail
+    100016: Fin_L_end
+    100018: Fin_R_end
+    100020: Tail_end
+    100022: Fish2_tex
+    400000: Fin_L
+    400002: Fin_R
+    400004: Fish2
+    400006: Fish2Armature
+    400008: //RootNode
+    400010: Root
+    400012: Root2
+    400014: Tail
+    400016: Fin_L_end
+    400018: Fin_R_end
+    400020: Tail_end
+    400022: Fish2_tex
+    4300000: Fish2
+    4300002: Fish2_tex
+    7400000: Fish2Armature|CrabArmatureAction.001
+    7400002: Fish2Armature|Fish2ArmatureAction
+    7400004: Fish2Armature|Fish2ArmatureAction.001
+    7400006: Fish2Armature|Swim.001
+    7400008: Fish2Armature|Swim.002
+    7400010: Fish2Armature|Swim.003
+    7400012: Fish2Armature|Swim.004
+    7400014: Fish2Armature|Swim
+    7400016: Fish2Armature|Swim.005
+    7400018: Fish2Armature|Swim.006
+    7400020: Fish2Armature|Swim.007
+    7400022: Fish2Armature|Swim.008
+    9500000: //RootNode
+    13700000: Fish2
+    13700002: Fish2_tex
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Fish2Armature|Swim
+      takeName: Fish2Armature|Swim
+      firstFrame: 1
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 1
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Fish2
+        weight: 1
+      - path: Fish2_tex
+        weight: 1
+      - path: Fish2Armature
+        weight: 1
+      - path: Fish2Armature/Root
+        weight: 1
+      - path: Fish2Armature/Root/Fin_L
+        weight: 1
+      - path: Fish2Armature/Root/Fin_R
+        weight: 1
+      - path: Fish2Armature/Root/Root2
+        weight: 1
+      - path: Fish2Armature/Root/Root2/Tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: Fish2Armature
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

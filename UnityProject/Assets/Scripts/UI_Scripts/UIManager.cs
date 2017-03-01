@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
     // Setting Variables
     [SerializeField]
-    private float SwapPageTimeInterval;
+	public float SwapPageTimeInterval;
     //
     // enum all UI pages
     public enum UIPageType

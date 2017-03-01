@@ -37,6 +37,17 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private float ver_ori;
     private IEnumerator coroutine;
 
+	void OnDisable()
+	{
+		try {
+			AuxCameraSystem.Instance.UnShow ();
+			Destroy (FriendScoreManager.Instance.currentScoreBoardPage);
+			Destroy (ScoreBoardManager.Instance.currentScoreBoardPage);
+			Destroy (MaterialScoreBoardManager.Instance.currentScoreBoardPage);
+		} catch {
+		}
+	}
+
     void Awake()
     {
         if (Instance == null)
@@ -56,17 +67,17 @@ public class IsolatedIslandUIManager : MonoBehaviour
     }
 
     private void AdjustPageStatus(GameObject page)
-    {
-        page.transform.SetParent(transform);
-        page.GetComponent<RectTransform>().localScale = Vector3.one;
-        page.GetComponent<RectTransform>().offsetMax = new Vector2(0, -50);
-        page.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+	{
+		page.transform.SetParent (transform);
+		page.GetComponent<RectTransform> ().localScale = Vector3.one;
+		page.GetComponent<RectTransform> ().offsetMax = new Vector2 (0, -50);
+		page.GetComponent<RectTransform> ().offsetMin = new Vector2 (0, 0);
 
-        page.transform.Find("BackButton").GetComponent<Button>().onClick.AddListener(delegate
-        {
-            Destroy(page);
-        });
-    }
+		page.transform.Find ("BackButton").GetComponent<Button> ().onClick.AddListener (delegate {
+			Destroy (page);
+			ShowIsland ();
+		});
+	}
 
 	void OnEnable()
 	{
@@ -78,6 +89,8 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     public void OpenScoreBoardPage()
     {
+		AuxCameraSystem.Instance.UnShow ();
+
         GameObject newPage = Instantiate(scoreBoardPage);
         AdjustPageStatus(newPage);
         ScoreBoardManager.Instance.TargetCurrentScoreBoardPage(newPage);
@@ -86,6 +99,8 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     public void OpenFriendScoreBoardPage()
     {
+		AuxCameraSystem.Instance.UnShow ();
+
         GameObject newPage = Instantiate(friendScoreBoardPage);
         AdjustPageStatus(newPage);
         // Target to newPage
@@ -95,6 +110,8 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     public void OpenMaterialScoreBoardPage()
     {
+		AuxCameraSystem.Instance.UnShow ();
+
         GameObject newPage = Instantiate(materialScoreBoardPage);
         AdjustPageStatus(newPage);
         MaterialScoreBoardManager.Instance.TargetCurrentScoreBoardPage(newPage);
@@ -127,6 +144,8 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private void ThrowMaterialToIsland(Item item)
     {
         // call Throw Item API;
+		AuxCameraSystem.Instance.UnShow ();
+
         UserManager.Instance.User.Player.OperationManager.SendMaterialToIsland(item.ItemID);
         print("ThrowMaterialToIsland");
     }
@@ -188,13 +207,15 @@ public class IsolatedIslandUIManager : MonoBehaviour
 	{
 		// TMP : r as animal , g as businessman , b as farmer
 
-		AuxCameraSystem.Instance.ShowIsland ();
+		Invoke ("ShowIsland", UIManager.Instance.SwapPageTimeInterval);
+		//AuxCameraSystem.Instance.ShowIsland ();
 
 		float r, g, b;
 		float totalScore;
 		r = Island.Instance.GetTotalScore (GroupType.Animal);
 		g = Island.Instance.GetTotalScore (GroupType.Businessman);
 		b = Island.Instance.GetTotalScore (GroupType.Farmer);
+
 		print ("r = " + r.ToString ());
 		print ("g = " + g.ToString ());
 		print ("b = " + b.ToString ());
@@ -209,6 +230,11 @@ public class IsolatedIslandUIManager : MonoBehaviour
 		redArea.fillAmount = r + g + b;
 		greenArea.fillAmount = g + b;
 		blueArea.fillAmount = b;
+	}
+
+	private void ShowIsland()
+	{
+		AuxCameraSystem.Instance.ShowIsland ();
 	}
 
 }

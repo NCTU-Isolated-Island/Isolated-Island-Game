@@ -18,7 +18,7 @@ public class FriendScoreManager : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject currentScoreBoardPage;
+	public GameObject currentScoreBoardPage;
     [SerializeField]
     private GameObject friendScoreSetContent;
     [SerializeField]

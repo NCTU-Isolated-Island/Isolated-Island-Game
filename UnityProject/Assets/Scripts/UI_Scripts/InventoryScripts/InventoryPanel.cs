@@ -17,6 +17,9 @@ public class InventoryPanel : MonoBehaviour
     [SerializeField]
     private ItemInfoDetailPanel itemInfoDetailPanelPrefab;
 
+	[SerializeField]
+	private Button toPutItemButton;
+
     //
     [SerializeField]
     private Button toMainPageButton;
@@ -51,6 +54,12 @@ public class InventoryPanel : MonoBehaviour
             UserManager.Instance.User.OnPlayerOnline += RegisterEventsToPlayer;
         }
         transform.gameObject.SetActive(false);
+
+		toPutItemButton.onClick.AddListener (delegate {
+			PlayerDecorationManager.Instance.CurrentControlMode = PlayerDecorationManager.ControlMode.Decorate;
+			UIManager.Instance.SwapPage (UIManager.UIPageType.PutItem);
+		});
+
     }
 
     public void ShowPanel(InventoryUsageType usageType)

@@ -43,14 +43,7 @@ public class TransactionManager : MonoBehaviour
     public int puttingIndex;
 
     private int opponentPlayerID;
-
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.T))
-    //        SendTransactionRequest(23);
-    //}
-
-
+		
     void Awake()
     {
         if (Instance == null)
@@ -73,6 +66,12 @@ public class TransactionManager : MonoBehaviour
             UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
         }
     }
+
+	public void ShowOpponentVessel()
+	{
+		AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[opponentPlayerID] , new Vector3(0,-5.98f,31.5f) , Quaternion.Euler(15f,0,0));
+
+	}
 
     public void PutInItemFromInventory(Item puttingItem)
     {
@@ -158,6 +157,11 @@ public class TransactionManager : MonoBehaviour
         // Swap to Transaction Page
         UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
 
+		if (transaction.AccepterPlayerID != UserManager.Instance.User.Player.PlayerID)
+			opponentPlayerID = transaction.AccepterPlayerID;
+		else
+			opponentPlayerID = transaction.RequesterPlayerID;
+
         // Ui Init Setting
         InitialSetting();
 
@@ -168,8 +172,8 @@ public class TransactionManager : MonoBehaviour
         thisTransaction.OnTransactionEnd += OnTransactionEnd;
 
 		// call API
-		AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[opponentPlayerID] , new Vector3(0,-5.98f,31.5f) , Quaternion.Euler(15f,0,0));
-    }
+		//ShowOpponentVessel();
+	}
 
     public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
     {
@@ -283,6 +287,7 @@ public class TransactionManager : MonoBehaviour
 
         // move back to previous UI page
         UIManager.Instance.ToPreviousPage();
+		AuxCameraSystem.Instance.UnShow ();
     }
 
     // UI API

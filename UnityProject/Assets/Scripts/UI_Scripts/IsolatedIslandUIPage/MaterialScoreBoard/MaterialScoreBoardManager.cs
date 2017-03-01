@@ -17,7 +17,7 @@ public class MaterialScoreBoardManager : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject currentScoreBoardPage;
+	public GameObject currentScoreBoardPage;
     [SerializeField]
     private GameObject materialScoreSetContent;
     [SerializeField]

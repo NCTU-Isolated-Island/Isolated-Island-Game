@@ -96,11 +96,6 @@ public class MainBoatUIManager : MonoBehaviour {
 			case "ToEverydayButton":
                     // TODO : Add listener to this button
 				break;
-//			case "ToPutItemButton":
-//				button.onClick.AddListener (delegate {
-//					UIManager.Instance.SwapPage (UIManager.UIPageType.PutItem);
-//				});
-//				break;
 			case "DrawMaterialButton":
 				button.onClick.AddListener (delegate {
 					Debug.Log ("Draw Material");
@@ -116,7 +111,6 @@ public class MainBoatUIManager : MonoBehaviour {
 				button.onClick.AddListener (delegate {
 					PlayerDecorationManager.Instance.CurrentControlMode = PlayerDecorationManager.ControlMode.Decorate;
 					UIManager.Instance.SwapPage (UIManager.UIPageType.PutItem);
-					// need API
 				});
 				break;
 			}

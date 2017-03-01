@@ -96,6 +96,7 @@ public class MissionUIManager : MonoBehaviour
 			//
 			Text missionName = tmp.transform.Find ("MissionName").GetComponent<Text> ();
 			Text missionType = tmp.transform.Find ("MissionType").GetComponent<Text> ();
+			Image missionIcon = tmp.transform.Find ("MissionIcon").GetComponent<Image> ();
 
 			if (questRecordInformation.isFinished == false)
 				missionName.text = questRecordInformation.questName;
@@ -105,39 +106,51 @@ public class MissionUIManager : MonoBehaviour
 			switch (questRecordInformation.questType) {
 			case QuestType.QR_Code:
 				missionType.text = "掃描 QR code";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestQR");
 				break;
 			case QuestType.MutiplayerSynthesize:
 				missionType.text = "多人合成";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestStranger");
 				break;
 			case QuestType.Message:
 				missionType.text = "傳送訊息";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestFriend");
 				break;
 			case QuestType.Trade:
 				missionType.text = "完成交易";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestFriend");
 				break;
 			case QuestType.Synthesize:
 				missionType.text = "個人合成";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
 				break;
 			case QuestType.Achievement:
 				missionType.text = "解除成就";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
 				break;
 			case QuestType.CollectItem:
 				missionType.text = "收集素材";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
 				break;
 			case QuestType.Friend:
 				missionType.text = "加入好友";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestStranger");
 				break;
 			case QuestType.Island:
 				missionType.text = "島嶼";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
 				break;
 			case QuestType.Login:
 				missionType.text = "登入";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
 				break;
 			case QuestType.Ocean:
 				missionType.text = "海洋";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestLocation");
 				break;
 			default:
 				missionType.text = "";
+				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
 				break;
 			}
 
