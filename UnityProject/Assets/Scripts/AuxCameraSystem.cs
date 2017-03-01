@@ -66,8 +66,19 @@ public class AuxCameraSystem : MonoBehaviour {
 
 		model = island;
 		this.model.layer = LayerMask.NameToLayer ("SecondCamera");
-		this.model.transform.localPosition = new Vector3 (0, -2.2f, 4.62f);
+		this.model.transform.localPosition = new Vector3 (0, -1.63f, 4.62f);
 		AuxCamera.transform.localRotation = Quaternion.Euler (15f, 0, 0);
 		hasModel = true;
+	}
+
+	void OnGUI()
+	{
+		if (hasModel) 
+		{
+			if (Event.current.type == EventType.Repaint) 
+			{
+				AuxCamera.Render();
+			}
+		}
 	}
 }
