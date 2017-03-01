@@ -1,0 +1,276 @@
+fileFormatVersion: 2
+guid: 91133c8f39032ec4cbafd16ecf6783e7
+timeCreated: 1481049406
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Arm_L
+    100002: Arm_R
+    100004: ClawIn_L
+    100006: ClawIn_R
+    100008: ClawOut_L
+    100010: ClawOut_R
+    100012: Crab
+    100014: CrabArmature
+    100016: //RootNode
+    100018: Forearm_L
+    100020: Forearm_R
+    100022: LegBot1_L
+    100024: LegBot1_R
+    100026: LegBot2_L
+    100028: LegBot2_R
+    100030: LegBot3_L
+    100032: LegBot3_R
+    100034: LegTop1_L
+    100036: LegTop1_R
+    100038: LegTop2_L
+    100040: LegTop2_R
+    100042: LegTop3_L
+    100044: LegTop3_R
+    100046: Root
+    400000: Arm_L
+    400002: Arm_R
+    400004: ClawIn_L
+    400006: ClawIn_R
+    400008: ClawOut_L
+    400010: ClawOut_R
+    400012: Crab
+    400014: CrabArmature
+    400016: //RootNode
+    400018: Forearm_L
+    400020: Forearm_R
+    400022: LegBot1_L
+    400024: LegBot1_R
+    400026: LegBot2_L
+    400028: LegBot2_R
+    400030: LegBot3_L
+    400032: LegBot3_R
+    400034: LegTop1_L
+    400036: LegTop1_R
+    400038: LegTop2_L
+    400040: LegTop2_R
+    400042: LegTop3_L
+    400044: LegTop3_R
+    400046: Root
+    4300000: Crab
+    7400000: Walk
+    7400002: Idle
+    9500000: //RootNode
+    13700000: Crab
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Idle
+      takeName: Idle
+      firstFrame: 0
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Crab
+        weight: 1
+      - path: CrabArmature
+        weight: 1
+      - path: CrabArmature/Root
+        weight: 1
+      - path: CrabArmature/Root/Arm_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_L/Forearm_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_L/Forearm_L/ClawIn_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_L/Forearm_L/ClawOut_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_R
+        weight: 1
+      - path: CrabArmature/Root/Arm_R/Forearm_R
+        weight: 1
+      - path: CrabArmature/Root/Arm_R/Forearm_R/ClawIn_R
+        weight: 1
+      - path: CrabArmature/Root/Arm_R/Forearm_R/ClawOut_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_L/LegBot1_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_R/LegBot1_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_L/LegBot2_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_R/LegBot2_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_L/LegBot3_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_R/LegBot3_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Walk
+      takeName: Walk
+      firstFrame: 0
+      lastFrame: 38
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Crab
+        weight: 1
+      - path: CrabArmature
+        weight: 1
+      - path: CrabArmature/Root
+        weight: 1
+      - path: CrabArmature/Root/Arm_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_L/Forearm_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_L/Forearm_L/ClawIn_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_L/Forearm_L/ClawOut_L
+        weight: 1
+      - path: CrabArmature/Root/Arm_R
+        weight: 1
+      - path: CrabArmature/Root/Arm_R/Forearm_R
+        weight: 1
+      - path: CrabArmature/Root/Arm_R/Forearm_R/ClawIn_R
+        weight: 1
+      - path: CrabArmature/Root/Arm_R/Forearm_R/ClawOut_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_L/LegBot1_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop1_R/LegBot1_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_L/LegBot2_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop2_R/LegBot2_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_L/LegBot3_L
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_R
+        weight: 1
+      - path: CrabArmature/Root/LegTop3_R/LegBot3_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: CrabArmature
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
