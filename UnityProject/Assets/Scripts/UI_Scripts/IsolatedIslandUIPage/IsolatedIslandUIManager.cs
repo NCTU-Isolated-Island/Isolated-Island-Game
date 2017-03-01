@@ -195,6 +195,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
 		r = Island.Instance.GetTotalScore (GroupType.Animal);
 		g = Island.Instance.GetTotalScore (GroupType.Businessman);
 		b = Island.Instance.GetTotalScore (GroupType.Farmer);
+
 		print ("r = " + r.ToString ());
 		print ("g = " + g.ToString ());
 		print ("b = " + b.ToString ());
