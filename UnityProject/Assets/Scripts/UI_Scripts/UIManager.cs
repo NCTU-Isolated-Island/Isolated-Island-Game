@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
     // DEBUG
     void OnGUI()
     {
-        GUI.Label(new Rect(50, 50, 100, 100), (1 / Time.deltaTime).ToString());
+        //GUI.Label(new Rect(50, 50, 100, 100), (1 / Time.deltaTime).ToString());
     }
 
     void Update()
