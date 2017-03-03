@@ -134,5 +134,11 @@ namespace IsolatedIslandGame.Client.Communication
             LogService.FatalFormat("ClienPlayer DonateItemToPlayer ");
             return false;
         }
+
+        public override bool AssignQuestToAllPlayer(int questID, string administratorPassword)
+        {
+            LogService.FatalFormat("ClienPlayer AssignQuestToAllPlayer ");
+            return false;
+        }
     }
 }
