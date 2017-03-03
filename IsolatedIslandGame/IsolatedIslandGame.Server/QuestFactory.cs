@@ -219,5 +219,25 @@ namespace IsolatedIslandGame.Server
                 }
             }
         }
+        public void AssignQuestToAllPlayer(int questID)
+        {
+            Quest quest;
+            if(FindQuest(questID, out quest))
+            {
+                var playerIDs = DatabaseService.RepositoryList.PlayerRepository.ListAllPlayerID();
+                foreach (int playerID in playerIDs)
+                {
+                    QuestRecord record;
+                    Player player;
+                    if (quest.CreateRecord(playerID, out record) && PlayerFactory.Instance.FindPlayer(playerID, out player))
+                    {
+                        record.RegisterObserverEvents(player);
+                        player.AddQuestRecord(record);
+                        record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                    }
+                }
+                LogService.Info($"AssignQuestToAllPlayer, QuestID: {questID}, PlayerCount: {playerIDs.Count}");
+            }
+        }
     }
 }

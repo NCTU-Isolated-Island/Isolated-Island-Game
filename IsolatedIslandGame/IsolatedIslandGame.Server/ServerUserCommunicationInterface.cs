@@ -8,6 +8,7 @@ using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Server.Configuration;
 using System.Collections.Generic;
+using System;
 
 namespace IsolatedIslandGame.Server
 {
@@ -232,6 +233,19 @@ namespace IsolatedIslandGame.Server
                         }
                     }
                 }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool AssignQuestToAllPlayer(int questID, string administratorPassword)
+        {
+            if(administratorPassword == SystemConfiguration.Instance.AdministratorPassword)
+            {
+                (QuestFactory.Instance as QuestFactory).AssignQuestToAllPlayer(questID);
+                return true;
             }
             else
             {
