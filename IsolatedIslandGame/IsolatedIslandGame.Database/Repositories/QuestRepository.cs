@@ -1,7 +1,5 @@
 ﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Quests;
-using IsolatedIslandGame.Library.Quests.Requirements;
-using IsolatedIslandGame.Library.Quests.Rewards;
 using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
 
@@ -59,6 +57,8 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRequirementToHaveSpecificNumberKindMaterialQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToAddSpecificNumberDecorationToVesselQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToHaveSpecificNumberDecorationOnVesselQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToFinishedBeforeSpecificTimeQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToFinishedInSpecificTimeSpanQuestRequirement(int requirementID, out QuestRequirement requirement);
         #endregion
 
         #region Specialize QuestReward

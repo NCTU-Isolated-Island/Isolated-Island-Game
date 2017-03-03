@@ -1,5 +1,4 @@
-﻿using IsolatedIslandGame.Protocol;
-using IsolatedIslandGame.Protocol.Communication.OperationCodes;
+﻿using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.Player;
 using System.Collections.Generic;
 
@@ -19,6 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 if (subject.User.CommunicationInterface.InviteFriend(subject.PlayerID, accepterPlayerID))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, InviteFriend, AccepterPlayerID: {accepterPlayerID}");
+                    subject.User.EventManager.UserInform("成功", "已送出邀請。");
                     return true;
                 }
                 else

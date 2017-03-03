@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
-using IsolatedIslandGame.Database;
 
 namespace IsolatedIslandGame.Server
 {
@@ -33,6 +30,7 @@ namespace IsolatedIslandGame.Server
                             isInviter = true,
                             isConfirmed = false
                         });
+                        accepter.User.EventManager.UserInform("邀請", $"玩家 {inviter.Nickname} 向你發出了好友邀請，去查看一下吧!");
                     }
                     return true;
                 }

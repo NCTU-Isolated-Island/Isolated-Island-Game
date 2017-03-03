@@ -20,5 +20,7 @@
         HaveSpecificNumberKindMaterial,
         AddSpecificNumberDecorationToVessel,
         HaveSpecificNumberDecorationOnVessel,
+        FinishedBeforeSpecificTime,
+        FinishedInSpecificTimeSpan,
     }
 }

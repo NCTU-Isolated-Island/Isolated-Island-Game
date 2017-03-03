@@ -4,5 +4,6 @@
     {
         FetchData,
         LandmarkOperation,
+        AssignQuestToAllPlayer
     }
 }
