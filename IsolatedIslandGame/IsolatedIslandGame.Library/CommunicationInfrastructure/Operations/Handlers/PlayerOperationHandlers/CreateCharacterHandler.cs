@@ -22,6 +22,12 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 string nickname = (string)parameters[(byte)CreateCharacterParameterCode.Nickname];
                 string signature = (string)parameters[(byte)CreateCharacterParameterCode.Signature];
                 GroupType groupType = (GroupType)parameters[(byte)CreateCharacterParameterCode.GroupType];
+
+                if(nickname.Length > 20)
+                {
+                    nickname = nickname.Substring(0, 20);
+                }
+
                 if(subject.GroupType != GroupType.No)
                 {
                     errorCode = ErrorCode.AlreadyExisted;

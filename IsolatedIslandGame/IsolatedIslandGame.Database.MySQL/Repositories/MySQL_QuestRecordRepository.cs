@@ -4,6 +4,7 @@ using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Library.Quests.RequirementRecords;
 using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Database.MySQL.Repositories
@@ -228,6 +229,18 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 requirementRecords.Add(requirementRecord);
                             }
                             break;
+                        case QuestRequirementType.FinishedBeforeSpecificTime:
+                            if (SpecializeQuestRequirementRecordToFinishedBeforeSpecificTimeQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.FinishedInSpecificTimeSpan:
+                            if (SpecializeQuestRequirementRecordToFinishedInSpecificTimeSpanQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
                         default:
                             LogService.Fatal($"MySQL_QuestRecordRepository ListRequirementRecordsOfQuestRecord QuestRequirementType: {info.questRequirementType} not implemented");
                             break;
@@ -332,6 +345,14 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 case QuestRequirementType.HaveSpecificNumberDecorationOnVessel:
                     {
                         return CreateHaveSpecificNumberDecorationOnVesselQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.FinishedBeforeSpecificTime:
+                    {
+                        return CreateFinishedBeforeSpecificTimeQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.FinishedInSpecificTimeSpan:
+                    {
+                        return CreateFinishedInSpecificTimeSpanQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
                     }
                 default:
                     requirementRecord = null;
@@ -673,6 +694,44 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 if (command.ExecuteNonQuery() > 0)
                 {
                     requirementRecord = new HaveSpecificNumberDecorationOnVesselQuestRequirementRecord(requirementRecordID, requirement, 0);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateFinishedBeforeSpecificTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO FBST_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,IsExpired) VALUES (@requirementRecordID,false) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new FinishedBeforeSpecificTimeQuestRequirementRecord(requirementRecordID, requirement, false);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateFinishedInSpecificTimeSpanQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO FISTS_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,StartTime,IsExpired) VALUES (@requirementRecordID,CURRENT_TIMESTAMP,false) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new FinishedInSpecificTimeSpanQuestRequirementRecord(requirementRecordID, requirement, DateTime.Now, false);
                     return true;
                 }
                 else
@@ -1108,6 +1167,55 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
+        protected override bool SpecializeQuestRequirementRecordToFinishedBeforeSpecificTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT IsExpired
+                from FBST_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        bool isExpired = reader.GetBoolean(0);
+                        requirementRecord = new FinishedBeforeSpecificTimeQuestRequirementRecord(requirementRecordID, requirement, isExpired);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementRecordToFinishedInSpecificTimeSpanQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT StartTime, IsExpired
+                from FISTS_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        DateTime startTime = reader.GetDateTime(0);
+                        bool isExpired = reader.GetBoolean(1);
+                        requirementRecord = new FinishedInSpecificTimeSpanQuestRequirementRecord(requirementRecordID, requirement, startTime, isExpired);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region update quest requirement record
@@ -1400,6 +1508,39 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("decorationCount", record.DecorationCount);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateHaveSpecificNumberDecorationOnVesselQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override void UpdateFinishedBeforeSpecificTimeQuestRequirementRecord(FinishedBeforeSpecificTimeQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE FBST_QuestRequirementRecordCollection SET 
+                IsExpired = @isExpired
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("isExpired", record.IsExpired);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateFinishedBeforeSpecificTimeQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override void UpdateFinishedInSpecificTimeSpanQuestRequirementRecord(FinishedInSpecificTimeSpanQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE FISTS_QuestRequirementRecordCollection SET 
+                StartTime = @startTime, IsExpired = @isExpired
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("startTime", record.StartTime);
+                command.Parameters.AddWithValue("isExpired", record.IsExpired);
                 command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
 
                 if (command.ExecuteNonQuery() <= 0)

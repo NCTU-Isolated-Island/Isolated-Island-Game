@@ -93,5 +93,13 @@ namespace IsolatedIslandGame.Server.Quests
         {
             DatabaseService.RepositoryList.QuestRecordRepository.UpdateHaveSpecificNumberDecorationOnVesselQuestRequirementRecord(record);
         }
+        public override void UpdateFinishedBeforeSpecificTimeQuestRequirementRecord(FinishedBeforeSpecificTimeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateFinishedBeforeSpecificTimeQuestRequirementRecord(record);
+        }
+        public override void UpdateFinishedInSpecificTimeSpanQuestRequirementRecord(FinishedInSpecificTimeSpanQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateFinishedInSpecificTimeSpanQuestRequirementRecord(record);
+        }
     }
 }

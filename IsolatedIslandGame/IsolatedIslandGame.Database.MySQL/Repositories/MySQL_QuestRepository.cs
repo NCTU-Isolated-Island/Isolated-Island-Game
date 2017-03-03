@@ -5,6 +5,7 @@ using IsolatedIslandGame.Library.Quests.Requirements;
 using IsolatedIslandGame.Library.Quests.Rewards;
 using IsolatedIslandGame.Protocol;
 using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 
 namespace IsolatedIslandGame.Database.MySQL.Repositories
@@ -181,6 +182,18 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         break;
                     case QuestRequirementType.HaveSpecificNumberDecorationOnVessel:
                         if (SpecializeQuestRequirementToHaveSpecificNumberDecorationOnVesselQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.FinishedBeforeSpecificTime:
+                        if (SpecializeQuestRequirementToFinishedBeforeSpecificTimeQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.FinishedInSpecificTimeSpan:
+                        if (SpecializeQuestRequirementToFinishedInSpecificTimeSpanQuestRequirement(info.questRequirementID, out requirement))
                         {
                             requirements.Add(requirement);
                         }
@@ -785,6 +798,52 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         int specificDecorationNumber = reader.GetInt32(0);
                         requirement = new HaveSpecificNumberDecorationOnVesselQuestRequirement(requirementID, specificDecorationNumber);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToFinishedBeforeSpecificTimeQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificTime
+                from FBST_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        DateTime specificTime = reader.GetDateTime(0);
+                        requirement = new FinishedBeforeSpecificTimeQuestRequirement(requirementID, specificTime);
+                        return true;
+                    }
+                    else
+                    {
+                        requirement = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementToFinishedInSpecificTimeSpanQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            string sqlString = @"SELECT SpecificTimeSpan
+                from FISTS_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementID", requirementID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        TimeSpan specificTimeSpan = reader.GetTimeSpan(0);
+                        requirement = new FinishedInSpecificTimeSpanQuestRequirement(requirementID, specificTimeSpan);
                         return true;
                     }
                     else

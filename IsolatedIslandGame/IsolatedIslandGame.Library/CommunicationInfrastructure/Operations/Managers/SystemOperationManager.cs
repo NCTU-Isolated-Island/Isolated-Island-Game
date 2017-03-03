@@ -23,6 +23,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
             {
                 { SystemOperationCode.FetchData, FetchDataResolver },
                 { SystemOperationCode.LandmarkOperation, new LandmarkOperationResolver(systemManager) },
+                { SystemOperationCode.AssignQuestToAllPlayer, new AssignQuestToAllPlayerHandler(systemManager) },
             };
         }
 
@@ -64,6 +65,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)LandmarkOperationParameterCode.Parameters, parameters }
             };
             SendOperation(SystemOperationCode.LandmarkOperation, operationParameters);
+        }
+        public void AssignQuestToAllPlayer(int questID, string administratorPassword)
+        {
+            Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
+            {
+                { (byte)AssignQuestToAllPlayerParameterCode.QuestID, questID },
+                { (byte)AssignQuestToAllPlayerParameterCode.AdministratorPassword, administratorPassword }
+            };
+            SendOperation(SystemOperationCode.AssignQuestToAllPlayer, operationParameters);
         }
     }
 }

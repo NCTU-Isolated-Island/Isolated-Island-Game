@@ -107,8 +107,8 @@ namespace IsolatedIslandGame.Server
                 }
             }
 
-            IssueEveryHourPassedQuests();
-            IssueEveryDayPassedQuests();
+            AssignEveryHourPassedQuests();
+            AssignEveryDayPassedQuests();
             (VesselManager.Instance as ServerVesselManager).OnVesselOceanChanged += DetectVesselOceanChange;
         }
         public bool QuestsWhenEnteredSpecificOcean(OceanType oceanType, out IEnumerable<Quest> quests)
@@ -125,7 +125,7 @@ namespace IsolatedIslandGame.Server
             }
         }
 
-        private void IssueEveryHourPassedQuests()
+        private void AssignEveryHourPassedQuests()
         {
             foreach(int playerID in DatabaseService.RepositoryList.PlayerRepository.ListAllPlayerID())
             {
@@ -150,9 +150,9 @@ namespace IsolatedIslandGame.Server
                 nextHour += TimeSpan.FromHours(1);
             }
 
-            Scheduler.Instance.AddTask(nextHour, IssueEveryHourPassedQuests);
+            Scheduler.Instance.AddTask(nextHour, AssignEveryHourPassedQuests);
         }
-        private void IssueEveryDayPassedQuests()
+        private void AssignEveryDayPassedQuests()
         {
             foreach (int playerID in DatabaseService.RepositoryList.PlayerRepository.ListAllPlayerID())
             {
@@ -177,7 +177,7 @@ namespace IsolatedIslandGame.Server
                 nextDay += TimeSpan.FromDays(1);
             }
 
-            Scheduler.Instance.AddTask(nextDay, IssueEveryDayPassedQuests);
+            Scheduler.Instance.AddTask(nextDay, AssignEveryDayPassedQuests);
 
             foreach (var setPair in hasGivenEnteredSpecificOceanQuestRecords)
             {
@@ -217,6 +217,27 @@ namespace IsolatedIslandGame.Server
                         }
                     }
                 }
+            }
+        }
+        public void AssignQuestToAllPlayer(int questID)
+        {
+            Quest quest;
+            if(FindQuest(questID, out quest))
+            {
+                var playerIDs = DatabaseService.RepositoryList.PlayerRepository.ListAllPlayerID();
+                foreach (int playerID in playerIDs)
+                {
+                    QuestRecord record;
+                    Player player;
+                    if (quest.CreateRecord(playerID, out record) && PlayerFactory.Instance.FindPlayer(playerID, out player))
+                    {
+                        record.RegisterObserverEvents(player);
+                        player.AddQuestRecord(record);
+                        record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                        player.User.EventManager.UserInform("提示", "有新的任務被發佈了，去查看一下吧!");
+                    }
+                }
+                LogService.Info($"AssignQuestToAllPlayer, QuestID: {questID}, PlayerCount: {playerIDs.Count}");
             }
         }
     }

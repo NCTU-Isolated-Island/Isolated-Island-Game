@@ -36,5 +36,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         public abstract bool CancelTransaction(int playerID, int transactionID);
         public abstract bool ReadPlayerMessage(int playerID, int playerMessageID);
         public abstract bool DonateItemToPlayer(int senderPlayerID, int receiverPlayerID, Item item, int itemCount);
+        public abstract bool AssignQuestToAllPlayer(int questID, string administratorPassword);
     }
 }
