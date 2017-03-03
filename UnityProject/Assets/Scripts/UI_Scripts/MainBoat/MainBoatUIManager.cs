@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Library;
 using System.Collections;
 using System.Collections.Generic;
+using IsolatedIslandGame.Protocol;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,9 @@ public class MainBoatUIManager : MonoBehaviour {
     private Button[] verticalButtonList;
     [SerializeField]
     private Button[] horizontalButtonList;
+
+	[SerializeField]
+	private GameObject getMaterialPanel;
     //
 
     //
@@ -35,38 +39,34 @@ public class MainBoatUIManager : MonoBehaviour {
     }
 
     void Start()
-    {
-        InitSetting();
+	{
+		InitSetting ();
 
-        foreach (Button button in horizontalButtonList)
-        {
-            switch (button.name)
-            {
-                case "ToFPVButton":
-                    button.onClick.AddListener((delegate {
-                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.FirstPerson);
-                    }));
-                    break;
-                case "ToBirdViewButton":
-                    button.onClick.AddListener(delegate {
-                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.BirdView);
-                    });
-                    break;
-                case "ToNormalViewButton":
-                    button.onClick.AddListener(delegate {
-                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.NormalView);
-                    });
-                    break;
-            }
-            button.onClick.AddListener(delegate
-            {
-                if (MainBoatUIManager.Instance.maskStatus)
-                    MainBoatUIManager.Instance.ReverseMaskStatus();
-            });
-        }
+		foreach (Button button in horizontalButtonList) {
+			switch (button.name) {
+			case "ToFPVButton":
+				button.onClick.AddListener ((delegate {
+					PlayerController.Instance.ChangeViewMode (PlayerController.ViewMode.FirstPerson);
+				}));
+				break;
+			case "ToBirdViewButton":
+				button.onClick.AddListener (delegate {
+					PlayerController.Instance.ChangeViewMode (PlayerController.ViewMode.BirdView);
+				});
+				break;
+			case "ToNormalViewButton":
+				button.onClick.AddListener (delegate {
+					PlayerController.Instance.ChangeViewMode (PlayerController.ViewMode.NormalView);
+				});
+				break;
+			}
+			button.onClick.AddListener (delegate {
+				if (MainBoatUIManager.Instance.maskStatus)
+					MainBoatUIManager.Instance.ReverseMaskStatus ();
+			});
+		}
 
-        foreach (Button button in verticalButtonList)
-        {
+		foreach (Button button in verticalButtonList) {
 			switch (button.name) {
 			case "ToIngredientsButton":
 				button.onClick.AddListener (delegate {
@@ -114,13 +114,50 @@ public class MainBoatUIManager : MonoBehaviour {
 				});
 				break;
 			}
-            //button.onClick.AddListener(delegate
-            //{
-            //    if (MainBoatUIManager.Instance.maskStatus)
-            //        MainBoatUIManager.Instance.ReverseMaskStatus();
-            //});
-        }
-    }
+			//button.onClick.AddListener(delegate
+			//{
+			//    if (MainBoatUIManager.Instance.maskStatus)
+			//        MainBoatUIManager.Instance.ReverseMaskStatus();
+			//});
+		}
+		if (UserManager.Instance.User.IsOnline) {
+			RegisterPlayerEvents (UserManager.Instance.User.Player);
+		} else {
+			UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
+		}
+	
+	}
+	
+
+	void RegisterPlayerEvents(Player player)
+	{
+		player.ResponseManager.OnDrawMaterialResponse += 
+			(delegate(IsolatedIslandGame.Protocol.ErrorCode returnCode, Item material, int count) {
+			switch (returnCode) {
+			case ErrorCode.NoError:
+				RenderGetMaterialPanel (material, count);
+				break;
+			default:
+				break;
+			}
+		});
+	}
+
+	void RenderGetMaterialPanel(Item item , int count)
+	{
+		GameObject tmp = Instantiate (getMaterialPanel);
+		tmp.transform.SetParent (transform);
+		tmp.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (0, 30, 0);
+		tmp.GetComponent<RectTransform> ().localScale = new Vector3 (0.5213f, 0.5213f, 0.5213f);
+
+		tmp.transform.Find ("Message").GetComponent<Text> ().text = string.Format ("你抽到了 {0} 個 {1} !!!", count.ToString (), item.ItemName);
+		tmp.transform.Find ("MaterialImage").GetComponent<Image> ().sprite = Resources.Load<Sprite> ("2D/" + item.ItemID);
+
+		tmp.transform.Find ("Accept").GetComponent<Button> ().onClick.AddListener (delegate {
+			Destroy (tmp);
+		});
+
+	}
 	
 	public void ReverseMaskStatus()
     {

@@ -34,7 +34,7 @@ public class BGMController : MonoBehaviour {
 
         if (nextBGMpath == PrevBGMpath) return;
         PrevBGMpath = nextBGMpath;
-
+		//print (nextBGMpath);
         AudioManager.Instance.SetBGM(nextBGMpath);
     }
 
@@ -50,8 +50,13 @@ public class BGMController : MonoBehaviour {
 
     void Start() // for testing
     {
-        BGMDictionary["winter_light_1"] = "winter";
+        BGMDictionary["winter_light_1"] = "computer_center";
         BGMDictionary["cosy_and_warm_1"] = "cozyandwarm";
+		BGMDictionary ["a_girl_from_osaka_1"] = "osaka";
+		BGMDictionary ["a_new_generation_1"] = "winter";
+		BGMDictionary ["hopeful_journey_1"] = "journey";
+		BGMDictionary ["indy_racing_1"] = "racing";
+		BGMDictionary ["lost_soul_1"] = "lostsoul";
 
         Exited = true;
     }

@@ -74,6 +74,7 @@ public class LocationSystem : MonoBehaviour {
 		//FOR DEVELOP
 		if(Input.location.status != LocationServiceStatus.Running)
 		{
+			//return new Vector3(30,0,27);
 			return new Vector3(TestLocation.transform.position.x,0f,TestLocation.transform.position.z);
 //			return Vector3.one;
 		}

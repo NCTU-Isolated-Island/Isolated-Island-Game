@@ -39,6 +39,7 @@ public class MissionUIManager : MonoBehaviour
 		Text missionDescription = missionDetailContent.transform.Find ("MissionDescription").GetComponent<Text> ();
 		Text missionRequirement = missionDetailContent.transform.Find ("MissionRequirementTitle/MissionRequirementContent").GetComponent<Text> ();
 		Text missionReward = missionDetailContent.transform.Find ("MissionRewardTitle/MissionRewardContent").GetComponent<Text> ();
+		Image missionIcon = missionDetailContent.transform.Find ("MissionIcon").GetComponent<Image> ();
 
 //		print (information.questName);
 //		print (information.questDescription);
@@ -49,6 +50,45 @@ public class MissionUIManager : MonoBehaviour
         missionDescription.text = information.questDescription;
 		missionRequirement.text = information.requirementsDescription;
 		missionReward.text = information.rewardsDescription;
+
+		switch (information.questType) {
+		case QuestType.QR_Code:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestQR");
+			break;
+		case QuestType.MutiplayerSynthesize:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestStranger");
+			break;
+		case QuestType.Message:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestFriend");
+			break;
+		case QuestType.Trade:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestFriend");
+			break;
+		case QuestType.Synthesize:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
+			break;
+		case QuestType.Achievement:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
+			break;
+		case QuestType.CollectItem:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
+			break;
+		case QuestType.Friend:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestStranger");
+			break;
+		case QuestType.Island:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
+			break;
+		case QuestType.Login:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
+			break;
+		case QuestType.Ocean:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestLocation");
+			break;
+		default:
+			missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestIndependent");
+			break;
+		}
 
         viewingQuest = information;
 	}
@@ -97,11 +137,12 @@ public class MissionUIManager : MonoBehaviour
 			Text missionName = tmp.transform.Find ("MissionName").GetComponent<Text> ();
 			Text missionType = tmp.transform.Find ("MissionType").GetComponent<Text> ();
 			Image missionIcon = tmp.transform.Find ("MissionIcon").GetComponent<Image> ();
+			Image finishedImage = tmp.transform.Find ("FinishedImage").GetComponent<Image> ();
 
 			if (questRecordInformation.isFinished == false)
-				missionName.text = questRecordInformation.questName;
+				finishedImage.gameObject.SetActive (false);
 			else
-				missionName.text = "已完成 點擊以領取獎勵";
+				finishedImage.gameObject.SetActive (true);
 
 			switch (questRecordInformation.questType) {
 			case QuestType.QR_Code:
