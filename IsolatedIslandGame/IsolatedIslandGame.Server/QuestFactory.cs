@@ -234,6 +234,7 @@ namespace IsolatedIslandGame.Server
                         record.RegisterObserverEvents(player);
                         player.AddQuestRecord(record);
                         record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                        player.User.EventManager.UserInform("提示", "有新的任務被發佈了，去查看一下吧!");
                     }
                 }
                 LogService.Info($"AssignQuestToAllPlayer, QuestID: {questID}, PlayerCount: {playerIDs.Count}");
