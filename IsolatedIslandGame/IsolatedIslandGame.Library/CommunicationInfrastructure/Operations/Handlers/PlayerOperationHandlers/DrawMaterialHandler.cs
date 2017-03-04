@@ -60,12 +60,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         };
                         SendResponse(operationCode, responseParameters);
                         LogService.InfoFormat("Player: {0}, DrawMaterial, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, itemCount);
-                        DateTime nextDrawMaterialTime = DateTime.Today;
-                        while(nextDrawMaterialTime < DateTime.Now)
-                        {
-                            nextDrawMaterialTime += TimeSpan.FromHours(6);
-                        }
-                        subject.NextDrawMaterialTime = nextDrawMaterialTime;
+                        subject.NextDrawMaterialTime = ItemManager.Instance.NextDrawMaterialTime;
                         return true;
                     }
                     else if(DateTime.Now <= subject.NextDrawMaterialTime)

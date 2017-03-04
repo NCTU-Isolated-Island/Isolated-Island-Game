@@ -11,13 +11,13 @@
                 case OceanType.Type1:
                     return "第1";
                 case OceanType.Type2:
-                    return "第2";
+                    return "北冰洋";
                 case OceanType.Type3:
                     return "第3";
                 case OceanType.Type4:
                     return "第4";
                 case OceanType.Type5:
-                    return "第5";
+                    return "所羅門";
                 case OceanType.Type6:
                     return "第6";
                 case OceanType.Type7:
