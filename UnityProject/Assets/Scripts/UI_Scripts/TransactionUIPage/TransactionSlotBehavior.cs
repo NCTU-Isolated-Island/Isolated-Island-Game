@@ -18,14 +18,14 @@ public class TransactionSlotBehavior : MonoBehaviour {
     public void ToInventoryPageFromTransactionSlot()
     {
         TransactionManager.Instance.puttingIndex = posIndex;
-        TransactionManager.Instance.TransactionUIPage.SetActive(false);
+        //TransactionManager.Instance.TransactionUIPage.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
     }
 
     public void SetSlotItem(Item item)
     {
         this.item = item;
-        TransactionManager.Instance.TransactionUIPage.SetActive(true);
+        //TransactionManager.Instance.TransactionUIPage.SetActive(true);
     }
 
     public void SetSlotAmount(int amount)

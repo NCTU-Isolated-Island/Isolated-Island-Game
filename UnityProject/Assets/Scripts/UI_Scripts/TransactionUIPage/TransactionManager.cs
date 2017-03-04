@@ -286,8 +286,9 @@ public class TransactionManager : MonoBehaviour
         MessagePanel.SetActive(true);
 
         // move back to previous UI page
-        UIManager.Instance.ToPreviousPage();
-		AuxCameraSystem.Instance.UnShow ();
+        //UIManager.Instance.ToPreviousPage();
+        UIManager.Instance.ToMainPage();
+        AuxCameraSystem.Instance.UnShow ();
     }
 
     // UI API
