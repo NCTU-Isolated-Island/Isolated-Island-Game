@@ -47,10 +47,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 }
                 Item randomItem = materials.ElementAt(randomGenerator.Next(0, materials.Count()));
                 int itemCount = 1;
-
+                DateTime drawTime = DateTime.Now;
                 lock(subject.Inventory)
                 {
-                    if(DateTime.Now > subject.NextDrawMaterialTime && subject.Inventory.AddItemCheck(randomItem.ItemID, itemCount))
+                    if(drawTime >= subject.NextDrawMaterialTime && subject.Inventory.AddItemCheck(randomItem.ItemID, itemCount))
                     {
                         subject.Inventory.AddItem(randomItem, itemCount);
                         Dictionary<byte, object> responseParameters = new Dictionary<byte, object>
@@ -60,10 +60,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         };
                         SendResponse(operationCode, responseParameters);
                         LogService.InfoFormat("Player: {0}, DrawMaterial, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, itemCount);
-                        subject.NextDrawMaterialTime = ItemManager.Instance.NextDrawMaterialTime;
+                        subject.NextDrawMaterialTime = ItemManager.Instance.NextDrawMaterialTime + ItemManager.Instance.NextDrawMaterialTimeSpan;
                         return true;
                     }
-                    else if(DateTime.Now <= subject.NextDrawMaterialTime)
+                    else if(drawTime < subject.NextDrawMaterialTime)
                     {
                         SendError(operationCode, ErrorCode.Fail, "DrawMaterial Fail");
                         LogService.ErrorFormat("Player: {0}, DrawMaterial Fail, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, itemCount);
