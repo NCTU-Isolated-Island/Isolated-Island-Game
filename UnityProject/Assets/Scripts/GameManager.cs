@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void Login()
     {
+        //SystemManager.Instance.OperationManager.AssignQuestToAllPlayer(1, "TestServer");
         FacebookService.LoginWithFacbook();
         //UserManager.Instance.User.OperationManager.PlayerIDLogin(37, "TestServer");
     }

@@ -15,6 +15,8 @@ namespace IsolatedIslandGame.Library
         protected Dictionary<int, Item> itemDictionary;
         public IEnumerable<Item> Items { get { return itemDictionary.Values; } }
         public int ItemCount { get { return itemDictionary.Count; } }
+        public TimeSpan NextDrawMaterialTimeSpan { get; protected set; }
+        public DateTime NextDrawMaterialTime { get; protected set; }
 
         public abstract event Action<Item> OnItemUpdate;
 

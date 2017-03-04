@@ -12,6 +12,7 @@ namespace IsolatedIslandGame.Server
 
         public ItemFactory()
         {
+            NextDrawMaterialTimeSpan = TimeSpan.FromSeconds(30);
             var items = DatabaseService.RepositoryList.ItemRepository.ListAll();
             foreach(var item in items)
             {
@@ -26,13 +27,8 @@ namespace IsolatedIslandGame.Server
                 player.NextDrawMaterialTime = now;
             }
 
-            DateTime nextDrawMaterialTime = DateTime.Today;
-            while (nextDrawMaterialTime < DateTime.Now)
-            {
-                nextDrawMaterialTime += TimeSpan.FromHours(2);
-            }
-
-            Scheduler.Instance.AddTask(nextDrawMaterialTime, () => 
+            NextDrawMaterialTime = DateTime.Today + TimeSpan.FromSeconds(((DateTime.Now - DateTime.Today).TotalSeconds / NextDrawMaterialTimeSpan.TotalSeconds) * NextDrawMaterialTimeSpan.TotalSeconds) + NextDrawMaterialTimeSpan;
+            Scheduler.Instance.AddTask(NextDrawMaterialTime, () => 
             {
                 ResetDrawMaterialTime();
             });
@@ -87,18 +83,16 @@ namespace IsolatedIslandGame.Server
 
         private void ResetDrawMaterialTime()
         {
-            DateTime nextDrawMaterialTime = DateTime.Today;
-            while (nextDrawMaterialTime < DateTime.Now)
-            {
-                nextDrawMaterialTime += TimeSpan.FromHours(2);
-            }
-            DatabaseService.RepositoryList.PlayerRepository.GlobalUpdateNextDrawMaterialTime(nextDrawMaterialTime);
+            NextDrawMaterialTime = DateTime.Today + TimeSpan.FromSeconds(((DateTime.Now - DateTime.Today).TotalSeconds / NextDrawMaterialTimeSpan.TotalSeconds) * NextDrawMaterialTimeSpan.TotalSeconds) + NextDrawMaterialTimeSpan;
+            DatabaseService.RepositoryList.PlayerRepository.GlobalUpdateNextDrawMaterialTime(NextDrawMaterialTime);
             foreach (Player player in PlayerFactory.Instance.Players)
             {
-                player.NextDrawMaterialTime = nextDrawMaterialTime;
+                player.NextDrawMaterialTime = NextDrawMaterialTime;
             }
-            
-            Scheduler.Instance.AddTask(nextDrawMaterialTime, ResetDrawMaterialTime);
+            Scheduler.Instance.AddTask(NextDrawMaterialTime, () =>
+            {
+                ResetDrawMaterialTime();
+            });
         }
     }
 }
