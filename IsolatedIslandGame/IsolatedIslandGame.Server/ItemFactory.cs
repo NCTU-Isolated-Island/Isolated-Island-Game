@@ -12,7 +12,7 @@ namespace IsolatedIslandGame.Server
 
         public ItemFactory()
         {
-            NextDrawMaterialTimeSpan = TimeSpan.FromSeconds(30);
+            NextDrawMaterialTimeSpan = TimeSpan.FromSeconds(7200);
             var items = DatabaseService.RepositoryList.ItemRepository.ListAll();
             foreach(var item in items)
             {

@@ -91,20 +91,23 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
         }
         public void SyncQuestRecordUpdated(QuestRecord record)
         {
-            QuestRecordInformation information = record.QuestRecordInformation;
-            var parameters = new Dictionary<byte, object>
+            if(record.IsFinished || !record.Quest.IsHidden)
             {
-                { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordID, information.questRecordID },
-                { (byte)SyncQuestRecordUpdatedParameterCode.QuestType, (byte)information.questType },
-                { (byte)SyncQuestRecordUpdatedParameterCode.QuestName, information.questName },
-                { (byte)SyncQuestRecordUpdatedParameterCode.QuestDescription, information.questDescription },
-                { (byte)SyncQuestRecordUpdatedParameterCode.IsHidden, information.isHidden },
-                { (byte)SyncQuestRecordUpdatedParameterCode.RequirementsDescription, information.requirementsDescription },
-                { (byte)SyncQuestRecordUpdatedParameterCode.RewardsDescription, information.rewardsDescription },
-                { (byte)SyncQuestRecordUpdatedParameterCode.HasGottenReward, information.hasGottenReward },
-                { (byte)SyncQuestRecordUpdatedParameterCode.IsFinished, information.isFinished }
-            };
-            SendSyncData(PlayerSyncDataCode.QuestRecordUpdated, parameters);
+                QuestRecordInformation information = record.QuestRecordInformation;
+                var parameters = new Dictionary<byte, object>
+                {
+                    { (byte)SyncQuestRecordUpdatedParameterCode.QuestRecordID, information.questRecordID },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.QuestType, (byte)information.questType },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.QuestName, information.questName },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.QuestDescription, information.questDescription },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.IsHidden, information.isHidden },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.RequirementsDescription, information.requirementsDescription },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.RewardsDescription, information.rewardsDescription },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.HasGottenReward, information.hasGottenReward },
+                    { (byte)SyncQuestRecordUpdatedParameterCode.IsFinished, information.isFinished }
+                };
+                SendSyncData(PlayerSyncDataCode.QuestRecordUpdated, parameters);
+            }
         }
         public void SyncNextDrawMaterialTimeUpdated(DateTime nextDrawMaterialTime)
         {

@@ -18,20 +18,23 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     foreach (var questRecord in subject.QuestRecords)
                     {
-                        var information = questRecord.QuestRecordInformation;
-                        var result = new Dictionary<byte, object>
+                        if (questRecord.IsFinished || !questRecord.Quest.IsHidden)
                         {
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordID, information.questRecordID },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestType, (byte)information.questType },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestName, information.questName },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.QuestDescription, information.questDescription },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.IsHidden, information.isHidden },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.RequirementsDescription, information.requirementsDescription },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.RewardsDescription, information.rewardsDescription },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.HasGottenReward, information.hasGottenReward },
-                            { (byte)FetchAllQuestRecordsResponseParameterCode.IsFinished, information.isFinished }
-                        };
-                        SendResponse(fetchCode, result);
+                            var information = questRecord.QuestRecordInformation;
+                            var result = new Dictionary<byte, object>
+                            {
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.QuestRecordID, information.questRecordID },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.QuestType, (byte)information.questType },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.QuestName, information.questName },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.QuestDescription, information.questDescription },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.IsHidden, information.isHidden },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.RequirementsDescription, information.requirementsDescription },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.RewardsDescription, information.rewardsDescription },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.HasGottenReward, information.hasGottenReward },
+                                { (byte)FetchAllQuestRecordsResponseParameterCode.IsFinished, information.isFinished }
+                            };
+                            SendResponse(fetchCode, result);
+                        }
                     }
                     return true;
                 }
