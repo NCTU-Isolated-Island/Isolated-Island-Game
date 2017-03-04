@@ -51,7 +51,8 @@ namespace IsolatedIslandGame.Library.Quests
                 StringBuilder rewardDescriptionBuilder = new StringBuilder();
                 foreach(var reward in Quest.Rewards)
                 {
-                    rewardDescriptionBuilder.AppendLine(reward.Description);
+                    if(reward.QuestRewardType != Protocol.QuestRewardType.AcceptSpecificQuest)
+                        rewardDescriptionBuilder.AppendLine(reward.Description);
                 }
                 information.rewardsDescription = rewardDescriptionBuilder.ToString();
                 information.hasGottenReward = HasGottenReward;
