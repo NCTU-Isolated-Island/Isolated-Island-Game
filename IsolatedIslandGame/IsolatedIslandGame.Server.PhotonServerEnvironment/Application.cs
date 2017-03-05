@@ -92,8 +92,8 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             DecorationFactory.Initial(new Items.ServerDecorationFactory());
             BlueprintManager.Initial(new BlueprintFactory());
             VesselManager.Initial(new ServerVesselManager());
-            QuestManager.Initial(new QuestFactory());
             QuestRecordFactory.Initial(new Quests.ServerQuestRecordFactory());
+            QuestManager.Initial(new QuestFactory());
             LandmarkManager.Initial(new LandmarkFactory());
             FriendManager.InitialManager();
             PlayerInformationManager.Initial(new ServerPlayerInformationManager());

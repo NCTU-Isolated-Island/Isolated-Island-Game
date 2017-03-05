@@ -388,6 +388,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
+                command.Parameters.AddWithValue("questID", questID);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())

@@ -122,11 +122,13 @@ public class MissionUIManager : MonoBehaviour
     void LoadQuestList(QuestRecordInformation information)
 	{
 		//print("LoadQuestList");
-		foreach (Transform questRecordObject in missionSetContent.transform) {
+		foreach (Transform questRecordObject in missionSetContent.transform)
+        {
 			Destroy (questRecordObject.gameObject);
 		}
 
-		foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations) {
+		foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations)
+        {
 			if (questRecordInformation.isFinished && questRecordInformation.hasGottenReward)
 				continue;
 
@@ -144,7 +146,10 @@ public class MissionUIManager : MonoBehaviour
 			else
 				finishedImage.gameObject.SetActive (true);
 
-			switch (questRecordInformation.questType) {
+            missionName.text = questRecordInformation.questName;
+
+
+            switch (questRecordInformation.questType) {
 			case QuestType.QR_Code:
 				missionType.text = "掃描 QR code";
 				missionIcon.sprite = Resources.Load<Sprite> ("QuestIcon/QuestQR");
