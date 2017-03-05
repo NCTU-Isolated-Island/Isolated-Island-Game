@@ -28,7 +28,7 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         {
             get
             {
-                return $"裝飾數量： {AddedDecorationCount}/{(Requirement as HaveSpecificNumberDecorationOnVesselQuestRequirement).SpecificDecorationNumber}";
+                return $"裝飾數量： {AddedDecorationCount}/{(Requirement as AddSpecificNumberDecorationToVesselQuestRequirement).SpecificDecorationNumber}";
             }
         }
 
