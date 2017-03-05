@@ -35,22 +35,47 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         }
         internal override void RegisterObserverEvents(Player player)
         {
-            player.Vessel.OnVesselTransformUpdated += (vesselID, locationX, locationY, rotationEulerAngleY, locatedOceanType) =>
+            if(player.Vessel == null)
             {
-                if (!IsSufficient)
+                player.OnBindVessel += (vessel) => 
                 {
-                    lock (existedOceanSet)
+                    vessel.OnVesselTransformUpdated += (vesselID, locationX, locationY, rotationEulerAngleY, locatedOceanType) =>
                     {
-                        if (!existedOceanSet.Contains(locatedOceanType))
+                        if (!IsSufficient)
                         {
-                            if (existedOceanSet.Add(locatedOceanType) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddOceanToExistedInSpecificNumberOceanQuestRequirementRecord(this, locatedOceanType)))
+                            lock (existedOceanSet)
                             {
-                                onRequirementStatusChange?.Invoke(this);
+                                if (!existedOceanSet.Contains(locatedOceanType))
+                                {
+                                    if (existedOceanSet.Add(locatedOceanType) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddOceanToExistedInSpecificNumberOceanQuestRequirementRecord(this, locatedOceanType)))
+                                    {
+                                        onRequirementStatusChange?.Invoke(this);
+                                    }
+                                }
+                            }
+                        }
+                    };
+                };
+            }
+            else
+            {
+                player.Vessel.OnVesselTransformUpdated += (vesselID, locationX, locationY, rotationEulerAngleY, locatedOceanType) =>
+                {
+                    if (!IsSufficient)
+                    {
+                        lock (existedOceanSet)
+                        {
+                            if (!existedOceanSet.Contains(locatedOceanType))
+                            {
+                                if (existedOceanSet.Add(locatedOceanType) && (QuestRecordFactory.Instance == null || QuestRecordFactory.Instance.AddOceanToExistedInSpecificNumberOceanQuestRequirementRecord(this, locatedOceanType)))
+                                {
+                                    onRequirementStatusChange?.Invoke(this);
+                                }
                             }
                         }
                     }
-                }
-            };
+                };
+            }
         }
     }
 }
