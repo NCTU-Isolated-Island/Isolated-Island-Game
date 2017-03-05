@@ -270,6 +270,24 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                             rewards.Add(reward);
                         }
                         break;
+                    case QuestRewardType.GiveSpecificNumberSpecificLevelRandomMaterial:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificLevelRandomMaterialQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.GiveSpecificNumberSpecificLevelSpecificGroupRandomMaterial:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificLevelSpecificGroupRandomMaterialQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.GiveSpecificNumberSpecificLevelBelongingGroupRandomMaterial:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificLevelBelongingGroupRandomMaterialQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
                     default:
                         LogService.Fatal($"MySQL_QuestRepository ListRewardsOfQuest QuestRewardType: {info.questRewardType} not implemented");
                         break;
