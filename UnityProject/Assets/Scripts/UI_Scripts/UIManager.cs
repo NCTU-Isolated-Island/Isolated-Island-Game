@@ -65,6 +65,10 @@ public class UIManager : MonoBehaviour
         //
         if (PageStack.Count > 1)
             UIPageList[(int)PageStack.Peek()].SetActive(false);
+        if (nextPage == UIPageType.Chat_Record)
+        {
+            ChatUIManager.Instance.LoadChatRecord();
+        }
         //
         if (nextPage == UIPageType.Inventory)
         {

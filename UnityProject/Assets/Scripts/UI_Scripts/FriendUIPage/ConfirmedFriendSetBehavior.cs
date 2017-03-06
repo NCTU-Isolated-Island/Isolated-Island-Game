@@ -7,6 +7,7 @@ using IsolatedIslandGame.Library;
 public class ConfirmedFriendSetBehavior : MonoBehaviour {
 
     public PlayerInformation information;
+    private Button sendMessageButton;
     private Button friendSetButton;
 
     void Awake()
@@ -30,7 +31,13 @@ public class ConfirmedFriendSetBehavior : MonoBehaviour {
                 CameraManager.Instance.ToNearAnchor(GameManager.Instance.UserGameObject[information.playerID]);
                 FriendUIManager.Instance.gameObject.SetActive(false);
             });
-        
+        sendMessageButton = gameObject.transform.Find("SendMessageButton").GetComponent<Button>();
+        sendMessageButton.onClick.AddListener(delegate
+        {
+            UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Message);
+            ChatUIManager.Instance.LoadMessagePage(information);
+        });
+
         UpdateButtonStatus();
     }
 

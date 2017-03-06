@@ -138,7 +138,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
         });
 
         confrimPanel.transform.localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
-        confrimPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 30, 0);
+        confrimPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -30, 0);
     }
 
     private void ThrowMaterialToIsland(Item item)
@@ -205,12 +205,12 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
 	public void LoadIslandPieChart()
 	{
-		// TMP : r as animal , g as businessman , b as farmer
+        // TMP : r as animal , g as businessman , b as farmer
 
-		Invoke ("ShowIsland", UIManager.Instance.SwapPageTimeInterval);
-		//AuxCameraSystem.Instance.ShowIsland ();
+        //Invoke ("ShowIsland", UIManager.Instance.SwapPageTimeInterval);
+        ShowIsland();
 
-		float r, g, b;
+        float r, g, b;
 		float totalScore;
 		r = Island.Instance.GetTotalScore (GroupType.Animal);
 		g = Island.Instance.GetTotalScore (GroupType.Businessman);
@@ -234,7 +234,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
 	private void ShowIsland()
 	{
-		AuxCameraSystem.Instance.ShowIsland ();
+		//AuxCameraSystem.Instance.ShowIsland ();
 	}
 
 }

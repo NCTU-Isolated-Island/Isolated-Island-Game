@@ -1,7 +1,6 @@
 ﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,20 +25,14 @@ public class ChatUIManager : MonoBehaviour {
 
     [SerializeField]
     private Text titleText;
+    [SerializeField]
+    private Text unReadMessageAmount;
 
-    private Dictionary<int, List<PlayerConversation>> playerConversationTable = new Dictionary<int, List<PlayerConversation>>();
-
-    // Variable for Message page
+    private Dictionary<int, Dictionary<int, PlayerConversation>> playerConversationTable = new Dictionary<int, Dictionary<int, PlayerConversation>>();
 
     public PlayerInformation chattingPlayer;
     [SerializeField]
     private InputField messageInputField;
-    //
-
-    void InitSetting()
-    {
-
-    }
 
     void Awake()
     {
@@ -67,18 +60,52 @@ public class ChatUIManager : MonoBehaviour {
 
     void OnGetPlayerConversation(PlayerConversation conversation)
     {
-        List<PlayerConversation> conversations;
+        Dictionary<int, PlayerConversation> conversations;
         int otherPlayerID = GetOtherPlayerID(conversation);
         if (playerConversationTable.TryGetValue(otherPlayerID, out conversations))
         {
-            conversations.Add(conversation);
+            if(conversations.ContainsKey(conversation.message.playerMessageID))
+            {
+                conversations[conversation.message.playerMessageID] = conversation;
+            }
+            else
+            {
+                conversations.Add(conversation.message.playerMessageID, conversation);
+            }
         }
         else
         {
-            playerConversationTable.Add(otherPlayerID, new List<PlayerConversation> { conversation });
+            playerConversationTable.Add(otherPlayerID, new Dictionary<int, PlayerConversation> { { conversation.message.playerMessageID, conversation } });
         }
-        LoadChatRecord();
-        LoadMessagePage(chattingPlayer);
+        if(UIManager.Instance.PageStack.Peek() == UIManager.UIPageType.Chat_Record)
+        {
+            LoadChatRecord();
+        }
+        if(UIManager.Instance.PageStack.Peek() == UIManager.UIPageType.Chat_Message && GetOtherPlayerID(conversation) == chattingPlayer.playerID)
+        {
+            LoadMessagePage(chattingPlayer);
+        }
+
+        int sum = playerConversationTable.Sum(targetConversations => targetConversations.Value.Count(targetConversation => 
+        {
+            if(!targetConversation.Value.hasRead && targetConversation.Value.receiverPlayerID == UserManager.Instance.User.Player.PlayerID)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }));
+        if (sum == 0)
+        {
+            unReadMessageAmount.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            unReadMessageAmount.transform.parent.gameObject.SetActive(true);
+            unReadMessageAmount.text = sum.ToString();
+        }
     }
 
     public void LoadChatRecord()
@@ -99,7 +126,7 @@ public class ChatUIManager : MonoBehaviour {
             Image chatFriendImage = tmp.transform.FindChild("Image").GetComponent<Image>();
 
             PlayerInformation opponentPlayer;
-            PlayerInformationManager.Instance.FindPlayerInformation(GetOtherPlayerID(entry.Value[0]), out opponentPlayer);
+            PlayerInformationManager.Instance.FindPlayerInformation(GetOtherPlayerID(entry.Value.Values.First()), out opponentPlayer);
 
             chatFriendName.text = opponentPlayer.nickname;
 
@@ -146,46 +173,59 @@ public class ChatUIManager : MonoBehaviour {
         titleText.text = chatPlayer.nickname;
         // Instantiate Message Bubble and put under content
         List<int> renderedMessage = new List<int>();
-        List<PlayerConversation> conversation = new List<PlayerConversation>();
+        Dictionary<int, PlayerConversation> conversation = new Dictionary<int, PlayerConversation>();
         if (playerConversationTable.ContainsKey(chatPlayer.playerID))
             conversation = playerConversationTable[chatPlayer.playerID];
 
-        foreach (var entry in conversation.OrderBy(x => x.message.sendTime))
+        foreach (var entry in conversation.OrderBy(x => x.Value.message.sendTime))
         {
-            // Make sure not rendered same message
-            if (renderedMessage.Contains(entry.message.playerMessageID)) return;
-            renderedMessage.Add(entry.message.playerMessageID);
+            if (renderedMessage.Contains(entry.Value.message.playerMessageID)) return;
+            renderedMessage.Add(entry.Value.message.playerMessageID);
 
-            if (entry.receiverPlayerID == UserManager.Instance.User.Player.PlayerID)
+            if (entry.Value.receiverPlayerID == UserManager.Instance.User.Player.PlayerID)
             {
                 GameObject bubble = Instantiate(receiveMessageBubble);
                 Text textObj = bubble.transform.GetComponentInChildren<Text>();
-                textObj.text = entry.message.content;
+                textObj.text = entry.Value.message.content;
 
                 bubble.transform.SetParent(messageBubbleContent.transform);
                 bubble.GetComponent<RectTransform>().localScale = Vector2.one;
-                // Adjust bubble height
-                //bubble.transform.Find("Bubble").GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.gameObject.GetComponent<RectTransform>().rect.height + 10);
+                bubble.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
+                if (!entry.Value.hasRead)
+                {
+                    UserManager.Instance.User.Player.OperationManager.ReadPlayerMessage(entry.Value.message.playerMessageID);
+                }
             }
-            else if (entry.receiverPlayerID == chatPlayer.playerID)
+            else if (entry.Value.receiverPlayerID == chatPlayer.playerID)
             {
                 GameObject bubble = Instantiate(sendMessageBubble);
                 Text textObj = bubble.transform.GetComponentInChildren<Text>();
-                textObj.text = entry.message.content;
+                textObj.text = entry.Value.message.content;
 
                 bubble.transform.SetParent(messageBubbleContent.transform);
                 bubble.GetComponent<RectTransform>().localScale = Vector2.one;
-                // Adjust bubble height
-                //bubble.transform.Find("Bubble").GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.gameObject.GetComponent<RectTransform>().rect.height + 10);
+                bubble.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
             }
         }
     }
 
     public void SendMessageToChattingPlayer()
     {
-        UserManager.Instance.User.Player.OperationManager.SendMessage(chattingPlayer.playerID , messageInputField.text);
+        if (IsOnlyWhiteSpaceOrEmpty(messageInputField.text))
+            return;
+
+        UserManager.Instance.User.Player.OperationManager.SendMessage(chattingPlayer.playerID, messageInputField.text);
 
         messageInputField.text = null;
         LoadMessagePage(chattingPlayer);
+    }
+
+    private bool IsOnlyWhiteSpaceOrEmpty(string s)
+    {
+        foreach (char c in s)
+        {
+            if (c != ' ') return false;
+        }
+        return true;
     }
 }
