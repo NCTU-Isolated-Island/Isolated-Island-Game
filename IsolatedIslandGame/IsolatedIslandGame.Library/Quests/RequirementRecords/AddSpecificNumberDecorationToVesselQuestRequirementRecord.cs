@@ -41,13 +41,29 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         }
         internal override void RegisterObserverEvents(Player player)
         {
-            player.Vessel.OnDecorationChange += (changeType, vesselID, decoration) =>
+            if (player.Vessel == null)
             {
-                if (!IsSufficient && changeType == Protocol.DataChangeType.Add)
+                player.OnBindVessel += (vessel) => 
                 {
-                    AddedDecorationCount = AddedDecorationCount + 1;
-                }
-            };
+                    vessel.OnDecorationChange += (changeType, vesselID, decoration) =>
+                    {
+                        if (!IsSufficient && changeType == Protocol.DataChangeType.Add)
+                        {
+                            AddedDecorationCount = AddedDecorationCount + 1;
+                        }
+                    };
+                };
+            }
+            else
+            {
+                player.Vessel.OnDecorationChange += (changeType, vesselID, decoration) =>
+                {
+                    if (!IsSufficient && changeType == Protocol.DataChangeType.Add)
+                    {
+                        AddedDecorationCount = AddedDecorationCount + 1;
+                    }
+                };
+            }
         }
     }
 }

@@ -41,17 +41,37 @@ namespace IsolatedIslandGame.Library.Quests.RequirementRecords
         }
         internal override void RegisterObserverEvents(Player player)
         {
-            if (!IsSufficient && player.Vessel.LocatedOceanType == (Requirement as StayInSpecificOceanQuestRequirement).SpecificOceanType)
+            if (player.Vessel == null)
             {
-                HasStayedInSpecificOcean = true;
+                player.OnBindVessel += (vessel) => 
+                {
+                    if (!IsSufficient && vessel.LocatedOceanType == (Requirement as StayInSpecificOceanQuestRequirement).SpecificOceanType)
+                    {
+                        HasStayedInSpecificOcean = true;
+                    }
+                    vessel.OnVesselTransformUpdated += (vesselID, locationX, locationY, rotationEulerAngleY, locatedOceanType) =>
+                    {
+                        if (!IsSufficient && locatedOceanType == (Requirement as StayInSpecificOceanQuestRequirement).SpecificOceanType)
+                        {
+                            HasStayedInSpecificOcean = true;
+                        }
+                    };
+                };
             }
-            player.Vessel.OnVesselTransformUpdated += (vesselID, locationX, locationY, rotationEulerAngleY, locatedOceanType) =>
+            else
             {
-                if (!IsSufficient && locatedOceanType == (Requirement as StayInSpecificOceanQuestRequirement).SpecificOceanType)
+                if (!IsSufficient && player.Vessel.LocatedOceanType == (Requirement as StayInSpecificOceanQuestRequirement).SpecificOceanType)
                 {
                     HasStayedInSpecificOcean = true;
                 }
-            };
+                player.Vessel.OnVesselTransformUpdated += (vesselID, locationX, locationY, rotationEulerAngleY, locatedOceanType) =>
+                {
+                    if (!IsSufficient && locatedOceanType == (Requirement as StayInSpecificOceanQuestRequirement).SpecificOceanType)
+                    {
+                        HasStayedInSpecificOcean = true;
+                    }
+                };
+            }
         }
     }
 }
