@@ -10,18 +10,12 @@ public class MissionSetBehavior : MonoBehaviour {
     private QuestRecordInformation information;
     private Button button;
 
-	private void SetButtonListener()
+    private void SetButtonListener()
     {
         button = gameObject.GetComponent<Button>();
-
-		if (information.isFinished == false)
-			button.onClick.AddListener (delegate {
-				MissionUIManager.Instance.OpenMissionDetailPage (information);
-			});
-		else
-			button.onClick.AddListener (delegate {
-				UserManager.Instance.User.Player.OperationManager.TakeQuestReward(information.questRecordID);
-			});
+        button.onClick.AddListener(delegate {
+            MissionUIManager.Instance.OpenMissionDetailPage(information);
+        });
     }
 
     public void SetQuestInfo(QuestRecordInformation information)

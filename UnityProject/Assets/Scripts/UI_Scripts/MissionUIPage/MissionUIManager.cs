@@ -41,10 +41,27 @@ public class MissionUIManager : MonoBehaviour
 		Text missionReward = missionDetailContent.transform.Find ("MissionRewardTitle/MissionRewardContent").GetComponent<Text> ();
 		Image missionIcon = missionDetailContent.transform.Find ("MissionIcon").GetComponent<Image> ();
 
-//		print (information.questName);
-//		print (information.questDescription);
-//		print (information.requirementsDescription);
-//		print (information.rewardsDescription);
+        Button takeRewardButton = missionDetailContent.transform.Find("TakeRewardButton").GetComponent<Button>();
+
+        //		print (information.questName);
+        //		print (information.questDescription);
+        //		print (information.requirementsDescription);
+        //		print (information.rewardsDescription);
+
+        if (information.isFinished)
+        {
+            takeRewardButton.gameObject.SetActive(true);
+
+            takeRewardButton.onClick.AddListener(delegate
+            {
+                UserManager.Instance.User.Player.OperationManager.TakeQuestReward(information.questRecordID);
+                missionDetailScrollView.SetActive(false);
+            });
+        }
+        else
+        {
+            takeRewardButton.gameObject.SetActive(false);
+        }
 
         missionName.text = information.questName;
         missionDescription.text = information.questDescription;
@@ -147,7 +164,6 @@ public class MissionUIManager : MonoBehaviour
 				finishedImage.gameObject.SetActive (true);
 
             missionName.text = questRecordInformation.questName;
-
 
             switch (questRecordInformation.questType) {
 			case QuestType.QR_Code:

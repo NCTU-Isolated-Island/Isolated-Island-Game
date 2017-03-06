@@ -162,6 +162,9 @@ public class ChatUIManager : MonoBehaviour {
                 Text textObj = bubble.transform.GetComponentInChildren<Text>();
                 textObj.text = entry.message.content;
 
+                if (entry.hasRead == false)
+                    UserManager.Instance.User.Player.OperationManager.ReadPlayerMessage(entry.message.playerMessageID);
+
                 bubble.transform.SetParent(messageBubbleContent.transform);
                 bubble.GetComponent<RectTransform>().localScale = Vector2.one;
                 // Adjust bubble height
@@ -183,9 +186,21 @@ public class ChatUIManager : MonoBehaviour {
 
     public void SendMessageToChattingPlayer()
     {
-        UserManager.Instance.User.Player.OperationManager.SendMessage(chattingPlayer.playerID , messageInputField.text);
+        if (IsOnlyWhiteSpaceOrEmpty(messageInputField.text))
+            return;
+
+        UserManager.Instance.User.Player.OperationManager.SendMessage(chattingPlayer.playerID, messageInputField.text);
 
         messageInputField.text = null;
         LoadMessagePage(chattingPlayer);
+    }
+
+    private bool IsOnlyWhiteSpaceOrEmpty(string s)
+    {
+        foreach (char c in s)
+        {
+            if (c != ' ') return false;
+        }
+        return true;
     }
 }
