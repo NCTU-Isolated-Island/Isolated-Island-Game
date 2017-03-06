@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraManager : MonoBehaviour {
-
+public class CameraManager : MonoBehaviour
+{
 	public static CameraManager Instance { get; private set; }
 
 	private float MoveCameraDelay = 1.5f;

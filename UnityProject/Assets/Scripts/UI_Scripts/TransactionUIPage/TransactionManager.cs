@@ -154,26 +154,22 @@ public class TransactionManager : MonoBehaviour
 
     public void OnTransactionStart(Transaction transaction)
     {
-        // Swap to Transaction Page
-        UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
-
-		if (transaction.AccepterPlayerID != UserManager.Instance.User.Player.PlayerID)
-			opponentPlayerID = transaction.AccepterPlayerID;
-		else
-			opponentPlayerID = transaction.RequesterPlayerID;
-
-        // Ui Init Setting
-        InitialSetting();
-
         // Event Register
         thisTransaction = transaction;
         thisTransaction.OnTransactionItemChange += OnTransactionItemChange;
         thisTransaction.OnTransactionConfirmStatusChange += OnTransactionConfirmStatusChange;
         thisTransaction.OnTransactionEnd += OnTransactionEnd;
 
-		// call API
-		//ShowOpponentVessel();
-	}
+        UIManager.Instance.SwapPage(UIManager.UIPageType.Transaction);
+
+        if (transaction.AccepterPlayerID != UserManager.Instance.User.Player.PlayerID)
+            opponentPlayerID = transaction.AccepterPlayerID;
+        else
+            opponentPlayerID = transaction.RequesterPlayerID;
+
+        // Ui Init Setting
+        InitialSetting();
+    }
 
     public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
     {
