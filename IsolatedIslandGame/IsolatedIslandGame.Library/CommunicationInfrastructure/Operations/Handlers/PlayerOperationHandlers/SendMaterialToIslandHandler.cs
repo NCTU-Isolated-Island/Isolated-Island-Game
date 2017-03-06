@@ -20,10 +20,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 lock(subject.Inventory)
                 {
                     Item item;
-                    if(ItemManager.Instance.FindItem(materialItemID, out item) && item is Material && subject.Inventory.RemoveItemCheck(materialItemID, 1))
+                    if(ItemManager.Instance.FindItem(materialItemID, out item) && item is Material && subject.Inventory.RemoveItemCheck(materialItemID, 1) && Island.Instance.SendMaterial(subject, item as Material))
                     {
-                        subject.Inventory.RemoveItem(materialItemID, 1);
-                        return Island.Instance.SendMaterial(subject, item as Material);
+                        if (Island.Instance.SendMaterial(subject, item as Material))
+                        {
+                            subject.Inventory.RemoveItem(materialItemID, 1);
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                     else if(!ItemManager.Instance.FindItem(materialItemID, out item))
                     {
