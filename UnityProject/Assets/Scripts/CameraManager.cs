@@ -3,14 +3,22 @@ using System.Collections;
 
 public class CameraManager : MonoBehaviour
 {
+    enum CameraStatus
+    {
+        FirstPerson,
+        Near,
+        Far
+    }
 	public static CameraManager Instance { get; private set; }
 
 	private float MoveCameraDelay = 1.5f;
 
 	private GameObject Camera;
 	public bool using_cor;
+    private CameraStatus cameraStatus = CameraStatus.Near;
+    private GameObject selfVessel;
 
-	void Awake()
+    void Awake()
 	{
 		Camera = GameObject.FindGameObjectWithTag("MainCamera");
 		Instance = this;
@@ -19,11 +27,11 @@ public class CameraManager : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.A))
-			CameraRotateHorizontal(10);
-		if (Input.GetKeyDown(KeyCode.S))
-			CameraRotateHorizontal(-10);
-
+        //if(cameraStatus == CameraStatus.FirstPerson)
+        //{
+        //    ToFirstPerson(selfVessel);
+        //    selfVessel.transform.Find("CameraAnchor").rotation = Quaternion.identity;
+        //}
 	}
 
 	IEnumerator MoveObject(Transform source, Transform target, float overTime)
@@ -56,7 +64,7 @@ public class CameraManager : MonoBehaviour
 		}
 		source.localPosition = target.localPosition;
 		using_cor = false;
-		target.root.Find("CameraAnchor").rotation = Quaternion.identity;
+		target.root.Find("CameraAnchor").localRotation = Quaternion.identity;
 	}
 
 	public void ToFirstPerson(GameObject user)
@@ -65,7 +73,9 @@ public class CameraManager : MonoBehaviour
 
 		//Camera.transform.parent = Camera.transform.parent.parent;
 		using_cor = true;
-		StartCoroutine(MoveObjectToFPV(Camera.transform, user.transform.Find("FirstPersonAnchor"),MoveCameraDelay));
+        cameraStatus = CameraStatus.FirstPerson;
+        selfVessel = user;
+        StartCoroutine(MoveObjectToFPV(Camera.transform, user.transform.Find("FirstPersonAnchor"),MoveCameraDelay));
 	}
 
 	public void ToNearAnchor (GameObject user)
@@ -75,7 +85,8 @@ public class CameraManager : MonoBehaviour
 //		user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
 		//Camera.transform.parent = user.transform.Find("CameraAnchor");
 		using_cor = true;
-		Camera.transform.parent = user.transform;
+        cameraStatus = CameraStatus.Near;
+        Camera.transform.parent = user.transform;
 		StartCoroutine(MoveObject(Camera.transform, user.transform.Find("NearAnchor"), MoveCameraDelay));
 	}
 
@@ -86,7 +97,8 @@ public class CameraManager : MonoBehaviour
 		//user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
 		//Camera.transform.parent = user.transform.Find("CameraAnchor");
 		using_cor = true;
-		Camera.transform.parent = user.transform;
+        cameraStatus = CameraStatus.Far;
+        Camera.transform.parent = user.transform;
 		StartCoroutine(MoveObject(Camera.transform, user.transform.Find("FarAnchor"), MoveCameraDelay));
 	}
 
