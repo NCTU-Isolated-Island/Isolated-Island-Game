@@ -389,6 +389,12 @@ public class GameManager : MonoBehaviour
                             ) as GameObject;
 
                         userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.OwnerPlayerID);
+                        if(vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
+                        {
+                            userVesselGameObject.tag = "SelfVessel";
+                            CombinationalOceanController.Instance.UpdateSubCenter(userVesselGameObject.transform.position);
+                            print("Reset Position!");
+                        }
 
                         foreach (Decoration decoration in vessel.Decorations)
                         {
