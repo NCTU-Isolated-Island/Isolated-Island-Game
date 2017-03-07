@@ -108,6 +108,10 @@ public class UIManager : MonoBehaviour
         UIPageType tmp = PageStack.Pop();
         //
         UIPageList[(int)PageStack.Peek()].SetActive(true);
+        if (PageStack.Peek() == UIPageType.Chat_Record)
+        {
+            ChatUIManager.Instance.LoadChatRecord();
+        }
         //
         StartCoroutine(RemovingPage(UIPageList[(int)tmp]));
     }

@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -64,12 +65,12 @@ public class FriendUIManager : MonoBehaviour {
     public void LoadFriends()
     {
         //print("Loading Friends");
-        foreach(Transform renderedFriend in friendSetContent.transform)
+        foreach (Transform renderedFriend in friendSetContent.transform)
         {
             Destroy(renderedFriend.gameObject);
         }
 
-        foreach (var friend in UserManager.Instance.User.Player.FriendInformations)
+        foreach (var friend in UserManager.Instance.User.Player.FriendInformations.OrderBy(CompareOnlineFriend))
         {
             GameObject tmp;
             PlayerInformation friendInformation;
@@ -80,12 +81,14 @@ public class FriendUIManager : MonoBehaviour {
                     tmp = Instantiate(invitingFriendSetPrefab);
                     tmp.transform.SetParent(friendSetContent.transform);
                     tmp.gameObject.GetComponent<InvitingFriendSetBehavior>().information = friendInformation;
+                    tmp.gameObject.GetComponent<InvitingFriendSetBehavior>().InitialButtonStatus();
                 }
                 else
                 {
                     tmp = Instantiate(confirmedFriendSetPrefab);
                     tmp.transform.SetParent(friendSetContent.transform);
                     tmp.gameObject.GetComponent<ConfirmedFriendSetBehavior>().information = friendInformation;
+                    tmp.gameObject.GetComponent<ConfirmedFriendSetBehavior>().InitialButtonStatus();
                 }
 
                 tmp.GetComponent<RectTransform>().localScale = Vector2.one;
@@ -123,8 +126,17 @@ public class FriendUIManager : MonoBehaviour {
         }
     }
 
-	void LoadFriendList()
-	{
-		
-	}
+	private int CompareOnlineFriend(FriendInformation x)
+    {
+        PlayerInformation information;
+        if (PlayerInformationManager.Instance.FindPlayerInformation(x.friendPlayerID, out information))
+        {
+            if (GameManager.Instance.UserGameObject.ContainsKey(information.playerID))
+                return -1;
+            else
+                return 1;
+        }
+        else
+            return 0;
+    }
 }
