@@ -82,6 +82,10 @@ namespace IsolatedIslandGame.Client.Communication
                     peer.EstablishEncryption();
                     break;
                 case StatusCode.Disconnect:
+                case StatusCode.DisconnectByServer:
+                case StatusCode.DisconnectByServerUserLimit:
+                case StatusCode.DisconnectByServerLogic:
+                case StatusCode.TimeoutDisconnect:
                     ServerConnected = false;
                     break;
                 case StatusCode.EncryptionEstablished:
