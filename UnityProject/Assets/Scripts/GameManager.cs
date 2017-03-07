@@ -393,7 +393,7 @@ public class GameManager : MonoBehaviour
                         {
                             userVesselGameObject.tag = "SelfVessel";
                             CombinationalOceanController.Instance.UpdateSubCenter(userVesselGameObject.transform.position);
-                            print("Reset Position!");
+                            CombinationalOceanController.Instance.UpdateCenter(userVesselGameObject.transform.position);
                         }
 
                         foreach (Decoration decoration in vessel.Decorations)
