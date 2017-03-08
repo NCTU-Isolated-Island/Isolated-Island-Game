@@ -60,14 +60,6 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
-		if(Input.GetKeyDown(KeyCode.Alpha0))
-		{
-			int userID = 24;
-
-			AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[userID],
-				new Vector3(0,-10.3f,40.8f),Quaternion.Euler(12.8f,0,0));
-		}
-
 		if(EventSystem.current.currentSelectedGameObject == null)
 		{
 			CheckDoubleClick();

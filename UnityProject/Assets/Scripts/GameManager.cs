@@ -294,7 +294,7 @@ public class GameManager : MonoBehaviour
                 switch (changeType)
                 {
                     case DataChangeType.Add:
-					{print(decoration.Material.ItemID);
+					{//print(decoration.Material.ItemID);
                             GameObject decorationGameObject = Instantiate(
                                 elementModels[decoration.Material.ItemID],
                                 userVesselGameObject.transform.Find("Decorations")

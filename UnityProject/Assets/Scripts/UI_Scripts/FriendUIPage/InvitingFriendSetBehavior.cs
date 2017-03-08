@@ -17,6 +17,11 @@ public class InvitingFriendSetBehavior : MonoBehaviour {
 
     void Start()
     {
+        
+    }
+
+    public void InitialButtonStatus()
+    {
         friendSetButton = gameObject.GetComponent<Button>();
         friendSetButton.onClick.AddListener(
             delegate
@@ -25,11 +30,6 @@ public class InvitingFriendSetBehavior : MonoBehaviour {
                 CameraManager.Instance.ToNearAnchor(GameManager.Instance.UserGameObject[information.playerID]);
                 FriendUIManager.Instance.gameObject.SetActive(false);
             });
-        UpdateButtonStatus();
-    }
-
-    public void UpdateButtonStatus()
-    {
         //print("UpdateButtonStatus");
         if (PlayerInformationManager.Instance.FindPlayerInformation(information.playerID, out information))
         {

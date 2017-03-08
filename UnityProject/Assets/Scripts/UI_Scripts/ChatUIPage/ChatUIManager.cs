@@ -121,9 +121,12 @@ public class ChatUIManager : MonoBehaviour {
             tmp.transform.SetParent(messageSetContent.transform);
             tmp.GetComponent<RectTransform>().localScale = Vector2.one;
 
-            Text chatFriendName = tmp.transform.FindChild("chatFriendName").GetComponent<Text>();
-            Text chatFriendGroup = tmp.transform.FindChild("chatFriendGroup").GetComponent<Text>();
-            Image chatFriendImage = tmp.transform.FindChild("Image").GetComponent<Image>();
+            Text chatFriendName = tmp.transform.Find("chatFriendName").GetComponent<Text>();
+            Text chatFriendGroup = tmp.transform.Find("chatFriendGroup").GetComponent<Text>();
+            Image chatFriendImage = tmp.transform.Find("Image").GetComponent<Image>();
+
+            Text lastMessageRecord = tmp.transform.Find("lastMessageRecord").GetComponent<Text>();
+            Text unReadAmount = tmp.transform.Find("UnReadImage/UnReadAmount").GetComponent<Text>();
 
             PlayerInformation opponentPlayer;
             PlayerInformationManager.Instance.FindPlayerInformation(GetOtherPlayerID(entry.Value.Values.First()), out opponentPlayer);
@@ -144,6 +147,21 @@ public class ChatUIManager : MonoBehaviour {
                     chatFriendGroup.text = "自然";
                     chatFriendImage.sprite = Resources.Load<Sprite>("GroupIcon/farmer");
                     break;
+            }
+
+            if (playerConversationTable.ContainsKey(opponentPlayer.playerID))
+                lastMessageRecord.text = playerConversationTable[opponentPlayer.playerID].OrderBy(x => x.Value.message.sendTime).Last().Value.message.content;
+
+            int unReadCount = playerConversationTable[opponentPlayer.playerID].Count(x =>
+            {
+                return !x.Value.hasRead && x.Value.receiverPlayerID == UserManager.Instance.User.Player.PlayerID;
+            });
+            if (unReadCount == 0)
+                unReadAmount.transform.parent.gameObject.SetActive(false);
+            else
+            {
+                unReadAmount.transform.parent.gameObject.SetActive(true);
+                unReadAmount.text = unReadCount.ToString();
             }
 
             tmp.GetComponent<Button>().onClick.AddListener(delegate{

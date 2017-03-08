@@ -22,6 +22,11 @@ public class ConfirmedFriendSetBehavior : MonoBehaviour {
 
     void Start()
     {
+        
+    }
+
+    public void InitialButtonStatus()
+    {
         friendSetButton = gameObject.GetComponent<Button>();
         friendSetButton.onClick.AddListener(
             delegate
@@ -37,12 +42,6 @@ public class ConfirmedFriendSetBehavior : MonoBehaviour {
             UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Message);
             ChatUIManager.Instance.LoadMessagePage(information);
         });
-
-        UpdateButtonStatus();
-    }
-
-    public void UpdateButtonStatus()
-    {
         //print("UpdateButtonStatus");
         if (PlayerInformationManager.Instance.FindPlayerInformation(information.playerID, out information))
         {

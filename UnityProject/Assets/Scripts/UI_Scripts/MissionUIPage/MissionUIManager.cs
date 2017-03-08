@@ -14,7 +14,6 @@ public class MissionUIManager : MonoBehaviour
     private GameObject questSet;
     [SerializeField]
     private GameObject missionSetContent;
-
     [SerializeField]
     private GameObject missionDetailScrollView;
     [SerializeField]
@@ -99,7 +98,6 @@ public class MissionUIManager : MonoBehaviour
                 missionIcon.sprite = Resources.Load<Sprite>("QuestIcon/QuestIndependent");
                 break;
         }
-
         viewingQuest = information;
     }
 
