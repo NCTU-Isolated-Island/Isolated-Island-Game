@@ -20,9 +20,8 @@ public class MainBoatUIManager : MonoBehaviour {
 
 	[SerializeField]
 	private GameObject getMaterialPanel;
-    //
-
-    //
+    [SerializeField]
+    private Text areaTitle;
 
     void Awake()
     {
@@ -39,96 +38,107 @@ public class MainBoatUIManager : MonoBehaviour {
     }
 
     void Start()
-	{
-		InitSetting ();
+    {
+        InitSetting();
 
-		foreach (Button button in horizontalButtonList) {
-			switch (button.name) {
-			case "ToFPVButton":
-				button.onClick.AddListener ((delegate {
-					PlayerController.Instance.ChangeViewMode (PlayerController.ViewMode.FirstPerson);
-				}));
-				break;
-			case "ToBirdViewButton":
-				button.onClick.AddListener (delegate {
-					PlayerController.Instance.ChangeViewMode (PlayerController.ViewMode.BirdView);
-				});
-				break;
-			case "ToNormalViewButton":
-				button.onClick.AddListener (delegate {
-					PlayerController.Instance.ChangeViewMode (PlayerController.ViewMode.NormalView);
-				});
-				break;
-			}
-			button.onClick.AddListener (delegate {
-				if (MainBoatUIManager.Instance.maskStatus)
-					MainBoatUIManager.Instance.ReverseMaskStatus ();
-			});
-		}
+        foreach (Button button in horizontalButtonList)
+        {
+            switch (button.name)
+            {
+                case "ToFPVButton":
+                    button.onClick.AddListener((delegate
+                    {
+                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.FirstPerson);
+                    }));
+                    break;
+                case "ToBirdViewButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.BirdView);
+                    });
+                    break;
+                case "ToNormalViewButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        PlayerController.Instance.ChangeViewMode(PlayerController.ViewMode.NormalView);
+                    });
+                    break;
+            }
+            button.onClick.AddListener(delegate
+            {
+                if (MainBoatUIManager.Instance.maskStatus)
+                    MainBoatUIManager.Instance.ReverseMaskStatus();
+            });
+        }
 
-		foreach (Button button in verticalButtonList) {
-			switch (button.name) {
-			case "ToIngredientsButton":
-				button.onClick.AddListener (delegate {
-					UIManager.Instance.SwapPage (UIManager.UIPageType.Inventory);
-				});
-				break;
-			case "ToBluePrintButton":
-				button.onClick.AddListener (delegate {
-					UIManager.Instance.SwapPage (UIManager.UIPageType.BluePrint);
-				});
-				break;
-			case "ToMissionButton":
-				button.onClick.AddListener (delegate {
-					UIManager.Instance.SwapPage (UIManager.UIPageType.Mission);
-				});
-				break;
-			case "ToFriendButton":
-				button.onClick.AddListener (delegate {
-					UIManager.Instance.SwapPage (UIManager.UIPageType.Friend);
-				});
-				break;
-			case "ToChatButton":
-				button.onClick.AddListener (delegate {
-					UIManager.Instance.SwapPage (UIManager.UIPageType.Chat_Record);
-				});
-				break;
-			case "ToEverydayButton":
+        foreach (Button button in verticalButtonList)
+        {
+            switch (button.name)
+            {
+                case "ToIngredientsButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
+                    });
+                    break;
+                case "ToBluePrintButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        UIManager.Instance.SwapPage(UIManager.UIPageType.BluePrint);
+                    });
+                    break;
+                case "ToMissionButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        UIManager.Instance.SwapPage(UIManager.UIPageType.Mission);
+                    });
+                    break;
+                case "ToFriendButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        UIManager.Instance.SwapPage(UIManager.UIPageType.Friend);
+                    });
+                    break;
+                case "ToChatButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Record);
+                    });
+                    break;
+                case "ToEverydayButton":
                     // TODO : Add listener to this button
-				break;
-			case "DrawMaterialButton":
-				button.onClick.AddListener (delegate {
-					Debug.Log ("Draw Material");
-					UserManager.Instance.User.Player.OperationManager.DrawMaterial ();
-				});
-				break;
-			case "ToCombineButton":
-				button.onClick.AddListener (delegate {
-					UIManager.Instance.SwapPage (UIManager.UIPageType.Combine);
-				});
-				break;
-			case "ToPutItemButton":
-				button.onClick.AddListener (delegate {
-					PlayerDecorationManager.Instance.CurrentControlMode = PlayerDecorationManager.ControlMode.Decorate;
-					UIManager.Instance.SwapPage (UIManager.UIPageType.PutItem);
-				});
-				break;
-			}
-			//button.onClick.AddListener(delegate
-			//{
-			//    if (MainBoatUIManager.Instance.maskStatus)
-			//        MainBoatUIManager.Instance.ReverseMaskStatus();
-			//});
-		}
-		if (UserManager.Instance.User.IsOnline) {
-			RegisterPlayerEvents (UserManager.Instance.User.Player);
-		} else {
-			UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
-		}
+                    break;
+                case "DrawMaterialButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        Debug.Log("Draw Material");
+                        UserManager.Instance.User.Player.OperationManager.DrawMaterial();
+                    });
+                    break;
+                case "ToCombineButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        UIManager.Instance.SwapPage(UIManager.UIPageType.Combine);
+                    });
+                    break;
+                case "ToPutItemButton":
+                    button.onClick.AddListener(delegate
+                    {
+                        PlayerDecorationManager.Instance.CurrentControlMode = PlayerDecorationManager.ControlMode.Decorate;
+                        UIManager.Instance.SwapPage(UIManager.UIPageType.PutItem);
+                    });
+                    break;
+            }
+        }
+        if (UserManager.Instance.User.IsOnline)
+        {
+            RegisterPlayerEvents(UserManager.Instance.User.Player);
+        }
+        else {
+            UserManager.Instance.User.OnPlayerOnline += RegisterPlayerEvents;
+        }
+    }
 	
-	}
-	
-
 	void RegisterPlayerEvents(Player player)
 	{
 		player.ResponseManager.OnDrawMaterialResponse += 
@@ -141,9 +151,25 @@ public class MainBoatUIManager : MonoBehaviour {
 				break;
 			}
 		});
-	}
+        if(player.Vessel == null)
+        {
+            player.OnBindVessel += (vessel) => 
+            {
+                vessel.OnVesselTransformUpdated += Vessel_OnVesselTransformUpdated;
+            };
+        }
+        else
+        {
+            player.Vessel.OnVesselTransformUpdated += Vessel_OnVesselTransformUpdated;
+        }
+    }
 
-	void RenderGetMaterialPanel(Item item , int count)
+    private void Vessel_OnVesselTransformUpdated(int vesselID, float locationX, float locationY, float rotationEulerAngleY, OceanType locatedOceanType)
+    {
+        areaTitle.text = string.Format("{0}海域", OceanNameMapping.GetOceanName(locatedOceanType));
+    }
+
+    void RenderGetMaterialPanel(Item item , int count)
 	{
 		GameObject tmp = Instantiate (getMaterialPanel);
 		tmp.transform.SetParent (transform);

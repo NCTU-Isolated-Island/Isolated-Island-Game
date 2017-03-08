@@ -41,28 +41,28 @@ public class PlayerIslandController : MonoBehaviour {
 
 
 
-	public IEnumerator ContributeIsland(int itemID)
-	{
+	//public IEnumerator ContributeIsland(int itemID)
+	//{
 		
-		yield return PlayerController.Instance.GetCurrentArea();
+	//	yield return PlayerController.Instance.GetCurrentArea();
 
-		bool containTrigger = false;
-		foreach(GameObject entry in PlayerController.Instance.InArea)
-		{
-			if(entry.name == "IslandTrigger")
-			{
-				containTrigger = true;
-			}
-		}
+	//	bool containTrigger = false;
+	//	foreach(GameObject entry in PlayerController.Instance.InArea)
+	//	{
+	//		if(entry.name == "IslandTrigger")
+	//		{
+	//			containTrigger = true;
+	//		}
+	//	}
 
-		if(!containTrigger)
-			ShowWarning("必須在竹湖旁才能佔領");
-			yield return null;
+	//	if(!containTrigger)
+	//		ShowWarning("必須在竹湖旁才能佔領");
+	//		yield return null;
 
-		UserManager.Instance.User.Player.OperationManager.SendMaterialToIsland(itemID);
+	//	UserManager.Instance.User.Player.OperationManager.SendMaterialToIsland(itemID);
 
-		//Refresh item list?
-	}
+	//	//Refresh item list?
+	//}
 
 	public void ShowWarning(string text)
 	{
