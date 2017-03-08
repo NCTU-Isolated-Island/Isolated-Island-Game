@@ -160,7 +160,7 @@ public class ChatUIManager : MonoBehaviour {
                 unReadAmount.transform.parent.gameObject.SetActive(false);
             else
             {
-                unReadAmount.transform.parent.gameObject.SetActive(false);
+                unReadAmount.transform.parent.gameObject.SetActive(true);
                 unReadAmount.text = unReadCount.ToString();
             }
 
