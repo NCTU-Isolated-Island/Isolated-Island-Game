@@ -64,8 +64,8 @@ public class TransactionManager : MonoBehaviour
 
 	public void ShowOpponentVessel()
 	{
-		AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[opponentPlayerID] , new Vector3(0,-5.98f,31.5f) , Quaternion.Euler(15f,0,0));
-
+        //TODO : verify API usage
+		//AuxCameraSystem.Instance.ShowPlayerGameObject(GameManager.Instance.UserGameObject[opponentPlayerID] , new Vector3(0,-5.98f,31.5f) , Quaternion.Euler(15f,0,0));
 	}
 
     public void PutInItemFromInventory(Item puttingItem)
@@ -98,8 +98,6 @@ public class TransactionManager : MonoBehaviour
 
     public void OnReceiveTransactionRequest(int requesterPlayerID)
     {
-        //TODO
-        // Pop Receive Transaction UI , ask user to accept or not
         opponentPlayerID = requesterPlayerID;
         PlayerInformation opponentPlayer;
         PlayerInformationManager.Instance.FindPlayerInformation(requesterPlayerID, out opponentPlayer);
@@ -137,13 +135,10 @@ public class TransactionManager : MonoBehaviour
     public void ChangeTransactionItem(int transactionID, DataChangeType changeType, TransactionItemInfo info)
     {
         UserManager.Instance.User.Player.OperationManager.ChangeTransactionItem(transactionID, changeType, info);
-        //TODO
     }
 
     public void OnTransactionItemChange(int transactionID, int playerID, DataChangeType changeType, TransactionItemInfo info)
     {
-        //TODO
-        // Change the info of the OpponentItem
         if (UserManager.Instance.User.Player.PlayerID != playerID)
         {
             int index = info.PositionIndex;
@@ -165,7 +160,6 @@ public class TransactionManager : MonoBehaviour
     public void ConfirmTransaction()
     {
         UserManager.Instance.User.Player.OperationManager.ChangeTransactionConfirmStatus(thisTransaction.TransactionID , true);
-        //TODO
     }
 
     public void UnLockTransaction()
@@ -230,10 +224,6 @@ public class TransactionManager : MonoBehaviour
 
     public void OnTransactionEnd(int transactionID, bool isSuccessful)
     {
-        //TODO 
-        // If confirmed , Pop a UI indicating transaction complete
-        // If not , Pop a UI indicating transaction cancelled
-
         UIManager.Instance.ToMainPage();
 
         thisTransaction.OnTransactionItemChange -= OnTransactionItemChange;
@@ -248,15 +238,12 @@ public class TransactionManager : MonoBehaviour
         {
             UserManager.Instance.User.UserInform("交易通知", "交易失敗");
         }
-        //AuxCameraSystem.Instance.UnShow ();
     }
 
     // UI API
 
     public void UploadPutInItem(TransactionItemInfo info)
     {
-        //if (thisTransaction.IsLocked) return;
-
         if (MyTransactionItem[info.PositionIndex].amount == 0)
             ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Add, info);
         else
