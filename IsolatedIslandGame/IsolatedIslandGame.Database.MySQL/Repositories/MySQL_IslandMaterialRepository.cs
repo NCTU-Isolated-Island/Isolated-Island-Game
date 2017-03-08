@@ -88,5 +88,18 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
+        public override void UpdateTotalScore(GroupType groupType, int totalScore)
+        {
+            string sqlString = @"UPDATE IslandTotalScoreCollection SET TotalScore = @totalScore WHERE GroupType = @groupType;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("totalScore", totalScore);
+                command.Parameters.AddWithValue("groupType", (byte)groupType);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.ErrorFormat("MySQL_IslandMaterialRepository UpdateTotalScore no affected");
+                }
+            }
+        }
     }
 }

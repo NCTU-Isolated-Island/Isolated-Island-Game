@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.Quests
             private set
             {
                 hasGottenReward = value;
-                if (hasGottenReward == true)
+                if (hasGottenReward)
                 {
                     QuestRecordFactory.Instance?.MarkQuestRecordHasGottenReward(QuestRecordID);
                 }

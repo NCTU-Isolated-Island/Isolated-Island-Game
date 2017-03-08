@@ -1,7 +1,4 @@
-﻿using IsolatedIslandGame.Library;
-using IsolatedIslandGame.Library.Quests;
-using System.Collections;
-using System.Collections.Generic;
+﻿using IsolatedIslandGame.Library.Quests;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,5 +20,4 @@ public class MissionSetBehavior : MonoBehaviour {
         this.information = information;
 		SetButtonListener ();
     }
-	
 }

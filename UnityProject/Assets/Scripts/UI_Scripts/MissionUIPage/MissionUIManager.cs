@@ -10,26 +10,18 @@ public class MissionUIManager : MonoBehaviour
 
     public static MissionUIManager Instance { get; private set; }
 
-    // UI Variable
     [SerializeField]
-    private GameObject missionSet;
+    private GameObject questSet;
     [SerializeField]
     private GameObject missionSetContent;
-
-    //
 
     [SerializeField]
     private GameObject missionDetailScrollView;
     [SerializeField]
     private GameObject missionDetailContent;
-    //    [SerializeField]
-    //    private GameObject missionPrizeContent;
-    //    [SerializeField]
-    //    private GameObject missionPrizeSet;
 
     private QuestRecordInformation viewingQuest;
 
-    //
 
     public void OpenMissionDetailPage(QuestRecordInformation information)
     {
@@ -110,7 +102,6 @@ public class MissionUIManager : MonoBehaviour
 
         viewingQuest = information;
     }
-    //
 
     void Awake()
     {
@@ -152,22 +143,17 @@ public class MissionUIManager : MonoBehaviour
 
         foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations)
         {
-            if (questRecordInformation.isFinished && questRecordInformation.hasGottenReward)
+            if (questRecordInformation.hasGottenReward)
                 continue;
 
-            GameObject tmp = Instantiate(missionSet);
-            //
-            tmp.GetComponent<MissionSetBehavior>().SetQuestInfo(questRecordInformation);
-            //
-            Text missionName = tmp.transform.Find("MissionName").GetComponent<Text>();
-            Text missionType = tmp.transform.Find("MissionType").GetComponent<Text>();
-            Image missionIcon = tmp.transform.Find("MissionIcon").GetComponent<Image>();
-            Image finishedImage = tmp.transform.Find("FinishedImage").GetComponent<Image>();
+            GameObject questRow = Instantiate(questSet);
+            questRow.GetComponent<MissionSetBehavior>().SetQuestInfo(questRecordInformation);
+            Text missionName = questRow.transform.Find("MissionName").GetComponent<Text>();
+            Text missionType = questRow.transform.Find("MissionType").GetComponent<Text>();
+            Image missionIcon = questRow.transform.Find("MissionIcon").GetComponent<Image>();
+            Image finishedImage = questRow.transform.Find("FinishedImage").GetComponent<Image>();
 
-            if (questRecordInformation.isFinished == false)
-                finishedImage.gameObject.SetActive(false);
-            else
-                finishedImage.gameObject.SetActive(true);
+            finishedImage.gameObject.SetActive(questRecordInformation.isFinished);
 
             missionName.text = questRecordInformation.questName;
 
@@ -223,8 +209,8 @@ public class MissionUIManager : MonoBehaviour
                     break;
             }
 
-            tmp.transform.SetParent(missionSetContent.transform);
-            tmp.transform.localScale = Vector3.one;
+            questRow.transform.SetParent(missionSetContent.transform);
+            questRow.transform.localScale = Vector3.one;
         }
     }
 
