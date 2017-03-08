@@ -24,10 +24,6 @@ public class TransactionManager : MonoBehaviour
     [SerializeField]
     private GameObject ReceiveTransactionRequestPanel;
     [SerializeField]
-    private GameObject MessagePanel;
-    //[SerializeField]
-    //private GameObject TransactionConfirmedPanel;
-    [SerializeField]
     private GameObject ChooseAmountPanel;
 
     [SerializeField]
@@ -52,7 +48,6 @@ public class TransactionManager : MonoBehaviour
         }
         TransactionUIPage.SetActive(false);
         ReceiveTransactionRequestPanel.SetActive(false);
-        MessagePanel.SetActive(false);
     }
 
     void Start()
@@ -94,22 +89,11 @@ public class TransactionManager : MonoBehaviour
         // Event Register
         UserManager.Instance.User.Player.OnTransactionRequest += OnReceiveTransactionRequest;
         UserManager.Instance.User.Player.OnTransactionStart += OnTransactionStart;
-
-        // UI Listener Register
     }
-
-    void OnDestroy()
-    {
-        UserManager.Instance.User.Player.OnTransactionRequest -= OnReceiveTransactionRequest;
-        UserManager.Instance.User.Player.OnTransactionStart -= OnTransactionStart;
-    }
-
-    // Server Service API
 
     public void SendTransactionRequest(int accepterPlayerID)
     {
         UserManager.Instance.User.Player.OperationManager.TransactionRequest(accepterPlayerID);
-        //TODO
     }
 
     public void OnReceiveTransactionRequest(int requesterPlayerID)
@@ -121,34 +105,13 @@ public class TransactionManager : MonoBehaviour
         PlayerInformationManager.Instance.FindPlayerInformation(requesterPlayerID, out opponentPlayer);
         ReceiveTransactionRequestPanel.transform.Find("Message").GetComponent<Text>().text
              = opponentPlayer.nickname + "發出交易請求";
-
-        //StartCoroutine(OnReceiveTransactionRequest_PopUI(true)); // Pop the UI
+        
         ReceiveTransactionRequestPanel.SetActive(true);
     }
-
-    //IEnumerator OnReceiveTransactionRequest_PopUI(bool OnOff) // true to pop , false to move back
-    //{
-    //    float pass_time = 0;
-    //    Vector3 ori = ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition;
-    //    while (pass_time < 0.5f)
-    //    {
-    //        if (OnOff == true)
-    //            ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition =
-    //                Vector3.Lerp(ori, Vector3.zero, pass_time / 0.5f);
-    //        else
-    //            ReceiveTransactionRequestPanel.GetComponent<RectTransform>().anchoredPosition =
-    //                Vector3.Lerp(ori, new Vector3(0, 105, 0), pass_time / 0.5f);
-
-    //        pass_time += Time.deltaTime;
-    //        yield return null;
-    //    }
-    //}
 
     public void AcceptTransaction()
     {
         UserManager.Instance.User.Player.OperationManager.AcceptTransaction(opponentPlayerID);
-        //TODO
-        //StartCoroutine(OnReceiveTransactionRequest_PopUI(false));
         ReceiveTransactionRequestPanel.SetActive(false);
     }
 
@@ -271,20 +234,21 @@ public class TransactionManager : MonoBehaviour
         // If confirmed , Pop a UI indicating transaction complete
         // If not , Pop a UI indicating transaction cancelled
 
+        UIManager.Instance.ToMainPage();
+
         thisTransaction.OnTransactionItemChange -= OnTransactionItemChange;
         thisTransaction.OnTransactionConfirmStatusChange -= OnTransactionConfirmStatusChange;
         thisTransaction.OnTransactionEnd -= OnTransactionEnd;
 
         if (isSuccessful)
-            MessagePanel.transform.FindChild("TransactionMessage").GetComponent<Text>().text = "交易成功";
+        {
+            UserManager.Instance.User.UserInform("交易通知", "交易成功");
+        }
         else
-            MessagePanel.transform.FindChild("TransactionMessage").GetComponent<Text>().text = "交易取消";
-        MessagePanel.SetActive(true);
-
-        // move back to previous UI page
-        //UIManager.Instance.ToPreviousPage();
-        UIManager.Instance.ToMainPage();
-        AuxCameraSystem.Instance.UnShow ();
+        {
+            UserManager.Instance.User.UserInform("交易通知", "交易失敗");
+        }
+        //AuxCameraSystem.Instance.UnShow ();
     }
 
     // UI API
@@ -298,18 +262,6 @@ public class TransactionManager : MonoBehaviour
         else
             ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Update, info);
     }
-
-    //public void UpLoadRemoveItem(TransactionItemInfo info)
-    //{
-    //    if (thisTransaction.IsLocked) return;
-
-    //    ChangeTransactionItem(thisTransaction.TransactionID, DataChangeType.Remove, info);
-    //}
-
-    //public void PopConfirmedPanel()
-    //{
-    //    TransactionConfirmedPanel.SetActive(true);
-    //}
 
     // Setting
 
@@ -337,7 +289,5 @@ public class TransactionManager : MonoBehaviour
         ConfirmTransactionButton.interactable = true;
         UnlockTransactionSlotButton.interactable = false;
     }
-
-    // TESTING
-
+    
 }

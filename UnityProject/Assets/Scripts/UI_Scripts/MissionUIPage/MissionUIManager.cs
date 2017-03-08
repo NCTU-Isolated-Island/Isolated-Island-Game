@@ -15,21 +15,11 @@ public class MissionUIManager : MonoBehaviour
     private GameObject missionSet;
     [SerializeField]
     private GameObject missionSetContent;
-
-    //
-
+    
     [SerializeField]
     private GameObject missionDetailScrollView;
     [SerializeField]
     private GameObject missionDetailContent;
-    //    [SerializeField]
-    //    private GameObject missionPrizeContent;
-    //    [SerializeField]
-    //    private GameObject missionPrizeSet;
-
-    private QuestRecordInformation viewingQuest;
-
-    //
 
     public void OpenMissionDetailPage(QuestRecordInformation information)
     {
@@ -107,8 +97,6 @@ public class MissionUIManager : MonoBehaviour
                 missionIcon.sprite = Resources.Load<Sprite>("QuestIcon/QuestIndependent");
                 break;
         }
-
-        viewingQuest = information;
     }
     //
 
