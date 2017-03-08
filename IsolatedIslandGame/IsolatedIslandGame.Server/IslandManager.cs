@@ -29,6 +29,7 @@ namespace IsolatedIslandGame.Server
             Island.Initial();
             Island.Instance.OnSendMaterial += SaveSendMaterialRecord;
             Island.Instance.OnTotalScoreUpdated += SystemManager.Instance.EventManager.SyncDataResolver.SyncIslandTotalScoreUpdated;
+            Island.Instance.OnTotalScoreUpdated += DatabaseService.RepositoryList.IslandMaterialRepository.UpdateTotalScore;
             Island.Instance.OnTodayMaterialRankingUpdated += SyncTodayMaterialRankingUpdated;
             Island.Instance.OnPlayerScoreRankingUpdated += SyncPlayerScoreRankingUpdated;
             Island.Instance.OnResetTodayMaterialRanking += SystemManager.Instance.EventManager.IslandResetTodayMaterialRanking;

@@ -18,6 +18,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 {
                     foreach (var questRecord in subject.QuestRecords)
                     {
+                        if(questRecord.IsFinished && questRecord.HasGottenReward)
+                        {
+                            continue;
+                        }
                         if (questRecord.IsFinished || !questRecord.Quest.IsHidden)
                         {
                             var information = questRecord.QuestRecordInformation;

@@ -10,5 +10,6 @@ namespace IsolatedIslandGame.Database.Repositories
         public abstract List<Island.PlayerMaterialInfo> ListTodayMaterialRanking();
         public abstract List<Island.PlayerScoreInfo> ListPlayerScoreRanking();
         public abstract void Save(Island.PlayerMaterialInfo info);
+        public abstract void UpdateTotalScore(GroupType groupType, int totalScore);
     }
 }
