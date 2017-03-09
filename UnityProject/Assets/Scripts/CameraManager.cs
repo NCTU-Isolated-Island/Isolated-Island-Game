@@ -13,7 +13,7 @@ public class CameraManager : MonoBehaviour
 
 	private float MoveCameraDelay = 1.5f;
 
-	private GameObject Camera;
+	public GameObject Camera;
 	public bool using_cor;
     private CameraStatus cameraStatus = CameraStatus.Near;
     private GameObject selfVessel;

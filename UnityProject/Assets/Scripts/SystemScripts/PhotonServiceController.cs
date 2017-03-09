@@ -72,6 +72,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             else
             {
                 LogService.Info("Disconnected");
+                UserManager.Instance.User.PlayerOffline();
                 PhotonService.Instance.Connect(
                     serverName: SystemConfiguration.Instance.ServerName,
                     serverAddress: SystemConfiguration.Instance.ServerAddress,

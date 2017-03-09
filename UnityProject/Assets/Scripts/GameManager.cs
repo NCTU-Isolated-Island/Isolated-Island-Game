@@ -245,7 +245,7 @@ public class GameManager : MonoBehaviour
         UserManager.Instance.User.Player.OperationManager.CreateCharacter(nickname, signature, groupType);
     }
 
-    void GetPlayerVesselGameObject()
+    public void GetPlayerVesselGameObject()
     {
         if (UserGameObject.ContainsKey(UserManager.Instance.User.Player.PlayerID))
         {
@@ -392,8 +392,6 @@ public class GameManager : MonoBehaviour
                         if(vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
                         {
                             userVesselGameObject.tag = "SelfVessel";
-                            CombinationalOceanController.Instance.UpdateSubCenter(userVesselGameObject.transform.position);
-                            CombinationalOceanController.Instance.UpdateCenter(userVesselGameObject.transform.position);
                         }
 
                         foreach (Decoration decoration in vessel.Decorations)

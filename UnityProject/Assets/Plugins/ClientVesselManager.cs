@@ -84,21 +84,22 @@ namespace IsolatedIslandGame.Client
             }
             else
             {
-                vessel = new Vessel(
-                    vesselID: 0,
-                    ownerPlayerID: ownerPlayerID,
-                    locationX: 0,
-                    locationZ: 0,
-                    rotationEulerAngleY: 0,
-                    locatedOceanType: OceanType.Unknown);
-                vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
-                AssemblyVessel(vessel);
-                if (onVesselChange != null)
-                {
-                    onVesselChange(DataChangeType.Add, vessel);
-                }
+                //vessel = new Vessel(
+                //    vesselID: 0,
+                //    ownerPlayerID: ownerPlayerID,
+                //    locationX: 0,
+                //    locationZ: 0,
+                //    rotationEulerAngleY: 0,
+                //    locatedOceanType: OceanType.Unknown);
+                //vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
+                //AssemblyVessel(vessel);
+                //if (onVesselChange != null)
+                //{
+                //    onVesselChange(DataChangeType.Add, vessel);
+                //}
+                vessel = null;
                 SystemManager.Instance.OperationManager.FetchDataResolver.FetchVesselWithOwnerPlayerID(ownerPlayerID);
-                return true;
+                return false;
             }
         }
 

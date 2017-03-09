@@ -43,6 +43,7 @@ public class MissionUIManager : MonoBehaviour
         {
             takeRewardButton.gameObject.SetActive(true);
 
+            takeRewardButton.onClick.RemoveAllListeners();
             takeRewardButton.onClick.AddListener(delegate
             {
                 UserManager.Instance.User.Player.OperationManager.TakeQuestReward(information.questRecordID);
@@ -133,7 +134,6 @@ public class MissionUIManager : MonoBehaviour
 
     void LoadQuestList()
     {
-        //print("LoadQuestList");
         foreach (Transform questRecordObject in missionSetContent.transform)
         {
             Destroy(questRecordObject.gameObject);
@@ -145,7 +145,8 @@ public class MissionUIManager : MonoBehaviour
                 continue;
 
             GameObject questRow = Instantiate(questSet);
-            questRow.GetComponent<MissionSetBehavior>().SetQuestInfo(questRecordInformation);
+            QuestRecordInformation record = questRecordInformation;
+            questRow.GetComponent<MissionSetBehavior>().SetQuestInfo(record);
             Text missionName = questRow.transform.Find("MissionName").GetComponent<Text>();
             Text missionType = questRow.transform.Find("MissionType").GetComponent<Text>();
             Image missionIcon = questRow.transform.Find("MissionIcon").GetComponent<Image>();

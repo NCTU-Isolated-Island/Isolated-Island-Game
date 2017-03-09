@@ -203,14 +203,13 @@ public class PlayerController : MonoBehaviour {
 	public void RemoveAllDecoration()
 	{
 		Vessel vessel;
-		VesselManager.Instance.FindVesselByOwnerPlayerID(UserManager.Instance.User.Player.PlayerID,out vessel);
-
-		foreach(Decoration entry in vessel.Decorations)
-		{
-			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(entry.DecorationID);
-		}
-
-
+		if(VesselManager.Instance.FindVesselByOwnerPlayerID(UserManager.Instance.User.Player.PlayerID,out vessel))
+        {
+            foreach (Decoration entry in vessel.Decorations)
+            {
+                UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(entry.DecorationID);
+            }
+        }
 	}
 
 	void ShowVessel(GameObject vessel)

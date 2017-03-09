@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using IsolatedIslandGame.Library;
 using UnityEngine;
 
 public class CombinationalOceanController : MonoBehaviour
@@ -11,6 +10,23 @@ public class CombinationalOceanController : MonoBehaviour
     {
         Instance = this;
         lastestSubCenter = transform.position;
+        if(UserManager.Instance.User.IsOnline)
+        {
+            UserManager.Instance.User.Player.OnBindVessel += (vessel) => 
+            {
+                transform.position = new Vector3(vessel.LocationX, transform.position.y, vessel.LocationZ);
+            };
+        }
+        else
+        {
+            UserManager.Instance.User.OnPlayerOnline += (player) => 
+            {
+                UserManager.Instance.User.Player.OnBindVessel += (vessel) =>
+                {
+                    transform.position = new Vector3(vessel.LocationX, transform.position.y, vessel.LocationZ);
+                };
+            };
+        }
     }
     public void UpdateCenter(Vector3 orginCenter)
     {
