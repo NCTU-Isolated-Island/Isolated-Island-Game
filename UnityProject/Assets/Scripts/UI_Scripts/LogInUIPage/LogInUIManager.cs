@@ -72,13 +72,16 @@ public class LogInUIManager : MonoBehaviour
     public void ToMainScenePrepare()
     {
         loginPage.SetActive(false);
-        if(gameObject.activeSelf)
+        if (gameObject.activeSelf)
+        {
             StartCoroutine(FadeBackground());
+        }
     }
 
     public IEnumerator FadeBackground()
     {
         SceneManager.LoadScene("MainScene");
+
         float passTime = 0f;
         while(passTime < 1f)
         {
