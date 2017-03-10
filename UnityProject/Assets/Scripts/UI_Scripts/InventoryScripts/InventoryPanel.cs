@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -121,7 +122,7 @@ public class InventoryPanel : MonoBehaviour
             Destroy(child.gameObject);
         }
         inventoryItemInfoBlockDictionary.Clear();
-        foreach (var info in inventory.ItemInfos)
+        foreach (var info in inventory.ItemInfos.OrderBy(x => x.InventoryItemInfoID))
         {
             InventoryItemInfoBlock infoBlock = Instantiate(inventoryItemInfoBlockPrefab);
             //
