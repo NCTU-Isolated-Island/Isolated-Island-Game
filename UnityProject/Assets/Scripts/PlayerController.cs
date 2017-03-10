@@ -119,14 +119,11 @@ public class PlayerController : MonoBehaviour {
 
             CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
 
+			CurrentFocusPlayerGameObject = hitInfo.transform.root.gameObject;
 
-            string[] a = hitInfo.transform.root.name.Split(' ');
-            int id = System.Int32.Parse(a[1]);
-
-            CurrentFocusPlayerGameObject = GameManager.Instance.UserGameObject[id];
             //
             UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
-            OtherBoatUIManager.Instance.SetOtherPlayerInfo(id);
+			OtherBoatUIManager.Instance.SetOtherPlayerInfo(hitInfo.transform.root.GetComponent<PlayerBehavior>().playerID);
             //
         }
 

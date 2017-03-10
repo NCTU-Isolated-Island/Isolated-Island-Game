@@ -25,13 +25,6 @@ public class GameManager : MonoBehaviour
     private bool isInMainScene;
 
 
-    public enum CameraStat
-    {
-        Near,
-        Far
-    }
-    private CameraStat cameraStat;
-
     #region Setup
 
     void Awake()
@@ -129,29 +122,16 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-    void OnGetPlayerConversation(IsolatedIslandGame.Library.TextData.PlayerConversation conversation)
-    {
-        //print(conversation.message.senderPlayerID + " : " +conversation.message.content );
-    }
 
     void OnPlayerOnline(Player player)
     {
         UserManager.Instance.User.Player.OnCreateCharacter += OnCreateCharacter;
-        UserManager.Instance.User.Player.OnGetPlayerConversation += OnGetPlayerConversation;
         if (UserManager.Instance.User.Player.GroupType == GroupType.No)
         {
             LogInUIManager.Instance.ToCreateCharacterPage();
-            //SceneManager.LoadScene("RegisterScene");
-            //LogInUIManager.Instance.ToCreateCharacterPage();
-
-            //Create Charater by Uimanager ? (probably
-            //UserManager.Instance.User.Player.OperationManager.CreateCharacter("ABC","signature", GroupType.Businessman);
         }
         else
         {
-
-            //UImanager.Instance.LoadResult(0);
-            //UIManager.Instance.LoadResult(0);
             LogInUIManager.Instance.ToMainScenePrepare();
         }
     }
@@ -294,7 +274,7 @@ public class GameManager : MonoBehaviour
                 switch (changeType)
                 {
                     case DataChangeType.Add:
-					{//print(decoration.Material.ItemID);
+					{
                             GameObject decorationGameObject = Instantiate(
                                 elementModels[decoration.Material.ItemID],
                                 userVesselGameObject.transform.Find("Decorations")
@@ -389,6 +369,8 @@ public class GameManager : MonoBehaviour
                             ) as GameObject;
 
                         userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.OwnerPlayerID);
+						userVesselGameObject.GetComponent<PlayerBehavior>().playerID = vessel.OwnerPlayerID;
+
                         if(vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
                         {
                             userVesselGameObject.tag = "SelfVessel";
@@ -450,7 +432,5 @@ public class GameManager : MonoBehaviour
     } //當船物件有變化時的回調事件
 
     #endregion
-
-
 
 }

@@ -8,6 +8,9 @@ public class PlayerBehavior : MonoBehaviour {
 
 	private Vector3 velocity;
 
+	public int playerID;
+
+
 	void Start()
 	{
 		TargetPosition = transform.position;
