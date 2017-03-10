@@ -17,8 +17,10 @@ public class MainBoatUIManager : MonoBehaviour {
     private Button[] verticalButtonList;
     [SerializeField]
     private Button[] horizontalButtonList;
+    [SerializeField]
+    private Button tutorialButton;
 
-	[SerializeField]
+    [SerializeField]
 	private GameObject getMaterialPanel;
     [SerializeField]
     private Text areaTitle;
@@ -130,6 +132,12 @@ public class MainBoatUIManager : MonoBehaviour {
                     break;
             }
         }
+
+        tutorialButton.onClick.AddListener(delegate
+        {
+            TutorialManager.Instance.OpenTutorialPage();
+        });
+
         if (UserManager.Instance.User.IsOnline)
         {
             RegisterPlayerEvents(UserManager.Instance.User.Player);
@@ -189,6 +197,8 @@ public class MainBoatUIManager : MonoBehaviour {
     {
         mask.SetActive(!maskStatus);
         maskStatus = !maskStatus;
+
+        tutorialButton.gameObject.SetActive(maskStatus);
 
         LExpand.Instance.OnClick();
     }

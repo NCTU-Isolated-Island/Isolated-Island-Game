@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using IsolatedIslandGame.Library;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using IsolatedIslandGame.Library;
 
 public class BluePrintUIManager : MonoBehaviour {
 
@@ -50,12 +51,12 @@ public class BluePrintUIManager : MonoBehaviour {
 
     public void LoadBluePrint()
     {
-        foreach(Transform bluePrint in bluePrintSetContent.transform)
+        foreach (Transform bluePrint in bluePrintSetContent.transform)
         {
             Destroy(bluePrint.gameObject);
         }
 
-        foreach (Blueprint bluePrint in UserManager.Instance.User.Player.KnownBlueprints)
+        foreach (Blueprint bluePrint in UserManager.Instance.User.Player.KnownBlueprints.OrderBy(blueprint => blueprint.BlueprintID))
         {
             // Show BluePrint in UI
             GameObject tmp = Instantiate(bluePrintSet);
@@ -68,10 +69,10 @@ public class BluePrintUIManager : MonoBehaviour {
 
             Image result = tmp.transform.FindChild("Result").GetComponent<Image>();
 
-            foreach(var elementInfo in bluePrint.Requirements)
+            foreach (var elementInfo in bluePrint.Requirements)
             {
                 // Put Sprite to material.sprite
-                material[elementInfo.positionIndex].sprite = Resources.Load<Sprite>("2D/" +  elementInfo.itemID);
+                material[elementInfo.positionIndex].sprite = Resources.Load<Sprite>("2D/" + elementInfo.itemID);
             }
 
             foreach (var elementInfo in bluePrint.Products)
@@ -87,7 +88,10 @@ public class BluePrintUIManager : MonoBehaviour {
             }
 
             blueprintButton = tmp.GetComponent<Button>();
-            blueprintButton.onClick.AddListener(delegate { ToCombineByBluePrint(bluePrint); });
+            blueprintButton.onClick.AddListener(delegate
+            {
+                ToCombineByBluePrint(bluePrint);
+            });
         }
     }
 

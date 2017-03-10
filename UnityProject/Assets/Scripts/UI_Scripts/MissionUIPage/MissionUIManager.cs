@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -139,7 +140,7 @@ public class MissionUIManager : MonoBehaviour
             Destroy(questRecordObject.gameObject);
         }
 
-        foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations)
+        foreach (QuestRecordInformation questRecordInformation in UserManager.Instance.User.Player.QuestRecordInformations.OrderBy(quest => quest.questType).OrderBy(quest => quest.isFinished).Reverse())
         {
             if (questRecordInformation.hasGottenReward)
                 continue;
