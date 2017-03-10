@@ -105,7 +105,7 @@ public class CameraManager : MonoBehaviour
 	public void Zoom (float amount)
 	{
 
-		if(Vector3.Distance(Camera.transform.position,Camera.transform.parent.position) < 5f && amount < 1)
+		if(Vector3.Distance(Camera.transform.position,Camera.transform.parent.position) < 3f && amount < 1)
 			return;
 		if(Vector3.Distance(Camera.transform.position,Camera.transform.parent.position) > 50f && amount > 1)
 			return;
