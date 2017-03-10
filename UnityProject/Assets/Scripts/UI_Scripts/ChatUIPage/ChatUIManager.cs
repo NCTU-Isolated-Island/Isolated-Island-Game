@@ -115,7 +115,7 @@ public class ChatUIManager : MonoBehaviour {
             Destroy(renderedFriend.gameObject);
         }
 
-        foreach (var entry in playerConversationTable)
+        foreach (var entry in playerConversationTable.OrderBy(x => x.Value.OrderBy(y => y.Value.message.sendTime).Last().Value.message.sendTime).Reverse())
         {
             GameObject tmp = Instantiate(messageSet);
             tmp.transform.SetParent(messageSetContent.transform);

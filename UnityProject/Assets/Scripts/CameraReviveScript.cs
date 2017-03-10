@@ -33,5 +33,7 @@ public class CameraReviveScript : MonoBehaviour
                 print("Revive!");
             };
         }
+
+        FirstPersonCameraController.Instance = tmp.GetComponent<FirstPersonCameraController>();
     }
 }
