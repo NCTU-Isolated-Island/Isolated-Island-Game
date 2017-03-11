@@ -12,12 +12,27 @@ public class LoadingGameObjectBehavior : MonoBehaviour {
 
     private float theta;
 
+    void Start()
+    {
+        theta = 0;
+    }
+
     void Update()
     {
-        upperCircle.fillAmount = Mathf.Cos(theta);
-        lowerCircle.fillAmount = Mathf.Cos(2 * theta);
+        lowerCircle = GetComponentsInChildren<Image>()[0];
+        upperCircle = GetComponentsInChildren<Image>()[1];
 
-        theta += Time.deltaTime;
+        upperCircle.fillAmount = Mathf.Abs(Mathf.Sin(theta));
+
+        if(theta >= Mathf.PI / 2f)
+        {
+            theta = 0f;
+
+            upperCircle.transform.SetParent(transform);
+            lowerCircle.transform.SetParent(upperCircle.transform);
+        }
+
+        theta += Time.deltaTime / 2f;
     }
 	
 }
