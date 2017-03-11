@@ -80,7 +80,9 @@ public class LogInUIManager : MonoBehaviour
 
     public IEnumerator FadeBackground()
     {
-        SceneManager.LoadScene("MainScene");
+		SceneManager.LoadScene("MainScene");
+
+		yield return new WaitForSeconds(2f);
 
         float passTime = 0f;
         while(passTime < 1f)
