@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TutorialBehavior : MonoBehaviour
 {
     [SerializeField]
-    private Image[] tutorialPageList;
+    private Sprite[] tutorialPageList;
 
     [SerializeField]
     private Button nextPageButton;
@@ -20,6 +20,7 @@ public class TutorialBehavior : MonoBehaviour
     void Start()
     {
         currentPageNum = 0;
+        gameObject.GetComponent<Image>().sprite = tutorialPageList[currentPageNum];
 
         nextPageButton.onClick.AddListener(delegate
         {
@@ -40,8 +41,8 @@ public class TutorialBehavior : MonoBehaviour
         if (currentPageNum == tutorialPageList.Length - 1)
             return;
 
-        tutorialPageList[currentPageNum].gameObject.SetActive(false);
-        tutorialPageList[currentPageNum + 1].gameObject.SetActive(true);
+        gameObject.GetComponent<Image>().sprite = tutorialPageList[currentPageNum + 1];
+
         currentPageNum++;
     }
 
@@ -50,9 +51,14 @@ public class TutorialBehavior : MonoBehaviour
         if (currentPageNum == 0)
             return;
 
-        tutorialPageList[currentPageNum].gameObject.SetActive(false);
-        tutorialPageList[currentPageNum - 1].gameObject.SetActive(true);
+        gameObject.GetComponent<Image>().sprite = tutorialPageList[currentPageNum - 1];
+
         currentPageNum--;
+    }
+
+    public void SetPageList(Sprite[] list)
+    {
+        tutorialPageList = list;
     }
 
 }
