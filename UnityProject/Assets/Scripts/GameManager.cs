@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
 
     void OnCreateCharacter(Player player)
     {
-        SceneManager.LoadScene("MainScene");
+        LogInUIManager.Instance.ToMainScenePrepare();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)

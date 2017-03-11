@@ -20,12 +20,6 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private Sprite[] groupFarmerTutorialPageList;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-            OpenTutorialPage();
-    }
-
     void Awake()
     {
         if (Instance == null)
