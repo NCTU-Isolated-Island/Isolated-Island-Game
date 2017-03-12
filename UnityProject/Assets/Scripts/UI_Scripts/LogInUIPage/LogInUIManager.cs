@@ -92,6 +92,9 @@ public class LogInUIManager : MonoBehaviour
 
 		yield return new WaitForSeconds(2f);
 
+        if (firstLogin == true)
+            TutorialManager.Instance.OpenTutorialPage();
+
         float passTime = 0f;
         while(passTime < 1f)
         {
@@ -109,9 +112,6 @@ public class LogInUIManager : MonoBehaviour
         }
         gameObject.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
-
-        if (firstLogin == true)
-            TutorialManager.Instance.OpenTutorialPage();
     }
 
     public void LoginRedirection()
