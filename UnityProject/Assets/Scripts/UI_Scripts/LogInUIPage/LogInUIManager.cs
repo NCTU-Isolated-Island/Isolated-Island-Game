@@ -38,6 +38,9 @@ public class LogInUIManager : MonoBehaviour
     [SerializeField]
     private GameObject nameLengthExceedWarning;
 
+    [SerializeField]
+    private GameObject loadingImage;
+
     private bool firstLogin = false;
 
     void InitSetting()
@@ -88,14 +91,15 @@ public class LogInUIManager : MonoBehaviour
     public IEnumerator FadeBackground()
     {
         print("FadeBackground");
-		SceneManager.LoadScene("MainScene");
+        float passTime = 0f;
 
-		yield return new WaitForSeconds(2f);
-
+        SceneManager.LoadScene("MainScene");
+        loadingImage.SetActive(true);
+        
+		//yield return new WaitForSeconds(2f);
         if (firstLogin == true)
             TutorialManager.Instance.OpenTutorialPage();
 
-        float passTime = 0f;
         while(passTime < 1f)
         {
             passTime += Time.deltaTime;
@@ -107,9 +111,27 @@ public class LogInUIManager : MonoBehaviour
             Color color2 = deepBlue.GetComponent<Image>().color;
             color2.a = Mathf.Lerp(1, 0, passTime / 1f);
             deepBlue.GetComponent<Image>().color = color2;
-            
+
+            Color color3 = loadingImage.GetComponent<Image>().color;
+            color3.a = Mathf.Lerp(0, 1, passTime / 1f);
+            loadingImage.GetComponent<Image>().color = color3;
+
             yield return new WaitForEndOfFrame();
         }
+
+        yield return new WaitForSeconds(1f);
+
+        while(1f < passTime && passTime < 2f)
+        {
+            passTime += Time.deltaTime;
+
+            Color color3 = loadingImage.GetComponent<Image>().color;
+            color3.a = Mathf.Lerp(1, 0, (passTime - 1f) / 1f);
+            loadingImage.GetComponent<Image>().color = color3;
+
+            yield return new WaitForEndOfFrame();
+        }
+
         gameObject.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
     }
