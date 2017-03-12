@@ -44,6 +44,12 @@ public class TutorialBehavior : MonoBehaviour
         gameObject.GetComponent<Image>().sprite = tutorialPageList[currentPageNum + 1];
 
         currentPageNum++;
+
+        if (currentPageNum == tutorialPageList.Length - 1)
+        {
+            closeButton.gameObject.SetActive(true);
+            nextPageButton.gameObject.SetActive(false);
+        }
     }
 
     public void PreviousPage()

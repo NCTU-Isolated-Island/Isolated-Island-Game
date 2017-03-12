@@ -38,6 +38,8 @@ public class LogInUIManager : MonoBehaviour
     [SerializeField]
     private GameObject nameLengthExceedWarning;
 
+    private bool firstLogin = false;
+
     void InitSetting()
     {
         NextGroup();
@@ -64,6 +66,8 @@ public class LogInUIManager : MonoBehaviour
     }
     public void ToCreateCharacterPage()
     {
+        firstLogin = true;
+
         loginPage.SetActive(false);
         createCharacterPage.SetActive(true);
         chooseGroupPage.SetActive(false);
@@ -72,6 +76,9 @@ public class LogInUIManager : MonoBehaviour
     public void ToMainScenePrepare()
     {
         loginPage.SetActive(false);
+        createCharacterPage.SetActive(false);
+        chooseGroupPage.SetActive(false);
+
         if (gameObject.activeSelf)
         {
             StartCoroutine(FadeBackground());
@@ -80,6 +87,7 @@ public class LogInUIManager : MonoBehaviour
 
     public IEnumerator FadeBackground()
     {
+        print("FadeBackground");
 		SceneManager.LoadScene("MainScene");
 
 		yield return new WaitForSeconds(2f);
@@ -101,6 +109,9 @@ public class LogInUIManager : MonoBehaviour
         }
         gameObject.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
+
+        if (firstLogin == true)
+            TutorialManager.Instance.OpenTutorialPage();
     }
 
     public void LoginRedirection()
@@ -134,8 +145,9 @@ public class LogInUIManager : MonoBehaviour
     public void CreateCharacter()
     {
         UserManager.Instance.User.Player.OperationManager.CreateCharacter(playerName, speech, groupType);
-        gameObject.SetActive(false);
-        UIManager.Instance.ToMainPage();
+        //gameObject.SetActive(false);
+        //UIManager.Instance.ToMainPage();
+        //ToMainScenePrepare();
     }
     public void NextGroup()
     {
