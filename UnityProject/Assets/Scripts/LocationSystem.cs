@@ -34,7 +34,7 @@ public class LocationSystem : MonoBehaviour {
 			StartCoroutine(GameManager.Instance.OnPlayerLocationChange
 				(
 					GetInGameCoordinate(),
-					transform.localRotation.y
+					transform.localEulerAngles.y
 				));
 			
 
