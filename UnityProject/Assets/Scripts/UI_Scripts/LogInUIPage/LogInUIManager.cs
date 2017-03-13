@@ -38,6 +38,11 @@ public class LogInUIManager : MonoBehaviour
     [SerializeField]
     private GameObject nameLengthExceedWarning;
 
+    [SerializeField]
+    private GameObject loadingImage;
+
+    private bool firstLogin = false;
+
     void InitSetting()
     {
         NextGroup();
@@ -64,6 +69,8 @@ public class LogInUIManager : MonoBehaviour
     }
     public void ToCreateCharacterPage()
     {
+        firstLogin = true;
+
         loginPage.SetActive(false);
         createCharacterPage.SetActive(true);
         chooseGroupPage.SetActive(false);
@@ -72,6 +79,9 @@ public class LogInUIManager : MonoBehaviour
     public void ToMainScenePrepare()
     {
         loginPage.SetActive(false);
+        createCharacterPage.SetActive(false);
+        chooseGroupPage.SetActive(false);
+
         if (gameObject.activeSelf)
         {
             StartCoroutine(FadeBackground());
@@ -80,11 +90,16 @@ public class LogInUIManager : MonoBehaviour
 
     public IEnumerator FadeBackground()
     {
-		SceneManager.LoadScene("MainScene");
-
-		yield return new WaitForSeconds(2f);
-
+        print("FadeBackground");
         float passTime = 0f;
+
+        SceneManager.LoadScene("MainScene");
+        loadingImage.SetActive(true);
+        
+		//yield return new WaitForSeconds(2f);
+        if (firstLogin == true)
+            TutorialManager.Instance.OpenTutorialPage();
+
         while(passTime < 1f)
         {
             passTime += Time.deltaTime;
@@ -96,9 +111,27 @@ public class LogInUIManager : MonoBehaviour
             Color color2 = deepBlue.GetComponent<Image>().color;
             color2.a = Mathf.Lerp(1, 0, passTime / 1f);
             deepBlue.GetComponent<Image>().color = color2;
-            
+
+            Color color3 = loadingImage.GetComponent<Image>().color;
+            color3.a = Mathf.Lerp(0, 1, passTime / 1f);
+            loadingImage.GetComponent<Image>().color = color3;
+
             yield return new WaitForEndOfFrame();
         }
+
+        yield return new WaitForSeconds(1f);
+
+        while(1f < passTime && passTime < 2f)
+        {
+            passTime += Time.deltaTime;
+
+            Color color3 = loadingImage.GetComponent<Image>().color;
+            color3.a = Mathf.Lerp(1, 0, (passTime - 1f) / 1f);
+            loadingImage.GetComponent<Image>().color = color3;
+
+            yield return new WaitForEndOfFrame();
+        }
+
         gameObject.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
     }
@@ -134,8 +167,9 @@ public class LogInUIManager : MonoBehaviour
     public void CreateCharacter()
     {
         UserManager.Instance.User.Player.OperationManager.CreateCharacter(playerName, speech, groupType);
-        gameObject.SetActive(false);
-        UIManager.Instance.ToMainPage();
+        //gameObject.SetActive(false);
+        //UIManager.Instance.ToMainPage();
+        //ToMainScenePrepare();
     }
     public void NextGroup()
     {
