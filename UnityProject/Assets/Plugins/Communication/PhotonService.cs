@@ -37,6 +37,10 @@ namespace IsolatedIslandGame.Client.Communication
             private set
             {
                 serverConnected = value;
+                if(!serverConnected)
+                {
+                    UserManager.Instance.User.UserInform("中斷", "與伺服器連線中斷");
+                }
                 if (onConnectChange != null)
                 {
                     onConnectChange(serverConnected);

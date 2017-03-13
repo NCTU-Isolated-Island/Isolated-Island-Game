@@ -376,6 +376,7 @@ public class GameManager : MonoBehaviour
                         if(vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
                         {
                             userVesselGameObject.tag = "SelfVessel";
+                            OceanController.Instance.SelfVesselTransform = userVesselGameObject.transform;
                         }
 
                         foreach (Decoration decoration in vessel.Decorations)
@@ -420,6 +421,10 @@ public class GameManager : MonoBehaviour
                             VesselDecoration.Remove(vessel.VesselID);
 
                             Destroy(userVesselGameObject);
+                            if (vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
+                            {
+                                OceanController.Instance.SelfVesselTransform = null;
+                            }
                         }
                     }
                     break;

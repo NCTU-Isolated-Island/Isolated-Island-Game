@@ -56,7 +56,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 else
                 {
                     LogService.ErrorFormat("SynthesizeMaterial error Player: {0}, there is no such a blueprint", subject.IdentityInformation);
-                    subject.User.EventManager.UserInform("失敗", "合成失敗。");
+                    subject.User.EventManager.UserInform("失敗", "合成失敗。(抱歉，現在還有很多藍圖還沒開放，你可能使用了正確的配方但是成品還沒被加入遊戲中)");
                     SendError(operationCode, ErrorCode.InvalidOperation, "there is no such a blueprint");
                     return false;
                 }
