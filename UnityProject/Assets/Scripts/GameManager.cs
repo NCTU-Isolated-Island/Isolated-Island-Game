@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         elementModels.Add(3017, Resources.Load("Ingredients/" + "Motor") as GameObject);
         elementModels.Add(3018, Resources.Load("Ingredients/" + "Flour") as GameObject);
 
-        elementModels.Add(4006, Resources.Load("Ingredients/" + "DeapseaPineapple") as GameObject);
+        elementModels.Add(4003, Resources.Load("Ingredients/" + "DeapseaPineapple") as GameObject);
         elementModels.Add(4006, Resources.Load("Ingredients/" + "Heater") as GameObject);
         elementModels.Add(4013, Resources.Load("Ingredients/" + "Latte") as GameObject);
         elementModels.Add(4014, Resources.Load("Ingredients/" + "Bread") as GameObject);
@@ -376,6 +376,7 @@ public class GameManager : MonoBehaviour
                         if(vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
                         {
                             userVesselGameObject.tag = "SelfVessel";
+                            OceanController.Instance.SelfVesselTransform = userVesselGameObject.transform;
                         }
 
                         foreach (Decoration decoration in vessel.Decorations)
@@ -420,6 +421,10 @@ public class GameManager : MonoBehaviour
                             VesselDecoration.Remove(vessel.VesselID);
 
                             Destroy(userVesselGameObject);
+                            if (vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
+                            {
+                                OceanController.Instance.SelfVesselTransform = null;
+                            }
                         }
                     }
                     break;
