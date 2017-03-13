@@ -82,7 +82,8 @@ public class GameManager : MonoBehaviour
         elementModels.Add(1023, Resources.Load("Ingredients/" + "pigment") as GameObject);
         elementModels.Add(1024, Resources.Load("Ingredients/" + "gold") as GameObject);
         elementModels.Add(1025, Resources.Load("Ingredients/" + "knife") as GameObject);
-        elementModels.Add(1034, Resources.Load("Ingredients/" + "Pineapple") as GameObject);
+        elementModels.Add(1026, Resources.Load("Ingredients/" + "pencil") as GameObject);
+        //elementModels.Add(1034, Resources.Load("Ingredients/" + "Pineapple") as GameObject);
         elementModels.Add(1035, Resources.Load("Ingredients/" + "oil") as GameObject);
         elementModels.Add(1036, Resources.Load("Ingredients/" + "Fish") as GameObject);
         elementModels.Add(1037, Resources.Load("Ingredients/" + "Sponge") as GameObject);
@@ -99,15 +100,16 @@ public class GameManager : MonoBehaviour
         elementModels.Add(3001, Resources.Load("Ingredients/" + "SpongeBaby") as GameObject);
         elementModels.Add(3005, Resources.Load("Ingredients/" + "Pillow") as GameObject);
         elementModels.Add(3012, Resources.Load("Ingredients/" + "Fries") as GameObject);
-        elementModels.Add(3014, Resources.Load("Ingredients/" + "Stereo") as GameObject);
         elementModels.Add(3015, Resources.Load("Ingredients/" + "Computer") as GameObject);
         elementModels.Add(3016, Resources.Load("Ingredients/" + "small_light") as GameObject);
         elementModels.Add(3017, Resources.Load("Ingredients/" + "Motor") as GameObject);
         elementModels.Add(3018, Resources.Load("Ingredients/" + "Flour") as GameObject);
 
+        elementModels.Add(4006, Resources.Load("Ingredients/" + "DeapseaPineapple") as GameObject);
         elementModels.Add(4006, Resources.Load("Ingredients/" + "Heater") as GameObject);
         elementModels.Add(4013, Resources.Load("Ingredients/" + "Latte") as GameObject);
         elementModels.Add(4014, Resources.Load("Ingredients/" + "Bread") as GameObject);
+        elementModels.Add(4016, Resources.Load("Ingredients/" + "Stereo") as GameObject);
         elementModels.Add(4017, Resources.Load("Ingredients/" + "imac") as GameObject);
 
         elementModels.Add(6001, Resources.Load("Ingredients/" + "ShineMood") as GameObject);
