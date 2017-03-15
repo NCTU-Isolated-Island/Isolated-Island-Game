@@ -58,6 +58,8 @@ public class InventoryPanel : MonoBehaviour
 
 		toPutItemButton.onClick.AddListener (delegate {
 			PlayerDecorationManager.Instance.CurrentControlMode = PlayerDecorationManager.ControlMode.Decorate;
+			GameManager.Instance.PlayerGameObject.GetComponentInChildren<MeshCollider>().enabled = true;
+			GameManager.Instance.PlayerGameObject.GetComponent<BoxCollider>().enabled = false;
 			UIManager.Instance.SwapPage (UIManager.UIPageType.PutItem);
 		});
 

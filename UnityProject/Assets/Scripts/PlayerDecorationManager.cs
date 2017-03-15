@@ -112,6 +112,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 		CurrentControlMode = ControlMode.Decorate;
 
 		GameManager.Instance.PlayerGameObject.GetComponentInChildren<MeshCollider>().enabled = true;
+		GameManager.Instance.PlayerGameObject.GetComponent<BoxCollider>().enabled = false;
 
 		//OutlineSystem.Instance.gameObject.SetActive(true);
 	}
@@ -199,6 +200,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 		}
 
 		GameManager.Instance.PlayerGameObject.GetComponentInChildren<MeshCollider>().enabled = false;
+		GameManager.Instance.PlayerGameObject.GetComponent<BoxCollider>().enabled = true;
 
 		//OutlineSystem.Instance.gameObject.SetActive(false);
 
@@ -306,7 +308,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 					else
 					{
 						CurrentSelectDecoration.transform.position = 
-							Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 9;
+							Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 3;
 					}
 				}
 			}
