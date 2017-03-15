@@ -110,6 +110,9 @@ public class PlayerDecorationManager : MonoBehaviour {
 			AddedDecorations.Add(CurrentSelectDecoration);
 
 		CurrentControlMode = ControlMode.Decorate;
+
+		GameManager.Instance.PlayerGameObject.GetComponentInChildren<MeshCollider>().enabled = true;
+
 		//OutlineSystem.Instance.gameObject.SetActive(true);
 	}
 
@@ -172,7 +175,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 			UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(entry.name));
 		}
 
-		print("Update");
+
 
 		foreach(GameObject entry in AddedDecorations)
 		{
@@ -194,6 +197,8 @@ public class PlayerDecorationManager : MonoBehaviour {
 		{
 			DeTransparentize(CurrentSelectDecoration);
 		}
+
+		GameManager.Instance.PlayerGameObject.GetComponentInChildren<MeshCollider>().enabled = false;
 
 		//OutlineSystem.Instance.gameObject.SetActive(false);
 
@@ -221,7 +226,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 					Camera.main.ScreenPointToRay(Input.mousePosition),
 					out vesselHitInfo,
 					99999f,
-					LayerMask.GetMask("PlayerModel")
+					LayerMask.GetMask("ShipModel")
 				);
 #endregion
 
