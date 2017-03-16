@@ -16,8 +16,8 @@
 						ServerAddress = "doorofsoul.duckdns.org", 
                         ServerPort = 4532,
                         //ServerPort = 4531,
-						ServerVersion = "Release1.1",
-						ClientVersion = "Release1.1"
+						ServerVersion = "Release1.2",
+						ClientVersion = "Release1.2"
                     };
                 }
                 return instance;
