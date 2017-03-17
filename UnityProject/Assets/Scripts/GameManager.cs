@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
 		elementModels.Add(1008, Resources.Load("Ingredients/" + "CoffeeBean") as GameObject);
         elementModels.Add(1009, Resources.Load("Ingredients/" + "pineapple") as GameObject);
         elementModels.Add(1010, Resources.Load("Ingredients/" + "apple") as GameObject);
-
+        elementModels.Add(1011, Resources.Load("Ingredients/" + "water") as GameObject);
         elementModels.Add(1013, Resources.Load("Ingredients/" + "fire") as GameObject);
 
 		elementModels.Add(1016, Resources.Load("Ingredients/" + "coal") as GameObject);
@@ -83,7 +83,9 @@ public class GameManager : MonoBehaviour
 		elementModels.Add(1022, Resources.Load("Ingredients/" + "fish") as GameObject);
 		elementModels.Add(1023, Resources.Load("Ingredients/" + "Sponge") as GameObject);
 
+        elementModels.Add(2001, Resources.Load("Ingredients/" + "Silicone") as GameObject);
         elementModels.Add(2002, Resources.Load("Ingredients/" + "Ball") as GameObject);
+        elementModels.Add(2003, Resources.Load("Ingredients/" + "rope") as GameObject);
         elementModels.Add(2005, Resources.Load("Ingredients/" + "StoneMill") as GameObject);
         elementModels.Add(2006, Resources.Load("Ingredients/" + "milk") as GameObject);
         elementModels.Add(2007, Resources.Load("Ingredients/" + "badminton") as GameObject);
