@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         elementModels.Add(3009, Resources.Load("Ingredients/" + "Coke") as GameObject);
         elementModels.Add(3011, Resources.Load("Ingredients/" + "Painter") as GameObject);
         elementModels.Add(3012, Resources.Load("Ingredients/" + "guitar") as GameObject);
-
+		elementModels.Add(3013, Resources.Load("Ingredients/" + "Ghost") as GameObject);
 		elementModels.Add(3014, Resources.Load("Ingredients/" + "small_light") as GameObject);
 
 		elementModels.Add(3017, Resources.Load("Ingredients/" + "Oven") as GameObject);
