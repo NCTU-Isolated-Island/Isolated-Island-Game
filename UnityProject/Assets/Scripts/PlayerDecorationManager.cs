@@ -99,8 +99,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 	{
 		print("BEgin");
 		print("itemID: " + itemID);
-
-		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],Vector3.zero,Quaternion.identity,
+		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],
 			GameManager.Instance.PlayerGameObject.transform.Find("Decorations")) as GameObject;
 		CurrentSelectDecoration.name = itemID.ToString();
 
@@ -147,10 +146,9 @@ public class PlayerDecorationManager : MonoBehaviour {
 			(
 				System.Int32.Parse(entry.name),
 				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
-				entry.transform.localRotation.eulerAngles.x, entry.transform.localRotation.eulerAngles.y, entry.transform.localRotation.eulerAngles.z
+				entry.transform.localEulerAngles.x, entry.transform.localEulerAngles.y, entry.transform.localEulerAngles.z
 			);
-			print(entry.transform.localEulerAngles);
-			print(entry.transform.localRotation.eulerAngles.x);
+
 		}
 
 		foreach(GameObject entry in ModifiedDecorations)
@@ -163,7 +161,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 			(
 				System.Int32.Parse(entry.name),
 				entry.transform.localPosition.x, entry.transform.localPosition.y, entry.transform.localPosition.z,
-				entry.transform.localRotation.eulerAngles.x, entry.transform.localRotation.eulerAngles.y, entry.transform.localRotation.eulerAngles.z
+				entry.transform.localEulerAngles.x, entry.transform.localEulerAngles.y, entry.transform.localEulerAngles.z
 			);
 		}
 
@@ -308,7 +306,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 					else
 					{
 						CurrentSelectDecoration.transform.position = 
-							Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 3;
+							Camera.main.transform.position + Camera.main.ScreenPointToRay(Input.mousePosition).direction * 2f;
 					}
 				}
 			}

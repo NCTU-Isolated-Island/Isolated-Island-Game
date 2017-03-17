@@ -355,7 +355,7 @@ public class GameManager : MonoBehaviour
                             if (VesselDecoration[vesselID].TryGetValue(decoration.DecorationID, out decorationGameObject))
                             {
                                 decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
-                                decorationGameObject.transform.localRotation = Quaternion.Euler(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
+								decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
                             }
                             else
                             {
