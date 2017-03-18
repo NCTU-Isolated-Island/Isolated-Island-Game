@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
 
 
 		elementModels.Add(1018, Resources.Load("Ingredients/" + "Patato") as GameObject);
-		elementModels.Add(1019, Resources.Load("Ingredients/" + "wood") as GameObject);
+		//elementModels.Add(1019, Resources.Load("Ingredients/" + "wood") as GameObject);
 
 		elementModels.Add(1021, Resources.Load("Ingredients/" + "oil") as GameObject);
 		elementModels.Add(1022, Resources.Load("Ingredients/" + "fish") as GameObject);
@@ -196,7 +196,6 @@ public class GameManager : MonoBehaviour
             isInMainScene = false;
         }
 
-        //TODO 設定完之後再把顯示出遊戲畫面（在這之前可能顯示loading bar
     }
 
     public IEnumerator OnPlayerLocationChange(Vector3 position, float eulerAngleY)
@@ -303,35 +302,36 @@ public class GameManager : MonoBehaviour
             {
                 switch (changeType)
                 {
-                    case DataChangeType.Add:
-					{
-                            GameObject decorationGameObject = Instantiate(
-                                elementModels[decoration.Material.ItemID],
-                                userVesselGameObject.transform.Find("Decorations")
-                            ) as GameObject;
+					case DataChangeType.Add:
+					{	
+						
+							GameObject decorationGameObject = Instantiate(
+								elementModels[decoration.Material.ItemID],
+								userVesselGameObject.transform.Find("Decorations")
+							) as GameObject;
 
-                            decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
-                            decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
-                            decorationGameObject.name = decoration.DecorationID.ToString();
+							decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
+							decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
+							decorationGameObject.name = decoration.DecorationID.ToString();
 
-                            if (!VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
-                            {
-                                //Find OwnerPlayerID by VesselID
-                                Vessel v;
-                                VesselManager.Instance.FindVessel(vesselID, out v);
+							if (!VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
+							{
+								//Find OwnerPlayerID by VesselID
+								Vessel v;
+								VesselManager.Instance.FindVessel(vesselID, out v);
 
-                                VesselDecoration[vesselID].Add(decoration.DecorationID, decorationGameObject);
+								VesselDecoration[vesselID].Add(decoration.DecorationID, decorationGameObject);
 
-                                //TODO for some reason UserDecoration[v.PlayerInformation.playerID] already
-                                // contain key "decoration.DecorationID"
 
-                            }
-                            else
-                            {
-                                Debug.LogFormat("Add Decoration to Vessel Fail, Decoration Already Existed, VesselID: {0}, DecorationID: {1}", vesselID, decoration.DecorationID);
-                            }
-                        }
-                        break;
+							}
+							else
+							{
+								Debug.LogFormat("Add Decoration to Vessel Fail, Decoration Already Existed, VesselID: {0}, DecorationID: {1}", vesselID, decoration.DecorationID);
+							}
+						
+                        
+                    }
+                    break;
                     case DataChangeType.Remove:
                         {
                             if (VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
