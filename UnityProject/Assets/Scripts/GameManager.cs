@@ -304,7 +304,9 @@ public class GameManager : MonoBehaviour
                 {
 					case DataChangeType.Add:
 					{	
-						
+						if(!elementModels.ContainsKey(decoration.Material.ItemID))
+							return;
+
 							GameObject decorationGameObject = Instantiate(
 								elementModels[decoration.Material.ItemID],
 								userVesselGameObject.transform.Find("Decorations")
@@ -409,6 +411,9 @@ public class GameManager : MonoBehaviour
 
                         foreach (Decoration decoration in vessel.Decorations)
                         {
+							if(!elementModels.ContainsKey(decoration.Material.ItemID))
+								continue;
+						
                             if (!decorationDictionary.ContainsKey(decoration.DecorationID))
                             {
                                 GameObject decorationGameObject = Instantiate(
