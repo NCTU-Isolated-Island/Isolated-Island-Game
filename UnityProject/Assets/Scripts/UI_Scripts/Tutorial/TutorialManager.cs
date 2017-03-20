@@ -13,12 +13,12 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject tutorialPage;
 
-    [SerializeField]
-    private Sprite[] groupAnimalTutorialPageList;
-    [SerializeField]
-    private Sprite[] groupBusinessmanTutorialPageList;
-    [SerializeField]
-    private Sprite[] groupFarmerTutorialPageList;
+    //[SerializeField]
+    //private Sprite[] groupAnimalTutorialPageList;
+    //[SerializeField]
+    //private Sprite[] groupBusinessmanTutorialPageList;
+    //[SerializeField]
+    //private Sprite[] groupFarmerTutorialPageList;
 
     void Awake()
     {
@@ -36,18 +36,7 @@ public class TutorialManager : MonoBehaviour
         PlayerInformation info;
         if (PlayerInformationManager.Instance.FindPlayerInformation(GameManager.Instance.PlayerID, out info))
         {
-            switch (info.groupType)
-            {
-                case GroupType.Animal:
-                    page.GetComponent<TutorialBehavior>().SetPageList(groupAnimalTutorialPageList);
-                    break;
-                case GroupType.Businessman:
-                    page.GetComponent<TutorialBehavior>().SetPageList(groupBusinessmanTutorialPageList);
-                    break;
-                case GroupType.Farmer:
-                    page.GetComponent<TutorialBehavior>().SetPageList(groupFarmerTutorialPageList);
-                    break;
-            }
+            page.GetComponent<TutorialBehavior>().SetGroupType(info.groupType);
         }
     }
 
