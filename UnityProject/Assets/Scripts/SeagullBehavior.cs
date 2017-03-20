@@ -7,24 +7,27 @@ public class SeagullBehavior : MonoBehaviour {
 	private Vector3 moveDirection;
 	private float lifeTime;
 
-	void Start () {
-		
-		DetermineInitialValue();
-		Setup();
-	}
-
-	void DetermineInitialValue()
+	void Awake()
 	{
+		lifeTime = 120f;
+
 		Vector2 unitCircle = Random.insideUnitCircle;
+		Vector3 tempFlyDirection = new Vector3(unitCircle.x, 0f, unitCircle.y);
 
-		moveDirection = new Vector3(unitCircle.x,0,unitCircle.y);
-		lifeTime = Random.Range(30,60);
-	}
+		Vector3 spawnPosition = GameManager.Instance.PlayerGameObject.transform.position - tempFlyDirection * 50f
+			+ Vector3.up * 7f;
+		moveDirection = Quaternion.Euler(0f,Random.Range(-30f,30f),0f) * tempFlyDirection;
 
-	void Setup()
-	{
+		transform.position = spawnPosition;
 		transform.rotation = Quaternion.LookRotation(moveDirection * -1);
 	}
+
+	void Start () {
+		
+
+	}
+
+
 	
 	void Update () {
 		Move();
@@ -39,6 +42,6 @@ public class SeagullBehavior : MonoBehaviour {
 
 	void Move()
 	{
-		transform.position += moveDirection * Time.deltaTime * 1f;
+		transform.position += moveDirection * Time.deltaTime * 6.5f;
 	}
 }

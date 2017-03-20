@@ -9,7 +9,8 @@ public class SeagullGenerator : MonoBehaviour {
 
     [SerializeField]
     private GameObject seagullGameObject;
-
+	[SerializeField]
+	private Transform SeagullsFolder;
 
     private void Awake()
     {
@@ -20,18 +21,23 @@ public class SeagullGenerator : MonoBehaviour {
 
     private void Start()
     {
-		InvokeRepeating("Generate",1f,2f);
+		
+		InvokeRepeating("Generate",Random.Range(10,30),Random.Range(45,60));
         
     }
 
-  
+	void Update()
+	{
+		
+	}
 
 	void Generate()
 	{
-		Vector2 unitCircle = Random.insideUnitCircle * 500f;
-		Vector3 position = new Vector3(unitCircle.x, 3f, unitCircle.y);
+		if(GameManager.Instance.PlayerGameObject == null)
+			return;
 
-		Instantiate(seagullGameObject,position,Quaternion.identity);
+
+		Instantiate(seagullGameObject,SeagullsFolder);
 	}
 
 }
