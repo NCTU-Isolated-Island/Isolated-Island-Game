@@ -65,7 +65,10 @@ public class PlayerController : MonoBehaviour {
 			CheckDoubleClick();
 		}
 
-
+		if(Input.GetKeyDown(KeyCode.C))
+		{
+			Resources.UnloadUnusedAssets();
+		}
 		PinchToZoom();
 	}
 

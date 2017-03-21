@@ -21,6 +21,7 @@ public class TutorialBehavior : MonoBehaviour
 
     void ChangeSprite()
     {
+
         switch (playerGrouptype)
         {
             case GroupType.Animal:
@@ -47,6 +48,7 @@ public class TutorialBehavior : MonoBehaviour
         });
         closeButton.onClick.AddListener(delegate
         {
+
             Destroy(gameObject);
         });
     }
