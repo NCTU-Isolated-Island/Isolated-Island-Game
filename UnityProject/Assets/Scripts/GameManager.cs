@@ -62,57 +62,85 @@ public class GameManager : MonoBehaviour
 
     void LoadItemGameObject()
     {
-        // itemID to item path in resources
-        //elementModels.Add(1002, Resources.Load("Ingredients/" + "Speaker") as GameObject);
-        elementModels.Add(4001, Resources.Load("Ingredients/" + "Chip") as GameObject);
-        //elementModels.Add(1004, Resources.Load("Ingredients/" + "take_copter_1") as GameObject);
-        elementModels.Add(1019, Resources.Load("Ingredients/" + "wood") as GameObject);
-        elementModels.Add(2013, Resources.Load("Ingredients/" + "steel") as GameObject);
-        elementModels.Add(2003, Resources.Load("Ingredients/" + "rope") as GameObject);
-        elementModels.Add(1016, Resources.Load("Ingredients/" + "coal") as GameObject);
-        elementModels.Add(1013, Resources.Load("Ingredients/" + "fire") as GameObject);
-        elementModels.Add(1006, Resources.Load("Ingredients/" + "Wheat") as GameObject);
-        elementModels.Add(2001, Resources.Load("Ingredients/" + "Silicone") as GameObject);
+        elementModels.Add(   1, Resources.Load("Ingredients/" + "trash") as GameObject);
+
         elementModels.Add(1005, Resources.Load("Ingredients/" + "stone") as GameObject);
+		elementModels.Add(1006, Resources.Load("Ingredients/" + "Wheat") as GameObject);
+		elementModels.Add(1007, Resources.Load("Ingredients/" + "Egg") as GameObject);
+		elementModels.Add(1008, Resources.Load("Ingredients/" + "CoffeeBean") as GameObject);
+        elementModels.Add(1009, Resources.Load("Ingredients/" + "pineapple") as GameObject);
+        elementModels.Add(1010, Resources.Load("Ingredients/" + "apple") as GameObject);
         elementModels.Add(1011, Resources.Load("Ingredients/" + "water") as GameObject);
-        elementModels.Add(1007, Resources.Load("Ingredients/" + "Egg") as GameObject);
-        elementModels.Add(1008, Resources.Load("Ingredients/" + "CoffeeBean") as GameObject);
+        elementModels.Add(1013, Resources.Load("Ingredients/" + "fire") as GameObject);
+
+		elementModels.Add(1016, Resources.Load("Ingredients/" + "coal") as GameObject);
+
+
+		elementModels.Add(1018, Resources.Load("Ingredients/" + "Patato") as GameObject);
+		//elementModels.Add(1019, Resources.Load("Ingredients/" + "wood") as GameObject);
+
+		elementModels.Add(1021, Resources.Load("Ingredients/" + "oil") as GameObject);
+		elementModels.Add(1022, Resources.Load("Ingredients/" + "fish") as GameObject);
+		elementModels.Add(1023, Resources.Load("Ingredients/" + "Sponge") as GameObject);
+
+        elementModels.Add(2001, Resources.Load("Ingredients/" + "Silicone") as GameObject);
+        elementModels.Add(2002, Resources.Load("Ingredients/" + "Ball") as GameObject);
+        elementModels.Add(2003, Resources.Load("Ingredients/" + "rope") as GameObject);
+        elementModels.Add(2005, Resources.Load("Ingredients/" + "StoneMill") as GameObject);
         elementModels.Add(2006, Resources.Load("Ingredients/" + "milk") as GameObject);
-        elementModels.Add(1018, Resources.Load("Ingredients/" + "Patato") as GameObject);
-        elementModels.Add(2011, Resources.Load("Ingredients/" + "pigment") as GameObject);
-        elementModels.Add(2019, Resources.Load("Ingredients/" + "gold") as GameObject);
+        elementModels.Add(2007, Resources.Load("Ingredients/" + "badminton") as GameObject);
         elementModels.Add(2008, Resources.Load("Ingredients/" + "knife") as GameObject);
-        elementModels.Add(2014, Resources.Load("Ingredients/" + "pencil") as GameObject);
-        //elementModels.Add(1034, Resources.Load("Ingredients/" + "Pineapple") as GameObject);
-        elementModels.Add(1021, Resources.Load("Ingredients/" + "oil") as GameObject);
-        elementModels.Add(1022, Resources.Load("Ingredients/" + "Fish") as GameObject);
-        elementModels.Add(1023, Resources.Load("Ingredients/" + "Sponge") as GameObject);
+        elementModels.Add(2009, Resources.Load("Ingredients/" + "Sugar") as GameObject);
 
-        //elementModels.Add(2001, Resources.Load("Ingredients/" + "SpongeWet") as GameObject);
-        //elementModels.Add(2004, Resources.Load("Ingredients/" + "Podium") as GameObject);
-        //elementModels.Add(2005, Resources.Load("Ingredients/" + "basket") as GameObject);
-        elementModels.Add(4008, Resources.Load("Ingredients/" + "Ghost") as GameObject);
-        elementModels.Add(5004, Resources.Load("Ingredients/" + "guitar") as GameObject);
-        elementModels.Add(2017, Resources.Load("Ingredients/" + "Propeller") as GameObject);
-        elementModels.Add(2016, Resources.Load("Ingredients/" + "electricity") as GameObject);
-        //elementModels.Add(2020, Resources.Load("Ingredients/" + "Oven") as GameObject);
+        elementModels.Add(2011, Resources.Load("Ingredients/" + "pigment") as GameObject);
+        elementModels.Add(2012, Resources.Load("Ingredients/" + "Pot") as GameObject);
+        elementModels.Add(2013, Resources.Load("Ingredients/" + "Flour") as GameObject);
+		elementModels.Add(2014, Resources.Load("Ingredients/" + "pencil") as GameObject);
 
-        //elementModels.Add(3001, Resources.Load("Ingredients/" + "SpongeBaby") as GameObject);
-        elementModels.Add(4002, Resources.Load("Ingredients/" + "Pillow") as GameObject);
-        //elementModels.Add(3012, Resources.Load("Ingredients/" + "Fries") as GameObject);
-        //elementModels.Add(3015, Resources.Load("Ingredients/" + "Computer") as GameObject);
-        elementModels.Add(2018, Resources.Load("Ingredients/" + "small_light") as GameObject);
-        //elementModels.Add(3017, Resources.Load("Ingredients/" + "Motor") as GameObject);
-        elementModels.Add(3005, Resources.Load("Ingredients/" + "Flour") as GameObject);
+		elementModels.Add(2016, Resources.Load("Ingredients/" + "electricity") as GameObject);
+		elementModels.Add(2017, Resources.Load("Ingredients/" + "Propeller") as GameObject);
 
-        //elementModels.Add(4003, Resources.Load("Ingredients/" + "DeapseaPineapple") as GameObject);
-        //elementModels.Add(4006, Resources.Load("Ingredients/" + "Heater") as GameObject);
-        elementModels.Add(5002, Resources.Load("Ingredients/" + "Latte") as GameObject);
-        elementModels.Add(5005, Resources.Load("Ingredients/" + "Bread") as GameObject);
-        //elementModels.Add(4016, Resources.Load("Ingredients/" + "Stereo") as GameObject);
-        //elementModels.Add(4017, Resources.Load("Ingredients/" + "imac") as GameObject);
+		elementModels.Add(2019, Resources.Load("Ingredients/" + "gold") as GameObject);
+        elementModels.Add(2020, Resources.Load("Ingredients/" + "Candle") as GameObject);
 
-        //elementModels.Add(6001, Resources.Load("Ingredients/" + "ShineMood") as GameObject);
+        elementModels.Add(3001, Resources.Load("Ingredients/" + "Soup") as GameObject);
+        elementModels.Add(3002, Resources.Load("Ingredients/" + "steel") as GameObject);
+		elementModels.Add(3003, Resources.Load("Ingredients/" + "Chip") as GameObject);
+
+		elementModels.Add(3005, Resources.Load("Ingredients/" + "Pillow") as GameObject);
+
+		elementModels.Add(3008, Resources.Load("Ingredients/" + "Latte") as GameObject);
+        elementModels.Add(3009, Resources.Load("Ingredients/" + "Coke") as GameObject);
+        elementModels.Add(3011, Resources.Load("Ingredients/" + "Painter") as GameObject);
+        elementModels.Add(3012, Resources.Load("Ingredients/" + "guitar") as GameObject);
+		elementModels.Add(3013, Resources.Load("Ingredients/" + "Ghost") as GameObject);
+		elementModels.Add(3014, Resources.Load("Ingredients/" + "small_light") as GameObject);
+
+		elementModels.Add(3017, Resources.Load("Ingredients/" + "Oven") as GameObject);
+		elementModels.Add(3018, Resources.Load("Ingredients/" + "take_copter_1") as GameObject);
+		elementModels.Add(3019, Resources.Load("Ingredients/" + "Bread") as GameObject);
+
+        elementModels.Add(4004, Resources.Load("Ingredients/" + "badminton_racket") as GameObject);
+        elementModels.Add(4006, Resources.Load("Ingredients/" + "Motor") as GameObject);
+
+		elementModels.Add(4009, Resources.Load("Ingredients/" + "ShineMood") as GameObject);
+        elementModels.Add(4010, Resources.Load("Ingredients/" + "black_horse") as GameObject);
+
+        elementModels.Add(4013, Resources.Load("Ingredients/" + "imac") as GameObject);
+
+
+		elementModels.Add(4016, Resources.Load("Ingredients/" + "Fries") as GameObject);
+
+
+        // check
+        foreach (var element in elementModels)
+        {
+            if (element.Value == null)
+                print(element.Key);
+        }
+
+
+	
     }
 
     IEnumerator SlowUpdate()
@@ -168,7 +196,6 @@ public class GameManager : MonoBehaviour
             isInMainScene = false;
         }
 
-        //TODO 設定完之後再把顯示出遊戲畫面（在這之前可能顯示loading bar
     }
 
     public IEnumerator OnPlayerLocationChange(Vector3 position, float eulerAngleY)
@@ -275,35 +302,38 @@ public class GameManager : MonoBehaviour
             {
                 switch (changeType)
                 {
-                    case DataChangeType.Add:
-					{
-                            GameObject decorationGameObject = Instantiate(
-                                elementModels[decoration.Material.ItemID],
-                                userVesselGameObject.transform.Find("Decorations")
-                            ) as GameObject;
+					case DataChangeType.Add:
+					{	
+						if(!elementModels.ContainsKey(decoration.Material.ItemID))
+							return;
 
-                            decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
-                            decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
-                            decorationGameObject.name = decoration.DecorationID.ToString();
+							GameObject decorationGameObject = Instantiate(
+								elementModels[decoration.Material.ItemID],
+								userVesselGameObject.transform.Find("Decorations")
+							) as GameObject;
 
-                            if (!VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
-                            {
-                                //Find OwnerPlayerID by VesselID
-                                Vessel v;
-                                VesselManager.Instance.FindVessel(vesselID, out v);
+							decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
+							decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
+							decorationGameObject.name = decoration.DecorationID.ToString();
 
-                                VesselDecoration[vesselID].Add(decoration.DecorationID, decorationGameObject);
+							if (!VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
+							{
+								//Find OwnerPlayerID by VesselID
+								Vessel v;
+								VesselManager.Instance.FindVessel(vesselID, out v);
 
-                                //TODO for some reason UserDecoration[v.PlayerInformation.playerID] already
-                                // contain key "decoration.DecorationID"
+								VesselDecoration[vesselID].Add(decoration.DecorationID, decorationGameObject);
 
-                            }
-                            else
-                            {
-                                Debug.LogFormat("Add Decoration to Vessel Fail, Decoration Already Existed, VesselID: {0}, DecorationID: {1}", vesselID, decoration.DecorationID);
-                            }
-                        }
-                        break;
+
+							}
+							else
+							{
+								Debug.LogFormat("Add Decoration to Vessel Fail, Decoration Already Existed, VesselID: {0}, DecorationID: {1}", vesselID, decoration.DecorationID);
+							}
+						
+                        
+                    }
+                    break;
                     case DataChangeType.Remove:
                         {
                             if (VesselDecoration[vesselID].ContainsKey(decoration.DecorationID))
@@ -329,7 +359,7 @@ public class GameManager : MonoBehaviour
                             if (VesselDecoration[vesselID].TryGetValue(decoration.DecorationID, out decorationGameObject))
                             {
                                 decorationGameObject.transform.localPosition = new Vector3(decoration.PositionX, decoration.PositionY, decoration.PositionZ);
-                                decorationGameObject.transform.localRotation = Quaternion.Euler(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
+								decorationGameObject.transform.localEulerAngles = new Vector3(decoration.RotationEulerAngleX, decoration.RotationEulerAngleY, decoration.RotationEulerAngleZ);
                             }
                             else
                             {
@@ -381,6 +411,9 @@ public class GameManager : MonoBehaviour
 
                         foreach (Decoration decoration in vessel.Decorations)
                         {
+							if(!elementModels.ContainsKey(decoration.Material.ItemID))
+								continue;
+						
                             if (!decorationDictionary.ContainsKey(decoration.DecorationID))
                             {
                                 GameObject decorationGameObject = Instantiate(

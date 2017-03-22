@@ -1,70 +1,76 @@
-﻿using System.Collections;
+﻿using IsolatedIslandGame.Protocol;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TutorialBehavior : MonoBehaviour
 {
-    [SerializeField]
-    private Sprite[] tutorialPageList;
+    //[SerializeField]
+    //private Sprite[] tutorialPageList;
+    public const int TutorialPageCount = 8;
+
+    private GroupType playerGrouptype;
 
     [SerializeField]
     private Button nextPageButton;
-    [SerializeField]
-    private Button previousPageButton;
     [SerializeField]
     private Button closeButton;
 
     private int currentPageNum;
 
+    void ChangeSprite()
+    {
+
+        switch (playerGrouptype)
+        {
+            case GroupType.Animal:
+                gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("TutorialSprite/信仰" + currentPageNum.ToString());
+                print("TutorialSprite / 信仰" + currentPageNum.ToString());
+                break;
+            case GroupType.Businessman:
+                gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("TutorialSprite/科技" + currentPageNum.ToString());
+                break;
+            case GroupType.Farmer:
+                gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("TutorialSprite/自然" + currentPageNum.ToString());
+                break;
+        }
+    }
+
     void Start()
     {
-        currentPageNum = 0;
-        gameObject.GetComponent<Image>().sprite = tutorialPageList[currentPageNum];
+        currentPageNum = 1;
+        ChangeSprite();
 
         nextPageButton.onClick.AddListener(delegate
         {
             NextPage();
         });
-        previousPageButton.onClick.AddListener(delegate
-        {
-            PreviousPage();
-        });
         closeButton.onClick.AddListener(delegate
         {
+
             Destroy(gameObject);
         });
     }
 
     public void NextPage()
     {
-        if (currentPageNum == tutorialPageList.Length - 1)
+        if (currentPageNum == TutorialPageCount)
             return;
 
-        gameObject.GetComponent<Image>().sprite = tutorialPageList[currentPageNum + 1];
-
         currentPageNum++;
+        ChangeSprite();
 
-        if (currentPageNum == tutorialPageList.Length - 1)
+        if (currentPageNum == TutorialPageCount)
         {
             closeButton.gameObject.SetActive(true);
             nextPageButton.gameObject.SetActive(false);
         }
     }
 
-    public void PreviousPage()
+    public void SetGroupType(GroupType grouptype)
     {
-        if (currentPageNum == 0)
-            return;
-
-        gameObject.GetComponent<Image>().sprite = tutorialPageList[currentPageNum - 1];
-
-        currentPageNum--;
-    }
-
-    public void SetPageList(Sprite[] list)
-    {
-        tutorialPageList = list;
+        playerGrouptype = grouptype;
     }
 
 }
