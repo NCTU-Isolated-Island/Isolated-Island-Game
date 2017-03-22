@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace IsolatedIslandGame.Library
 {
@@ -52,6 +53,35 @@ namespace IsolatedIslandGame.Library
             {
                 return requirements.All(requirement => infos.Contains(requirement));
             }
+        }
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Item item;
+            foreach (var info in Requirements)
+            {
+                if (ItemManager.Instance.FindItem(info.itemID, out item))
+                {
+                    stringBuilder.Append($"{item.ItemName} x{info.itemCount} ");
+                }
+                else
+                {
+                    stringBuilder.Append($"未知的物品 x{info.itemCount} ");
+                }
+            }
+            stringBuilder.Append("=> ");
+            foreach (var info in Products)
+            {
+                if (ItemManager.Instance.FindItem(info.itemID, out item))
+                {
+                    stringBuilder.Append($"{item.ItemName} x{info.itemCount} ");
+                }
+                else
+                {
+                    stringBuilder.Append($"未知的物品 x{info.itemCount} ");
+                }
+            }
+            return stringBuilder.ToString();
         }
     }
 }

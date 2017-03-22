@@ -50,7 +50,7 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRequirementToGetSpecificItemQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToCloseDealWithOutlanderQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToCollectSpecificNumberBelongingGroupMaterialQuestRequirement(int requirementID, out QuestRequirement requirement);
-        protected abstract bool SpecializeQuestRequirementToSynthesizeSpecificScoreMaterialQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToSynthesizeSpecificBlueprintQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToScanSpecificQR_CodeQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToHaveSpecificNumberFriendQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToSynthesizeSuccessfulSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement);
@@ -59,6 +59,7 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRequirementToHaveSpecificNumberDecorationOnVesselQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToFinishedBeforeSpecificTimeQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToFinishedInSpecificTimeSpanQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToDrawMaterialQuestRequirement(int requirementID, out QuestRequirement requirement);
         #endregion
 
         #region Specialize QuestReward
@@ -71,6 +72,7 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelSpecificGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelBelongingGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelOtherGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         #endregion
     }
 }

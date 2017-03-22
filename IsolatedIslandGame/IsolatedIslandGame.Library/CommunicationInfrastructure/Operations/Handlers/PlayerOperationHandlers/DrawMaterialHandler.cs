@@ -21,29 +21,45 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 Random randomGenerator = new Random(DateTime.Now.GetHashCode());
                 int resultCaseNumber = randomGenerator.Next(1, 101);
                 IEnumerable<Material> materials = null;
-                if (resultCaseNumber <= 60)
+                if (resultCaseNumber <= 15)
                 {
-                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.GroupType == subject.GroupType && x.Level == 1);
+                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Level == 0);
                 }
-                else if(resultCaseNumber <= 80)
+                else if(resultCaseNumber <= 75)
                 {
-                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.GroupType != subject.GroupType && x.Level == 1);
+                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Level == 1);
+                    if(randomGenerator.Next(1,101) <= 80)
+                    {
+                        materials = materials.Where(x => x.GroupType == subject.GroupType);
+                    }
+                    else
+                    {
+                        materials = materials.Where(x => x.GroupType != subject.GroupType);
+                    }
                 }
-                else if(resultCaseNumber <= 90)
+                else if(resultCaseNumber <= 95)
                 {
                     materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Level == 2);
-                }
-                else if(resultCaseNumber <= 97)
-                {
-                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Level == 3);
-                }
-                else if (resultCaseNumber <= 99)
-                {
-                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Level == 4);
+                    if (randomGenerator.Next(1, 101) <= 70)
+                    {
+                        materials = materials.Where(x => x.GroupType == subject.GroupType);
+                    }
+                    else
+                    {
+                        materials = materials.Where(x => x.GroupType != subject.GroupType);
+                    }
                 }
                 else
                 {
-                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Level == 1);
+                    materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Level == 3);
+                    if (randomGenerator.Next(1, 101) <= 60)
+                    {
+                        materials = materials.Where(x => x.GroupType == subject.GroupType);
+                    }
+                    else
+                    {
+                        materials = materials.Where(x => x.GroupType != subject.GroupType);
+                    }
                 }
                 Item randomItem = materials.ElementAt(randomGenerator.Next(0, materials.Count()));
                 int itemCount = 1;
@@ -61,6 +77,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         SendResponse(operationCode, responseParameters);
                         LogService.InfoFormat("Player: {0}, DrawMaterial, ItemID: {1}, ItemCount{2}", subject.IdentityInformation, randomItem.ItemID, itemCount);
                         subject.NextDrawMaterialTime = ItemManager.Instance.NextDrawMaterialTime + ItemManager.Instance.NextDrawMaterialTimeSpan;
+                        subject.DrawMaterial();
                         return true;
                     }
                     else if(drawTime < subject.NextDrawMaterialTime)
