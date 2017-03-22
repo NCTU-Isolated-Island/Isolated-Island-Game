@@ -144,8 +144,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                             requirements.Add(requirement);
                         }
                         break;
-                    case QuestRequirementType.SynthesizeSpecificScoreMaterial:
-                        if (SpecializeQuestRequirementToSynthesizeSpecificScoreMaterialQuestRequirement(info.questRequirementID, out requirement))
+                    case QuestRequirementType.SynthesizeSpecificBlueprint:
+                        if (SpecializeQuestRequirementToSynthesizeSpecificBlueprintQuestRequirement(info.questRequirementID, out requirement))
                         {
                             requirements.Add(requirement);
                         }
@@ -194,6 +194,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         break;
                     case QuestRequirementType.FinishedInSpecificTimeSpan:
                         if (SpecializeQuestRequirementToFinishedInSpecificTimeSpanQuestRequirement(info.questRequirementID, out requirement))
+                        {
+                            requirements.Add(requirement);
+                        }
+                        break;
+                    case QuestRequirementType.DrawMaterial:
+                        if (SpecializeQuestRequirementToDrawMaterialQuestRequirement(info.questRequirementID, out requirement))
                         {
                             requirements.Add(requirement);
                         }
@@ -284,6 +290,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         break;
                     case QuestRewardType.GiveSpecificNumberSpecificLevelBelongingGroupRandomMaterial:
                         if (SpecializeQuestRewardToGiveSpecificNumberSpecificLevelBelongingGroupRandomMaterialQuestReward(info.questRewardID, out reward))
+                        {
+                            rewards.Add(reward);
+                        }
+                        break;
+                    case QuestRewardType.GiveSpecificNumberSpecificLevelOtherGroupRandomMaterial:
+                        if (SpecializeQuestRewardToGiveSpecificNumberSpecificLevelOtherGroupRandomMaterialQuestReward(info.questRewardID, out reward))
                         {
                             rewards.Add(reward);
                         }
@@ -665,10 +677,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool SpecializeQuestRequirementToSynthesizeSpecificScoreMaterialQuestRequirement(int requirementID, out QuestRequirement requirement)
+        protected override bool SpecializeQuestRequirementToSynthesizeSpecificBlueprintQuestRequirement(int requirementID, out QuestRequirement requirement)
         {
-            string sqlString = @"SELECT SpecificMaterialScore
-                from SSSM_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
+            string sqlString = @"SELECT SpecificBlueprintID
+                from SSB_QuestRequirementCollection WHERE QuestRequirementID = @requirementID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementID", requirementID);
@@ -676,8 +688,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        int specificMaterialScore = reader.GetInt32(0);
-                        requirement = new SynthesizeSpecificScoreMaterialQuestRequirement(requirementID, specificMaterialScore);
+                        int specificBlueprintID = reader.GetInt32(0);
+                        requirement = new SynthesizeSpecificBlueprintQuestRequirement(requirementID, specificBlueprintID);
                         return true;
                     }
                     else
@@ -871,6 +883,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     }
                 }
             }
+        }
+        protected override bool SpecializeQuestRequirementToDrawMaterialQuestRequirement(int requirementID, out QuestRequirement requirement)
+        {
+            requirement = new DrawMaterialQuestRequirement(requirementID);
+            return true;
         }
         #endregion
 
@@ -1090,6 +1107,31 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         int materialLevel = reader.GetInt32(1);
 
                         reward = new GiveSpecificNumberSpecificLevelBelongingGroupRandomMaterialQuestReward(rewardID, materialCount, materialLevel);
+                        return true;
+                    }
+                    else
+                    {
+                        reward = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelOtherGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward)
+        {
+            string sqlString = @"SELECT MaterialCount, MaterialLevel
+                from GSNSLOGRM_QuestRewardCollection WHERE QuestRewardID = @rewardID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("rewardID", rewardID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int materialCount = reader.GetInt32(0);
+                        int materialLevel = reader.GetInt32(1);
+
+                        reward = new GiveSpecificNumberSpecificLevelOtherGroupRandomMaterialQuestReward(rewardID, materialCount, materialLevel);
                         return true;
                     }
                     else

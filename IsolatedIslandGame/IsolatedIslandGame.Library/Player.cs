@@ -107,6 +107,9 @@ namespace IsolatedIslandGame.Library
         public delegate void SynthesizeResultEventHandler(bool isSuccessful, Blueprint blueprint);
         private event SynthesizeResultEventHandler onSynthesizeResultGenerated;
         public event SynthesizeResultEventHandler OnSynthesizeResultGenerated { add { onSynthesizeResultGenerated += value; } remove { onSynthesizeResultGenerated -= value; } }
+
+        private event Action onDrawMaterial;
+        public event Action OnDrawMaterial { add { onDrawMaterial += value; } remove { onDrawMaterial -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress, DateTime nextDrawMaterialTime, int cumulativeLoginCount)
@@ -363,6 +366,10 @@ namespace IsolatedIslandGame.Library
                 onSynthesizeResultGenerated?.Invoke(false, null);
                 return false;
             }
+        }
+        public void DrawMaterial()
+        {
+            onDrawMaterial?.Invoke();
         }
     }
 }

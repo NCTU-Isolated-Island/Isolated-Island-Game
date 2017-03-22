@@ -13,7 +13,7 @@
         GetSpecificItem,
         CloseDealWithOutlander,
         CollectSpecificNumberBelongingGroupMaterial,
-        SynthesizeSpecificScoreMaterial,
+        SynthesizeSpecificBlueprint,
         ScanSpecificQR_Code,
         HaveSpecificNumberFriend,
         SynthesizeSuccessfulSpecificNumberOfTime,
@@ -22,5 +22,6 @@
         HaveSpecificNumberDecorationOnVessel,
         FinishedBeforeSpecificTime,
         FinishedInSpecificTimeSpan,
+        DrawMaterial
     }
 }

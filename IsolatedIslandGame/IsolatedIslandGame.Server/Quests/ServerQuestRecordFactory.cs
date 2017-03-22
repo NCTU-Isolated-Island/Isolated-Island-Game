@@ -65,9 +65,9 @@ namespace IsolatedIslandGame.Server.Quests
         {
             DatabaseService.RepositoryList.QuestRecordRepository.UpdateCollectSpecificNumberBelongingGroupMaterialQuestRequirementRecord(record);
         }
-        public override void UpdateSynthesizeSpecificScoreMaterialQuestRequirementRecord(SynthesizeSpecificScoreMaterialQuestRequirementRecord record)
+        public override void UpdateSynthesizeSpecificBlueprintQuestRequirementRecord(SynthesizeSpecificBlueprintQuestRequirementRecord record)
         {
-            DatabaseService.RepositoryList.QuestRecordRepository.UpdateSynthesizeSpecificScoreMaterialQuestRequirementRecord(record);
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateSynthesizeSpecificBlueprintQuestRequirementRecord(record);
         }
         public override void UpdateScanSpecificQR_CodeQuestRequirementRecord(ScanSpecificQR_CodeQuestRequirementRecord record)
         {
@@ -100,6 +100,10 @@ namespace IsolatedIslandGame.Server.Quests
         public override void UpdateFinishedInSpecificTimeSpanQuestRequirementRecord(FinishedInSpecificTimeSpanQuestRequirementRecord record)
         {
             DatabaseService.RepositoryList.QuestRecordRepository.UpdateFinishedInSpecificTimeSpanQuestRequirementRecord(record);
+        }
+        public override void UpdateDrawMaterialQuestRequirementRecord(DrawMaterialQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateDrawMaterialQuestRequirementRecord(record);
         }
     }
 }

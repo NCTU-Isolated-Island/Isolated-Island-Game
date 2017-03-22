@@ -187,8 +187,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 requirementRecords.Add(requirementRecord);
                             }
                             break;
-                        case QuestRequirementType.SynthesizeSpecificScoreMaterial:
-                            if (SpecializeQuestRequirementRecordToSynthesizeSpecificScoreMaterialQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                        case QuestRequirementType.SynthesizeSpecificBlueprint:
+                            if (SpecializeQuestRequirementRecordToSynthesizeSpecificBlueprintQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
                             {
                                 requirementRecords.Add(requirementRecord);
                             }
@@ -237,6 +237,12 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                             break;
                         case QuestRequirementType.FinishedInSpecificTimeSpan:
                             if (SpecializeQuestRequirementRecordToFinishedInSpecificTimeSpanQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.DrawMaterial:
+                            if (SpecializeQuestRequirementRecordToDrawMaterialQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
                             {
                                 requirementRecords.Add(requirementRecord);
                             }
@@ -318,9 +324,9 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     {
                         return CreateCollectSpecificNumberBelongingGroupMaterialQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
                     }
-                case QuestRequirementType.SynthesizeSpecificScoreMaterial:
+                case QuestRequirementType.SynthesizeSpecificBlueprint:
                     {
-                        return CreateSynthesizeSpecificScoreMaterialQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                        return CreateSynthesizeSpecificBlueprintQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
                     }
                 case QuestRequirementType.ScanSpecificQR_Code:
                     {
@@ -353,6 +359,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 case QuestRequirementType.FinishedInSpecificTimeSpan:
                     {
                         return CreateFinishedInSpecificTimeSpanQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.DrawMaterial:
+                    {
+                        return CreateDrawMaterialQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
                     }
                 default:
                     requirementRecord = null;
@@ -571,16 +581,16 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool CreateSynthesizeSpecificScoreMaterialQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        protected override bool CreateSynthesizeSpecificBlueprintQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
         {
-            string sqlString = @"INSERT INTO SSSM_QuestRequirementRecordCollection 
+            string sqlString = @"INSERT INTO SSB_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasSynthesizedSpecificScoreMaterial) VALUES (@requirementRecordID,false) ;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
                 if (command.ExecuteNonQuery() > 0)
                 {
-                    requirementRecord = new SynthesizeSpecificScoreMaterialQuestRequirementRecord(requirementRecordID, requirement, false);
+                    requirementRecord = new SynthesizeSpecificBlueprintQuestRequirementRecord(requirementRecordID, requirement, false);
                     return true;
                 }
                 else
@@ -741,6 +751,11 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     return false;
                 }
             }
+        }
+        protected override bool CreateDrawMaterialQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            requirementRecord = new DrawMaterialQuestRequirementRecord(requirementRecordID, requirement, false);
+            return true;
         }
         #endregion
 
@@ -1000,10 +1015,10 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        protected override bool SpecializeQuestRequirementRecordToSynthesizeSpecificScoreMaterialQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        protected override bool SpecializeQuestRequirementRecordToSynthesizeSpecificBlueprintQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
         {
             string sqlString = @"SELECT HasSynthesizedSpecificScoreMaterial
-                from SSSM_QuestRequirementRecordCollection 
+                from SSB_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
@@ -1012,8 +1027,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 {
                     if (reader.Read())
                     {
-                        bool hasSynthesizedSpecificScoreMaterial = reader.GetBoolean(0);
-                        requirementRecord = new SynthesizeSpecificScoreMaterialQuestRequirementRecord(requirementRecordID, requirement, hasSynthesizedSpecificScoreMaterial);
+                        bool hasSynthesizedSpecificBlueprint = reader.GetBoolean(0);
+                        requirementRecord = new SynthesizeSpecificBlueprintQuestRequirementRecord(requirementRecordID, requirement, hasSynthesizedSpecificBlueprint);
                         return true;
                     }
                     else
@@ -1217,6 +1232,30 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
+        protected override bool SpecializeQuestRequirementRecordToDrawMaterialQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT HasDrawMaterial
+                from DM_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        bool hasDrawMaterial = reader.GetBoolean(0);
+                        requirementRecord = new DrawMaterialQuestRequirementRecord(requirementRecordID, requirement, hasDrawMaterial);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region update quest requirement record
@@ -1405,19 +1444,19 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 }
             }
         }
-        public override void UpdateSynthesizeSpecificScoreMaterialQuestRequirementRecord(SynthesizeSpecificScoreMaterialQuestRequirementRecord record)
+        public override void UpdateSynthesizeSpecificBlueprintQuestRequirementRecord(SynthesizeSpecificBlueprintQuestRequirementRecord record)
         {
-            string sqlString = @"UPDATE SSSM_QuestRequirementRecordCollection SET 
-                HasSynthesizedSpecificScoreMaterial = @hasSynthesizedSpecificScoreMaterial
+            string sqlString = @"UPDATE SSB_QuestRequirementRecordCollection SET 
+                HasSynthesizedSpecificBlueprint = @hasSynthesizedSpecificBlueprint
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
-                command.Parameters.AddWithValue("hasSynthesizedSpecificScoreMaterial", record.HasSynthesizedSpecificScoreMaterial);
+                command.Parameters.AddWithValue("hasSynthesizedSpecificBlueprint", record.HasSynthesizedSpecificBlueprint);
                 command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
 
                 if (command.ExecuteNonQuery() <= 0)
                 {
-                    LogService.Error($"MySQL_QuestRecordRepository UpdateSynthesizeSpecificScoreMaterialQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateSynthesizeSpecificBlueprintQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
                 }
             }
         }
@@ -1547,6 +1586,22 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.Error($"MySQL_QuestRecordRepository UpdateHaveSpecificNumberDecorationOnVesselQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override void UpdateDrawMaterialQuestRequirementRecord(DrawMaterialQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE DM_QuestRequirementRecordCollection SET 
+                HasDrawMaterial = @hasDrawMaterial
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("hasDrawMaterial", record.HasDrawMaterial);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateDrawMaterialQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
                 }
             }
         }

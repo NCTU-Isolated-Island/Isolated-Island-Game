@@ -14,32 +14,7 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
                 Blueprint blueprint;
                 if (BlueprintManager.Instance.FindBlueprint(BlueprintID, out blueprint))
                 {
-                    StringBuilder stringBuilder = new StringBuilder("解鎖藍圖： ");
-                    Item item;
-                    foreach(var info in blueprint.Requirements)
-                    {
-                        if (ItemManager.Instance.FindItem(info.itemID, out item))
-                        {
-                            stringBuilder.Append($"{item.ItemName} x{info.itemCount} ");
-                        }
-                        else
-                        {
-                            stringBuilder.Append($"未知的物品 x{info.itemCount} ");
-                        }
-                    }
-                    stringBuilder.Append("=> ");
-                    foreach (var info in blueprint.Products)
-                    {
-                        if (ItemManager.Instance.FindItem(info.itemID, out item))
-                        {
-                            stringBuilder.Append($"{item.ItemName} x{info.itemCount} ");
-                        }
-                        else
-                        {
-                            stringBuilder.Append($"未知的物品 x{info.itemCount} ");
-                        }
-                    }
-                    return stringBuilder.ToString();
+                    return "解鎖藍圖： " + blueprint.ToString();
                 }
                 else
                 {
