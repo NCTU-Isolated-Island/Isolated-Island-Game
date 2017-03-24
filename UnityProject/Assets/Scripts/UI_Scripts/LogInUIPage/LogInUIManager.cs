@@ -35,9 +35,6 @@ public class LogInUIManager : MonoBehaviour
     [SerializeField]
     private GameObject chooseGroupPage;
 
-    [SerializeField]
-    private GameObject nameLengthExceedWarning;
-
     private bool firstLogin = false;
 
     void InitSetting()
@@ -95,7 +92,7 @@ public class LogInUIManager : MonoBehaviour
         if (firstLogin == true)
             TutorialManager.Instance.OpenTutorialPage();
 
-        while(passTime < 1f)
+        while (passTime < 1f)
         {
             passTime += Time.deltaTime;
 
@@ -106,12 +103,9 @@ public class LogInUIManager : MonoBehaviour
             Color color2 = deepBlue.GetComponent<Image>().color;
             color2.a = Mathf.Lerp(1, 0, passTime / 1f);
             deepBlue.GetComponent<Image>().color = color2;
-            
+
             yield return new WaitForEndOfFrame();
         }
-
-        //yield return new WaitForSeconds(1f);
-
 
         gameObject.SetActive(false);
         UIManager.Instance.SwapPage(UIManager.UIPageType.Main);
@@ -119,7 +113,7 @@ public class LogInUIManager : MonoBehaviour
 
     public void LoginRedirection()
     {
-        if(PhotonService.Instance.ServerConnected)
+        if (PhotonService.Instance.ServerConnected)
         {
             GetComponent<Button>().interactable = false;
             GameManager.Instance.Login();
@@ -137,9 +131,20 @@ public class LogInUIManager : MonoBehaviour
     {
         if (playerNameText.text.Length > 20)
         {
-            nameLengthExceedWarning.SetActive(true);
+            UserManager.Instance.User.UserInform("系統通知" , "您輸入的角色名稱過長\n請不要輸入超過20個字元");
             return;
         }
+        if(playerNameText.text.Length == 0)
+        {
+            UserManager.Instance.User.UserInform("系統通知", "角色名稱不能為空\n請輸入角色名稱");
+            return;
+        }
+        if(playerSpeechText.text.Length == 0)
+        {
+            UserManager.Instance.User.UserInform("系統通知", "沒有想說的話嗎?\n請輸入想說的話");
+            return;
+        }
+
         playerName = playerNameText.text;
         speech = playerSpeechText.text;
         ToChooseGroupPage();
@@ -148,10 +153,8 @@ public class LogInUIManager : MonoBehaviour
     public void CreateCharacter()
     {
         UserManager.Instance.User.Player.OperationManager.CreateCharacter(playerName, speech, groupType);
-        //gameObject.SetActive(false);
-        //UIManager.Instance.ToMainPage();
-        //ToMainScenePrepare();
     }
+
     public void NextGroup()
     {
         if (groupType == GroupType.Farmer)
