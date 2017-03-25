@@ -247,6 +247,60 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                                 requirementRecords.Add(requirementRecord);
                             }
                             break;
+                        case QuestRequirementType.SendMessageToSpecificNumberDifferentPlayer:
+                            if (SpecializeQuestRequirementRecordToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.DonateItemSpecificNumberOfTime:
+                            if (SpecializeQuestRequirementRecordToDonateItemSpecificNumberOfTimeQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.RemoveSpecificNumberDecorationFromVessel:
+                            if (SpecializeQuestRequirementRecordToRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.HaveSpecificNumberSpecificItem:
+                            if (SpecializeQuestRequirementRecordToHaveSpecificNumberSpecificItemQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTime:
+                            if (SpecializeQuestRequirementRecordToMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTime:
+                            if (SpecializeQuestRequirementRecordToMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.CloseDealWithSpecificNumberDifferentOtherGroupPlayer:
+                            if (SpecializeQuestRequirementRecordToCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.SendMessageToSpecificNumberSpecificGroupDifferentPlayer:
+                            if (SpecializeQuestRequirementRecordToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
+                        case QuestRequirementType.StillNotOpened:
+                            if (SpecializeQuestRequirementRecordToStillNotOpenedQuestRequirementRecord(info.questRequirementRecordID, requirement, out requirementRecord))
+                            {
+                                requirementRecords.Add(requirementRecord);
+                            }
+                            break;
                         default:
                             LogService.Fatal($"MySQL_QuestRecordRepository ListRequirementRecordsOfQuestRecord QuestRequirementType: {info.questRequirementType} not implemented");
                             break;
@@ -363,6 +417,42 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 case QuestRequirementType.DrawMaterial:
                     {
                         return CreateDrawMaterialQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.SendMessageToSpecificNumberDifferentPlayer:
+                    {
+                        return CreateSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.DonateItemSpecificNumberOfTime:
+                    {
+                        return CreateDonateItemSpecificNumberOfTimeQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.RemoveSpecificNumberDecorationFromVessel:
+                    {
+                        return CreateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.HaveSpecificNumberSpecificItem:
+                    {
+                        return CreateHaveSpecificNumberSpecificItemQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTime:
+                    {
+                        return CreateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTime:
+                    {
+                        return CreateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.CloseDealWithSpecificNumberDifferentOtherGroupPlayer:
+                    {
+                        return CreateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.SendMessageToSpecificNumberSpecificGroupDifferentPlayer:
+                    {
+                        return CreateSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
+                    }
+                case QuestRequirementType.StillNotOpened:
+                    {
+                        return CreateStillNotOpenedQuestRequirementRecord(questRequirementRecordID, requirement, out requirementRecord);
                     }
                 default:
                     requirementRecord = null;
@@ -584,7 +674,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         protected override bool CreateSynthesizeSpecificBlueprintQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
         {
             string sqlString = @"INSERT INTO SSB_QuestRequirementRecordCollection 
-                (QuestRequirementRecordID,HasSynthesizedSpecificScoreMaterial) VALUES (@requirementRecordID,false) ;";
+                (QuestRequirementRecordID,HasSynthesizedSpecificBlueprint) VALUES (@requirementRecordID,false) ;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -754,7 +844,150 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         }
         protected override bool CreateDrawMaterialQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
         {
-            requirementRecord = new DrawMaterialQuestRequirementRecord(requirementRecordID, requirement, false);
+            string sqlString = @"INSERT INTO DM_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,HasDrawMaterial) VALUES (@requirementRecordID,false) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new DrawMaterialQuestRequirementRecord(requirementRecordID, requirement, false);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            requirementRecord = new SendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(requirementRecordID, requirement, new HashSet<int>());
+            return true;
+        }
+        protected override bool CreateDonateItemSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO DISNOT_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,DonatedItemCount) VALUES (@requirementRecordID,0) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new DonateItemSpecificNumberOfTimeQuestRequirementRecord(requirementRecordID, requirement, 0);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO RSNDFV_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,RemovedDecorationCount) VALUES (@requirementRecordID,0) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new RemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(requirementRecordID, requirement, 0);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateHaveSpecificNumberSpecificItemQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO HSNSI_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID) VALUES (@requirementRecordID) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new HaveSpecificNumberSpecificItemQuestRequirementRecord(requirementRecordID, requirement);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO MFSWSGPSNOT_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,SuccessfulCount) VALUES (@requirementRecordID,0) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(requirementRecordID, requirement, 0);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO MFSWOGPSNOT_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,SuccessfulCount) VALUES (@requirementRecordID,0) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(requirementRecordID, requirement, 0);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"INSERT INTO CDWSNDOGP_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,CloseDealCount) VALUES (@requirementRecordID,0) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    requirementRecord = new CloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(requirementRecordID, requirement, 0);
+                    return true;
+                }
+                else
+                {
+                    requirementRecord = null;
+                    return false;
+                }
+            }
+        }
+        protected override bool CreateSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            requirementRecord = new SendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(requirementRecordID, requirement, new HashSet<int>());
+            return true;
+        }
+        protected override bool CreateStillNotOpenedQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            requirementRecord = new StillNotOpenedQuestRequirementRecord(requirementRecordID, requirement);
             return true;
         }
         #endregion
@@ -1017,7 +1250,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         }
         protected override bool SpecializeQuestRequirementRecordToSynthesizeSpecificBlueprintQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
         {
-            string sqlString = @"SELECT HasSynthesizedSpecificScoreMaterial
+            string sqlString = @"SELECT HasSynthesizedSpecificBlueprint
                 from SSB_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
@@ -1251,10 +1484,182 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                     else
                     {
                         requirementRecord = null;
+                        return true;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementRecordToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            HashSet<int> playerID_Set = new HashSet<int>();
+            string sqlString = @"SELECT PlayerID
+                from SMTSNDP_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int playerID = reader.GetInt32(0);
+                        playerID_Set.Add(playerID);
+                    }
+                }
+            }
+            requirementRecord = new SendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(requirementRecordID, requirement, playerID_Set);
+            return true;
+        }
+        protected override bool SpecializeQuestRequirementRecordToDonateItemSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT DonatedItemCount
+                from DISNOT_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int donatedItemCount = reader.GetInt32(0);
+                        requirementRecord = new DonateItemSpecificNumberOfTimeQuestRequirementRecord(requirementRecordID, requirement, donatedItemCount);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
                         return false;
                     }
                 }
             }
+        }
+        protected override bool SpecializeQuestRequirementRecordToRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT RemovedDecorationCount
+                from RSNDFV_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int removedDecorationCount = reader.GetInt32(0);
+                        requirementRecord = new RemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(requirementRecordID, requirement, removedDecorationCount);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementRecordToHaveSpecificNumberSpecificItemQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            requirementRecord = new HaveSpecificNumberSpecificItemQuestRequirementRecord(requirementRecordID, requirement);
+            return true;
+        }
+        protected override bool SpecializeQuestRequirementRecordToMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT SuccessfulCount
+                from MFSWSGPSNOT_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int successfulCount = reader.GetInt32(0);
+                        requirementRecord = new MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(requirementRecordID, requirement, successfulCount);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementRecordToMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT SuccessfulCount
+                from MFSWOGPSNOT_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int successfulCount = reader.GetInt32(0);
+                        requirementRecord = new MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(requirementRecordID, requirement, successfulCount);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementRecordToCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            string sqlString = @"SELECT CloseDealCount
+                from CDWSNDOGP_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int closeDealCount = reader.GetInt32(0);
+                        requirementRecord = new CloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(requirementRecordID, requirement, closeDealCount);
+                        return true;
+                    }
+                    else
+                    {
+                        requirementRecord = null;
+                        return false;
+                    }
+                }
+            }
+        }
+        protected override bool SpecializeQuestRequirementRecordToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            HashSet<int> playerID_Set = new HashSet<int>();
+            string sqlString = @"SELECT PlayerID
+                from SMTSNSGDP_QuestRequirementRecordCollection 
+                WHERE QuestRequirementRecordID = @requirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int playerID = reader.GetInt32(0);
+                        playerID_Set.Add(playerID);
+                    }
+                }
+            }
+            requirementRecord = new SendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(requirementRecordID, requirement, playerID_Set);
+            return true;
+        }
+        protected override bool SpecializeQuestRequirementRecordToStillNotOpenedQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord)
+        {
+            requirementRecord = new StillNotOpenedQuestRequirementRecord(requirementRecordID, requirement);
+            return true;
         }
         #endregion
 
@@ -1602,6 +2007,124 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 if (command.ExecuteNonQuery() <= 0)
                 {
                     LogService.Error($"MySQL_QuestRecordRepository UpdateDrawMaterialQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override bool AddPlayerIDToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID)
+        {
+            string sqlString = @"INSERT INTO SMTSNDP_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,PlayerID) VALUES (@questRequirementRecordID,@playerID) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+                command.Parameters.AddWithValue("playerID", theOtherPlayerID);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository AddPlayerIDToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+        public override void UpdateDonateItemSpecificNumberOfTimeQuestRequirementRecord(DonateItemSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE DISNOT_QuestRequirementRecordCollection SET 
+                DonatedItemCount = @donatedItemCount
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("donatedItemCount", record.DonatedItemCount);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateDonateItemSpecificNumberOfTimeQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override void UpdateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(RemoveSpecificNumberDecorationFromVesselQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE RSNDFV_QuestRequirementRecordCollection SET 
+                RemovedDecorationCount = @removedDecorationCount
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("removedDecorationCount", record.RemovedDecorationCount);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override void UpdateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE MFSWSGPSNOT_QuestRequirementRecordCollection SET 
+                SuccessfulCount = @successfulCount
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("successfulCount", record.SuccessfulCount);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override void UpdateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE MFSWOGPSNOT_QuestRequirementRecordCollection SET 
+                SuccessfulCount = @successfulCount
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("successfulCount", record.SuccessfulCount);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override void UpdateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(CloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord record)
+        {
+            string sqlString = @"UPDATE CDWSNDOGP_QuestRequirementRecordCollection SET 
+                CloseDealCount = @closeDealCount
+                WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("closeDealCount", record.CloseDealCount);
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository UpdateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                }
+            }
+        }
+        public override bool AddPlayerIDToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID)
+        {
+            string sqlString = @"INSERT INTO SMTSNSGDP_QuestRequirementRecordCollection 
+                (QuestRequirementRecordID,PlayerID) VALUES (@questRequirementRecordID,@playerID) ;";
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
+            {
+                command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
+                command.Parameters.AddWithValue("playerID", theOtherPlayerID);
+                if (command.ExecuteNonQuery() <= 0)
+                {
+                    LogService.Error($"MySQL_QuestRecordRepository AddPlayerIDToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord Error QuestRequirementRecordID: {record.QuestRequirementRecordID}");
+                    return false;
+                }
+                else
+                {
+                    return true;
                 }
             }
         }

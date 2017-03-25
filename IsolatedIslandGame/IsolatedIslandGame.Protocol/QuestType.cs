@@ -12,6 +12,8 @@
         QR_Code,
         CollectItem,
         MutiplayerSynthesize,
-        Achievement
+        Achievement,
+        Lecture,
+        Story,
     }
 }

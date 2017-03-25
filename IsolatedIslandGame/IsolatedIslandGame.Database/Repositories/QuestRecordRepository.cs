@@ -49,6 +49,15 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool CreateFinishedBeforeSpecificTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         protected abstract bool CreateFinishedInSpecificTimeSpanQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         protected abstract bool CreateDrawMaterialQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateDonateItemSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateHaveSpecificNumberSpecificItemQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool CreateStillNotOpenedQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         #endregion
 
         #region specialize quest requirement record
@@ -73,6 +82,15 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRequirementRecordToFinishedBeforeSpecificTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         protected abstract bool SpecializeQuestRequirementRecordToFinishedInSpecificTimeSpanQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         protected abstract bool SpecializeQuestRequirementRecordToDrawMaterialQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToDonateItemSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToHaveSpecificNumberSpecificItemQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
+        protected abstract bool SpecializeQuestRequirementRecordToStillNotOpenedQuestRequirementRecord(int requirementRecordID, QuestRequirement requirement, out QuestRequirementRecord requirementRecord);
         #endregion
 
         #region update quest requirement record
@@ -97,6 +115,13 @@ namespace IsolatedIslandGame.Database.Repositories
         public abstract void UpdateFinishedBeforeSpecificTimeQuestRequirementRecord(FinishedBeforeSpecificTimeQuestRequirementRecord record);
         public abstract void UpdateFinishedInSpecificTimeSpanQuestRequirementRecord(FinishedInSpecificTimeSpanQuestRequirementRecord record);
         public abstract void UpdateDrawMaterialQuestRequirementRecord(DrawMaterialQuestRequirementRecord record);
+        public abstract bool AddPlayerIDToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID);
+        public abstract void UpdateDonateItemSpecificNumberOfTimeQuestRequirementRecord(DonateItemSpecificNumberOfTimeQuestRequirementRecord record);
+        public abstract void UpdateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(RemoveSpecificNumberDecorationFromVesselQuestRequirementRecord record);
+        public abstract void UpdateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record);
+        public abstract void UpdateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record);
+        public abstract void UpdateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(CloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord record);
+        public abstract bool AddPlayerIDToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID);
         #endregion
     }
 }

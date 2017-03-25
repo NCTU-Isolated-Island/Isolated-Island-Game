@@ -33,6 +33,10 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
             Blueprint blueprint;
             if (BlueprintManager.Instance.FindBlueprint(BlueprintID, out blueprint))
             {
+                if(!player.IsKnownBlueprint(blueprint.BlueprintID))
+                {
+                    player.User.EventManager.UserInform("提示", $"解鎖了藍圖: {blueprint.BlueprintID}");
+                }
                 player.GetBlueprint(blueprint);
             }
         }

@@ -12,5 +12,7 @@
         GiveSpecificNumberSpecificLevelSpecificGroupRandomMaterial,
         GiveSpecificNumberSpecificLevelBelongingGroupRandomMaterial,
         GiveSpecificNumberSpecificLevelOtherGroupRandomMaterial,
+
+        RemoveSpecificNumberSpecificItem,
     }
 }
