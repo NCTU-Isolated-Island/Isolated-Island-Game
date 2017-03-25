@@ -7,6 +7,7 @@ public class PlayerBehavior : MonoBehaviour
 	private Quaternion TargetRotaion;
 	private Vector3 velocity;
 	public int playerID;
+	public string playerName;
 
 	void Start()
 	{

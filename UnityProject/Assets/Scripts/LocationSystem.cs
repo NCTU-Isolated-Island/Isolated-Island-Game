@@ -14,34 +14,58 @@ public class LocationSystem : MonoBehaviour {
 
 	public GameObject TestLocation;
 
+	private bool DebugMode = false;
+
 	void Awake()
 	{
 		if(Instance == null){
 			Instance = this;
 		}
 
+		#if UNITY_EDITOR
+		DebugMode = true;
+		#endif
 
 	}
 
 	void Update()
 	{	
-		if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
-		//if(Input.anyKeyDown)
+		if(DebugMode)
 		{
-			
-			transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
+			if(Input.GetKeyDown(KeyCode.T))
+			{
 
-			StartCoroutine(GameManager.Instance.OnPlayerLocationChange
-				(
-					GetInGameCoordinate(),
-					transform.localEulerAngles.y
-				));
-			
+				transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
 
-			previousLocation = GetInGameCoordinate();
-			updateTime = ConvertFromUnixTimestamp(Input.location.lastData.timestamp);
+				StartCoroutine(GameManager.Instance.OnPlayerLocationChange
+					(
+						GetInGameCoordinate(),
+						transform.localEulerAngles.y
+					));
+
+
+				previousLocation = GetInGameCoordinate();
+				updateTime = ConvertFromUnixTimestamp(Input.location.lastData.timestamp);
+			}
 		}
+		else
+		{
+			if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
+			{
 
+				transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
+
+				StartCoroutine(GameManager.Instance.OnPlayerLocationChange
+					(
+						GetInGameCoordinate(),
+						transform.localEulerAngles.y
+					));
+
+
+				previousLocation = GetInGameCoordinate();
+				updateTime = ConvertFromUnixTimestamp(Input.location.lastData.timestamp);
+			}
+		}
 	}
 
 	public void StartLocationService()
@@ -72,11 +96,9 @@ public class LocationSystem : MonoBehaviour {
 	public Vector3 GetInGameCoordinate()
 	{
 		//FOR DEVELOP
-		if(Input.location.status != LocationServiceStatus.Running)
+		if(Input.location.status != LocationServiceStatus.Running || DebugMode)
 		{
-			//return new Vector3(30,0,27);
 			return new Vector3(TestLocation.transform.position.x,0f,TestLocation.transform.position.z);
-//			return Vector3.one;
 		}
 
 		Vector3 result;
