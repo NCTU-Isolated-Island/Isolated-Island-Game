@@ -26,17 +26,12 @@ public class UIManager : MonoBehaviour
         //GUI.Label(new Rect(50, 50, 100, 100), (1 / Time.deltaTime).ToString());
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-            SwapPage(UIPageType.IsolatedIsland);
-    }
-
-
     // Variables for creating character
     private int CampNum;
     [SerializeField]
     private UserInformPanel userInformPanelPrefab;
+    [SerializeField]
+    private GameObject playerOnlineMessage;
 
     void Awake()
     {
@@ -185,5 +180,29 @@ public class UIManager : MonoBehaviour
         panel.transform.SetParent(transform);
         panel.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         panel.GetComponent<RectTransform>().localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
+    }
+
+    public void RenderPlayerOnlineMessage(int playerID)
+    {
+        PlayerInformation info;
+        if (PlayerInformationManager.Instance.FindPlayerInformation(playerID, out info))
+        {
+            GameObject tmp = Instantiate(playerOnlineMessage);
+            tmp.transform.SetParent(transform);
+            tmp.GetComponent<RectTransform>().offsetMax = new Vector2(0, tmp.GetComponent<RectTransform>().offsetMax.y);
+            tmp.GetComponent<RectTransform>().offsetMin = new Vector2(0, tmp.GetComponent<RectTransform>().offsetMin.y);
+            tmp.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            tmp.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+            tmp.transform.Find("Title").gameObject.GetComponent<Text>().text = "玩家上線通知";
+            tmp.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("{0}已上線", info.nickname);
+
+            Destroy(tmp , 1.5f);
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+            RenderPlayerOnlineMessage(GameManager.Instance.PlayerID);
     }
 }
