@@ -401,6 +401,12 @@ public class GameManager : MonoBehaviour
                             ) as GameObject;
 
                         userVesselGameObject.name = string.Format("OwnerID: {0}", vessel.OwnerPlayerID);
+						
+						PlayerInformation info;
+						if (PlayerInformationManager.Instance.FindPlayerInformation(vessel.OwnerPlayerID, out info))
+						{
+							userVesselGameObject.GetComponent<PlayerBehavior>().playerName = info.nickname;
+						}
 						userVesselGameObject.GetComponent<PlayerBehavior>().playerID = vessel.OwnerPlayerID;
 
                         if(vessel.OwnerPlayerID == UserManager.Instance.User.Player.PlayerID)
