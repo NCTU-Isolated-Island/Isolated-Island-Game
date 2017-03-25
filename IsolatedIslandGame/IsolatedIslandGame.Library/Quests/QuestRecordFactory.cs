@@ -36,5 +36,12 @@ namespace IsolatedIslandGame.Library.Quests
         public abstract void UpdateFinishedBeforeSpecificTimeQuestRequirementRecord(FinishedBeforeSpecificTimeQuestRequirementRecord record);
         public abstract void UpdateFinishedInSpecificTimeSpanQuestRequirementRecord(FinishedInSpecificTimeSpanQuestRequirementRecord record);
         public abstract void UpdateDrawMaterialQuestRequirementRecord(DrawMaterialQuestRequirementRecord record);
+        public abstract bool AddPlayerIDToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID);
+        public abstract void UpdateDonateItemSpecificNumberOfTimeQuestRequirementRecord(DonateItemSpecificNumberOfTimeQuestRequirementRecord record);
+        public abstract void UpdateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(RemoveSpecificNumberDecorationFromVesselQuestRequirementRecord record);
+        public abstract void UpdateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record);
+        public abstract void UpdateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record);
+        public abstract void UpdateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(CloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord record);
+        public abstract bool AddPlayerIDToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID);
     }
 }

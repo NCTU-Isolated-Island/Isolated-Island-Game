@@ -29,6 +29,7 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
                 record.RegisterObserverEvents(player);
                 player.AddQuestRecord(record);
                 record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                player.User.EventManager.UserInform("提示", $"有新任務：{quest.QuestName}");
             }
         }
 

@@ -110,6 +110,9 @@ namespace IsolatedIslandGame.Library
 
         private event Action onDrawMaterial;
         public event Action OnDrawMaterial { add { onDrawMaterial += value; } remove { onDrawMaterial -= value; } }
+
+        private event Action onDonateItem;
+        public event Action OnDonateItem { add { onDonateItem += value; } remove { onDonateItem -= value; } }
         #endregion
 
         public Player(int playerID, ulong facebookID, string nickname, string signature, GroupType groupType, IPAddress lastConnectedIPAddress, DateTime nextDrawMaterialTime, int cumulativeLoginCount)
@@ -370,6 +373,10 @@ namespace IsolatedIslandGame.Library
         public void DrawMaterial()
         {
             onDrawMaterial?.Invoke();
+        }
+        public void DonateItem()
+        {
+            onDonateItem?.Invoke();
         }
     }
 }

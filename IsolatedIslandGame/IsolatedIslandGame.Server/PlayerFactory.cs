@@ -1,5 +1,6 @@
 ﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol;
 using IsolatedIslandGame.Server.Configuration;
@@ -314,15 +315,18 @@ namespace IsolatedIslandGame.Server
                 {
                     VesselManager.Instance.AddVessel(vessel);
                     player.BindVessel(vessel);
-
-                    foreach (Quest quest in (QuestManager.Instance as QuestFactory).QuestsWhenChosedGroup)
+                    IEnumerable<Quest> quests;
+                    if((QuestManager.Instance as QuestFactory).QuestsWhenChosedGroup(player.GroupType, out quests))
                     {
-                        QuestRecord record;
-                        if(quest.CreateRecord(player.PlayerID, out record))
+                        foreach (Quest quest in quests)
                         {
-                            record.RegisterObserverEvents(player);
-                            player.AddQuestRecord(record);
-                            record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                            QuestRecord record;
+                            if (quest.CreateRecord(player.PlayerID, out record))
+                            {
+                                record.RegisterObserverEvents(player);
+                                player.AddQuestRecord(record);
+                                record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                            }
                         }
                     }
                 }

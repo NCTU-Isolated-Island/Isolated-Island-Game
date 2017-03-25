@@ -22,6 +22,16 @@
         HaveSpecificNumberDecorationOnVessel,
         FinishedBeforeSpecificTime,
         FinishedInSpecificTimeSpan,
-        DrawMaterial
+        DrawMaterial,
+
+        SendMessageToSpecificNumberDifferentPlayer,
+        DonateItemSpecificNumberOfTime,
+        RemoveSpecificNumberDecorationFromVessel,
+        HaveSpecificNumberSpecificItem,
+        MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTime,
+        MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTime,
+        CloseDealWithSpecificNumberDifferentOtherGroupPlayer,
+        SendMessageToSpecificNumberSpecificGroupDifferentPlayer,
+        StillNotOpened
     }
 }

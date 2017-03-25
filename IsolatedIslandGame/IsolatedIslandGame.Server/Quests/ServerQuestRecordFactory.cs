@@ -105,5 +105,33 @@ namespace IsolatedIslandGame.Server.Quests
         {
             DatabaseService.RepositoryList.QuestRecordRepository.UpdateDrawMaterialQuestRequirementRecord(record);
         }
+        public override bool AddPlayerIDToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToSendMessageToSpecificNumberDifferentPlayerQuestRequirementRecord(record, theOtherPlayerID);
+        }
+        public override void UpdateDonateItemSpecificNumberOfTimeQuestRequirementRecord(DonateItemSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateDonateItemSpecificNumberOfTimeQuestRequirementRecord(record);
+        }
+        public override void UpdateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(RemoveSpecificNumberDecorationFromVesselQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateRemoveSpecificNumberDecorationFromVesselQuestRequirementRecord(record);
+        }
+        public override void UpdateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(record);
+        }
+        public override void UpdateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(MakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirementRecord(record);
+        }
+        public override void UpdateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(CloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord record)
+        {
+            DatabaseService.RepositoryList.QuestRecordRepository.UpdateCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirementRecord(record);
+        }
+        public override bool AddPlayerIDToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(SendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord record, int theOtherPlayerID)
+        {
+            return DatabaseService.RepositoryList.QuestRecordRepository.AddPlayerIDToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirementRecord(record, theOtherPlayerID);
+        }
     }
 }

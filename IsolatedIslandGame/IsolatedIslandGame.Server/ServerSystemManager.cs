@@ -10,7 +10,7 @@ namespace IsolatedIslandGame.Server
         {
             foreach(ServerUser user in UserFactory.Instance.Users)
             {
-                user.SendEvent(eventCode, parameters);
+                user?.SendEvent(eventCode, parameters);
             }
         }
     }

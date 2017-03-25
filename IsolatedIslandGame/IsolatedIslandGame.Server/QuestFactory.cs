@@ -4,6 +4,7 @@ using IsolatedIslandGame.Library.Quests;
 using IsolatedIslandGame.Protocol;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IsolatedIslandGame.Server
 {
@@ -12,8 +13,12 @@ namespace IsolatedIslandGame.Server
         private List<Quest> questsWhenRegistered = new List<Quest>();
         public IEnumerable<Quest> QuestsWhenRegistered { get { return questsWhenRegistered.ToArray(); } }
 
-        private List<Quest> questsWhenChosedGroup = new List<Quest>();
-        public IEnumerable<Quest> QuestsWhenChosedGroup { get { return questsWhenChosedGroup.ToArray(); } }
+        private Dictionary<GroupType, List<Quest>> questsWhenChosedGroup = new Dictionary<GroupType, List<Quest>>
+        {
+            { GroupType.Animal, new List<Quest>() },
+            { GroupType.Businessman, new List<Quest>() },
+            { GroupType.Farmer, new List<Quest>() }
+        };
 
         private List<Quest> questsWhenTodayFirstLogin = new List<Quest>();
         public IEnumerable<Quest> QuestsWhenTodayFirstLogin { get { return questsWhenTodayFirstLogin.ToArray(); } }
@@ -63,12 +68,15 @@ namespace IsolatedIslandGame.Server
                     questsWhenRegistered.Add(quest);
                 }
             }
-            foreach (var questID in DatabaseService.RepositoryList.QuestRepository.ListQuestIDsWhenChosedGroup())
+            foreach (var group_questID_Pair in DatabaseService.RepositoryList.QuestRepository.ListQuestIDsWhenChosedGroup())
             {
-                Quest quest;
-                if (FindQuest(questID, out quest))
+                foreach (var questID in group_questID_Pair.Value)
                 {
-                    questsWhenChosedGroup.Add(quest);
+                    Quest quest;
+                    if (FindQuest(questID, out quest))
+                    {
+                        questsWhenChosedGroup[group_questID_Pair.Key].Add(quest);
+                    }
                 }
             }
             foreach (var questID in DatabaseService.RepositoryList.QuestRepository.ListQuestIDsWhenTodayFirstLogin())
@@ -95,14 +103,14 @@ namespace IsolatedIslandGame.Server
                     questsWhenEveryDayPassed.Add(quest);
                 }
             }
-            foreach (var ocen_questID_Pair in DatabaseService.RepositoryList.QuestRepository.ListQuestIDsWhenEnteredSpecificOcean())
+            foreach (var ocean_questID_Pair in DatabaseService.RepositoryList.QuestRepository.ListQuestIDsWhenEnteredSpecificOcean())
             {
-                foreach (var questID in ocen_questID_Pair.Value)
+                foreach (var questID in ocean_questID_Pair.Value)
                 {
                     Quest quest;
                     if (FindQuest(questID, out quest))
                     {
-                        questsWhenEnteredSpecificOcean[ocen_questID_Pair.Key].Add(quest);
+                        questsWhenEnteredSpecificOcean[ocean_questID_Pair.Key].Add(quest);
                     }
                 }
             }
@@ -116,6 +124,19 @@ namespace IsolatedIslandGame.Server
             if(questsWhenEnteredSpecificOcean.ContainsKey(oceanType))
             {
                 quests = questsWhenEnteredSpecificOcean[oceanType].ToArray();
+                return true;
+            }
+            else
+            {
+                quests = null;
+                return false;
+            }
+        }
+        public bool QuestsWhenChosedGroup(GroupType groupType, out IEnumerable<Quest> quests)
+        {
+            if (questsWhenChosedGroup.ContainsKey(groupType))
+            {
+                quests = questsWhenChosedGroup[groupType].ToArray();
                 return true;
             }
             else
@@ -222,7 +243,7 @@ namespace IsolatedIslandGame.Server
         public void AssignQuestToAllPlayer(int questID)
         {
             Quest quest;
-            if(FindQuest(questID, out quest))
+            if (FindQuest(questID, out quest))
             {
                 var playerIDs = DatabaseService.RepositoryList.PlayerRepository.ListAllPlayerID();
                 foreach (int playerID in playerIDs)

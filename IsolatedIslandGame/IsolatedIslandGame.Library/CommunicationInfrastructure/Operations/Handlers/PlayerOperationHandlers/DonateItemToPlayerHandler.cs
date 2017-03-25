@@ -21,7 +21,15 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 Item item;
                 if (ItemManager.Instance.FindItem(itemID, out item))
                 {
-                    return subject.User.CommunicationInterface.DonateItemToPlayer(subject.PlayerID, playerID, item, itemCount);
+                    if(subject.User.CommunicationInterface.DonateItemToPlayer(subject.PlayerID, playerID, item, itemCount))
+                    {
+                        subject.DonateItem();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {

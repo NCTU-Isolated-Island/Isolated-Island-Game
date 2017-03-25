@@ -2,6 +2,7 @@
 using IsolatedIslandGame.Protocol;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace IsolatedIslandGame.Library.Quests.Rewards
 {
@@ -30,11 +31,15 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
         public override void GiveReward(Player player)
         {
             var materials = ItemManager.Instance.Items.OfType<Material>().Where(x => x.Score == MaterialScore && x.GroupType == GroupType).ToArray();
-            Random randomGenerator = new Random();
+            Random randomGenerator = new Random(Guid.NewGuid().GetHashCode());
+            StringBuilder stringBuilder = new StringBuilder("獲得了： ");
             for (int i = 0; i < MaterialCount; i++)
             {
-                player.Inventory.AddItem(materials[randomGenerator.Next(0, materials.Length)], 1);
+                Material material = materials[randomGenerator.Next(0, materials.Length)];
+                player.Inventory.AddItem(material, 1);
+                stringBuilder.Append($"{material.ItemName} ");
             }
+            player.User.EventManager.UserInform("提示", stringBuilder.ToString());
         }
 
         public override bool GiveRewardCheck(Player player)

@@ -32,7 +32,7 @@ namespace IsolatedIslandGame.Database.Repositories
 
         protected abstract List<QuestReward> ListRewardsOfQuest(int questID);
         public abstract List<int> ListQuestIDsWhenRegistered();
-        public abstract List<int> ListQuestIDsWhenChosedGroup();
+        public abstract Dictionary<GroupType, List<int>> ListQuestIDsWhenChosedGroup();
         public abstract List<int> ListQuestIDsWhenTodayFirstLogin();
         public abstract List<int> ListQuestIDsWhenEveryHourPassed();
         public abstract List<int> ListQuestIDsWhenEveryDayPassed();
@@ -60,6 +60,15 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRequirementToFinishedBeforeSpecificTimeQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToFinishedInSpecificTimeSpanQuestRequirement(int requirementID, out QuestRequirement requirement);
         protected abstract bool SpecializeQuestRequirementToDrawMaterialQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToSendMessageToSpecificNumberDifferentPlayerQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToDonateItemSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToRemoveSpecificNumberDecorationFromVesselQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToHaveSpecificNumberSpecificItemQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToMakeFriendSuccessfulWithSpecificGroupPlayerSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToMakeFriendSuccessfulWithOtherGroupPlayerSpecificNumberOfTimeQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToCloseDealWithSpecificNumberDifferentOtherGroupPlayerQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToSendMessageToSpecificNumberSpecificGroupDifferentPlayerQuestRequirement(int requirementID, out QuestRequirement requirement);
+        protected abstract bool SpecializeQuestRequirementToStillNotOpenedQuestRequirement(int requirementID, out QuestRequirement requirement);
         #endregion
 
         #region Specialize QuestReward
@@ -73,6 +82,7 @@ namespace IsolatedIslandGame.Database.Repositories
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelSpecificGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelBelongingGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
         protected abstract bool SpecializeQuestRewardToGiveSpecificNumberSpecificLevelOtherGroupRandomMaterialQuestReward(int rewardID, out QuestReward reward);
+        protected abstract bool SpecializeQuestRewardToRemoveSpecificNumberSpecificItemQuestReward(int rewardID, out QuestReward reward);
         #endregion
     }
 }

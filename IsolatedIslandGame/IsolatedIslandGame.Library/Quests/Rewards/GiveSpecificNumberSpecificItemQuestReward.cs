@@ -36,20 +36,13 @@ namespace IsolatedIslandGame.Library.Quests.Rewards
             if (ItemManager.Instance.FindItem(ItemID, out item))
             {
                 player.Inventory.AddItem(item, ItemCount);
+                player.User.EventManager.UserInform("提示", $"獲得了： {item.ItemName}x {ItemCount}");
             }
         }
 
         public override bool GiveRewardCheck(Player player)
         {
-            Item item;
-            if (ItemManager.Instance.FindItem(ItemID, out item))
-            {
-                return player.Inventory.AddItemCheck(item.ItemID, ItemCount);
-            }
-            else
-            {
-                return false;
-            }
+            return player.Inventory.AddItemCheck(ItemID, ItemCount);
         }
     }
 }

@@ -31,6 +31,7 @@ namespace IsolatedIslandGame.Library.Quests
         public event Action<QuestRecord> OnQuestRecordStatusChange { add { onQuestRecordStatusChange += value; } remove { onQuestRecordStatusChange -= value; } }
 
         private Action giveReward;
+        private Action<QuestRecord> informQuestInished;
 
         public QuestRecordInformation QuestRecordInformation
         {
@@ -82,6 +83,15 @@ namespace IsolatedIslandGame.Library.Quests
             if(!IsFinished)
             {
                 requirementRecords.ForEach(x => x.RegisterObserverEvents(player));
+                informQuestInished = (record) =>
+                {
+                    if (IsFinished)
+                    {
+                        player.User.EventManager.UserInform("提示", $"任務： {Quest.QuestName}完成了");
+                        onQuestRecordStatusChange -= informQuestInished;
+                    }
+                };
+                onQuestRecordStatusChange += informQuestInished;
             }
             giveReward = () => 
             {

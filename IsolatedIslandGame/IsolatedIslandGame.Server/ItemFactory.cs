@@ -12,7 +12,7 @@ namespace IsolatedIslandGame.Server
 
         public ItemFactory()
         {
-            NextDrawMaterialTimeSpan = TimeSpan.FromSeconds(3600);
+            NextDrawMaterialTimeSpan = TimeSpan.FromSeconds(10800);
             var items = DatabaseService.RepositoryList.ItemRepository.ListAll();
             foreach(var item in items)
             {
@@ -27,7 +27,7 @@ namespace IsolatedIslandGame.Server
                 player.NextDrawMaterialTime = now;
             }
 
-            NextDrawMaterialTime = DateTime.Today + TimeSpan.FromSeconds(((DateTime.Now - DateTime.Today).TotalSeconds / NextDrawMaterialTimeSpan.TotalSeconds) * NextDrawMaterialTimeSpan.TotalSeconds);
+            NextDrawMaterialTime = DateTime.Today + TimeSpan.FromSeconds(Math.Floor((DateTime.Now - DateTime.Today).TotalSeconds / NextDrawMaterialTimeSpan.TotalSeconds) * NextDrawMaterialTimeSpan.TotalSeconds);
             Scheduler.Instance.AddTask(NextDrawMaterialTime + NextDrawMaterialTimeSpan, () => 
             {
                 ResetDrawMaterialTime();
@@ -83,7 +83,7 @@ namespace IsolatedIslandGame.Server
 
         private void ResetDrawMaterialTime()
         {
-            NextDrawMaterialTime = DateTime.Today + TimeSpan.FromSeconds(((DateTime.Now - DateTime.Today).TotalSeconds / NextDrawMaterialTimeSpan.TotalSeconds) * NextDrawMaterialTimeSpan.TotalSeconds);
+            NextDrawMaterialTime = DateTime.Today + TimeSpan.FromSeconds(Math.Floor((DateTime.Now - DateTime.Today).TotalSeconds / NextDrawMaterialTimeSpan.TotalSeconds) * NextDrawMaterialTimeSpan.TotalSeconds);
             DatabaseService.RepositoryList.PlayerRepository.GlobalUpdateNextDrawMaterialTime(NextDrawMaterialTime);
             foreach (Player player in PlayerFactory.Instance.Players)
             {
