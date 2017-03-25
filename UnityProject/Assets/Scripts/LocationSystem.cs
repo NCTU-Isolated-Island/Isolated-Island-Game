@@ -35,12 +35,12 @@ public class LocationSystem : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.T))
 			{
 
-				transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
+				Quaternion rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
 
 				StartCoroutine(GameManager.Instance.OnPlayerLocationChange
 					(
 						GetInGameCoordinate(),
-						transform.localEulerAngles.y
+						rotation.eulerAngles.y
 					));
 
 
@@ -53,12 +53,12 @@ public class LocationSystem : MonoBehaviour {
 			if(updateTime != ConvertFromUnixTimestamp(Input.location.lastData.timestamp))
 			{
 
-				transform.rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
+				Quaternion rotation = Quaternion.LookRotation(GetInGameCoordinate() - previousLocation);
 
 				StartCoroutine(GameManager.Instance.OnPlayerLocationChange
 					(
 						GetInGameCoordinate(),
-						transform.localEulerAngles.y
+						rotation.eulerAngles.y
 					));
 
 
