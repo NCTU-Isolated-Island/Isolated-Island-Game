@@ -25,7 +25,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { SystemFetchDataCode.IslandTotalScore, new FetchIslandTotalScoreHandler(subject) },
                 { SystemFetchDataCode.IslandTodayMaterialRanking, new FetchIslandTodayMaterialRankingHandler(subject) },
                 { SystemFetchDataCode.IslandPlayerScoreRanking, new FetchIslandPlayerScoreRankingHandler(subject) },
-                { SystemFetchDataCode.AllLandmarks, new FetchAllLandmarksHandler(subject) }
+                { SystemFetchDataCode.AllLandmarks, new FetchAllLandmarksHandler(subject) },
+                { SystemFetchDataCode.ClientFunctionCheckTable, new FetchClientFunctionCheckTableHandler(subject) }
             };
         }
 
@@ -113,6 +114,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         public void FetchAllLandmarks()
         {
             SendOperation(SystemFetchDataCode.AllLandmarks, new Dictionary<byte, object>());
+        }
+        public void FetchClientFunctionCheckTable()
+        {
+            SendOperation(SystemFetchDataCode.ClientFunctionCheckTable, new Dictionary<byte, object>());
         }
     }
 }

@@ -68,6 +68,11 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             {
                 LogService.Fatal("Load SystemConfiguration Fail");
             }
+
+            ClientFunctionCheckTable.Initial(new System.Collections.Generic.Dictionary<int, bool>
+            {
+                { (int)Protocol.ClientFunctionCode.Basic, true }
+            });
         }
         private void SetupServices()
         {
