@@ -15,8 +15,8 @@ namespace IsolatedIslandGame.Server.Items
                 positionY: positionY,
                 positionZ: positionZ,
                 eulerAngleX: rotationEulerAngleX,
-                eulerAngleY: rotationEulerAngleX,
-                eulerAngleZ: rotationEulerAngleX,
+                eulerAngleY: rotationEulerAngleY,
+                eulerAngleZ: rotationEulerAngleZ,
                 decoration: out decoration);
         }
 
