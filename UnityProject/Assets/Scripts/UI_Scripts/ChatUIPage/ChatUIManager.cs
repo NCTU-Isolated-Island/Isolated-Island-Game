@@ -202,13 +202,10 @@ public class ChatUIManager : MonoBehaviour {
 
             if (entry.Value.receiverPlayerID == UserManager.Instance.User.Player.PlayerID)
             {
-                GameObject bubble = Instantiate(receiveMessageBubble);
-                Text textObj = bubble.transform.GetComponentInChildren<Text>();
-                textObj.text = entry.Value.message.content;
+                GameObject outframe = Instantiate(receiveMessageBubble);
+                GameObject bubble = outframe.transform.Find("ReceiveBubble").gameObject;
+                FillInBubbleData(entry, bubble);
 
-                bubble.transform.SetParent(messageBubbleContent.transform);
-                bubble.GetComponent<RectTransform>().localScale = Vector2.one;
-                bubble.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
                 if (!entry.Value.hasRead)
                 {
                     UserManager.Instance.User.Player.OperationManager.ReadPlayerMessage(entry.Value.message.playerMessageID);
@@ -216,15 +213,24 @@ public class ChatUIManager : MonoBehaviour {
             }
             else if (entry.Value.receiverPlayerID == chatPlayer.playerID)
             {
-                GameObject bubble = Instantiate(sendMessageBubble);
-                Text textObj = bubble.transform.GetComponentInChildren<Text>();
-                textObj.text = entry.Value.message.content;
-
-                bubble.transform.SetParent(messageBubbleContent.transform);
-                bubble.GetComponent<RectTransform>().localScale = Vector2.one;
-                bubble.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
+                GameObject outframe = Instantiate(sendMessageBubble);
+                GameObject bubble = outframe.transform.Find("SendBubble").gameObject;
+                FillInBubbleData(entry, bubble);
             }
         }
+    }
+
+    private void FillInBubbleData(KeyValuePair<int, PlayerConversation> entry, GameObject bubble)
+    {
+        Text textObj = bubble.transform.GetComponentInChildren<Text>();
+        textObj.text = entry.Value.message.content;
+
+        bubble.transform.parent.SetParent(messageBubbleContent.transform);
+        bubble.GetComponent<RectTransform>().localScale = Vector2.one;
+        bubble.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
+
+        bubble.transform.parent.GetComponent<RectTransform>().localScale = Vector2.one;
+        bubble.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
     }
 
     public void SendMessageToChattingPlayer()

@@ -121,6 +121,7 @@ public class GameManager : MonoBehaviour
 		elementModels.Add(3019, Resources.Load("Ingredients/" + "Bread") as GameObject);
 
         elementModels.Add(4004, Resources.Load("Ingredients/" + "badminton_racket") as GameObject);
+		elementModels.Add(4005, Resources.Load("Ingredients/" + "Computer") as GameObject);
         elementModels.Add(4006, Resources.Load("Ingredients/" + "Motor") as GameObject);
 
 		elementModels.Add(4009, Resources.Load("Ingredients/" + "ShineMood") as GameObject);
@@ -392,6 +393,18 @@ public class GameManager : MonoBehaviour
                         {
                             groupType = (int)playerInformation.groupType;
                         }
+						
+						//Render Player Online Message
+					if(UserManager.Instance.User.Player.PlayerID != vessel.OwnerPlayerID)
+					{
+						UIManager.Instance.RenderPlayerOnlineMessage(
+							vessel.OwnerPlayerID,
+							Vector3.Distance(GameManager.Instance.PlayerGameObject.gameObject.transform.position,new Vector3(vessel.LocationX,0,vessel.LocationZ))
+						);
+					}
+
+
+						//--------
 
                         GameObject userVesselGameObject = Instantiate
                             (
