@@ -13,7 +13,7 @@
                     {
                         ServerName = "IsolatedIsland.ReleaseServer",
                         //ServerName = "IsolatedIsland.TestServer",
-						ServerAddress = "doorofsoul.duckdns.org", 
+						ServerAddress = "isolatedisland-destination.duckdns.org", 
                         ServerPort = 4532,
                         //ServerPort = 4531,
 						ServerVersion = "Release1.2",
