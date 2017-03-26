@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
     // Setting Variables
     [SerializeField]
-	public float SwapPageTimeInterval;
+    public float SwapPageTimeInterval;
     //
     // enum all UI pages
     public enum UIPageType
@@ -187,22 +187,39 @@ public class UIManager : MonoBehaviour
         PlayerInformation info;
         if (PlayerInformationManager.Instance.FindPlayerInformation(playerID, out info))
         {
-            GameObject tmp = Instantiate(playerOnlineMessage);
-            tmp.transform.SetParent(transform);
-            tmp.GetComponent<RectTransform>().offsetMax = new Vector2(0, tmp.GetComponent<RectTransform>().offsetMax.y);
-            tmp.GetComponent<RectTransform>().offsetMin = new Vector2(0, tmp.GetComponent<RectTransform>().offsetMin.y);
-            tmp.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-            tmp.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
-            tmp.transform.Find("Title").gameObject.GetComponent<Text>().text = "玩家上線通知";
-            tmp.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("{0}已上線", info.nickname);
-
-            Destroy(tmp , 1.5f);
+            GameObject obj = Instantiate(playerOnlineMessage);
+            obj.transform.SetParent(transform);
+            obj.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("玩家 {0} 已上線", info.nickname);
+            StartCoroutine(PlayerOnlineMessageAnimation(obj));
         }
     }
 
-    void Update()
+    private IEnumerator PlayerOnlineMessageAnimation(GameObject obj)
     {
-        if (Input.GetKeyDown(KeyCode.I))
-            RenderPlayerOnlineMessage(GameManager.Instance.PlayerID);
+        float passTime = 0f;
+        float intervalTime = 5f;
+
+        RectTransform self = GetComponent<RectTransform>();
+        CanvasScaler canvasScaler = Instance.GetComponent<CanvasScaler>();
+
+        Vector2 ori = new Vector2(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2, 0);
+
+        obj.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+        while (passTime < intervalTime)
+        {
+            passTime += Time.deltaTime;
+
+            obj.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(ori, -ori, passTime / intervalTime);
+
+            yield return null;
+        }
+        Destroy(obj);
     }
+
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.I))
+    //        RenderPlayerOnlineMessage(GameManager.Instance.PlayerID);
+    //}
 }
