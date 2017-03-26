@@ -228,6 +228,8 @@ public class ChatUIManager : MonoBehaviour {
         bubble.transform.parent.SetParent(messageBubbleContent.transform);
         bubble.GetComponent<RectTransform>().localScale = Vector2.one;
         bubble.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
+
+        bubble.transform.parent.GetComponent<RectTransform>().localScale = Vector2.one;
         bubble.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
     }
 

@@ -188,7 +188,7 @@ public class UIManager : MonoBehaviour
         if (PlayerInformationManager.Instance.FindPlayerInformation(playerID, out info))
         {
             GameObject obj = Instantiate(playerOnlineMessage);
-            obj.transform.SetParent(transform);
+            obj.transform.SetParent(UIPageList[(int)UIPageType.Main].transform);
             obj.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("玩家 {0} 已上線", info.nickname);
             StartCoroutine(PlayerOnlineMessageAnimation(obj));
         }
@@ -202,7 +202,8 @@ public class UIManager : MonoBehaviour
         RectTransform self = GetComponent<RectTransform>();
         CanvasScaler canvasScaler = Instance.GetComponent<CanvasScaler>();
 
-        Vector2 ori = new Vector2(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2, 0);
+        Vector2 ori = new Vector2(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2, (canvasScaler.referenceResolution.y / 2 ) * 0.8f);
+        Vector2 end = new Vector2(-(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2), (canvasScaler.referenceResolution.y / 2) * 0.8f);
 
         obj.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
 
@@ -210,7 +211,7 @@ public class UIManager : MonoBehaviour
         {
             passTime += Time.deltaTime;
 
-            obj.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(ori, -ori, passTime / intervalTime);
+            obj.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(ori, end, passTime / intervalTime);
 
             yield return null;
         }
