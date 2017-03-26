@@ -1,15 +1,15 @@
-﻿using System.Collections;
+﻿using IsolatedIslandGame.Library;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using IsolatedIslandGame.Library;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
     // Setting Variables
-    [SerializeField]
-    public float SwapPageTimeInterval;
+    private float SwapPageTimeInterval;
     //
     // enum all UI pages
     public enum UIPageType
@@ -217,9 +217,22 @@ public class UIManager : MonoBehaviour
         Destroy(obj);
     }
 
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.I))
-    //        RenderPlayerOnlineMessage(GameManager.Instance.PlayerID);
-    //}
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+            RenderPlayerOnlineMessage(GameManager.Instance.PlayerID);
+
+        if (!SomePageIsActive())
+            ToMainPage();
+    }
+
+    private bool SomePageIsActive()
+    {
+        foreach (var page in UIPageList.Where(x => x != null))
+        {
+            if (page.gameObject.activeInHierarchy == true)
+                return true;
+        }
+        return false;
+    }
 }
