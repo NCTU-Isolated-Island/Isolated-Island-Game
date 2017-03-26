@@ -182,14 +182,14 @@ public class UIManager : MonoBehaviour
         panel.GetComponent<RectTransform>().localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
     }
 
-    public void RenderPlayerOnlineMessage(int playerID)
+	public void RenderPlayerOnlineMessage(int playerID , float distance)
     {
         PlayerInformation info;
         if (PlayerInformationManager.Instance.FindPlayerInformation(playerID, out info))
         {
             GameObject obj = Instantiate(playerOnlineMessage);
             obj.transform.SetParent(UIPageList[(int)UIPageType.Main].transform);
-            obj.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("玩家 {0} 已上線", info.nickname);
+			obj.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("玩家 {0} 已上線 : 距離你{1}公尺", info.nickname,distance);
             StartCoroutine(PlayerOnlineMessageAnimation(obj));
         }
     }
@@ -197,7 +197,7 @@ public class UIManager : MonoBehaviour
     private IEnumerator PlayerOnlineMessageAnimation(GameObject obj)
     {
         float passTime = 0f;
-        float intervalTime = 5f;
+        float intervalTime = 9f;
 
         RectTransform self = GetComponent<RectTransform>();
         CanvasScaler canvasScaler = Instance.GetComponent<CanvasScaler>();
@@ -221,7 +221,7 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.I))
-            RenderPlayerOnlineMessage(GameManager.Instance.PlayerID);
+            RenderPlayerOnlineMessage(GameManager.Instance.PlayerID,100f);
 
         if (!SomePageIsActive())
             ToMainPage();

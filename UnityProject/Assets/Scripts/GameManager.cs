@@ -393,6 +393,18 @@ public class GameManager : MonoBehaviour
                         {
                             groupType = (int)playerInformation.groupType;
                         }
+						
+						//Render Player Online Message
+					if(UserManager.Instance.User.Player.PlayerID != vessel.OwnerPlayerID)
+					{
+						UIManager.Instance.RenderPlayerOnlineMessage(
+							vessel.OwnerPlayerID,
+							Vector3.Distance(GameManager.Instance.PlayerGameObject.gameObject.transform.position,new Vector3(vessel.LocationX,0,vessel.LocationZ))
+						);
+					}
+
+
+						//--------
 
                         GameObject userVesselGameObject = Instantiate
                             (
