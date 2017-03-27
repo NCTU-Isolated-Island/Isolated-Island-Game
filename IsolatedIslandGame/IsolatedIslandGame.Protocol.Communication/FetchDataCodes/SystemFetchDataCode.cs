@@ -12,6 +12,7 @@
         IslandTodayMaterialRanking,
         IslandPlayerScoreRanking,
         AllLandmarks,
-        ClientFunctionCheckTable
+        ClientFunctionCheckTable,
+        WorldChannelMessages
     }
 }
