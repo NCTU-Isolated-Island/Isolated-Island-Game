@@ -202,8 +202,8 @@ public class UIManager : MonoBehaviour
         RectTransform self = GetComponent<RectTransform>();
         CanvasScaler canvasScaler = Instance.GetComponent<CanvasScaler>();
 
-        Vector2 ori = new Vector2(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2, (canvasScaler.referenceResolution.y / 2 ) * 0.8f);
-        Vector2 end = new Vector2(-(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2), (canvasScaler.referenceResolution.y / 2) * 0.8f);
+        Vector2 ori = new Vector2(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2, (canvasScaler.referenceResolution.y / 2 ) * (0.8f + Random.Range(-0.08f, 0.08f)));
+        Vector2 end = new Vector2(-(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2), ori.y);
 
         obj.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
 
