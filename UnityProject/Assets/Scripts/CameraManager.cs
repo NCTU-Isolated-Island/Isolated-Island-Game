@@ -71,6 +71,8 @@ public class CameraManager : MonoBehaviour
 	{
 		if(using_cor) return;
 
+		PlayerController.Instance.CurrentFocusPlayerGameObject = user;
+
 		//Camera.transform.parent = Camera.transform.parent.parent;
 		using_cor = true;
         cameraStatus = CameraStatus.FirstPerson;
@@ -81,6 +83,8 @@ public class CameraManager : MonoBehaviour
 	public void ToNearAnchor (GameObject user)
 	{
 		if (using_cor) return;
+
+		PlayerController.Instance.CurrentFocusPlayerGameObject = user;
 
 //		user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
 		//Camera.transform.parent = user.transform.Find("CameraAnchor");
@@ -93,6 +97,8 @@ public class CameraManager : MonoBehaviour
 	public void ToFarAnchor (GameObject user)
 	{
 		if (using_cor) return;
+
+		PlayerController.Instance.CurrentFocusPlayerGameObject = user;
 
 		//user.transform.Find("CameraAnchor").rotation = Quaternion.identity;
 		//Camera.transform.parent = user.transform.Find("CameraAnchor");
