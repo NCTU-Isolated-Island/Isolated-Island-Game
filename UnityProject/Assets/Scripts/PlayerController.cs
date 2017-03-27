@@ -13,15 +13,12 @@ public class PlayerController : MonoBehaviour {
 	private float lastTimeClick = -99f ;
 
 	public static PlayerController Instance;
+
 	public List<GameObject> InArea;
 	public GameObject CurrentFocusPlayerGameObject;
 
-
 	public enum ViewMode{ FirstPerson, BirdView, NormalView }
 	public ViewMode CurrenViewMode = ViewMode.NormalView;
-
-	float clickTime = -99f;
-
 
 	public delegate void PlayerAction();
 	public static event PlayerAction OnGetArea;
@@ -65,10 +62,6 @@ public class PlayerController : MonoBehaviour {
 			CheckDoubleClick();
 		}
 
-		if(Input.GetKeyDown(KeyCode.C))
-		{
-			Resources.UnloadUnusedAssets();
-		}
 		PinchToZoom();
 	}
 
@@ -122,19 +115,12 @@ public class PlayerController : MonoBehaviour {
 
             CameraManager.Instance.ToNearAnchor(hitInfo.transform.root.gameObject);
 
-			CurrentFocusPlayerGameObject = hitInfo.transform.root.gameObject;
-
             //
             UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
 			OtherBoatUIManager.Instance.SetOtherPlayerInfo(hitInfo.transform.root.GetComponent<PlayerBehavior>().playerID);
             //
         }
 
-	}
-
-	public void RemoveDecoration(GameObject target)
-	{
-		UserManager.Instance.User.Player.OperationManager.RemoveDecorationFromVessel(System.Int32.Parse(target.name));
 	}
 
 	void AdjustViewAngle()
@@ -160,14 +146,11 @@ public class PlayerController : MonoBehaviour {
 	public void ToPlayerFarAnchor()
 	{
 		CameraManager.Instance.ToFarAnchor(GameManager.Instance.PlayerGameObject);
-		CurrentFocusPlayerGameObject = GameManager.Instance.PlayerGameObject;
 	}
 
 	public void ToPlayerNearAnchor()
 	{
 		CameraManager.Instance.ToNearAnchor(GameManager.Instance.PlayerGameObject);
-		CurrentFocusPlayerGameObject = GameManager.Instance.PlayerGameObject;
-
 	}
 
 	void PinchToZoom()
@@ -181,8 +164,6 @@ public class PlayerController : MonoBehaviour {
 			// Find the position in the previous frame of each touch.
 			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
 			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-
-
 
             // Find the magnitude of the vector (the distance) between the touches in each frame.
             float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
@@ -258,9 +239,7 @@ public class PlayerController : MonoBehaviour {
 		  
 		switch (mode) {
 		case ViewMode.FirstPerson:
-			//Maybe need CameraManager.to first person anchor
 			CameraManager.Instance.ToFirstPerson(GameManager.Instance.PlayerGameObject);
-			//Camera.main.transform.position = GameManager.Instance.PlayerGameObject.transform.Find("FirstPersonAnchor").position;
 			FirstPersonCameraController.Instance.enabled = true;
 			CurrenViewMode = ViewMode.FirstPerson;
 			break;
@@ -276,6 +255,7 @@ public class PlayerController : MonoBehaviour {
 			FirstPersonCameraController.Instance.enabled = false;
 			CurrenViewMode = ViewMode.BirdView;
 			break;
+
 		default:
 			break;
 		}
