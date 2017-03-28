@@ -13,6 +13,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO BlueprintCollection 
                 (BlueprintID,IsOrderless,IsBlueprintRequired) VALUES (NULL,@isOrderless,@isBlueprintRequired) ;
                 SELECT LAST_INSERT_ID();";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("isOrderless", isOrderless);
@@ -39,6 +40,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"DELETE FROM BlueprintCollection 
                 WHERE BlueprintID = @blueprintID;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("blueprintID", blueprintID);
@@ -52,6 +54,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             List<BlueprintInfo> blueprintInfos = new List<BlueprintInfo>();
             string sqlString = @"SELECT BlueprintID, IsOrderless, IsBlueprintRequired from BlueprintCollection ;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -84,6 +87,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO BlueprintRequirementCollection 
                 (BlueprintID,ItemID,ItemCount,PositionIndex) VALUES (@blueprintID,@itemID,@itemCount,@positionIndex) ;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("blueprintID", blueprintID);
@@ -102,6 +106,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"DELETE FROM BlueprintRequirementCollection 
                 WHERE BlueprintID = @blueprintID AND ItemID = @itemID AND ItemCount = @itemCount AND PositionIndex = @positionIndex;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("blueprintID", blueprintID);
@@ -122,6 +127,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 ItemID, ItemCount, PositionIndex
                 from BlueprintRequirementCollection 
                 WHERE BlueprintID = @blueprintID;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("blueprintID", blueprintID);
@@ -143,6 +149,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO BlueprintProductCollection 
                 (BlueprintID,ItemID,ItemCount,PositionIndex) VALUES (@blueprintID,@itemID,@itemCount,@positionIndex) ;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("blueprintID", blueprintID);
@@ -161,6 +168,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"DELETE FROM BlueprintProductCollection 
                 WHERE BlueprintID = @blueprintID AND ItemID = @itemID AND ItemCount = @itemCount AND PositionIndex = @positionIndex;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("blueprintID", blueprintID);
@@ -181,7 +189,8 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 ItemID, ItemCount, PositionIndex
                 from BlueprintProductCollection 
                 WHERE BlueprintID = @blueprintID;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList..Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@blueprintID", blueprintID);
                 using (MySqlDataReader reader = command.ExecuteReader())

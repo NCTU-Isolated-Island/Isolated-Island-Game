@@ -13,6 +13,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO PlayerConversationCollection 
                 (ReceiverPlayerID,MessageID,HasRead) VALUES (@receiverPlayerID,@playerMessageID,@hasRead) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("receiverPlayerID", receiverPlayerID);
@@ -44,6 +45,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 MessageID, HasRead, SenderPlayerID, SendTime, Content
                 from {DatabaseService.DatabaseName}_PlayerData.PlayerConversationCollection, {DatabaseService.DatabaseName}_TextData.PlayerMessageCollection 
                 WHERE ReceiverPlayerID = @receiverPlayerID AND MessageID = @playerMessageID AND MessageID = PlayerMessageID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("receiverPlayerID", receiverPlayerID);
@@ -87,6 +89,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 MessageID, HasRead, SenderPlayerID, SendTime, Content, ReceiverPlayerID
                 from {DatabaseService.DatabaseName}_PlayerData.PlayerConversationCollection, {DatabaseService.DatabaseName}_TextData.PlayerMessageCollection 
                 WHERE (ReceiverPlayerID = @playerID OR SenderPlayerID = @playerID) AND MessageID = PlayerMessageID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -123,6 +126,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"UPDATE PlayerConversationCollection SET HasRead  = true
                 WHERE ReceiverPlayerID = @playerID AND MessageID = @playerMessageID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);

@@ -13,23 +13,26 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO WorldChannelMessageCollection 
                 (PlayerMessageID) VALUES (@playerMessageID) ;
                 SELECT LAST_INSERT_ID();";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
+            lock(DatabaseService.ConnectionList.TextDataConnection)
             {
-                command.Parameters.AddWithValue("playerMessageID", playerMessageID);
-
-                PlayerMessage message;
-                using (MySqlDataReader reader = command.ExecuteReader())
+                using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
                 {
-                    if (reader.Read() && DatabaseService.RepositoryList.PlayerMessageRepository.Read(playerMessageID, out message))
+                    command.Parameters.AddWithValue("playerMessageID", playerMessageID);
+
+                    PlayerMessage message;
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        int worldMessageID = reader.GetInt32(0);
-                        worldMessage = new WorldChannelMessage(worldMessageID, message);
-                        return true;
-                    }
-                    else
-                    {
-                        worldMessage = null;
-                        return false;
+                        if (reader.Read() && DatabaseService.RepositoryList.PlayerMessageRepository.Read(playerMessageID, out message))
+                        {
+                            int worldMessageID = reader.GetInt32(0);
+                            worldMessage = new WorldChannelMessage(worldMessageID, message);
+                            return true;
+                        }
+                        else
+                        {
+                            worldMessage = null;
+                            return false;
+                        }
                     }
                 }
             }

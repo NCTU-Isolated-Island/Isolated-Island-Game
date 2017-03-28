@@ -11,22 +11,25 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO TransactionCollection 
                 (RequesterPlayerID,AccepterPlayerID) VALUES (@requesterPlayerID,@accepterPlayerID) ;
                 SELECT LAST_INSERT_ID();";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
+            lock(DatabaseService.ConnectionList.ArchiveDataConnection)
             {
-                command.Parameters.AddWithValue("requesterPlayerID", requesterPlayerID);
-                command.Parameters.AddWithValue("accepterPlayerID", accepterPlayerID);
-                using (MySqlDataReader reader = command.ExecuteReader())
+                using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
                 {
-                    if (reader.Read())
+                    command.Parameters.AddWithValue("requesterPlayerID", requesterPlayerID);
+                    command.Parameters.AddWithValue("accepterPlayerID", accepterPlayerID);
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        int transactionID = reader.GetInt32(0);
-                        transaction = new Transaction(transactionID, requesterPlayerID, accepterPlayerID);
-                        return true;
-                    }
-                    else
-                    {
-                        transaction = null;
-                        return false;
+                        if (reader.Read())
+                        {
+                            int transactionID = reader.GetInt32(0);
+                            transaction = new Transaction(transactionID, requesterPlayerID, accepterPlayerID);
+                            return true;
+                        }
+                        else
+                        {
+                            transaction = null;
+                            return false;
+                        }
                     }
                 }
             }

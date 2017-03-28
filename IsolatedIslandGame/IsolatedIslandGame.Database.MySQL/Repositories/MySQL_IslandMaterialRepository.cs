@@ -14,6 +14,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 (SELECT Score, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection.GroupType as TGroupType FROM {DatabaseService.DatabaseName}_ArchiveData.IslandMaterialCollection, {DatabaseService.DatabaseName}_SettingData.MaterialCollection, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection 
                 WHERE SenderPlayerID = PlayerID AND MaterialItemID = ItemID) as ScoreTable
                 WHERE TGroupType = @groupType GROUP BY TGroupType;";
+            lock(DatabaseService.ConnectionList.ArchiveDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("groupType", (byte)groupType);
@@ -37,6 +38,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT SenderPlayerID, MaterialItemID 
                 FROM IslandMaterialCollection 
                 WHERE DATE(DATE_SUB(SendTime, INTERVAL 6 HOUR)) = DATE(DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 6 HOUR));";
+            lock(DatabaseService.ConnectionList.ArchiveDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -58,6 +60,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = $@"SELECT SenderPlayerID, SUM(Score) 
                 FROM {DatabaseService.DatabaseName}_ArchiveData.IslandMaterialCollection, {DatabaseService.DatabaseName}_SettingData.MaterialCollection, {DatabaseService.DatabaseName}_PlayerData.PlayerCollection 
                 WHERE SenderPlayerID = PlayerID AND MaterialItemID = ItemID GROUP BY SenderPlayerID;";
+            lock(DatabaseService.ConnectionList.ArchiveDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -78,6 +81,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO IslandMaterialCollection 
                 (SenderPlayerID,MaterialItemID) VALUES (@senderPlayerID,@materialItemID) ;";
+            lock(DatabaseService.ConnectionList.ArchiveDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("senderPlayerID", info.playerID);
@@ -91,6 +95,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         public override void UpdateTotalScore(GroupType groupType, int totalScore)
         {
             string sqlString = @"UPDATE IslandTotalScoreCollection SET TotalScore = @totalScore WHERE GroupType = @groupType;";
+            lock(DatabaseService.ConnectionList.ArchiveDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("totalScore", totalScore);

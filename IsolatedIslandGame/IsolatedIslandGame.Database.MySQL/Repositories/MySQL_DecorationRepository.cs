@@ -13,6 +13,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO DecorationCollection 
                 (VesselID,MaterialItemID,PositionX,PositionY,PositionZ,EulerAngleX,EulerAngleY,EulerAngleZ) VALUES (@vesselID,@materialItemID,@positionX,@positionY,@positionZ,@eulerAngleX,@eulerAngleY,@eulerAngleZ) ;
                 SELECT LAST_INSERT_ID();";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("vesselID", vesselID);
@@ -53,6 +54,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 MaterialItemID, PositionX, PositionY, PositionZ, EulerAngleX, EulerAngleY, EulerAngleZ 
                 from DecorationCollection WHERE DecorationID = @decorationID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("decorationID", decorationID);
@@ -92,6 +94,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE DecorationCollection SET 
                 VesselID = @vesselID, MaterialItemID = @materialItemID, PositionX = @positionX, PositionY = @positionY, PositionZ = @positionZ, EulerAngleX = @eulerAngleX, EulerAngleY = @eulerAngleY, EulerAngleZ  = @eulerAngleZ
                 WHERE DecorationID = @decorationID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("vesselID", vesselID);
@@ -113,6 +116,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"DELETE FROM DecorationCollection 
                 WHERE DecorationID = @decorationID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("decorationID", decorationID);
@@ -129,6 +133,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 DecorationID, MaterialItemID, PositionX, PositionY, PositionZ, EulerAngleX, EulerAngleY, EulerAngleZ
                 from DecorationCollection 
                 WHERE VesselID = @vesselID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("vesselID", vesselID);

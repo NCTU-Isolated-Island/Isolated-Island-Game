@@ -17,6 +17,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO QuestRecordCollection 
                 (PlayerID,QuestID) VALUES (@playerID,@questID) ;
                 SELECT LAST_INSERT_ID();";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -52,6 +53,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT QuestRecordID, QuestID, HasGottenReward
                 from QuestRecordCollection 
                 WHERE PlayerID = @playerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -91,6 +93,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = $@"SELECT QuestRequirementRecordID, {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection.QuestRequirementID, {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection.QuestRequirementType
                 from {DatabaseService.DatabaseName}_PlayerData.QuestRequirementRecordCollection, {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection
                 WHERE QuestRecordID = @questRecordID AND {DatabaseService.DatabaseName}_PlayerData.QuestRequirementRecordCollection.QuestRequirementID = {DatabaseService.DatabaseName}_SettingData.QuestRequirementCollection.QuestRequirementID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRecordID", questRecordID);
@@ -315,6 +318,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO QuestRequirementRecordCollection 
                 (QuestRecordID,QuestRequirementID) VALUES (@questRecordID,@questRequirementID) ;
                 SELECT LAST_INSERT_ID();";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRecordID", questRecordID);
@@ -465,6 +469,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE QuestRecordCollection SET 
                 HasGottenReward = true
                 WHERE QuestRecordID = @questRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRecordID", questRecordID);
@@ -485,6 +490,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT QuestRecordID
                 from QuestRecordCollection 
                 WHERE PlayerID = @playerID AND QuestID = @questID AND HasGottenReward = false;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -508,6 +514,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO CLSD_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasAchievedCumulativeLoginDayCount) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -527,6 +534,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SISO_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasStayedInSpecificOcean) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -546,6 +554,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO MFSSNOT_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,SuccessfulCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -565,6 +574,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO CDSNOT_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,CloseDealCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -584,6 +594,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SMTISNOT_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,SendMaterialToIslandCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -618,6 +629,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO GSI_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasGottenSpecificItem) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -637,6 +649,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO CDWO_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasCloseDealWithOutlander) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -656,6 +669,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO CSNBGM_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,MaterialCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -675,6 +689,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SSB_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasSynthesizedSpecificBlueprint) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -694,6 +709,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SSQRC_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasScannedCorrectQR_Code) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -713,6 +729,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO HSNF_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,FriendCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -732,6 +749,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SSSNOT_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,SuccessfulCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -751,6 +769,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO HSNKM_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,MaterialKindNumber) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -770,6 +789,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO ASNDTV_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,AddedDecorationCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -789,6 +809,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO HSNDOV_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,DecorationCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -808,6 +829,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO FBST_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,IsExpired) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -827,6 +849,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO FISTS_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,StartTime,IsExpired) VALUES (@requirementRecordID,CURRENT_TIMESTAMP,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -846,6 +869,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO DM_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,HasDrawMaterial) VALUES (@requirementRecordID,false) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -870,6 +894,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO DISNOT_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,DonatedItemCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -889,6 +914,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO RSNDFV_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,RemovedDecorationCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -908,6 +934,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO HSNSI_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID) VALUES (@requirementRecordID) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -927,6 +954,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO MFSWSGPSNOT_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,SuccessfulCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -946,6 +974,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO MFSWOGPSNOT_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,SuccessfulCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -965,6 +994,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO CDWSNDOGP_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,CloseDealCount) VALUES (@requirementRecordID,0) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -998,6 +1028,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT HasAchievedCumulativeLoginDayCount
                 from CLSD_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1022,6 +1053,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT HasStayedInSpecificOcean
                 from SISO_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1046,6 +1078,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT SuccessfulCount
                 from MFSSNOT_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1070,6 +1103,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT CloseDealCount
                 from CDSNOT_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1094,6 +1128,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT SendMaterialToIslandCount
                 from SMTISNOT_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1119,6 +1154,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT ExistedOcean
                 from EISNO_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1140,6 +1176,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT FriendPlayerID
                 from SMTSNDOFITSSO_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1161,6 +1198,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT FriendPlayerID
                 from CDWSNDFITSSO_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1181,6 +1219,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT HasGottenSpecificItem
                 from GSI_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1205,6 +1244,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT HasCloseDealWithOutlander
                 from CDWO_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1229,6 +1269,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT MaterialCount
                 from CSNBGM_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1253,6 +1294,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT HasSynthesizedSpecificBlueprint
                 from SSB_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1277,6 +1319,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT HasScannedCorrectQR_Code
                 from SSQRC_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1301,6 +1344,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT FriendCount
                 from HSNF_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1325,6 +1369,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT SuccessfulCount
                 from SSSNOT_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1349,6 +1394,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT MaterialKindNumber
                 from HSNKM_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1373,6 +1419,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT AddedDecorationCount
                 from ASNDTV_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1397,6 +1444,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT DecorationCount
                 from HSNDOV_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1421,6 +1469,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT IsExpired
                 from FBST_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1445,6 +1494,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT StartTime, IsExpired
                 from FISTS_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1470,6 +1520,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT HasDrawMaterial
                 from DM_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1495,6 +1546,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT PlayerID
                 from SMTSNDP_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1515,6 +1567,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT DonatedItemCount
                 from DISNOT_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1539,6 +1592,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT RemovedDecorationCount
                 from RSNDFV_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1568,6 +1622,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT SuccessfulCount
                 from MFSWSGPSNOT_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1592,6 +1647,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT SuccessfulCount
                 from MFSWOGPSNOT_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1616,6 +1672,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT CloseDealCount
                 from CDWSNDOGP_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1641,6 +1698,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT PlayerID
                 from SMTSNSGDP_QuestRequirementRecordCollection 
                 WHERE QuestRequirementRecordID = @requirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("requirementRecordID", requirementRecordID);
@@ -1669,6 +1727,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE CLSD_QuestRequirementRecordCollection SET 
                 HasAchievedCumulativeLoginDayCount = @hasAchievedCumulativeLoginDayCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("hasAchievedCumulativeLoginDayCount", record.HasAchievedCumulativeLoginDayCount);
@@ -1685,6 +1744,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE SISO_QuestRequirementRecordCollection SET 
                 HasStayedInSpecificOcean = @hasStayedInSpecificOcean
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("hasStayedInSpecificOcean", record.HasStayedInSpecificOcean);
@@ -1701,6 +1761,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE MFSSNOT_QuestRequirementRecordCollection SET 
                 SuccessfulCount = @successfulCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("successfulCount", record.SuccessfulCount);
@@ -1717,6 +1778,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE CDSNOT_QuestRequirementRecordCollection SET 
                 CloseDealCount = @closeDealCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("closeDealCount", record.CloseDealCount);
@@ -1733,6 +1795,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE SMTISNOT_QuestRequirementRecordCollection SET 
                 SendMaterialToIslandCount = @sendMaterialToIslandCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("sendMaterialToIslandCount", record.SendMaterialToIslandCount);
@@ -1748,6 +1811,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO EISNO_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,ExistedOcean) VALUES (@questRequirementRecordID,@existedOcean) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
@@ -1767,6 +1831,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SMTSNDOFITSSO_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,FriendPlayerID) VALUES (@questRequirementRecordID,@friendPlayerID) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
@@ -1786,6 +1851,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO CDWSNDFITSSO_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,FriendPlayerID) VALUES (@questRequirementRecordID,@friendPlayerID) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
@@ -1806,6 +1872,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE GSI_QuestRequirementRecordCollection SET 
                 HasGottenSpecificItem = @hasGottenSpecificItem
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("hasGottenSpecificItem", record.HasGottenSpecificItem);
@@ -1822,6 +1889,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE CDWO_QuestRequirementRecordCollection SET 
                 HasCloseDealWithOutlander = @hasCloseDealWithOutlander
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("hasCloseDealWithOutlander", record.HasCloseDealWithOutlander);
@@ -1838,6 +1906,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE CSNBGM_QuestRequirementRecordCollection SET 
                 MaterialCount = @materialCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("materialCount", record.MaterialCount);
@@ -1854,6 +1923,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE SSB_QuestRequirementRecordCollection SET 
                 HasSynthesizedSpecificBlueprint = @hasSynthesizedSpecificBlueprint
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("hasSynthesizedSpecificBlueprint", record.HasSynthesizedSpecificBlueprint);
@@ -1870,6 +1940,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE SSQRC_QuestRequirementRecordCollection SET 
                 HasScannedCorrectQR_Code = @hasScannedCorrectQR_Code
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("hasScannedCorrectQR_Code", record.HasScannedCorrectQR_Code);
@@ -1886,6 +1957,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE HSNF_QuestRequirementRecordCollection SET 
                 FriendCount = @friendCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("friendCount", record.FriendCount);
@@ -1902,6 +1974,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE SSSNOT_QuestRequirementRecordCollection SET 
                 SuccessfulCount = @successfulCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("successfulCount", record.SuccessfulCount);
@@ -1918,6 +1991,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE HSNKM_QuestRequirementRecordCollection SET 
                 MaterialKindNumber = @materialKindNumber
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("materialKindNumber", record.MaterialKindNumber);
@@ -1934,6 +2008,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE ASNDTV_QuestRequirementRecordCollection SET 
                 AddedDecorationCount = @addedDecorationCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("addedDecorationCount", record.AddedDecorationCount);
@@ -1950,6 +2025,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE HSNDOV_QuestRequirementRecordCollection SET 
                 DecorationCount = @decorationCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("decorationCount", record.DecorationCount);
@@ -1966,6 +2042,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE FBST_QuestRequirementRecordCollection SET 
                 IsExpired = @isExpired
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("isExpired", record.IsExpired);
@@ -1982,6 +2059,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE FISTS_QuestRequirementRecordCollection SET 
                 StartTime = @startTime, IsExpired = @isExpired
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("startTime", record.StartTime);
@@ -1999,6 +2077,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE DM_QuestRequirementRecordCollection SET 
                 HasDrawMaterial = @hasDrawMaterial
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("hasDrawMaterial", record.HasDrawMaterial);
@@ -2014,6 +2093,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SMTSNDP_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,PlayerID) VALUES (@questRequirementRecordID,@playerID) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
@@ -2034,6 +2114,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE DISNOT_QuestRequirementRecordCollection SET 
                 DonatedItemCount = @donatedItemCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("donatedItemCount", record.DonatedItemCount);
@@ -2050,6 +2131,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE RSNDFV_QuestRequirementRecordCollection SET 
                 RemovedDecorationCount = @removedDecorationCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("removedDecorationCount", record.RemovedDecorationCount);
@@ -2066,6 +2148,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE MFSWSGPSNOT_QuestRequirementRecordCollection SET 
                 SuccessfulCount = @successfulCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("successfulCount", record.SuccessfulCount);
@@ -2082,6 +2165,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE MFSWOGPSNOT_QuestRequirementRecordCollection SET 
                 SuccessfulCount = @successfulCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("successfulCount", record.SuccessfulCount);
@@ -2098,6 +2182,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE CDWSNDOGP_QuestRequirementRecordCollection SET 
                 CloseDealCount = @closeDealCount
                 WHERE QuestRequirementRecordID = @questRequirementRecordID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("closeDealCount", record.CloseDealCount);
@@ -2113,6 +2198,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO SMTSNSGDP_QuestRequirementRecordCollection 
                 (QuestRequirementRecordID,PlayerID) VALUES (@questRequirementRecordID,@playerID) ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("questRequirementRecordID", record.QuestRequirementRecordID);
