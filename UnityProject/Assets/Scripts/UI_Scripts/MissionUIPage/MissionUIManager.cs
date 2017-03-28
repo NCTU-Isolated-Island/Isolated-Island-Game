@@ -33,7 +33,7 @@ public class MissionUIManager : MonoBehaviour
         Text missionReward = missionDetailContent.transform.Find("MissionRewardTitle/MissionRewardContent").GetComponent<Text>();
         Image missionIcon = missionDetailContent.transform.Find("MissionIcon").GetComponent<Image>();
 
-        Button takeRewardButton = missionDetailContent.transform.Find("TakeRewardButton").GetComponent<Button>();
+        Button takeRewardButton = missionDetailScrollView.transform.Find("TakeRewardButton").GetComponent<Button>();
 
         //		print (information.questName);
         //		print (information.questDescription);
