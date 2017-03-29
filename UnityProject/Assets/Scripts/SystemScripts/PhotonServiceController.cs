@@ -49,7 +49,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             {
                 LogService.Info("Connected");
                 UserManager.Instance.User.OperationManager.FetchDataResolver.FetchSystemVersion();
-                SystemManager.Instance.OperationManager.FetchDataResolver.FetchWorldChannelMessages();
+                
                 if (isFirstConnected)
                 {
                     isFirstConnected = false;

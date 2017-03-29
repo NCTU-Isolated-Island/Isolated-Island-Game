@@ -68,6 +68,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllItems();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
                     SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllLandmarks();
+                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchWorldChannelMessages();
 
                     subject.ResponseManager.LoginResponse(returnCode, player);
 

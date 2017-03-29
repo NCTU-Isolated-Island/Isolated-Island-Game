@@ -2,7 +2,6 @@
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using System.Collections.Generic;
-using System;
 
 namespace IsolatedIslandGame.Server
 {
