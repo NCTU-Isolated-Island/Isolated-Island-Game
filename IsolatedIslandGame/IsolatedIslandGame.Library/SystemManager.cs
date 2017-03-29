@@ -50,7 +50,7 @@ namespace IsolatedIslandGame.Library
             {
                 lock (worldChannelMessages)
                 {
-                    return worldChannelMessages.Values.OrderBy(x => x.Message.sendTime).Reverse().Take(maxCount).ToList();
+                    return worldChannelMessages.Values.OrderBy(x => x.Message.sendTime).Reverse().Take(maxCount).Reverse().ToList();
                 }
             }
             else
