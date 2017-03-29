@@ -14,6 +14,8 @@ public class ChatUIManager : MonoBehaviour {
     [SerializeField]
     private GameObject messageSet;
     [SerializeField]
+    private GameObject worldChannelMessageSet;
+    [SerializeField]
     private GameObject messageSetContent;
 
     [SerializeField]
@@ -114,7 +116,17 @@ public class ChatUIManager : MonoBehaviour {
         {
             Destroy(renderedFriend.gameObject);
         }
+        // World Channel Conversation
 
+        GameObject worldChannelEntry = Instantiate(worldChannelMessageSet);
+        worldChannelEntry.transform.SetParent(messageSetContent.transform);
+        worldChannelEntry.GetComponent<RectTransform>().localScale = Vector2.one;
+
+        worldChannelEntry.GetComponent<Button>().onClick.AddListener(delegate {
+            WorldChannelChatManager.Instance.ToWorldChannelChatPage();
+        });
+
+        // Player conversation
         foreach (var entry in playerConversationTable.OrderBy(x => x.Value.OrderBy(y => y.Value.message.sendTime).Last().Value.message.sendTime).Reverse())
         {
             GameObject tmp = Instantiate(messageSet);
@@ -165,12 +177,12 @@ public class ChatUIManager : MonoBehaviour {
             }
 
             tmp.GetComponent<Button>().onClick.AddListener(delegate{
-                ToMessagePageByChatRecord(opponentPlayer);
+                ToMessagePageByPlayerInformation(opponentPlayer);
             });
         }
     }
 
-    public void ToMessagePageByChatRecord(PlayerInformation chatPlayer)
+    public void ToMessagePageByPlayerInformation(PlayerInformation chatPlayer)
     {
         // Swap to Message Page
         UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Message);
