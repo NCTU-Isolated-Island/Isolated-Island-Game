@@ -13,13 +13,14 @@ public class WorldChannelChatManager : MonoBehaviour
     public static WorldChannelChatManager Instance { get; private set; }
 
     [SerializeField]
+    private GameObject worldChannelMessagePagePrefab;
+
     private GameObject worldChannelMessagePage;
 
     [SerializeField]
     private GameObject receiveMessageBubble;
     [SerializeField]
     private GameObject sendMessageBubble;
-
 
     [SerializeField]
     private GameObject accessOtherPlayerPage;
@@ -41,8 +42,9 @@ public class WorldChannelChatManager : MonoBehaviour
 
     private void UpdateWorldChannelMessageBubble(WorldChannelMessage newMessage)
     {
-        print("UpdateWorldChannelMessageBubble");
-        RenderWorldChannelBubble();
+        //print("UpdateWorldChannelMessageBubble");
+        if (messageBubbleContent != null)
+            RenderWorldChannelBubble();
     }
 
     private void RenderWorldChannelBubble()
@@ -96,7 +98,7 @@ public class WorldChannelChatManager : MonoBehaviour
             Button bubbleButton = bubble.GetComponent<Button>();
             bubbleButton.onClick.AddListener(delegate
             {
-                worldChannelMessagePage.SetActive(true);
+                accessOtherPlayerPage.SetActive(true);
                 SetAccessOtherPlayerPage(info);
             });
         }
@@ -112,37 +114,59 @@ public class WorldChannelChatManager : MonoBehaviour
     private void SetAccessOtherPlayerPage(PlayerInformation info)
     {
         Button sendMessageButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
-        Button sendFriendRequestButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
-        Button sendTransactionRequestButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
-        Button checkVesselButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
+        Button sendFriendRequestButton = accessOtherPlayerPage.transform.Find("SendFriendRequest").GetComponent<Button>();
+        Button sendTransactionRequestButton = accessOtherPlayerPage.transform.Find("SendTransactionRequest").GetComponent<Button>();
+        Button checkVesselButton = accessOtherPlayerPage.transform.Find("CheckVessel").GetComponent<Button>();
+
+        sendMessageButton.onClick.RemoveAllListeners();
+        sendFriendRequestButton.onClick.RemoveAllListeners();
+        sendTransactionRequestButton.onClick.RemoveAllListeners();
+        checkVesselButton.onClick.RemoveAllListeners();
 
         sendMessageButton.onClick.AddListener(delegate
         {
             ChatUIManager.Instance.ToMessagePageByPlayerInformation(info);
+            Destroy(worldChannelMessagePage);
         });
         sendFriendRequestButton.onClick.AddListener(delegate
         {
             UserManager.Instance.User.Player.OperationManager.InviteFriend(info.playerID);
+            accessOtherPlayerPage.SetActive(false);
         });
         sendTransactionRequestButton.onClick.AddListener(delegate
         {
             TransactionManager.Instance.SendTransactionRequest(info.playerID);
+            accessOtherPlayerPage.SetActive(false);
         });
         checkVesselButton.onClick.AddListener(delegate
         {
+            if (!GameManager.Instance.UserGameObject.ContainsKey(info.playerID))
+            {
+                UserManager.Instance.User.UserInform("通知" , "此玩家目前不在線上");
+                return;
+            }
+
             CameraManager.Instance.ToNearAnchor(GameManager.Instance.UserGameObject[info.playerID]);
             UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
             OtherBoatUIManager.Instance.SetOtherPlayerInfo(info.playerID);
+            Destroy(worldChannelMessagePage);
         });
+
+        if (UserManager.Instance.User.Player.ContainsFriend(info.playerID))
+        {
+            sendFriendRequestButton.interactable = false;
+        }
     }
 
     public void ToWorldChannelChatPage()
     {
-        GameObject page = Instantiate(worldChannelMessagePage);
+        GameObject page = Instantiate(worldChannelMessagePagePrefab);
         page.transform.SetParent(transform);
         page.GetComponent<RectTransform>().localScale = Vector3.one;
         page.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
         page.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+
+        worldChannelMessagePage = page;
 
         messageInputField = page.GetComponentInChildren<InputField>();
         messageBubbleContent = page.transform.Find("List/Viewport/Content").gameObject;
