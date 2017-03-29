@@ -13,20 +13,17 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO WorldChannelMessageCollection 
                 (PlayerMessageID) VALUES (@playerMessageID) ;
                 SELECT LAST_INSERT_ID();";
-            lock(DatabaseService.ConnectionList.TextDataConnection)
+            int worldMessageID;
+            lock (DatabaseService.ConnectionList.TextDataConnection)
             {
                 using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
                 {
                     command.Parameters.AddWithValue("playerMessageID", playerMessageID);
-
-                    PlayerMessage message;
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        if (reader.Read() && DatabaseService.RepositoryList.PlayerMessageRepository.Read(playerMessageID, out message))
+                        if (reader.Read())
                         {
-                            int worldMessageID = reader.GetInt32(0);
-                            worldMessage = new WorldChannelMessage(worldMessageID, message);
-                            return true;
+                            worldMessageID = reader.GetInt32(0);
                         }
                         else
                         {
@@ -35,6 +32,17 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                         }
                     }
                 }
+            }
+            PlayerMessage message;
+            if (DatabaseService.RepositoryList.PlayerMessageRepository.Read(playerMessageID, out message))
+            {
+                worldMessage = new WorldChannelMessage(worldMessageID, message);
+                return true;
+            }
+            else
+            {
+                worldMessage = null;
+                return false;
             }
         }
 
