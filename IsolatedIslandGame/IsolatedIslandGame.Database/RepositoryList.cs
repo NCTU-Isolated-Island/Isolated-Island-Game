@@ -25,6 +25,7 @@ namespace IsolatedIslandGame.Database
 
         #region text data
         public abstract PlayerMessageRepository PlayerMessageRepository { get; }
+        public abstract WorldChannelMessageRepository WorldChannelMessageRepository { get; }
         #endregion
 
         #region archive data

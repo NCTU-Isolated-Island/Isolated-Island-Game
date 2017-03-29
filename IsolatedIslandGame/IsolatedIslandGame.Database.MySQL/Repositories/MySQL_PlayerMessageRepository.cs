@@ -13,6 +13,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO PlayerMessageCollection 
                 (SenderPlayerID,SendTime,Content) VALUES (@senderPlayerID,@sendTime,@content) ;
                 SELECT LAST_INSERT_ID();";
+            lock(DatabaseService.ConnectionList.TextDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
             {
                 DateTime now = DateTime.Now;
@@ -47,6 +48,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 SenderPlayerID, SendTime, Content
                 from PlayerMessageCollection WHERE PlayerMessageID = @playerMessageID;";
+            lock(DatabaseService.ConnectionList.TextDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerMessageID", playerMessageID);
@@ -83,6 +85,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 PlayerMessageID, SendTime, Content
                 from PlayerMessageCollection 
                 WHERE SenderPlayerID = @senderPlayerID;";
+            lock(DatabaseService.ConnectionList.TextDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.TextDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("senderPlayerID", senderPlayerID);

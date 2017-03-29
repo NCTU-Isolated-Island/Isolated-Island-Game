@@ -13,6 +13,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO InventoryItemInfoCollection 
                 (InventoryID,ItemID,ItemCount,PositionIndex,IsFavorite) VALUES (@inventoryID,@itemID,@itemCount,@positionIndex,@isFavorite) ;
                 SELECT LAST_INSERT_ID();";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inventoryID", inventoryID);
@@ -51,6 +52,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 InventoryID, ItemID, ItemCount, PositionIndex, IsFavorite
                 from InventoryItemInfoCollection WHERE InventoryItemInfoID = @inventoryItemInfoID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inventoryItemInfoID", inventoryItemInfoID);
@@ -89,6 +91,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE InventoryItemInfoCollection SET 
                 InventoryID = @inventoryID, ItemID = @itemID, ItemCount = @itemCount, PositionIndex = @positionIndex, IsFavorite = @isFavorite
                 WHERE InventoryItemInfoID = @inventoryItemInfoID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inventoryID", inventoryID);
@@ -108,6 +111,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"DELETE FROM InventoryItemInfoCollection 
                 WHERE InventoryItemInfoID = @inventoryItemInfoID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inventoryItemInfoID", inventoryItemInfoID);
@@ -125,6 +129,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 InventoryItemInfoID, ItemID, ItemCount, PositionIndex, IsFavorite
                 from InventoryItemInfoCollection 
                 WHERE InventoryID = @inventoryID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inventoryID", inventoryID);

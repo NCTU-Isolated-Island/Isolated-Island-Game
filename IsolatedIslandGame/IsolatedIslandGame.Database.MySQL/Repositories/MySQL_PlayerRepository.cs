@@ -22,6 +22,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 string sqlString = @"INSERT INTO PlayerCollection 
                     (FacebookID, RegisterDate) VALUES (@facebookID, @registerDate) ;
                     SELECT LAST_INSERT_ID();";
+                lock(DatabaseService.ConnectionList.PlayerDataConnection)
                 using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
                 {
                     command.Parameters.AddWithValue("facebookID", facebookID);
@@ -46,6 +47,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
 
         public override bool Contains(ulong facebookID, out int playerID)
         {
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand("SELECT PlayerID FROM PlayerCollection WHERE FacebookID = @facebookID;", DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("facebookID", facebookID);
@@ -72,6 +74,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 FacebookID, Nickname, Signature, GroupType, LastConnectedIPAddress, NextDrawMaterialTime
                 from PlayerCollection WHERE PlayerID = @playerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -107,6 +110,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 LastConnectedIPAddress = @lastConnectedIPAddress,
                 NextDrawMaterialTime = @nextDrawMaterialTime
                 WHERE PlayerID = @playerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("nickname", player.Nickname ?? "");
@@ -141,6 +145,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 Nickname, Signature, GroupType, VesselID
                 from PlayerCollection, VesselCollection WHERE PlayerID = @playerID AND OwnerPlayerID = PlayerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -177,6 +182,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE PlayerCollection 
                 SET NextDrawMaterialTime = @nextDrawMaterialTime
                 WHERE true;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("nextDrawMaterialTime", nextDrawMaterialTime);
@@ -195,6 +201,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 LastLoginTime, CumulativeLoginCount
                 from PlayerCollection WHERE PlayerID = @playerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -243,6 +250,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             List<int> playerIDs = new List<int>();
             string sqlString = @"SELECT PlayerID from PlayerCollection ;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())

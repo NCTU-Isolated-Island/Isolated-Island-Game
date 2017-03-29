@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 MaterialID, Score, GroupType, Level
                 from MaterialCollection WHERE ItemID = @itemID;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("itemID", itemID);
@@ -36,6 +37,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             sqlString = @"SELECT  
                 ItemName, Description
                 from ItemCollection WHERE ItemID = @itemID;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("itemID", itemID);
@@ -69,6 +71,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 ItemID,ItemName, Description
                 from ItemCollection;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())
@@ -85,6 +88,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             sqlString = @"SELECT  
                 MaterialID, ItemID, Score, GroupType, Level
                 from MaterialCollection;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())

@@ -11,16 +11,19 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO TransactionItemInfoCollection 
                 (TransactionID,PlayerID,ItemID,ItemCount,PositionIndex) VALUES (@transactionID,@playerID,@itemID,@itemCount,@positionIndex) ;";
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
+            lock(DatabaseService.ConnectionList.ArchiveDataConnection)
             {
-                command.Parameters.AddWithValue("transactionID", transactionID);
-                command.Parameters.AddWithValue("playerID", playerID);
-                command.Parameters.AddWithValue("itemID", info.Item.ItemID);
-                command.Parameters.AddWithValue("itemCount", info.Count);
-                command.Parameters.AddWithValue("positionIndex", info.PositionIndex);
-                if (command.ExecuteNonQuery() <= 0)
+                using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.ArchiveDataConnection.Connection as MySqlConnection))
                 {
-                    LogService.Error($"MySQL_TransactionItemInfoRepository Save TransactionItemInfo Error TransactionID: {transactionID}, PlayerID: {playerID}, ItemID: {info.Item.ItemID}, ItemCount: {info.Count}, PositionIndex: {info.PositionIndex}");
+                    command.Parameters.AddWithValue("transactionID", transactionID);
+                    command.Parameters.AddWithValue("playerID", playerID);
+                    command.Parameters.AddWithValue("itemID", info.Item.ItemID);
+                    command.Parameters.AddWithValue("itemCount", info.Count);
+                    command.Parameters.AddWithValue("positionIndex", info.PositionIndex);
+                    if (command.ExecuteNonQuery() <= 0)
+                    {
+                        LogService.Error($"MySQL_TransactionItemInfoRepository Save TransactionItemInfo Error TransactionID: {transactionID}, PlayerID: {playerID}, ItemID: {info.Item.ItemID}, ItemCount: {info.Count}, PositionIndex: {info.PositionIndex}");
+                    }
                 }
             }
         }

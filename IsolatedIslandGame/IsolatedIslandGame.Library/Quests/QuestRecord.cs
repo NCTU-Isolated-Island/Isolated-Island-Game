@@ -85,7 +85,7 @@ namespace IsolatedIslandGame.Library.Quests
                 requirementRecords.ForEach(x => x.RegisterObserverEvents(player));
                 informQuestInished = (record) =>
                 {
-                    if (IsFinished)
+                    if (IsFinished && !HasGottenReward)
                     {
                         player.User.EventManager.UserInform("提示", $"任務： {Quest.QuestName}完成了");
                         onQuestRecordStatusChange -= informQuestInished;

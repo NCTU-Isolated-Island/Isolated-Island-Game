@@ -11,6 +11,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO PlayerKnownBlueprintCollection 
                 (PlayerID,BlueprintID) VALUES (@playerID,@blueprintID);";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -29,6 +30,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 BlueprintID
                 from PlayerKnownBlueprintCollection 
                 WHERE PlayerID = @playerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);

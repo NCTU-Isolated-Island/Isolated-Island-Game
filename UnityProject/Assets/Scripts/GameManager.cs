@@ -233,18 +233,15 @@ public class GameManager : MonoBehaviour
 							{
 								//Find OwnerPlayerID by VesselID
 								Vessel v;
-								VesselManager.Instance.FindVessel(vesselID, out v);
-
-								VesselDecoration[vesselID].Add(decoration.DecorationID, decorationGameObject);
-
-
+								if(VesselManager.Instance.FindVessel(vesselID, out v))
+                                {
+                                    VesselDecoration[vesselID].Add(decoration.DecorationID, decorationGameObject);
+                                }
 							}
 							else
 							{
 								Debug.LogFormat("Add Decoration to Vessel Fail, Decoration Already Existed, VesselID: {0}, DecorationID: {1}", vesselID, decoration.DecorationID);
 							}
-						
-                        
                     }
                     break;
                     case DataChangeType.Remove:
@@ -253,12 +250,12 @@ public class GameManager : MonoBehaviour
                             {
                                 //Find OwnerPlayerID by VesselID
                                 Vessel v;
-                                VesselManager.Instance.FindVessel(vesselID, out v);
-
-                                Destroy(VesselDecoration[vesselID][decoration.DecorationID]);
-
-                                UserDecoration[v.OwnerPlayerID].Remove(decoration.DecorationID);
-                                VesselDecoration[vesselID].Remove(decoration.DecorationID);
+                                if(VesselManager.Instance.FindVessel(vesselID, out v))
+                                {
+                                    Destroy(VesselDecoration[vesselID][decoration.DecorationID]);
+                                    UserDecoration[v.OwnerPlayerID].Remove(decoration.DecorationID);
+                                    VesselDecoration[vesselID].Remove(decoration.DecorationID);
+                                }
                             }
                             else
                             {

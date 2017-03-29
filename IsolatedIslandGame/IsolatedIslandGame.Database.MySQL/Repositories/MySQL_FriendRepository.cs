@@ -11,6 +11,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"INSERT INTO FriendCollection 
                 (InviterPlayerID,AccepterPlayerID,IsConfirmed) VALUES (@inviterPlayerID,@accepterPlayerID,@isConfirmed);";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inviterPlayerID", inviterPlayerID);
@@ -40,6 +41,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE FriendCollection SET 
                 IsConfirmed = @isConfirmed
                 WHERE InviterPlayerID = @inviterPlayerID AND AccepterPlayerID = @accepterPlayerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("isConfirmed", true);
@@ -68,6 +70,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"DELETE FROM FriendCollection 
                 WHERE (InviterPlayerID = @selfPlayerID AND AccepterPlayerID = @targetPlayerID) OR (InviterPlayerID = @targetPlayerID AND AccepterPlayerID = @selfPlayerID);";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("selfPlayerID", selfPlayerID);
@@ -84,6 +87,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             List<FriendInformation> friendInformations = new List<FriendInformation>();
             string sqlString = @"SELECT AccepterPlayerID, IsConfirmed from FriendCollection
                 WHERE InviterPlayerID = @playerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
