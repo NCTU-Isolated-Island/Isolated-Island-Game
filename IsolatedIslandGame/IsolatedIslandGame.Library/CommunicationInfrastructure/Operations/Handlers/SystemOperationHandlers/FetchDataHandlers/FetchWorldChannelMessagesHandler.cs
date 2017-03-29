@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 try
                 {
-                    foreach (WorldChannelMessage worldChannelMessage in SystemManager.Instance.GetWorldChannelMessages())
+                    foreach (WorldChannelMessage worldChannelMessage in SystemManager.Instance.GetWorldChannelMessages(10))
                     {
                         communicationInterface.User?.Player.SyncPlayerInformation(worldChannelMessage.Message.senderPlayerID);
                         var result = new Dictionary<byte, object>

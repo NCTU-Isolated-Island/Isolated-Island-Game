@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 ErrorCode errorCode;
                 int playerID = (int)parameters[(byte)PlayerIDLoginParameterCode.PlayerID];
                 string password = (string)parameters[(byte)PlayerIDLoginParameterCode.Password];
-                bool result = subject.CommunicationInterface.PlayerIDLogin(playerID, password, out debugMessage, out errorCode);
+                bool result = SystemManager.Instance.OperationInterface.PlayerIDLogin(subject, playerID, password, out debugMessage, out errorCode);
                 if (result)
                 {
                     Player player = subject.Player;

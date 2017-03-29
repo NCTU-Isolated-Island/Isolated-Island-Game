@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             if (base.Handle(operationCode, parameters))
             {
                 int requesterPlayerID = (int)parameters[(byte)AcceptTransactionParameterCode.RequesterPlayerID];
-                if (subject.User.CommunicationInterface.AcceptTransaction(requesterPlayerID, subject.PlayerID))
+                if (SystemManager.Instance.OperationInterface.AcceptTransaction(requesterPlayerID, subject.PlayerID))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, AcceptTransaction, RequesterPlayerID: {requesterPlayerID}");
                     return true;

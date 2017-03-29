@@ -20,7 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 ErrorCode errorCode;
                 ulong facebookID = ulong.Parse((string)parameters[(byte)LoginParameterCode.FacebookID]);
                 string accessToken = (string)parameters[(byte)LoginParameterCode.AccessToken];
-                bool result = subject.CommunicationInterface.Login(facebookID, accessToken, out debugMessage, out errorCode);
+                bool result = SystemManager.Instance.OperationInterface.Login(subject, facebookID, accessToken, out debugMessage, out errorCode);
                 if (result)
                 {
                     Player player = subject.Player;

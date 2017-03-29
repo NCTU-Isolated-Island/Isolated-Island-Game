@@ -21,7 +21,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     int questID = (int)parameters[(byte)AssignQuestToAllPlayerParameterCode.QuestID];
                     string administratorPassword = (string)parameters[(byte)AssignQuestToAllPlayerParameterCode.AdministratorPassword];
 
-                    return communicationInterface.AssignQuestToAllPlayer(questID, administratorPassword);
+                    return SystemManager.Instance.OperationInterface.AssignQuestToAllPlayer(questID, administratorPassword);
                 }
                 catch (InvalidCastException ex)
                 {

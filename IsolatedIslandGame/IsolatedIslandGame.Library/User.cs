@@ -30,6 +30,7 @@ namespace IsolatedIslandGame.Library
         public bool IsOnline { get { return Player != null; } }
 
         internal CommunicationInterface CommunicationInterface { get; private set; }
+        
         public UserEventManager EventManager { get; private set; }
         public UserOperationManager OperationManager { get; private set; }
         public UserResponseManager ResponseManager { get; private set; }
