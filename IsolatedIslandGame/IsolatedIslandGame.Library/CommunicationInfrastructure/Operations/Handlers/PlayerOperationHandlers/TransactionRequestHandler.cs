@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             if (base.Handle(operationCode, parameters))
             {
                 int accepterPlayerID = (int)parameters[(byte)TransactionRequestParameterCode.AccepterPlayerID];
-                if (subject.User.CommunicationInterface.TransactionRequest(subject.PlayerID, accepterPlayerID))
+                if (SystemManager.Instance.OperationInterface.TransactionRequest(subject.PlayerID, accepterPlayerID))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, TransactionRequest, AccepterPlayerID: {accepterPlayerID}");
                     subject.User.EventManager.UserInform("成功", "已發出交易邀請");

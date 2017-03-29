@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 try
                 {
-                    foreach (var conversation in subject.User.CommunicationInterface.GetPlayerConversations(subject.PlayerID))
+                    foreach (var conversation in SystemManager.Instance.OperationInterface.GetPlayerConversations(subject.PlayerID))
                     {
                         subject.SyncPlayerInformation(conversation.message.senderPlayerID);
                         subject.SyncPlayerInformation(conversation.receiverPlayerID);

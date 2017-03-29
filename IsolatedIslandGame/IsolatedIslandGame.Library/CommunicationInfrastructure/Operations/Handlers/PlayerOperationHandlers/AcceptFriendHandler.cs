@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             if (base.Handle(operationCode, parameters))
             {
                 int inviterPlayerID = (int)parameters[(byte)AcceptFriendParameterCode.InviterPlayerID];
-                if (subject.User.CommunicationInterface.AcceptFriend(inviterPlayerID, subject.PlayerID))
+                if (SystemManager.Instance.OperationInterface.AcceptFriend(inviterPlayerID, subject.PlayerID))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, AcceptFriend, InviterPlayerID: {inviterPlayerID}");
                     return true;
