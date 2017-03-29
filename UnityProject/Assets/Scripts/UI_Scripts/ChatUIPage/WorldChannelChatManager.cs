@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class WorldChannelChatManager : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class WorldChannelChatManager : MonoBehaviour
     [SerializeField]
     private GameObject sendMessageBubble;
 
+
+    [SerializeField]
+    private GameObject accessOtherPlayerPage;
     [SerializeField]
     private GameObject messageBubbleContent;
     [SerializeField]
@@ -87,6 +91,14 @@ public class WorldChannelChatManager : MonoBehaviour
             {
                 textObj.text = string.Format("{0} 說 : {1}", "...", worldChannelMessage.Message.content);
             }
+
+            bubble.AddComponent<Button>();
+            Button bubbleButton = bubble.GetComponent<Button>();
+            bubbleButton.onClick.AddListener(delegate
+            {
+                worldChannelMessagePage.SetActive(true);
+                SetAccessOtherPlayerPage(info);
+            });
         }
 
         bubble.transform.parent.SetParent(messageBubbleContent.transform);
@@ -95,6 +107,33 @@ public class WorldChannelChatManager : MonoBehaviour
 
         bubble.transform.parent.GetComponent<RectTransform>().localScale = Vector2.one;
         bubble.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(bubble.GetComponent<RectTransform>().sizeDelta.x, textObj.preferredHeight + 20);
+    }
+
+    private void SetAccessOtherPlayerPage(PlayerInformation info)
+    {
+        Button sendMessageButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
+        Button sendFriendRequestButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
+        Button sendTransactionRequestButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
+        Button checkVesselButton = accessOtherPlayerPage.transform.Find("SendMessage").GetComponent<Button>();
+
+        sendMessageButton.onClick.AddListener(delegate
+        {
+            ChatUIManager.Instance.ToMessagePageByPlayerInformation(info);
+        });
+        sendFriendRequestButton.onClick.AddListener(delegate
+        {
+            UserManager.Instance.User.Player.OperationManager.InviteFriend(info.playerID);
+        });
+        sendTransactionRequestButton.onClick.AddListener(delegate
+        {
+            TransactionManager.Instance.SendTransactionRequest(info.playerID);
+        });
+        checkVesselButton.onClick.AddListener(delegate
+        {
+            CameraManager.Instance.ToNearAnchor(GameManager.Instance.UserGameObject[info.playerID]);
+            UIManager.Instance.SwapPage(UIManager.UIPageType.OtherBoat);
+            OtherBoatUIManager.Instance.SetOtherPlayerInfo(info.playerID);
+        });
     }
 
     public void ToWorldChannelChatPage()
@@ -107,6 +146,7 @@ public class WorldChannelChatManager : MonoBehaviour
 
         messageInputField = page.GetComponentInChildren<InputField>();
         messageBubbleContent = page.transform.Find("List/Viewport/Content").gameObject;
+        accessOtherPlayerPage = page.transform.Find("AccessOtherPlayerPanel").gameObject;
         Button sendMessageButton = page.transform.Find("OperationField/EnterButton").gameObject.GetComponent<Button>();
         Button backButton = page.transform.Find("OperationField/BackButton").gameObject.GetComponent<Button>();
 
@@ -119,6 +159,7 @@ public class WorldChannelChatManager : MonoBehaviour
         {
             Destroy(page);
         });
+        accessOtherPlayerPage.SetActive(false);
 
         RenderWorldChannelBubble();
     }
@@ -127,7 +168,7 @@ public class WorldChannelChatManager : MonoBehaviour
     {
         if (IsOnlyWhiteSpaceOrEmpty(messageInputField.text))
             return;
-        UserManager.Instance.User.Player.OperationManager.SendWorldChannelMessage(messageInputField.text);
+       UserManager.Instance.User.Player.OperationManager.SendWorldChannelMessage(messageInputField.text);
         messageInputField.text = null;
     }
 

@@ -146,23 +146,6 @@ public class UIManager : MonoBehaviour
     {
         if (page == null)
             yield break;
-        //print("Removing " + page.name);
-        float passTime = 0;
-        RectTransform rectTransform = page.GetComponent<RectTransform>();
-        float targetY = rectTransform.anchoredPosition.y;
-
-        while (passTime < SwapPageTimeInterval)
-        {
-            passTime += Time.deltaTime;
-
-            Vector2 nextPosition = rectTransform.anchoredPosition;
-            nextPosition.y = Mathf.Lerp(targetY, -transform.root.GetComponent<RectTransform>().rect.height, passTime / SwapPageTimeInterval);
-            rectTransform.anchoredPosition = nextPosition;
-
-            yield return null;
-        }
-        rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -transform.root.GetComponent<RectTransform>().rect.height);
-
         page.SetActive(false);
         yield return null;
     }

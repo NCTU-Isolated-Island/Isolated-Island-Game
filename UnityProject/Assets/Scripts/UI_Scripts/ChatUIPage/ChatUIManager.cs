@@ -177,12 +177,12 @@ public class ChatUIManager : MonoBehaviour {
             }
 
             tmp.GetComponent<Button>().onClick.AddListener(delegate{
-                ToMessagePageByChatRecord(opponentPlayer);
+                ToMessagePageByPlayerInformation(opponentPlayer);
             });
         }
     }
 
-    public void ToMessagePageByChatRecord(PlayerInformation chatPlayer)
+    public void ToMessagePageByPlayerInformation(PlayerInformation chatPlayer)
     {
         // Swap to Message Page
         UIManager.Instance.SwapPage(UIManager.UIPageType.Chat_Message);
