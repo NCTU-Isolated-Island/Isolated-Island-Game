@@ -71,7 +71,23 @@ public class WorldChannelChatManager : MonoBehaviour
     private void FillInBubbleData(WorldChannelMessage worldChannelMessage, GameObject bubble)
     {
         Text textObj = bubble.transform.GetComponentInChildren<Text>();
-        textObj.text = worldChannelMessage.Message.content;
+
+        if (worldChannelMessage.Message.senderPlayerID == GameManager.Instance.PlayerID)
+        {
+            textObj.text = worldChannelMessage.Message.content;
+        }
+        else
+        {
+            PlayerInformation info;
+            if (PlayerInformationManager.Instance.FindPlayerInformation(worldChannelMessage.Message.senderPlayerID, out info))
+            {
+                textObj.text = string.Format("{0} 說 : {1}", info.nickname, worldChannelMessage.Message.content);
+            }
+            else
+            {
+                textObj.text = string.Format("{0} 說 : {1}", "...", worldChannelMessage.Message.content);
+            }
+        }
 
         bubble.transform.parent.SetParent(messageBubbleContent.transform);
         bubble.GetComponent<RectTransform>().localScale = Vector2.one;
