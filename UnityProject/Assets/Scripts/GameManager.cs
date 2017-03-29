@@ -304,7 +304,7 @@ public class GameManager : MonoBehaviour
                     }
 					
 					//Render Player Online Message
-					if(UserManager.Instance.User.Player.PlayerID != vessel.OwnerPlayerID && Time.timeSinceLevelLoad > 10f)
+					if(UserManager.Instance.User.Player.PlayerID != vessel.OwnerPlayerID && Time.timeSinceLevelLoad > 10f && GameManager.Instance.PlayerGameObject != null)
 					{
 						UIManager.Instance.RenderPlayerOnlineMessage(
 							vessel.OwnerPlayerID,
