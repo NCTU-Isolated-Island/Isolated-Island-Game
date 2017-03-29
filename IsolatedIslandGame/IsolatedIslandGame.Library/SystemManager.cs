@@ -1,7 +1,7 @@
 ﻿using IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Managers;
 using IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Managers;
-using IsolatedIslandGame.Library.Quests;
+using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Protocol.Communication.EventCodes;
 using System.Collections.Generic;
 
@@ -34,5 +34,6 @@ namespace IsolatedIslandGame.Library
             ResponseManager = new SystemResponseManager(this);
         }
         public abstract void SendAllUserEvent(UserEventCode eventCode, Dictionary<byte, object> parameters);
+        public abstract List<WorldChannelMessage> GetWorldChannelMessages();
     }
 }

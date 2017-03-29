@@ -190,7 +190,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
                 from BlueprintProductCollection 
                 WHERE BlueprintID = @blueprintID;";
             lock(DatabaseService.ConnectionList.SettingDataConnection)
-            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.Connection as MySqlConnection))
+            using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("@blueprintID", blueprintID);
                 using (MySqlDataReader reader = command.ExecuteReader())
