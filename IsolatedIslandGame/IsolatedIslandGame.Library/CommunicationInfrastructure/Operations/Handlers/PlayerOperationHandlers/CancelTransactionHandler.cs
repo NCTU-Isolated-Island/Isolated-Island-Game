@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 int transactionID = (int)parameters[(byte)CancelTransactionParameterCode.TransactionID];
 
-                if (subject.User.CommunicationInterface.CancelTransaction(subject.PlayerID, transactionID))
+                if (SystemManager.Instance.OperationInterface.CancelTransaction(subject.PlayerID, transactionID))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, CancelTransaction, TransactionID: {transactionID}");
                     return true;

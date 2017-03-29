@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 int playerMessageID = (int)parameters[(byte)ReadPlayerMessageParameterCode.PlayerMessageID];
 
-                if(subject.User.CommunicationInterface.ReadPlayerMessage(subject.PlayerID, playerMessageID))
+                if(SystemManager.Instance.OperationInterface.ReadPlayerMessage(subject.PlayerID, playerMessageID))
                 {
                     return true;
                 }

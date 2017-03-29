@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             {
                 string content = (string)parameters[(byte)SendWorldChannelMessageParameterCode.Content];
 
-                if (subject.User.CommunicationInterface.SendWorldChannelMessage(subject.PlayerID, content))
+                if (SystemManager.Instance.OperationInterface.SendWorldChannelMessage(subject.PlayerID, content))
                 {
                     return true;
                 }

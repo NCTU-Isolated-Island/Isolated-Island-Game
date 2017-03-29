@@ -31,7 +31,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                     {
                         if (subject.Inventory.ItemCount(itemID) >= itemCount)
                         {
-                            if (subject.User.CommunicationInterface.ChangeTransactionItem(subject.PlayerID, transactionID, changeType, new TransactionItemInfo(item, itemCount, positionIndex)))
+                            if (SystemManager.Instance.OperationInterface.ChangeTransactionItem(subject.PlayerID, transactionID, changeType, new TransactionItemInfo(item, itemCount, positionIndex)))
                             {
                                 LogService.InfoFormat($"Player: {subject.IdentityInformation}, ChangeTransactionItem, TransactionID: {transactionID}, DataChangeType: {changeType}, ItemID: {itemID}, ItemCount: {itemCount}, PositionIndex: {positionIndex}");
                                 return true;

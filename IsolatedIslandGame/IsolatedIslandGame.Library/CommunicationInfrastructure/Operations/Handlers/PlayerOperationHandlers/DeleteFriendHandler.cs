@@ -16,7 +16,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
             if (base.Handle(operationCode, parameters))
             {
                 int targetPlayerID = (int)parameters[(byte)DeleteFriendParameterCode.TargetPlayerID];
-                if (subject.User.CommunicationInterface.DeleteFriend(subject.PlayerID, targetPlayerID))
+                if (SystemManager.Instance.OperationInterface.DeleteFriend(subject.PlayerID, targetPlayerID))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, DeleteFriend, TargetPlayerID: {targetPlayerID}");
                     return true;

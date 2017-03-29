@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 try
                 {
                     string serverVersion, clientVersion;
-                    subject.CommunicationInterface.GetSystemVersion(out serverVersion, out clientVersion);
+                    SystemManager.Instance.OperationInterface.GetSystemVersion(out serverVersion, out clientVersion);
                     var result = new Dictionary<byte, object>
                     {
                         { (byte)FetchSystemVersionResponseParameterCode.CurrentServerVersion, serverVersion },

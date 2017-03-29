@@ -6,6 +6,7 @@ using IsolatedIslandGame.Protocol.Communication.EventParameters.System;
 using IsolatedIslandGame.Protocol.Communication.SyncDataCodes;
 using IsolatedIslandGame.Protocol.Communication.SyncDataParameters;
 using System.Collections.Generic;
+using IsolatedIslandGame.Library.TextData;
 using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
@@ -25,6 +26,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
                 { SystemEventCode.SyncData, SyncDataResolver },
                 { SystemEventCode.IslandResetTodayMaterialRanking, new IslandResetTodayMaterialRankingHandler(systemManager) },
                 { SystemEventCode.LandmarkEvent, new LandmarkEventResolver(systemManager) },
+                { SystemEventCode.BroadcastWorldChannelMessage, new BroadcastWorldChannelMessageHandler(systemManager) },
             };
         }
 
@@ -76,6 +78,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Managers
         public void IslandResetTodayMaterialRanking()
         {
             SendEvent(SystemEventCode.IslandResetTodayMaterialRanking, new Dictionary<byte, object>());
+        }
+        public void BroadcastWorldChannelMessage(WorldChannelMessage worldMessage)
+        {
+            Dictionary<byte, object> eventData = new Dictionary<byte, object>
+            {
+                { (byte)BroadcastWorldChannelMessageParameterCode.WorldChannelMessagesID, worldMessage.WorldChannelMessageID },
+                { (byte)BroadcastWorldChannelMessageParameterCode.PlayerMessageID, worldMessage.Message.playerMessageID },
+                { (byte)BroadcastWorldChannelMessageParameterCode.SenderPlayerID, worldMessage.Message.senderPlayerID },
+                { (byte)BroadcastWorldChannelMessageParameterCode.SendTime, worldMessage.Message.sendTime.ToBinary() },
+                { (byte)BroadcastWorldChannelMessageParameterCode.Content, worldMessage.Message.content }
+            };
+            SendEvent(SystemEventCode.BroadcastWorldChannelMessage, eventData);
         }
     }
 }
