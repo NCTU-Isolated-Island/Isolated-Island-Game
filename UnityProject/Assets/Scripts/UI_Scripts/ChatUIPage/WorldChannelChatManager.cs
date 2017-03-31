@@ -13,6 +13,13 @@ public class WorldChannelChatManager : MonoBehaviour
     public static WorldChannelChatManager Instance { get; private set; }
 
     [SerializeField]
+    private Color AnimalGroupMessageColor;
+    [SerializeField]
+    private Color BusinessManGroupMessageColor;
+    [SerializeField]
+    private Color FarmerGroupMessageColor;
+
+    [SerializeField]
     private GameObject worldChannelMessagePagePrefab;
 
     private GameObject worldChannelMessagePage;
@@ -101,6 +108,25 @@ public class WorldChannelChatManager : MonoBehaviour
                 accessOtherPlayerPage.SetActive(true);
                 SetAccessOtherPlayerPage(info);
             });
+
+            switch(info.groupType)
+            {
+                case GroupType.Animal:
+                    foreach (var entry in bubble.GetComponentsInChildren<Image>())
+                        entry.color = AnimalGroupMessageColor;
+                    break;
+                case GroupType.Farmer:
+                    foreach (var entry in bubble.GetComponentsInChildren<Image>())
+                        entry.GetComponent<Image>().color = FarmerGroupMessageColor;
+                    break;
+                case GroupType.Businessman:
+                    foreach (var entry in bubble.GetComponentsInChildren<Image>())
+                        entry.GetComponent<Image>().color = BusinessManGroupMessageColor;
+                    break;
+                default:
+                    bubble.GetComponent<Image>().color = Color.white;
+                    break;
+            }
         }
 
         bubble.transform.parent.SetParent(messageBubbleContent.transform);

@@ -56,12 +56,15 @@ public class GameUtility : MonoBehaviour {
 		GameManager.Instance.ElementModels.Add(2012, Resources.Load("Ingredients/" + "Pot") as GameObject);
 		GameManager.Instance.ElementModels.Add(2013, Resources.Load("Ingredients/" + "Flour") as GameObject);
 		GameManager.Instance.ElementModels.Add(2014, Resources.Load("Ingredients/" + "pencil") as GameObject);
-
+		GameManager.Instance.ElementModels.Add(2015, Resources.Load("Ingredients/" + "Wind") as GameObject);
 		GameManager.Instance.ElementModels.Add(2016, Resources.Load("Ingredients/" + "electricity") as GameObject);
 		GameManager.Instance.ElementModels.Add(2017, Resources.Load("Ingredients/" + "Propeller") as GameObject);
 
 		GameManager.Instance.ElementModels.Add(2019, Resources.Load("Ingredients/" + "gold") as GameObject);
 		GameManager.Instance.ElementModels.Add(2020, Resources.Load("Ingredients/" + "Candle") as GameObject);
+
+		GameManager.Instance.ElementModels.Add(2023, Resources.Load("Ingredients/" + "CoffeePowder") as GameObject);
+
 
 		GameManager.Instance.ElementModels.Add(3001, Resources.Load("Ingredients/" + "Soup") as GameObject);
 		GameManager.Instance.ElementModels.Add(3002, Resources.Load("Ingredients/" + "steel") as GameObject);
@@ -71,6 +74,7 @@ public class GameUtility : MonoBehaviour {
 
 		GameManager.Instance.ElementModels.Add(3008, Resources.Load("Ingredients/" + "Latte") as GameObject);
 		GameManager.Instance.ElementModels.Add(3009, Resources.Load("Ingredients/" + "Coke") as GameObject);
+		GameManager.Instance.ElementModels.Add(3010, Resources.Load("Ingredients/" + "Porcelain") as GameObject);
 		GameManager.Instance.ElementModels.Add(3011, Resources.Load("Ingredients/" + "Painter") as GameObject);
 		GameManager.Instance.ElementModels.Add(3012, Resources.Load("Ingredients/" + "guitar") as GameObject);
 		GameManager.Instance.ElementModels.Add(3013, Resources.Load("Ingredients/" + "Ghost") as GameObject);
@@ -84,9 +88,11 @@ public class GameUtility : MonoBehaviour {
 		GameManager.Instance.ElementModels.Add(4005, Resources.Load("Ingredients/" + "Computer") as GameObject);
 		GameManager.Instance.ElementModels.Add(4006, Resources.Load("Ingredients/" + "Motor") as GameObject);
 
+		GameManager.Instance.ElementModels.Add(4008, Resources.Load("Ingredients/" + "Blanket") as GameObject);
 		GameManager.Instance.ElementModels.Add(4009, Resources.Load("Ingredients/" + "ShineMood") as GameObject);
 		GameManager.Instance.ElementModels.Add(4010, Resources.Load("Ingredients/" + "black_horse") as GameObject);
-
+		GameManager.Instance.ElementModels.Add(4011, Resources.Load("Ingredients/" + "Dumbbell") as GameObject);
+		GameManager.Instance.ElementModels.Add(4012, Resources.Load("Ingredients/" + "NicePorcelain") as GameObject);
 		GameManager.Instance.ElementModels.Add(4013, Resources.Load("Ingredients/" + "imac") as GameObject);
 
 
