@@ -62,13 +62,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
                     subject.Player.OperationManager.FetchDataResolver.FetchAllPlayerConversations();
                     subject.Player.OperationManager.FetchDataResolver.FetchAllQuestRecords();
 
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTotalScore();
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandTodayMaterialRanking();
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchIslandPlayerScoreRanking();
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllItems();
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllVessels();
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchAllLandmarks();
-                    SystemManager.Instance.OperationManager.FetchDataResolver.FetchWorldChannelMessages();
+                    SystemManager.Instance.OperationManager.FetchDataResolver.InitialFetch();
 
                     subject.ResponseManager.LoginResponse(returnCode, player);
 

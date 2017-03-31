@@ -49,6 +49,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { PlayerOperationCode.DonateItemToPlayer, new DonateItemToPlayerHandler(player) },
                 { PlayerOperationCode.TakeQuestReward, new TakeQuestRewardHandler(player) },
                 { PlayerOperationCode.SendWorldChannelMessage, new SendWorldChannelMessageHandler(player) },
+                { PlayerOperationCode.PickupItemEntity, new PickupItemEntityHandler(player) },
             };
         }
 
@@ -305,6 +306,14 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Mana
                 { (byte)SendWorldChannelMessageParameterCode.Content, content }
             };
             SendOperation(PlayerOperationCode.SendWorldChannelMessage, parameters);
+        }
+        public void PickupItemEntity(int itemEntityID)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)PickupItemEntityParameterCode.ItemEntityID, itemEntityID }
+            };
+            SendOperation(PlayerOperationCode.PickupItemEntity, parameters);
         }
     }
 }

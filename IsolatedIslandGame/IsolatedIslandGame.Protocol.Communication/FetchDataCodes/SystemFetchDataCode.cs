@@ -13,6 +13,7 @@
         IslandPlayerScoreRanking,
         AllLandmarks,
         ClientFunctionCheckTable,
-        WorldChannelMessages
+        WorldChannelMessages,
+        AllItemEntities
     }
 }

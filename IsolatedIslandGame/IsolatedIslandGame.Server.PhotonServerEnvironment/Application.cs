@@ -104,6 +104,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             PlayerInformationManager.Initial(new ServerPlayerInformationManager());
             TransactionManager.Initial();
             IslandManager.Initial();
+            ItemEntityManager.Initial(new Items.ServerItemEntityManager());
         }
     }
 }

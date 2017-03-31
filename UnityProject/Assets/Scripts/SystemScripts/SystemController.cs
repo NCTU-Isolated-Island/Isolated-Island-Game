@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using IsolatedIslandGame.Library;
+using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Library.Landmarks;
 
 namespace IsolatedIslandGame.Client.Scripts.SystemScripts
@@ -17,6 +18,7 @@ namespace IsolatedIslandGame.Client.Scripts.SystemScripts
             Island.Initial();
             QuestManager.Initial(new QuestManager());
             LandmarkManager.Initial(new LandmarkManager());
+            ItemEntityManager.Initial(new ItemEntityManager());
         }
     }
 }

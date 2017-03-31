@@ -18,6 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Responses.Handl
             fetchResponseTable.Add(SystemFetchDataCode.AllLandmarks, new FetchAllLandmarksResponseHandler(subject));
             fetchResponseTable.Add(SystemFetchDataCode.ClientFunctionCheckTable, new FetchClientFunctionCheckTableResponseHandler(subject));
             fetchResponseTable.Add(SystemFetchDataCode.WorldChannelMessages, new FetchWorldChannelMessagesResponseHandler(subject));
+            fetchResponseTable.Add(SystemFetchDataCode.AllItemEntities, new FetchAllItemEntitiesResponseHandler(subject));
         }
     }
 }

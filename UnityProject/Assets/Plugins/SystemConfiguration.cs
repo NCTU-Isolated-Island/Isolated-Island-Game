@@ -11,11 +11,11 @@
                 {
                     instance = new SystemConfiguration
                     {
-                        ServerName = "IsolatedIsland.ReleaseServer",
-                        //ServerName = "IsolatedIsland.TestServer",
+                        //ServerName = "IsolatedIsland.ReleaseServer",
+                        ServerName = "IsolatedIsland.TestServer",
 						ServerAddress = "isolatedisland-destination.duckdns.org", 
-                        ServerPort = 4532,
-                        //ServerPort = 4531,
+                        //ServerPort = 4532,
+                        ServerPort = 4531,
 						ServerVersion = "Release1.2",
 						ClientVersion = "Release1.2"
                     };

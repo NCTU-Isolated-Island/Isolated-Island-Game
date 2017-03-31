@@ -19,6 +19,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
             syncTable.Add(SystemSyncDataCode.IslandTotalScoreUpdated, new SyncIslandTotalScoreUpdatedHandler(subject));
             syncTable.Add(SystemSyncDataCode.IslandTodayMaterialRankingUpdated, new SyncIslandTodayMaterialRankingUpdatedHandler(subject));
             syncTable.Add(SystemSyncDataCode.IslandPlayerScoreRankingUpdated, new SyncIslandPlayerScoreRankingUpdatedHandler(subject));
+            syncTable.Add(SystemSyncDataCode.ItemEntityChange, new SyncItemEntityChangeHandler(subject));
         }
 
         internal override void SendSyncData(SystemSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -112,6 +113,18 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Events.Handlers
                 { (byte)SyncIslandPlayerScoreRankingUpdatedParameterCode.Score, info.score }
             };
             SendSyncData(SystemSyncDataCode.IslandPlayerScoreRankingUpdated, parameters);
+        }
+        public void SyncItemEntityChange(DataChangeType changeType, ItemEntity itemEntity)
+        {
+            var parameters = new Dictionary<byte, object>
+            {
+                { (byte)SyncItemEntityChangeParameterCode.DataChangeType, (byte)changeType },
+                { (byte)SyncItemEntityChangeParameterCode.ItemEntityID, itemEntity.ItemEntityID },
+                { (byte)SyncItemEntityChangeParameterCode.ItemID, itemEntity.ItemID },
+                { (byte)SyncItemEntityChangeParameterCode.PositionX, itemEntity.PositionX },
+                { (byte)SyncItemEntityChangeParameterCode.PositionZ, itemEntity.PositionZ },
+            };
+            SendSyncData(SystemSyncDataCode.ItemEntityChange, parameters);
         }
     }
 }

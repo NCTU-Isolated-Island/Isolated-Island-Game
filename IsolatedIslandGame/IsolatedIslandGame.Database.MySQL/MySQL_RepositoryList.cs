@@ -66,5 +66,10 @@ namespace IsolatedIslandGame.Database.MySQL
         private MySQL_IslandMaterialRepository islandMaterialRepository = new MySQL_IslandMaterialRepository();
         public override IslandMaterialRepository IslandMaterialRepository { get { return islandMaterialRepository; } }
         #endregion
+
+        #region system data
+        private MySQL_ItemEntityRepository itemEntityRepository = new MySQL_ItemEntityRepository();
+        public override ItemEntityRepository ItemEntityRepository { get { return itemEntityRepository; } }
+        #endregion
     }
 }

@@ -8,6 +8,7 @@ namespace IsolatedIslandGame.Database
         public abstract SettingDataConnection SettingDataConnection { get; }
         public abstract TextDataConnection TextDataConnection { get; }
         public abstract ArchiveDataConnection ArchiveDataConnection { get; }
+        public abstract SystemDataConnection SystemDataConnection { get; }
 
         protected override string DatabaseName { get { return ""; } }
         public override bool Connect(string hostName, string userName, string password, string database)
