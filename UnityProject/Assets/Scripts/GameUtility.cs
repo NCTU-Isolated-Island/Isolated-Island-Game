@@ -91,7 +91,7 @@ public class GameUtility : MonoBehaviour {
 		GameManager.Instance.ElementModels.Add(4008, Resources.Load("Ingredients/" + "Blanket") as GameObject);
 		GameManager.Instance.ElementModels.Add(4009, Resources.Load("Ingredients/" + "ShineMood") as GameObject);
 		GameManager.Instance.ElementModels.Add(4010, Resources.Load("Ingredients/" + "black_horse") as GameObject);
-
+		GameManager.Instance.ElementModels.Add(4011, Resources.Load("Ingredients/" + "Dumbbell") as GameObject);
 		GameManager.Instance.ElementModels.Add(4012, Resources.Load("Ingredients/" + "NicePorcelain") as GameObject);
 		GameManager.Instance.ElementModels.Add(4013, Resources.Load("Ingredients/" + "imac") as GameObject);
 
