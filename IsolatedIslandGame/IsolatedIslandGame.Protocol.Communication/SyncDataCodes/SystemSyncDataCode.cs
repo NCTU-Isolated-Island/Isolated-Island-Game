@@ -9,5 +9,6 @@
         IslandTotalScoreUpdated,
         IslandTodayMaterialRankingUpdated,
         IslandPlayerScoreRankingUpdated,
+        ItemEntityChange,
     }
 }

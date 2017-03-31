@@ -27,7 +27,8 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 { SystemFetchDataCode.IslandPlayerScoreRanking, new FetchIslandPlayerScoreRankingHandler(subject) },
                 { SystemFetchDataCode.AllLandmarks, new FetchAllLandmarksHandler(subject) },
                 { SystemFetchDataCode.ClientFunctionCheckTable, new FetchClientFunctionCheckTableHandler(subject) },
-                { SystemFetchDataCode.WorldChannelMessages, new FetchWorldChannelMessagesHandler(subject) }
+                { SystemFetchDataCode.WorldChannelMessages, new FetchWorldChannelMessagesHandler(subject) },
+                { SystemFetchDataCode.AllItemEntities, new FetchAllItemEntitiesHandler(subject) }
             };
         }
 
@@ -59,7 +60,17 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         {
             subject.OperationManager.SendFetchDataOperation(fetchCode, parameters);
         }
-
+        public void InitialFetch()
+        {
+            FetchIslandTotalScore();
+            FetchIslandTodayMaterialRanking();
+            FetchIslandPlayerScoreRanking();
+            FetchAllItems();
+            FetchAllVessels();
+            FetchAllLandmarks();
+            FetchWorldChannelMessages();
+            FetchAllItemEntities();
+        }
         public void FetchItem(int itemID)
         {
             var parameters = new Dictionary<byte, object>
@@ -123,6 +134,10 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
         public void FetchWorldChannelMessages()
         {
             SendOperation(SystemFetchDataCode.WorldChannelMessages, new Dictionary<byte, object>());
+        }
+        public void FetchAllItemEntities()
+        {
+            SendOperation(SystemFetchDataCode.AllItemEntities, new Dictionary<byte, object>());
         }
     }
 }

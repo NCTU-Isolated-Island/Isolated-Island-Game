@@ -17,12 +17,16 @@ namespace IsolatedIslandGame.Database.MySQL
         private MySQL_ArchiveDataConnection archiveDataConnection = new MySQL_ArchiveDataConnection();
         public override ArchiveDataConnection ArchiveDataConnection { get { return archiveDataConnection; } }
 
+        private MySQL_SystemDataConnection systemDataConnection = new MySQL_SystemDataConnection();
+        public override SystemDataConnection SystemDataConnection { get { return systemDataConnection; } }
+
         public MySQL_ConnectionList()
         {
             childConnections.Add(playerDataConnection);
             childConnections.Add(settingDataConnection);
             childConnections.Add(textDataConnection);
             childConnections.Add(archiveDataConnection);
+            childConnections.Add(systemDataConnection);
         }
     }
 }

@@ -27,6 +27,7 @@
         DiscardItem,
         DonateItemToPlayer,
         TakeQuestReward,
-        SendWorldChannelMessage
+        SendWorldChannelMessage,
+        PickupItemEntity
     }
 }
