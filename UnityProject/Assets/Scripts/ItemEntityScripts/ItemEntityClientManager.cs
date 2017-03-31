@@ -9,7 +9,7 @@ public class ItemEntityClientManager : MonoBehaviour
 {
     public static ItemEntityClientManager Instance { get; private set; }
 
-    private List<int> RenderedItemEntityList = new List<int>();
+    private List<ItemEntityBehavior> RenderedItemEntityList = new List<ItemEntityBehavior>();
 
     private void Update()
     {
@@ -30,15 +30,24 @@ public class ItemEntityClientManager : MonoBehaviour
 
     public void GenerateAllItemEntity()
     {
+        print("Generate");
+
+        foreach(ItemEntityBehavior itemEntityBehavior in RenderedItemEntityList)
+        {
+            Destroy(itemEntityBehavior.gameObject);
+        }
+
         foreach (ItemEntity itemEntity in ItemEntityManager.Instance.ItemEntities)
         {
             GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
             item.transform.localScale *= 5f;
             item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
+
             item.AddComponent<ItemEntityBehavior>();
             item.GetComponent<ItemEntityBehavior>().SetItemEntityID(itemEntity.ItemEntityID);
 
-            RenderedItemEntityList.Add(itemEntity.ItemEntityID);
+            RenderedItemEntityList.Clear();
+            RenderedItemEntityList.Add(item.GetComponent<ItemEntityBehavior>());
         }
     }
 
