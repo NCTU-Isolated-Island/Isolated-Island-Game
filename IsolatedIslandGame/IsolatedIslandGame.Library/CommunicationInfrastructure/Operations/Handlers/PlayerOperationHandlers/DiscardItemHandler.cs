@@ -1,6 +1,7 @@
 ﻿using IsolatedIslandGame.Protocol.Communication.OperationCodes;
 using IsolatedIslandGame.Protocol.Communication.OperationParameters.Player;
 using System.Collections.Generic;
+using IsolatedIslandGame.Library.Items;
 
 namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Handlers.PlayerOperationHandlers
 {
@@ -19,7 +20,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
 
                 lock (subject.Inventory)
                 {
-                    if (subject.Inventory.RemoveItemCheck(itemID, itemCount))
+                    if (subject.Inventory.RemoveItemCheck(itemID, itemCount) && SystemManager.Instance.OperationInterface.DiscardItem(itemID, itemCount, subject.Vessel.LocationX, subject.Vessel.LocationZ))
                     {
                         subject.Inventory.RemoveItem(itemID, itemCount);
                         return true;

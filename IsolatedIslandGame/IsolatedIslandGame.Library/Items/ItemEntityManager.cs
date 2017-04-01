@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.Items
 
         public delegate void ItemEntityChangeEventHandler(DataChangeType changeType, ItemEntity itemEntity);
         private event ItemEntityChangeEventHandler onItemEntityChange;
-        public event ItemEntityChangeEventHandler OnItemEntityChange;
+        public event ItemEntityChangeEventHandler OnItemEntityChange { add { onItemEntityChange += value; } remove { onItemEntityChange -= value; } }
 
         public bool ContainsItemEntity(int itemEntityID)
         {

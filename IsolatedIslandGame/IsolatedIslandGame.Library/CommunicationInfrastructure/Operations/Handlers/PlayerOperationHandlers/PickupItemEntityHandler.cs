@@ -42,6 +42,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             {
                                 subject.Inventory.AddItem(item, 1);
                                 subject.User.EventManager.UserInform("提示", $"撿到了一個{item.ItemName}");
+                                ItemEntityManager.Instance.RemoveItemEntity(itemEntityID);
                                 return true;
                             }
                             else
