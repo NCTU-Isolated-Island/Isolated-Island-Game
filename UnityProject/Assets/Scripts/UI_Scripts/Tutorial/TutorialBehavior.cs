@@ -26,7 +26,6 @@ public class TutorialBehavior : MonoBehaviour
         {
             case GroupType.Animal:
                 gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("TutorialSprite/信仰" + currentPageNum.ToString());
-                print("TutorialSprite / 信仰" + currentPageNum.ToString());
                 break;
             case GroupType.Businessman:
                 gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("TutorialSprite/科技" + currentPageNum.ToString());

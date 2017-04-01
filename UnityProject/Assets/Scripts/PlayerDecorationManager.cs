@@ -99,7 +99,7 @@ public class PlayerDecorationManager : MonoBehaviour {
 	{
 		print("BEgin");
 		print("itemID: " + itemID);
-		CurrentSelectDecoration = Instantiate(GameManager.Instance.elementModels[itemID],
+		CurrentSelectDecoration = Instantiate(GameManager.Instance.ElementModels[itemID],
 			GameManager.Instance.PlayerGameObject.transform.Find("Decorations")) as GameObject;
 		CurrentSelectDecoration.name = itemID.ToString();
 

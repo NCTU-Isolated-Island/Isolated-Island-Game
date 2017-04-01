@@ -8,6 +8,7 @@ public class CameraReviveScript : MonoBehaviour
     {
         isClosed = true;
     }
+
     void OnDestroy()
     {
         if (isClosed)

@@ -17,7 +17,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 int receiverPlayerID = (int)parameters[(byte)SendMessageParameterCode.ReceiverPlayerID];
                 string content = (string)parameters[(byte)SendMessageParameterCode.Content];
 
-                if (subject.User.CommunicationInterface.SendMessage(subject.PlayerID, receiverPlayerID, content))
+                if (SystemManager.Instance.OperationInterface.SendMessage(subject.PlayerID, receiverPlayerID, content))
                 {
                     return true;
                 }

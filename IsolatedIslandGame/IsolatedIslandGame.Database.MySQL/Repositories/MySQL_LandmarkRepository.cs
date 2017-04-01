@@ -11,6 +11,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             List<Landmark> landmarks = new List<Landmark>();
             string sqlString = @"SELECT LandmarkID, LandmarkName, Description from LandmarkCollection ;";
+            lock(DatabaseService.ConnectionList.SettingDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.SettingDataConnection.Connection as MySqlConnection))
             {
                 using (MySqlDataReader reader = command.ExecuteReader())

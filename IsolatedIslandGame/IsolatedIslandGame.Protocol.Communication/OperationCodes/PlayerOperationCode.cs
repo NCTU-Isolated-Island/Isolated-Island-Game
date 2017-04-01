@@ -26,6 +26,8 @@
         ScanQR_Code,
         DiscardItem,
         DonateItemToPlayer,
-        TakeQuestReward
+        TakeQuestReward,
+        SendWorldChannelMessage,
+        PickupItemEntity
     }
 }

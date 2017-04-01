@@ -261,5 +261,28 @@ namespace IsolatedIslandGame.Server
                 LogService.Info($"AssignQuestToAllPlayer, QuestID: {questID}, PlayerCount: {playerIDs.Count}");
             }
         }
+        public void AssignStoryQuestToAllPlayer()
+        {
+            var playerIDs = DatabaseService.RepositoryList.PlayerRepository.ListAllPlayerID();
+            foreach (int playerID in playerIDs)
+            {
+                QuestRecord record;
+                Player player;
+                PlayerInformation info;
+                IEnumerable<Quest> quests;
+                if (PlayerInformationManager.Instance.FindPlayerInformation(playerID, out info) && QuestsWhenChosedGroup(info.groupType, out quests))
+                {
+                    Quest quest = quests.FirstOrDefault();
+                    if (quest != null && quest.CreateRecord(playerID, out record) && PlayerFactory.Instance.FindPlayer(playerID, out player))
+                    {
+                        record.RegisterObserverEvents(player);
+                        player.AddQuestRecord(record);
+                        record.OnQuestRecordStatusChange += player.EventManager.SyncDataResolver.SyncQuestRecordUpdated;
+                        player.User.EventManager.UserInform("提示", "主線任務被發佈了，去查看一下吧!");
+                    }
+                }
+            }
+            LogService.Info($"AssignQuestToAllPlayer, PlayerCount: {playerIDs.Count}");
+        }
     }
 }

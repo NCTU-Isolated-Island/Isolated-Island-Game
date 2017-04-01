@@ -25,12 +25,17 @@ namespace IsolatedIslandGame.Database
 
         #region text data
         public abstract PlayerMessageRepository PlayerMessageRepository { get; }
+        public abstract WorldChannelMessageRepository WorldChannelMessageRepository { get; }
         #endregion
 
         #region archive data
         public abstract TransactionRepository TransactionRepository { get; }
         public abstract TransactionItemInfoRepository TransactionItemInfoRepository { get; }
         public abstract IslandMaterialRepository IslandMaterialRepository { get; }
+        #endregion
+
+        #region system data
+        public abstract ItemEntityRepository ItemEntityRepository { get; }
         #endregion
     }
 }

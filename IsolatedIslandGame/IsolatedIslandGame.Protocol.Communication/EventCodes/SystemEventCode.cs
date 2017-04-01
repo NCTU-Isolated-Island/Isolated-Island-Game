@@ -4,6 +4,7 @@
     {
         SyncData,
         IslandResetTodayMaterialRanking,
-        LandmarkEvent
+        LandmarkEvent,
+        BroadcastWorldChannelMessage
     }
 }

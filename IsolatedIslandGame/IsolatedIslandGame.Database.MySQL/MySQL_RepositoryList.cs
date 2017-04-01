@@ -51,6 +51,9 @@ namespace IsolatedIslandGame.Database.MySQL
         #region text data
         private MySQL_PlayerMessageRepository playerMessageRepository = new MySQL_PlayerMessageRepository();
         public override PlayerMessageRepository PlayerMessageRepository { get { return playerMessageRepository; } }
+
+        private MySQL_WorldChannelMessageRepository worldChannelMessageRepository = new MySQL_WorldChannelMessageRepository();
+        public override WorldChannelMessageRepository WorldChannelMessageRepository { get { return worldChannelMessageRepository; } }
         #endregion
 
         #region archive data
@@ -62,6 +65,11 @@ namespace IsolatedIslandGame.Database.MySQL
 
         private MySQL_IslandMaterialRepository islandMaterialRepository = new MySQL_IslandMaterialRepository();
         public override IslandMaterialRepository IslandMaterialRepository { get { return islandMaterialRepository; } }
+        #endregion
+
+        #region system data
+        private MySQL_ItemEntityRepository itemEntityRepository = new MySQL_ItemEntityRepository();
+        public override ItemEntityRepository ItemEntityRepository { get { return itemEntityRepository; } }
         #endregion
     }
 }

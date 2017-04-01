@@ -53,6 +53,14 @@ public class CombineUIManager : MonoBehaviour {
         combineResultMessage.text = "";
     }
 
+    private void ClearMaterialSlots()
+    {
+        foreach (CombineSlotBehavior slot in materialSlots)
+        {
+            slot.SetSlotInfo(null);
+        }
+    }
+
     public void PutInItemFromInventory(Item puttingItem)
     {
         materialSlots[puttingSlotIndex].SetSlotInfo(puttingItem);
@@ -87,6 +95,7 @@ public class CombineUIManager : MonoBehaviour {
         {
             combineResultImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("2D/" + products[0].itemID);
             combineResultMessage.text = "合成成功";
+            ClearMaterialSlots();
         }
         else
         {

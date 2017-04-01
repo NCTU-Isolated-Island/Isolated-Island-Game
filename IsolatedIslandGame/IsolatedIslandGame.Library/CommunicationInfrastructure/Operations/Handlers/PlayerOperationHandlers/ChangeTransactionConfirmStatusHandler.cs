@@ -18,7 +18,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                 int transactionID = (int)parameters[(byte)ChangeTransactionConfirmStatusParameterCode.TransactionID];
                 bool isConfirmed = (bool)parameters[(byte)ChangeTransactionConfirmStatusParameterCode.IsConfirmed];
 
-                if (subject.User.CommunicationInterface.ChangeTransactionConfirmStatus(subject.PlayerID, transactionID, isConfirmed))
+                if (SystemManager.Instance.OperationInterface.ChangeTransactionConfirmStatus(subject.PlayerID, transactionID, isConfirmed))
                 {
                     LogService.InfoFormat($"Player: {subject.IdentityInformation}, ChangeTransactionConfirmStatus, TransactionID: {transactionID}, IsConfirmed: {isConfirmed}");
                     return true;

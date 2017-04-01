@@ -5,20 +5,11 @@ using UnityEngine.UI;
 
 public class PutItemUIPage : MonoBehaviour
 {
-
     public static PutItemUIPage Instance { get; private set; }
 
     private Button DoneButton;
     private Button RotateButton;
-
-    // UI Variable
-
-    //
-
-    void InitSetting()
-    {
-
-    }
+    private Button RemoveAllDecorationButton;
 
     void Update()
     {
@@ -40,6 +31,7 @@ public class PutItemUIPage : MonoBehaviour
 
         DoneButton = transform.Find("DoneButton").GetComponent<Button>();
         RotateButton = transform.Find("RotateButton").GetComponent<Button>();
+        RemoveAllDecorationButton = transform.Find("RemoveAllDecorationButton").GetComponent<Button>();
 
         DoneButton.onClick.AddListener(delegate
         {
@@ -50,7 +42,10 @@ public class PutItemUIPage : MonoBehaviour
         {
             PlayerDecorationManager.Instance.ChangeModelOrientation();
         });
-
+        RemoveAllDecorationButton.onClick.AddListener(delegate
+        {
+            PlayerController.Instance.RemoveAllDecoration();
+        });
 
         gameObject.SetActive(false);
     }

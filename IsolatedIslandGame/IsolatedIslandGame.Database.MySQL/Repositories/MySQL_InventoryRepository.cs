@@ -11,6 +11,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"INSERT INTO InventoryCollection 
                 (PlayerID,Capacity) VALUES (@playerID,@capacity) ;
                 SELECT LAST_INSERT_ID();";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -37,6 +38,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 Capacity
                 from InventoryCollection WHERE InventoryID = @inventoryID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inventoryID", inventoryID);
@@ -69,6 +71,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"SELECT  
                 InventoryID, Capacity
                 from InventoryCollection WHERE PlayerID = @playerID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("playerID", playerID);
@@ -101,6 +104,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
             string sqlString = @"UPDATE InventoryCollection SET 
                 Capacity = @capacity
                 WHERE InventoryID = @inventoryID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("capacity", inventory.Capacity);
@@ -119,6 +123,7 @@ namespace IsolatedIslandGame.Database.MySQL.Repositories
         {
             string sqlString = @"DELETE FROM InventoryCollection 
                 WHERE InventoryID = @inventoryID;";
+            lock(DatabaseService.ConnectionList.PlayerDataConnection)
             using (MySqlCommand command = new MySqlCommand(sqlString, DatabaseService.ConnectionList.PlayerDataConnection.Connection as MySqlConnection))
             {
                 command.Parameters.AddWithValue("inventoryID", inventoryID);

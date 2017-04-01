@@ -26,7 +26,7 @@ public class PlayerBehavior : MonoBehaviour
 	public void UpdateLocation(Vector3 position,float eulurAngle)
 	{
 		TargetPosition = position;
-        transform.localRotation = Quaternion.Euler(0f,eulurAngle,0f);
+		TargetRotaion = Quaternion.Euler(0f,eulurAngle,0f);
 	}
 
 }

@@ -26,13 +26,13 @@ namespace IsolatedIslandGame.Client
             else if (ContainsVessel(vessel.VesselID))
             {
                 Vessel existedVessel = vesselDictionary[vessel.VesselID];
-                vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
+                vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, existedVessel);
                 existedVessel.UpdateFullData(vessel);
             }
             else if (ContainsVesselWithOwnerPlayerID(vessel.OwnerPlayerID))
             {
                 Vessel existedVessel = vesselDictionaryByOwnerPlayerID[vessel.OwnerPlayerID];
-                vesselDictionary.Add(vessel.VesselID, vessel);
+                vesselDictionary.Add(vessel.VesselID, existedVessel);
                 existedVessel.UpdateFullData(vessel);
             }
             else
@@ -57,21 +57,9 @@ namespace IsolatedIslandGame.Client
             }
             else
             {
-                vessel = new Vessel(
-                    vesselID: vesselID,
-                    ownerPlayerID: 0,
-                    locationX: 0,
-                    locationZ: 0,
-                    rotationEulerAngleY: 0,
-                    locatedOceanType: OceanType.Unknown);
-                vesselDictionary.Add(vessel.VesselID, vessel);
-                AssemblyVessel(vessel);
-                if (onVesselChange != null)
-                {
-                    onVesselChange(DataChangeType.Add, vessel);
-                }
+                vessel = null;
                 SystemManager.Instance.OperationManager.FetchDataResolver.FetchVessel(vesselID);
-                return true;
+                return false;
             }
         }
 
@@ -84,19 +72,6 @@ namespace IsolatedIslandGame.Client
             }
             else
             {
-                //vessel = new Vessel(
-                //    vesselID: 0,
-                //    ownerPlayerID: ownerPlayerID,
-                //    locationX: 0,
-                //    locationZ: 0,
-                //    rotationEulerAngleY: 0,
-                //    locatedOceanType: OceanType.Unknown);
-                //vesselDictionaryByOwnerPlayerID.Add(vessel.OwnerPlayerID, vessel);
-                //AssemblyVessel(vessel);
-                //if (onVesselChange != null)
-                //{
-                //    onVesselChange(DataChangeType.Add, vessel);
-                //}
                 vessel = null;
                 SystemManager.Instance.OperationManager.FetchDataResolver.FetchVesselWithOwnerPlayerID(ownerPlayerID);
                 return false;
