@@ -11,6 +11,9 @@ public class PutItemUIPage : MonoBehaviour
     private Button RotateButton;
     private Button RemoveAllDecorationButton;
 
+    [SerializeField]
+    private GameObject confirmItemPanel;
+
     void Update()
     {
         if (PlayerDecorationManager.Instance.CurrentControlMode == PlayerDecorationManager.ControlMode.Rotate)
@@ -44,9 +47,30 @@ public class PutItemUIPage : MonoBehaviour
         });
         RemoveAllDecorationButton.onClick.AddListener(delegate
         {
-            PlayerController.Instance.RemoveAllDecoration();
+            RemoveAllDecoration();
         });
 
         gameObject.SetActive(false);
+    }
+
+    private void RemoveAllDecoration()
+    {
+        GameObject confrimPanel = Instantiate(confirmItemPanel);
+
+        confrimPanel.transform.SetParent(gameObject.transform);
+        confrimPanel.transform.Find("Message").gameObject.GetComponent<Text>().text
+            = string.Format("確定要將所有裝飾從船上撤下嗎?");
+        confrimPanel.transform.Find("Cancel").gameObject.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            Destroy(confrimPanel);
+        });
+        confrimPanel.transform.Find("Confirm").gameObject.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            PlayerController.Instance.RemoveAllDecoration();
+            Destroy(confrimPanel);
+        });
+
+        confrimPanel.transform.localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
+        confrimPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -30, 0);
     }
 }
