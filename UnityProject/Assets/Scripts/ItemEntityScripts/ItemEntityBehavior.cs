@@ -11,6 +11,9 @@ public class ItemEntityBehavior : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
+		if(Vector3.Distance(transform.position,GameManager.Instance.PlayerGameObject.transform.position) > 30f)
+			return;
+		
         ItemEntityClientManager.Instance.PickupItemEntity(itemEntityID);
     }
 
@@ -22,6 +25,8 @@ public class ItemEntityBehavior : MonoBehaviour
     private void Update()
     {
         transform.position = new Vector3(transform.position.x, Mathf.Sin(theta) * 0.3f, transform.position.z);
+		transform.eulerAngles = new Vector3(transform.eulerAngles.x,Time.time * 30f,transform.eulerAngles.z);
+			
 
         theta += Time.deltaTime;
     }

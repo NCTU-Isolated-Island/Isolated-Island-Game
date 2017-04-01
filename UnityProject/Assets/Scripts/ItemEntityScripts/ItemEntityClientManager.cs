@@ -42,7 +42,7 @@ public class ItemEntityClientManager : MonoBehaviour
         foreach (ItemEntity itemEntity in ItemEntityManager.Instance.ItemEntities)
         {
             GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
-            item.transform.localScale *= 5f;
+            item.transform.localScale *= 2f;
             item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
 
             item.AddComponent<ItemEntityBehavior>();
@@ -64,7 +64,7 @@ public class ItemEntityClientManager : MonoBehaviour
             case DataChangeType.Add:
                 {
                     GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
-                    item.transform.localScale *= 5f;
+                    item.transform.localScale *= 2f;
                     item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
 
                     item.AddComponent<ItemEntityBehavior>();
