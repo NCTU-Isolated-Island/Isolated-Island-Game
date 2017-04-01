@@ -10,8 +10,7 @@ public class ItemEntityClientManager : MonoBehaviour
 {
     public static ItemEntityClientManager Instance { get; private set; }
 
-    private Dictionary<ItemEntity, GameObject> RenderedItemEntityList
-        = new Dictionary<ItemEntity, GameObject>();
+    private Dictionary<int, GameObject> RenderedItemEntityList = new Dictionary<int, GameObject>();
 
     private void Update()
     {
@@ -34,24 +33,14 @@ public class ItemEntityClientManager : MonoBehaviour
 
     private void Start()
     {
+        GenerateAllItemEntity();
         ItemEntityManager.Instance.OnItemEntityChange += OnItemEntityChange;
     }
 
     public void GenerateAllItemEntity()
-    {
-        print("Generate");
-
-        foreach(var entry in RenderedItemEntityList.Where
-            ( x => !ItemEntityManager.Instance.ItemEntities.Contains(x.Key)))
-        {
-            Destroy(entry.Value);
-            RenderedItemEntityList.Remove(entry.Key);
-        }
-        
+    {        
         foreach (ItemEntity itemEntity in ItemEntityManager.Instance.ItemEntities)
         {
-            if (RenderedItemEntityList.ContainsKey(itemEntity)) continue;
-
             GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
             item.transform.localScale *= 5f;
             item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
@@ -59,7 +48,7 @@ public class ItemEntityClientManager : MonoBehaviour
             item.AddComponent<ItemEntityBehavior>();
             item.GetComponent<ItemEntityBehavior>().SetItemEntityID(itemEntity.ItemEntityID);
 
-            RenderedItemEntityList.Add(itemEntity, item);
+            RenderedItemEntityList.Add(itemEntity.ItemEntityID, item);
         }
     }
 
@@ -70,7 +59,30 @@ public class ItemEntityClientManager : MonoBehaviour
 
     private void OnItemEntityChange(DataChangeType type, ItemEntity itemEntity)
     {
-        GenerateAllItemEntity();
+        switch(type)
+        {
+            case DataChangeType.Add:
+                {
+                    GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
+                    item.transform.localScale *= 5f;
+                    item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
+
+                    item.AddComponent<ItemEntityBehavior>();
+                    item.GetComponent<ItemEntityBehavior>().SetItemEntityID(itemEntity.ItemEntityID);
+
+                    RenderedItemEntityList.Add(itemEntity.ItemEntityID, item);
+                }
+                break;
+            case DataChangeType.Remove:
+                {
+                    if(RenderedItemEntityList.ContainsKey(itemEntity.ItemEntityID))
+                    {
+                        Destroy(RenderedItemEntityList[itemEntity.ItemEntityID]);
+                        RenderedItemEntityList.Remove(itemEntity.ItemEntityID);
+                    }
+                }
+                break;
+        }
     }
 
 }

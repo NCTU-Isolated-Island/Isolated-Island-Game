@@ -25,5 +25,6 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure
         bool DonateItemToPlayer(int senderPlayerID, int receiverPlayerID, Item item, int itemCount);
         bool AssignQuestToAllPlayer(int questID, string administratorPassword);
         bool SendWorldChannelMessage(int senderPlayerID, string content);
+        bool DiscardItem(int itemID, int itemCount, float centerPositionX, float centerPositionZ);
     }
 }

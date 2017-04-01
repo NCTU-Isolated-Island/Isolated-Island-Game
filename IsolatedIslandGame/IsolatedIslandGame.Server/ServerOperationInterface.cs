@@ -245,5 +245,23 @@ namespace IsolatedIslandGame.Server
                 return false;
             }
         }
+
+        public bool DiscardItem(int itemID, int itemCount, float centerPositionX, float centerPositionZ)
+        {
+            Random randomGenerator = new Random(Guid.NewGuid().GetHashCode());
+            for(int i = 0; i < itemCount; i++)
+            {
+                ItemEntity itemEntity;
+                if(DatabaseService.RepositoryList.ItemEntityRepository.Create(
+                    itemID: itemID,
+                    positionX: (float)(centerPositionX + 20 * (randomGenerator.NextDouble() - 0.5)),
+                    positionZ: (float)(centerPositionZ + 20 * (randomGenerator.NextDouble() - 0.5)),
+                    itemEntity: out itemEntity))
+                {
+                    ItemEntityManager.Instance.AddItemEntity(itemEntity);
+                }
+            }
+            return true;
+        }
     }
 }
