@@ -4,17 +4,26 @@ using UnityEngine;
 using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
+using System.Linq;
 
 public class ItemEntityClientManager : MonoBehaviour
 {
     public static ItemEntityClientManager Instance { get; private set; }
 
-    private List<ItemEntityBehavior> RenderedItemEntityList = new List<ItemEntityBehavior>();
+    private Dictionary<ItemEntity, GameObject> RenderedItemEntityList
+        = new Dictionary<ItemEntity, GameObject>();
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
-            GenerateAllItemEntity();
+        {
+            DiscardItem();
+        }
+    }
+
+    public void DiscardItem()
+    {
+        UserManager.Instance.User.Player.OperationManager.DiscardItem(1013, 1);
     }
 
     private void Awake()
@@ -32,13 +41,17 @@ public class ItemEntityClientManager : MonoBehaviour
     {
         print("Generate");
 
-        foreach(ItemEntityBehavior itemEntityBehavior in RenderedItemEntityList)
+        foreach(var entry in RenderedItemEntityList.Where
+            ( x => !ItemEntityManager.Instance.ItemEntities.Contains(x.Key)))
         {
-            Destroy(itemEntityBehavior.gameObject);
+            Destroy(entry.Value);
+            RenderedItemEntityList.Remove(entry.Key);
         }
-
+        
         foreach (ItemEntity itemEntity in ItemEntityManager.Instance.ItemEntities)
         {
+            if (RenderedItemEntityList.ContainsKey(itemEntity)) continue;
+
             GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
             item.transform.localScale *= 5f;
             item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
@@ -46,8 +59,7 @@ public class ItemEntityClientManager : MonoBehaviour
             item.AddComponent<ItemEntityBehavior>();
             item.GetComponent<ItemEntityBehavior>().SetItemEntityID(itemEntity.ItemEntityID);
 
-            RenderedItemEntityList.Clear();
-            RenderedItemEntityList.Add(item.GetComponent<ItemEntityBehavior>());
+            RenderedItemEntityList.Add(itemEntity, item);
         }
     }
 

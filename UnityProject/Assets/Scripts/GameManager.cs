@@ -106,7 +106,9 @@ public class GameManager : MonoBehaviour
 
 			if(OnSetupDone != null)
 				OnSetupDone.Invoke();
-
+            //
+            ItemEntityClientManager.Instance.GenerateAllItemEntity();
+            //
         }
         else
         {
