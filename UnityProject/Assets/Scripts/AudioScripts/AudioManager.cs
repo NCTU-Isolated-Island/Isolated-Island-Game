@@ -82,12 +82,5 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         GameManager.Instance.PlayerGameObject.AddComponent<BGMController>();
-        //GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.AddComponent<MeshCollider>();
-        //GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<MeshCollider>().convex = true;
-        //GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<MeshCollider>().isTrigger = true;
-//        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.AddComponent<BoxCollider>();
-//        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<BoxCollider>().isTrigger = true;
-//        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.AddComponent<Rigidbody>();
-//        GameManager.Instance.PlayerGameObject.transform.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
 }

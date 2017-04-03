@@ -10,10 +10,10 @@ public class AreaDetector : MonoBehaviour {
         {
             if (!PlayerController.Instance.InArea.Contains(this.gameObject))
                 PlayerController.Instance.InArea.Add(this.gameObject);
-
-            // Handle login BGM change
+        }
+        if(other.tag == "SelfVessel")
+        {
             BGMController.Instance.ChangeBGM(name);
-            
         }
     }
 }

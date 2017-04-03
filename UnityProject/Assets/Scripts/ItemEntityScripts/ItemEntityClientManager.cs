@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using IsolatedIslandGame.Library;
+﻿using IsolatedIslandGame.Library;
 using IsolatedIslandGame.Library.Items;
 using IsolatedIslandGame.Protocol;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class ItemEntityClientManager : MonoBehaviour
 {
@@ -16,13 +16,13 @@ public class ItemEntityClientManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            DiscardItem();
+            DiscardItem(1013);
         }
     }
 
-    public void DiscardItem()
+    public void DiscardItem(int itemID , int amount = 1)
     {
-        UserManager.Instance.User.Player.OperationManager.DiscardItem(1013, 1);
+        UserManager.Instance.User.Player.OperationManager.DiscardItem(itemID, amount);
     }
 
     private void Awake()
@@ -38,17 +38,10 @@ public class ItemEntityClientManager : MonoBehaviour
     }
 
     public void GenerateAllItemEntity()
-    {        
+    {
         foreach (ItemEntity itemEntity in ItemEntityManager.Instance.ItemEntities)
         {
-            GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
-            item.transform.localScale *= 5f;
-            item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
-
-            item.AddComponent<ItemEntityBehavior>();
-            item.GetComponent<ItemEntityBehavior>().SetItemEntityID(itemEntity.ItemEntityID);
-
-            RenderedItemEntityList.Add(itemEntity.ItemEntityID, item);
+            GenerateItemByItemEntity(itemEntity);
         }
     }
 
@@ -59,30 +52,36 @@ public class ItemEntityClientManager : MonoBehaviour
 
     private void OnItemEntityChange(DataChangeType type, ItemEntity itemEntity)
     {
-        switch(type)
+        switch (type)
         {
             case DataChangeType.Add:
                 {
-                    GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
-                    item.transform.localScale *= 5f;
-                    item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
-
-                    item.AddComponent<ItemEntityBehavior>();
-                    item.GetComponent<ItemEntityBehavior>().SetItemEntityID(itemEntity.ItemEntityID);
-
-                    RenderedItemEntityList.Add(itemEntity.ItemEntityID, item);
+                    GenerateItemByItemEntity(itemEntity);
                 }
                 break;
             case DataChangeType.Remove:
                 {
-                    if(RenderedItemEntityList.ContainsKey(itemEntity.ItemEntityID))
+                    if (RenderedItemEntityList.ContainsKey(itemEntity.ItemEntityID))
                     {
                         Destroy(RenderedItemEntityList[itemEntity.ItemEntityID]);
                         RenderedItemEntityList.Remove(itemEntity.ItemEntityID);
                     }
                 }
                 break;
+            default:
+                break;
         }
     }
 
+    private void GenerateItemByItemEntity(ItemEntity itemEntity)
+    {
+        GameObject item = Instantiate(GameManager.Instance.ElementModels[itemEntity.ItemID]);
+        item.transform.localScale *= 2f;
+        item.transform.position = new Vector3(itemEntity.PositionX, 0, itemEntity.PositionZ);
+
+        item.AddComponent<ItemEntityBehavior>();
+        item.GetComponent<ItemEntityBehavior>().SetItemEntityID(itemEntity.ItemEntityID);
+
+        RenderedItemEntityList.Add(itemEntity.ItemEntityID, item);
+    }
 }

@@ -37,16 +37,19 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private float ver_ori;
     private IEnumerator coroutine;
 
-	void OnDisable()
-	{
-		try {
-			AuxCameraSystem.Instance.UnShow ();
-			Destroy (FriendScoreManager.Instance.currentScoreBoardPage);
-			Destroy (ScoreBoardManager.Instance.currentScoreBoardPage);
-			Destroy (MaterialScoreBoardManager.Instance.currentScoreBoardPage);
-		} catch {
-		}
-	}
+    void OnDisable()
+    {
+        try
+        {
+            AuxCameraSystem.Instance.UnShow();
+            Destroy(FriendScoreManager.Instance.currentScoreBoardPage);
+            Destroy(ScoreBoardManager.Instance.currentScoreBoardPage);
+            Destroy(MaterialScoreBoardManager.Instance.currentScoreBoardPage);
+        }
+        catch
+        {
+        }
+    }
 
     void Awake()
     {
@@ -62,34 +65,37 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     void Start()
     {
+        Island.Instance.OnTotalScoreUpdated += OnTotalScoreUpdated;
         Vector3 verTmp = interactionButtonsContent.GetComponent<RectTransform>().offsetMax;
         ver_ori = verTmp.y;
     }
 
     private void AdjustPageStatus(GameObject page)
-	{
-		page.transform.SetParent (transform);
-		page.GetComponent<RectTransform> ().localScale = Vector3.one;
-		page.GetComponent<RectTransform> ().offsetMax = new Vector2 (0, -50);
-		page.GetComponent<RectTransform> ().offsetMin = new Vector2 (0, 0);
+    {
+        page.transform.SetParent(transform);
+        page.GetComponent<RectTransform>().localScale = Vector3.one;
+        page.GetComponent<RectTransform>().offsetMax = new Vector2(0, -50);
+        page.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
 
-		page.transform.Find ("BackButton").GetComponent<Button> ().onClick.AddListener (delegate {
-			Destroy (page);
-			ShowIsland ();
-		});
-	}
+        page.transform.Find("BackButton").GetComponent<Button>().onClick.AddListener(delegate
+        {
+            Destroy(page);
+            ShowIsland();
+        });
+    }
 
-	void OnEnable()
-	{
-		LoadIslandPieChart ();
-		transform.Find ("BackButton").gameObject.GetComponent<Button> ().onClick.AddListener (delegate {
-			AuxCameraSystem.Instance.UnShow ();
-		});
-	}
+    void OnEnable()
+    {
+        LoadIslandPieChart();
+        transform.Find("BackButton").gameObject.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            AuxCameraSystem.Instance.UnShow();
+        });
+    }
 
     public void OpenScoreBoardPage()
     {
-		AuxCameraSystem.Instance.UnShow ();
+        AuxCameraSystem.Instance.UnShow();
 
         GameObject newPage = Instantiate(scoreBoardPage);
         AdjustPageStatus(newPage);
@@ -99,7 +105,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     public void OpenFriendScoreBoardPage()
     {
-		AuxCameraSystem.Instance.UnShow ();
+        AuxCameraSystem.Instance.UnShow();
 
         GameObject newPage = Instantiate(friendScoreBoardPage);
         AdjustPageStatus(newPage);
@@ -110,7 +116,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     public void OpenMaterialScoreBoardPage()
     {
-		AuxCameraSystem.Instance.UnShow ();
+        AuxCameraSystem.Instance.UnShow();
 
         GameObject newPage = Instantiate(materialScoreBoardPage);
         AdjustPageStatus(newPage);
@@ -144,7 +150,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private void ThrowMaterialToIsland(Item item)
     {
         // call Throw Item API;
-		AuxCameraSystem.Instance.UnShow ();
+        AuxCameraSystem.Instance.UnShow();
 
         UserManager.Instance.User.Player.OperationManager.SendMaterialToIsland(item.ItemID);
         print("ThrowMaterialToIsland");
@@ -203,38 +209,38 @@ public class IsolatedIslandUIManager : MonoBehaviour
         expandStatus = isOn;
     }
 
-	public void LoadIslandPieChart()
-	{
-        // TMP : r as animal , g as businessman , b as farmer
-
-        //Invoke ("ShowIsland", UIManager.Instance.SwapPageTimeInterval);
+    public void LoadIslandPieChart()
+    {
+        // TMP : r as animal , b as businessman , g as farmer
+        
         ShowIsland();
 
         float r, g, b;
-		float totalScore;
-		r = Island.Instance.GetTotalScore (GroupType.Animal);
-		g = Island.Instance.GetTotalScore (GroupType.Businessman);
-		b = Island.Instance.GetTotalScore (GroupType.Farmer);
+        float totalScore;
+        r = Island.Instance.GetTotalScore(GroupType.Animal);
+        b = Island.Instance.GetTotalScore(GroupType.Businessman);
+        g = Island.Instance.GetTotalScore(GroupType.Farmer);
+        
+        totalScore = r + g + b;
+        r = r / totalScore;
+        g = g / totalScore;
+        b = b / totalScore;
 
-		//print ("r = " + r.ToString ());
-		//print ("g = " + g.ToString ());
-		//print ("b = " + b.ToString ());
-		totalScore = r + g + b;
-		r = r / totalScore;
-		g = g / totalScore;
-		b = b / totalScore;
+        Image redArea = transform.Find("PieChart/Pie_RedArea").GetComponent<Image>();
+        Image greenArea = transform.Find("PieChart/Pie_GreenArea").GetComponent<Image>();
+        Image blueArea = transform.Find("PieChart/Pie_BlueArea").GetComponent<Image>();
+        redArea.fillAmount = r + g;
+        greenArea.fillAmount = g;
+        blueArea.fillAmount = b;
+    }
 
-		Image redArea = transform.Find ("PieChart/Pie_RedArea").GetComponent<Image> ();
-		Image greenArea = transform.Find ("PieChart/Pie_GreenArea").GetComponent<Image> ();
-		Image blueArea = transform.Find ("PieChart/Pie_BlueArea").GetComponent<Image> ();
-		redArea.fillAmount = r + g + b;
-		greenArea.fillAmount = g + b;
-		blueArea.fillAmount = b;
-	}
+    private void ShowIsland()
+    {
+        //AuxCameraSystem.Instance.ShowIsland ();
+    }
 
-	private void ShowIsland()
-	{
-		//AuxCameraSystem.Instance.ShowIsland ();
-	}
-
+    void OnTotalScoreUpdated(GroupType type, int score)
+    {
+        LoadIslandPieChart();
+    }
 }
