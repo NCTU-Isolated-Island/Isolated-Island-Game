@@ -70,6 +70,9 @@ namespace IsolatedIslandGame.Database.MySQL
         #region system data
         private MySQL_ItemEntityRepository itemEntityRepository = new MySQL_ItemEntityRepository();
         public override ItemEntityRepository ItemEntityRepository { get { return itemEntityRepository; } }
+
+        private MySQL_ItemEntityGeneratorRepository itemEntityGeneratorRepository = new MySQL_ItemEntityGeneratorRepository();
+        public override ItemEntityGeneratorRepository ItemEntityGeneratorRepository { get { return itemEntityGeneratorRepository; } }
         #endregion
     }
 }

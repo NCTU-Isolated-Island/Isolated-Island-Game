@@ -2,6 +2,7 @@
 {
     public enum ClientFunctionCode : byte
     {
-        Basic
+        Basic,
+        Island
     }
 }
