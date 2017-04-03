@@ -34,6 +34,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             
             
             Log.Info("PhotonServer Setup Successiful.......");
+
         }
 
         protected override void TearDown()
@@ -71,7 +72,8 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
 
             ClientFunctionCheckTable.Initial(new System.Collections.Generic.Dictionary<int, bool>
             {
-                { (int)Protocol.ClientFunctionCode.Basic, true }
+                { (int)Protocol.ClientFunctionCode.Basic, true },
+                { (int)Protocol.ClientFunctionCode.Island, false }
             });
         }
         private void SetupServices()
@@ -105,6 +107,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             TransactionManager.Initial();
             IslandManager.Initial();
             ItemEntityManager.Initial(new Items.ServerItemEntityManager());
+            Items.ItemEntityGeneratorFactory.Initial(new Items.ItemEntityGeneratorFactory());
         }
     }
 }

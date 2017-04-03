@@ -36,6 +36,7 @@ namespace IsolatedIslandGame.Database
 
         #region system data
         public abstract ItemEntityRepository ItemEntityRepository { get; }
+        public abstract ItemEntityGeneratorRepository ItemEntityGeneratorRepository { get; }
         #endregion
     }
 }

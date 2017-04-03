@@ -1,5 +1,4 @@
-﻿using System;
-using IsolatedIslandGame.Database;
+﻿using IsolatedIslandGame.Database;
 using IsolatedIslandGame.Library.Items;
 
 namespace IsolatedIslandGame.Server.Items
