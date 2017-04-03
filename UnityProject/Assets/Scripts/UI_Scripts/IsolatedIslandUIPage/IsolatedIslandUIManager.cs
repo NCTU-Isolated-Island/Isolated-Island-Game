@@ -68,6 +68,12 @@ public class IsolatedIslandUIManager : MonoBehaviour
         Island.Instance.OnTotalScoreUpdated += OnTotalScoreUpdated;
         Vector3 verTmp = interactionButtonsContent.GetComponent<RectTransform>().offsetMax;
         ver_ori = verTmp.y;
+
+
+		// Temp 
+		throwMaterialButton.interactable = true;
+		print(ClientFunctionCheckTable.Instance.IsFunctionOpened(ClientFunctionCode.Island));
+
     }
 
     private void AdjustPageStatus(GameObject page)

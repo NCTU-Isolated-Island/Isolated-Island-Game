@@ -34,7 +34,8 @@ public class AuxCameraSystem : MonoBehaviour {
 	public void UnShow()
 	{
 		hasModel = false;
-		Destroy(model);
+		if(model != null)
+			Destroy(model);
 		AuxCamera.enabled = false;
 	}
 
