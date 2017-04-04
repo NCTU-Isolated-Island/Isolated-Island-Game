@@ -71,8 +71,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
 
 		// Temp 
-		throwMaterialButton.interactable = true;
-		print(ClientFunctionCheckTable.Instance.IsFunctionOpened(ClientFunctionCode.Island));
+		throwMaterialButton.interactable = ClientFunctionCheckTable.Instance.IsFunctionOpened(ClientFunctionCode.Island);
 
     }
 
