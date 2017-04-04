@@ -33,6 +33,7 @@ public class GameUtility : MonoBehaviour {
 		GameManager.Instance.ElementModels.Add(1011, Resources.Load("Ingredients/" + "water") as GameObject);
 		GameManager.Instance.ElementModels.Add(1013, Resources.Load("Ingredients/" + "fire") as GameObject);
 
+		GameManager.Instance.ElementModels.Add(1015, Resources.Load("Ingredients/" + "IronOre") as GameObject);
 		GameManager.Instance.ElementModels.Add(1016, Resources.Load("Ingredients/" + "coal") as GameObject);
 
 
@@ -51,7 +52,7 @@ public class GameUtility : MonoBehaviour {
 		GameManager.Instance.ElementModels.Add(2007, Resources.Load("Ingredients/" + "badminton") as GameObject);
 		GameManager.Instance.ElementModels.Add(2008, Resources.Load("Ingredients/" + "knife") as GameObject);
 		GameManager.Instance.ElementModels.Add(2009, Resources.Load("Ingredients/" + "Sugar") as GameObject);
-
+		GameManager.Instance.ElementModels.Add(2010, Resources.Load("Ingredients/" + "VitaminC") as GameObject);
 		GameManager.Instance.ElementModels.Add(2011, Resources.Load("Ingredients/" + "pigment") as GameObject);
 		GameManager.Instance.ElementModels.Add(2012, Resources.Load("Ingredients/" + "Pot") as GameObject);
 		GameManager.Instance.ElementModels.Add(2013, Resources.Load("Ingredients/" + "Flour") as GameObject);
