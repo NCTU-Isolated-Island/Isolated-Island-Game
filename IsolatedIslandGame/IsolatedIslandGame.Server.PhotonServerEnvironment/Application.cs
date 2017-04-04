@@ -73,7 +73,7 @@ namespace IsolatedIslandGame.Server.PhotonServerEnvironment
             ClientFunctionCheckTable.Initial(new System.Collections.Generic.Dictionary<int, bool>
             {
                 { (int)Protocol.ClientFunctionCode.Basic, true },
-                { (int)Protocol.ClientFunctionCode.Island, false }
+                { (int)Protocol.ClientFunctionCode.Island, true }
             });
         }
         private void SetupServices()
