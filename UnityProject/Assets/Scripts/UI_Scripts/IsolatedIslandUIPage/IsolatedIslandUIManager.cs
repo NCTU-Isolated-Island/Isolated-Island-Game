@@ -78,6 +78,7 @@ public class IsolatedIslandUIManager : MonoBehaviour
     private void AdjustPageStatus(GameObject page)
     {
         page.transform.SetParent(transform);
+        page.transform.SetAsLastSibling();
         page.GetComponent<RectTransform>().localScale = Vector3.one;
         page.GetComponent<RectTransform>().offsetMax = new Vector2(0, -50);
         page.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
