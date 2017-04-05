@@ -12,6 +12,7 @@ public class ItemEntityBehavior : MonoBehaviour
     private void OnMouseUpAsButton()
     {
 		if(Vector3.Distance(transform.position,GameManager.Instance.PlayerGameObject.transform.position) > 30f)
+			//insert pop up info here
 			return;
 		
         ItemEntityClientManager.Instance.PickupItemEntity(itemEntityID);
