@@ -81,6 +81,14 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
+        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.AddComponent<BGMController>();
+        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.AddComponent<BoxCollider>();
+        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.AddComponent<Rigidbody>();
+        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
         GameManager.Instance.PlayerGameObject.AddComponent<BGMController>();
+        GameManager.Instance.PlayerGameObject.AddComponent<Rigidbody>();
+        GameManager.Instance.PlayerGameObject.GetComponent<Rigidbody>().isKinematic = true;
+        GameManager.Instance.PlayerGameObject.GetComponent<Collider>().isTrigger = true;
     }
 }
