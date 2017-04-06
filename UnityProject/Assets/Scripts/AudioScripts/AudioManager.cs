@@ -81,14 +81,18 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.AddComponent<BGMController>();
-        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.AddComponent<BoxCollider>();
-        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.AddComponent<Rigidbody>();
-        //    GameManager.Instance.PlayerGameObject.transform.Find("ShipModel").gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        GameObject OceanDetector = new GameObject("OceanDetector");
+        OceanDetector.AddComponent<BGMController>();
+        OceanDetector.AddComponent<BoxCollider>();
+        OceanDetector.AddComponent<Rigidbody>();
+        OceanDetector.GetComponent<Collider>().isTrigger = true;
+        OceanDetector.GetComponent<Rigidbody>().isKinematic = true;
+        OceanDetector.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
+        OceanDetector.transform.localPosition = Vector3.zero;
 
-        GameManager.Instance.PlayerGameObject.AddComponent<BGMController>();
-        GameManager.Instance.PlayerGameObject.AddComponent<Rigidbody>();
-        GameManager.Instance.PlayerGameObject.GetComponent<Rigidbody>().isKinematic = true;
-        GameManager.Instance.PlayerGameObject.GetComponent<Collider>().isTrigger = true;
+        //GameManager.Instance.PlayerGameObject.AddComponent<BGMController>();
+        //GameManager.Instance.PlayerGameObject.AddComponent<Rigidbody>();
+        //GameManager.Instance.PlayerGameObject.GetComponent<Rigidbody>().isKinematic = true;
+        //GameManager.Instance.PlayerGameObject.GetComponent<Collider>().isTrigger = true;
     }
 }
