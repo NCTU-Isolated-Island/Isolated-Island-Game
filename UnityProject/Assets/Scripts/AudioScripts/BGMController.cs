@@ -5,7 +5,6 @@ using IsolatedIslandGame.Library;
 
 public class BGMController : MonoBehaviour
 {
-
     public static BGMController Instance { get; private set; }
 
     private bool Exited; // true if already exit previous
@@ -15,6 +14,7 @@ public class BGMController : MonoBehaviour
 
     void OnTriggerEnter(Collider EnterOcean)
     {
+        print("OnTriggerEnter");
         if (Exited == false) return;
         if (BGMDictionary.ContainsKey(EnterOcean.name) == false) return;
         ChangeBGM(EnterOcean.name);

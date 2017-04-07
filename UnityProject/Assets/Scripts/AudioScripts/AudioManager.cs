@@ -81,6 +81,20 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        GameManager.Instance.PlayerGameObject.AddComponent<BGMController>();
+        GameObject OceanDetector = new GameObject("OceanDetector");
+        OceanDetector.AddComponent<BGMController>();
+        OceanDetector.AddComponent<BoxCollider>();
+        OceanDetector.AddComponent<Rigidbody>();
+        OceanDetector.GetComponent<Collider>().isTrigger = true;
+        OceanDetector.GetComponent<Rigidbody>().isKinematic = true;
+		OceanDetector.GetComponent<Rigidbody>().useGravity = false;
+        OceanDetector.transform.SetParent(GameManager.Instance.PlayerGameObject.transform);
+        OceanDetector.transform.localPosition = Vector3.zero;
+		OceanDetector.layer = LayerMask.NameToLayer("Ignore Raycast");
+
+        //GameManager.Instance.PlayerGameObject.AddComponent<BGMController>();
+        //GameManager.Instance.PlayerGameObject.AddComponent<Rigidbody>();
+        //GameManager.Instance.PlayerGameObject.GetComponent<Rigidbody>().isKinematic = true;
+        //GameManager.Instance.PlayerGameObject.GetComponent<Collider>().isTrigger = true;
     }
 }
