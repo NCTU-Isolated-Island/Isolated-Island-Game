@@ -42,9 +42,13 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                         subject.User.EventManager.UserInform("錯誤", "投送到島上的物品並非素材。");
                         return false;
                     }
-                    else
+                    else if(!subject.Inventory.RemoveItemCheck(materialItemID, 1))
                     {
                         subject.User.EventManager.UserInform("錯誤", "你並沒有這個素材。");
+                        return false;
+                    }
+                    else
+                    {
                         return false;
                     }
                 }

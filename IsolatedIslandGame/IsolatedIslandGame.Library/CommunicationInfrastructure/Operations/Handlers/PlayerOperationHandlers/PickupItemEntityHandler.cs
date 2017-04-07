@@ -29,7 +29,7 @@ namespace IsolatedIslandGame.Library.CommunicationInfrastructure.Operations.Hand
                             subject.User.EventManager.UserInform("失敗", "物品不存在。");
                             return false;
                         }
-                        else if (Math.Sqrt(Math.Pow(itemEntity.PositionX - subject.Vessel.LocationX, 2) + Math.Pow(itemEntity.PositionZ - subject.Vessel.LocationZ, 2)) > 75)
+                        else if (Math.Sqrt(Math.Pow(itemEntity.PositionX - subject.Vessel.LocationX, 2) + Math.Pow(itemEntity.PositionZ - subject.Vessel.LocationZ, 2)) > 50)
                         {
                             LogService.Error($"PickupItemEntity error Player: {subject.IdentityInformation}, ItemEntity Too Far ItemEntityID: {itemEntityID}");
                             subject.User.EventManager.UserInform("失敗", "距離太遠了。");
