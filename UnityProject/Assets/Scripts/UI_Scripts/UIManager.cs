@@ -142,6 +142,7 @@ public class UIManager : MonoBehaviour
         rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, 0);
         yield return null;
     }
+
     IEnumerator RemovingPage(GameObject page)
     {
         if (page == null)
@@ -165,14 +166,14 @@ public class UIManager : MonoBehaviour
         panel.GetComponent<RectTransform>().localScale = new Vector3(0.5213f, 0.5213f, 0.5213f);
     }
 
-	public void RenderPlayerOnlineMessage(int playerID , float distance)
+    public void RenderPlayerOnlineMessage(int playerID, float distance)
     {
         PlayerInformation info;
         if (PlayerInformationManager.Instance.FindPlayerInformation(playerID, out info))
         {
             GameObject obj = Instantiate(playerOnlineMessage);
             obj.transform.SetParent(UIPageList[(int)UIPageType.Main].transform);
-			obj.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("玩家 {0} 已上線 : 距離你{1}公尺", info.nickname,distance);
+            obj.transform.Find("Content").gameObject.GetComponent<Text>().text = string.Format("玩家 {0} 已上線 : 距離你{1}公尺", info.nickname, distance);
             StartCoroutine(PlayerOnlineMessageAnimation(obj));
         }
     }
@@ -185,7 +186,7 @@ public class UIManager : MonoBehaviour
         RectTransform self = GetComponent<RectTransform>();
         CanvasScaler canvasScaler = Instance.GetComponent<CanvasScaler>();
 
-        Vector2 ori = new Vector2(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2, (canvasScaler.referenceResolution.y / 2 ) * (0.8f + Random.Range(-0.08f, 0.08f)));
+        Vector2 ori = new Vector2(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2, (canvasScaler.referenceResolution.y / 2) * (0.8f + Random.Range(-0.08f, 0.08f)));
         Vector2 end = new Vector2(-(canvasScaler.referenceResolution.x / 2 + self.rect.width / 2), ori.y);
 
         obj.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
@@ -203,11 +204,11 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-            RenderPlayerOnlineMessage(GameManager.Instance.PlayerID,100f);
-
-        if (!SomePageIsActive())
-            ToMainPage();
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
+        {
+            print("GetEscapeButton");
+            ToPreviousPage();
+        }
     }
 
     private bool SomePageIsActive()
@@ -219,4 +220,10 @@ public class UIManager : MonoBehaviour
         }
         return false;
     }
+
+    public UIPageType GetCurrentUIPage()
+    {
+        return PageStack.Peek();
+    }
+
 }
