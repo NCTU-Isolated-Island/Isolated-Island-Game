@@ -204,7 +204,7 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Escape) && GetCurrentUIPage() != UIPageType.Main)
         {
             print("GetEscapeButton");
             ToPreviousPage();
