@@ -189,9 +189,6 @@ public class PlayerDecorationManager : MonoBehaviour {
 
 		CurrentControlMode = ControlMode.Normal;
 
-		UIManager.Instance.ToPreviousPage();
-		//UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
-
 		if(CurrentSelectDecoration != null)
 		{
 			DeTransparentize(CurrentSelectDecoration);

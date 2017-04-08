@@ -14,7 +14,6 @@ public class BGMController : MonoBehaviour
 
     void OnTriggerEnter(Collider EnterOcean)
     {
-        print("OnTriggerEnter");
         if (Exited == false) return;
         if (BGMDictionary.ContainsKey(EnterOcean.name) == false) return;
         ChangeBGM(EnterOcean.name);

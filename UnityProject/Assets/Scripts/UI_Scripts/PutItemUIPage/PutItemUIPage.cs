@@ -39,12 +39,14 @@ public class PutItemUIPage : MonoBehaviour
         DoneButton.onClick.AddListener(delegate
         {
             PlayerDecorationManager.Instance.UpdateModifiedDecorationsToServer();
+            UIManager.Instance.ToPreviousPage();
         });
 
         RotateButton.onClick.AddListener(delegate
         {
             PlayerDecorationManager.Instance.ChangeModelOrientation();
         });
+
         RemoveAllDecorationButton.onClick.AddListener(delegate
         {
             RemoveAllDecoration();
