@@ -69,10 +69,8 @@ public class IsolatedIslandUIManager : MonoBehaviour
         Vector3 verTmp = interactionButtonsContent.GetComponent<RectTransform>().offsetMax;
         ver_ori = verTmp.y;
 
-
 		// Temp 
 		throwMaterialButton.interactable = ClientFunctionCheckTable.Instance.IsFunctionOpened(ClientFunctionCode.Island);
-
     }
 
     private void AdjustPageStatus(GameObject page)
@@ -132,6 +130,13 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     public void OpenThrowMaterialPage()
     {
+        if (Vector3.Distance(IslandController.Instance.transform.position, GameManager.Instance.PlayerGameObject.transform.position) > 80f)
+        {
+            //insert pop up info here
+            UserManager.Instance.User.UserInform("通知", "你必須要再靠近一點才能投放素材");
+            return;
+        }
+
         UIManager.Instance.SwapPage(UIManager.UIPageType.Inventory);
     }
 
@@ -155,11 +160,8 @@ public class IsolatedIslandUIManager : MonoBehaviour
 
     private void ThrowMaterialToIsland(Item item)
     {
-        // call Throw Item API;
         AuxCameraSystem.Instance.UnShow();
-
         UserManager.Instance.User.Player.OperationManager.SendMaterialToIsland(item.ItemID);
-        print("ThrowMaterialToIsland");
     }
 
     public void OnClickExpandButton()
